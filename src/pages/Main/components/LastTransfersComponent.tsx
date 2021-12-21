@@ -56,6 +56,7 @@ const LastTransfersComponent = ({
   data,
   pageSize,
   onPageChange,
+  page
 }: BlockComponentProps<TransfersData>) => {
   if (!data?.view_extrinsic.length) return null
 
@@ -67,6 +68,7 @@ const LastTransfersComponent = ({
         rowKey={'block_index'}
       />
       <PaginationComponent
+        currentPage={page}
         pageSize={pageSize}
         count={data?.view_extrinsic_aggregate.aggregate?.count || 0}
         onPageChange={onPageChange}

@@ -25,7 +25,7 @@ const blocksWithTimeDifference = (blocks: Block[] | undefined): Block[] => {
   )
 }
 
-const LastBlocksComponent = ({ data, pageSize, onPageChange }: BlockComponentProps<BlocksData>) => {
+const LastBlocksComponent = ({ data, pageSize, page, onPageChange }: BlockComponentProps<BlocksData>) => {
   if (!data?.view_last_block.length) return null
   return (
     <div>
@@ -35,6 +35,7 @@ const LastBlocksComponent = ({ data, pageSize, onPageChange }: BlockComponentPro
         rowKey={'block_number'}
       />
       <PaginationComponent
+        currentPage={page}
         pageSize={pageSize}
         count={data?.view_last_block_aggregate?.aggregate?.count || 0}
         onPageChange={onPageChange}
