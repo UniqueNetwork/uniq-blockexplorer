@@ -20,12 +20,14 @@ const NothingFoundComponent = () => <span>Nothing found by you search request.</
 
 const MainPage = () => {
   const pageSize = 10 // default
-  const navigate = useNavigate();
-  const [queryParams, setQueryParams] = useSearchParams();
-  const [searchString, setSearchString] = useState(queryParams.get('search') || '')
+  const navigate = useNavigate()
+  const [queryParams, setQueryParams] = useSearchParams()
 
-  const getSearchBlockVariables = (_searchString: string | null) => _searchString ? { where: { block_number: { _eq: _searchString } } } : {}
-  const getSearchTransfersVariables = (_searchString: string | null) => _searchString ? { where: { block_index: { _eq: _searchString } } } : {}
+  const [search, blockOffset, transactionOffset] = useMemo<[string | null, number, number]>(() => {
+    return [queryParams.get('search'), (Number(queryParams.get('blockPage')) || 0) * pageSize, (Number(queryParams.get('transactionPage')) || 0) * pageSize]
+  }, [queryParams])
+
+  const [searchString, setSearchString] = useState(search || '')
 
   const {
     fetchMore: fetchMoreBlocks,
@@ -35,12 +37,12 @@ const MainPage = () => {
   } = useQuery<BlocksData, BlocksVariables>(getLatestBlocksQuery, {
     variables: {
       limit: pageSize,
-      offset: parseInt(queryParams.get('blockPage') || '0', 10),
+      offset: blockOffset,
       order_by: { block_number: 'desc' },
-      ...getSearchBlockVariables(queryParams.get('search'))
+      ...(search ? { where: { block_number: { _eq: search } } } : {}),
     },
     fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first'
+    nextFetchPolicy: 'cache-first',
   })
 
   const {
@@ -51,12 +53,12 @@ const MainPage = () => {
   } = useQuery<TransfersData, TransferVariables>(getLastTransfersQuery, {
     variables: {
       limit: pageSize,
-      offset: parseInt(queryParams.get('transactionPage') || '0', 10),
+      offset: transactionOffset,
       order_by: { block_index: 'desc' },
-      ...getSearchTransfersVariables(queryParams.get('search'))
+      ...(search ? { where: { block_index: { _eq: search } } } : {}),
     },
     fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first'
+    nextFetchPolicy: 'cache-first',
   })
 
   const onBlocksPageChange = useCallback(
@@ -64,7 +66,7 @@ const MainPage = () => {
       queryParams.set('blockPage', (offset / pageSize + 1).toString())
       setQueryParams(queryParams.toString())
     },
-    [fetchMoreBlocks, searchString]
+    [queryParams, setQueryParams],
   )
 
   const onTransfersPageChange = useCallback(
@@ -72,7 +74,7 @@ const MainPage = () => {
       queryParams.set('transactionPage', (offset / pageSize + 1).toString())
       setQueryParams(queryParams.toString())
     },
-    [fetchMoreTransfers, searchString]
+    [queryParams, setQueryParams],
   )
 
   const onSearchClick = useCallback(() => {
@@ -88,14 +90,14 @@ const MainPage = () => {
     }
 
     if (searchString.trim())
-      setQueryParams(`search=${searchString}`);
-  }, [fetchMoreTransfers, fetchMoreBlocks, searchString])
+      setQueryParams(`search=${searchString}`)
+  }, [searchString, setQueryParams, navigate])
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {
       if (key === 'Enter') onSearchClick()
     },
-    [onSearchClick]
+    [onSearchClick],
   )
 
   return (
@@ -104,16 +106,16 @@ const MainPage = () => {
         <InputText
           value={searchString}
           placeholder={'Extrinsic / account'}
-          onChange={(value) =>setSearchString(value?.toString() || '')}
+          onChange={(value) => setSearchString(value?.toString() || '')}
           onKeyDown={onSearchKeyDown}
         />
-        <Button onClick={onSearchClick} text="Search"/>
+        <Button onClick={onSearchClick} text='Search' />
       </div>
       {/* TODO: keep in mind - QTZ should be changed to different name based on config */}
       {!isBlocksFetching &&
-        !isTransfersFetching &&
-        !transfers?.view_extrinsic.length &&
-        !blocks?.view_last_block.length && <NothingFoundComponent />}
+      !isTransfersFetching &&
+      !transfers?.view_extrinsic.length &&
+      !blocks?.view_last_block.length && <NothingFoundComponent />}
       {!!transfers?.view_extrinsic.length && (
         <div className={'margin-top'}>
           <h2>Last QTZ transfers</h2>
