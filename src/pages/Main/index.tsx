@@ -24,7 +24,11 @@ const MainPage = () => {
   const [queryParams, setQueryParams] = useSearchParams()
 
   const [search, blockOffset, transactionOffset] = useMemo<[string | null, number, number]>(() => {
-    return [queryParams.get('search'), (Number(queryParams.get('blockPage')) || 0) * pageSize, (Number(queryParams.get('transactionPage')) || 0) * pageSize]
+    return [
+      queryParams.get('search'),
+      ((Number(queryParams.get('blockPage')) || 1) - 1) * pageSize,
+      ((Number(queryParams.get('transactionPage')) || 1) - 1) * pageSize,
+    ]
   }, [queryParams])
 
   const [searchString, setSearchString] = useState(search || '')
