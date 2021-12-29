@@ -1,5 +1,25 @@
 @import 'global';
 
+.pagination-wrapper {
+  font-size: 16px;
+  .total {
+    margin-right: calc(var(--gap) / 2);
+  }
+  .unique-select {
+    display: flex;
+    align-items: baseline;
+    column-gap: calc(var(--gap) / 2);
+    label {
+      font-size: 16px;
+      font-weight: 500;
+      width: 64px;
+    }
+    .select-wrapper {
+      width: 72px;
+    }
+  }
+}
+
 .pagination-container {
   list-style: none;
   padding: 0;

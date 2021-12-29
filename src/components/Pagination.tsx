@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import { Icon } from '@unique-nft/ui-kit'
-import usePagination, { UsePaginationProps, DOTS } from '../hooks/usePagination'
-import useDeviceSize from '../hooks/useDeviceSize'
+import { Icon, Select } from '@unique-nft/ui-kit'
+import usePagination, { DOTS } from '../hooks/usePagination'
 
 interface PaginationProps {
   count: number // total number of elements in DB
-  pageSize?: number // how many elements we present per single page
+  defaultPageSize?: number // how many elements we present per single page
   onPageChange: (limit: number, offset: number) => void // fetch new page data
   siblingCount?: number // how many pages to show, the rest will be "..."
   currentPage?: number
 }
+
+const PageSizeOptions = [10, 20, 30]
 
 // TODO: can be string (when DOTS)
 const PageNumberComponent = (props: {
@@ -36,13 +37,14 @@ const PageNumberComponent = (props: {
 }
 
 const PaginationComponent = ({
-  currentPage: currentPageFromProps,
-  count,
-  siblingCount = 2,
-  pageSize = 10,
-  onPageChange,
-}: PaginationProps) => {
+                               currentPage: currentPageFromProps,
+                               count,
+                               siblingCount = 2,
+                               defaultPageSize = 10,
+                               onPageChange,
+                             }: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1)
+  const [pageSize, setPageSize] = useState(defaultPageSize)
   const paginationRange = usePagination({
     total: count,
     currentPage,
@@ -66,10 +68,18 @@ const PaginationComponent = ({
     onPageChanged(currentPage - 1)
   }
 
+  const onPageSizeChange = (value: number) => {
+    setPageSize(value)
+    setCurrentPage(1)
+    onPageChange(value, 0)
+  }
 
   return (
     <div className={'flexbox-container flexbox-container_space-between pagination-wrapper'}>
-      <div>{count} items</div>
+      <div className={'flexbox-container'}>
+        <span className={'total'}>{count} items</span>
+        <Select label={'On page'} value={pageSize} options={PageSizeOptions} onChange={onPageSizeChange} />
+      </div>
       {count > pageSize && <ul className={'pagination-container'}>
         <li key={'prev'} onClick={onPrevious}>
           <Icon name={'carret-right'} size={12} color={currentPage === 1 ? '#ABB6C1' : '#040B1D'} />
@@ -84,7 +94,8 @@ const PaginationComponent = ({
         ))}
         {/* TODO: disabled={currentPage === lastPage} */}
         <li key={'next'} onClick={onNext}>
-          <Icon name={'carret-right'} size={12} color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'} />
+          <Icon name={'carret-right'} size={12}
+                color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'} />
         </li>
       </ul>}
     </div>

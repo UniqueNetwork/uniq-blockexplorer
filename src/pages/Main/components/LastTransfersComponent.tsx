@@ -100,7 +100,7 @@ const LastTransfersComponent = ({
         </div>)}
       </div>}
       <PaginationComponent
-        pageSize={pageSize}
+        defaultPageSize={pageSize}
         count={data?.view_extrinsic_aggregate.aggregate?.count || 0}
         onPageChange={onPageChange}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
