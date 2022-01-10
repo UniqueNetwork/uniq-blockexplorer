@@ -12,6 +12,9 @@ interface PaginationProps {
 
 const PageSizeOptions = [10, 20, 30]
 
+const DisabledColor = '#ABB6C1'
+const ActiveColor = '#040B1D'
+
 // TODO: can be string (when DOTS)
 const PageNumberComponent = (props: {
   pageNumber: number | string
@@ -37,12 +40,12 @@ const PageNumberComponent = (props: {
 }
 
 const PaginationComponent = ({
-                               currentPage: currentPageFromProps,
-                               count,
-                               siblingCount = 2,
-                               defaultPageSize = 10,
-                               onPageChange,
-                             }: PaginationProps) => {
+  currentPage: currentPageFromProps,
+  count,
+  siblingCount = 2,
+  defaultPageSize = 10,
+  onPageChange,
+}: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1)
   const [pageSize, setPageSize] = useState(defaultPageSize)
   const paginationRange = usePagination({
@@ -51,15 +54,19 @@ const PaginationComponent = ({
     siblingCount,
     pageSize,
   })
-  let lastPage =
+
+  const lastPage =
     (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null
+
+  const isLastPage = currentPage === lastPage || count < pageSize
+
   const onPageChanged = (newPage: number) => {
     const offset = (newPage - 1) * pageSize
     setCurrentPage(newPage)
     onPageChange(pageSize, offset)
   }
   const onNext = () => {
-    if (currentPage === lastPage || count < pageSize) return
+    if (isLastPage) return
     onPageChanged(currentPage + 1)
   }
 
@@ -78,26 +85,39 @@ const PaginationComponent = ({
     <div className={'flexbox-container flexbox-container_space-between pagination-wrapper'}>
       <div className={'flexbox-container'}>
         <span className={'total'}>{count} items</span>
-        <Select label={'On page'} value={pageSize} options={PageSizeOptions} onChange={onPageSizeChange} />
+        <Select
+          label={'On page'}
+          value={pageSize}
+          options={PageSizeOptions}
+          onChange={onPageSizeChange}
+        />
       </div>
-      {count > pageSize && <ul className={'pagination-container'}>
-        <li key={'prev'} onClick={onPrevious}>
-          <Icon name={'carret-right'} size={12} color={currentPage === 1 ? '#ABB6C1' : '#040B1D'} />
-        </li>
-        {paginationRange.map((pageNumber, index) => (
-          <PageNumberComponent
-            key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
-            pageNumber={pageNumber}
-            currentPage={currentPage}
-            onPageChanged={onPageChanged}
-          />
-        ))}
-        {/* TODO: disabled={currentPage === lastPage} */}
-        <li key={'next'} onClick={onNext}>
-          <Icon name={'carret-right'} size={12}
-                color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'} />
-        </li>
-      </ul>}
+      {count > pageSize && (
+        <ul className={'pagination-container'}>
+          <li key={'prev'} onClick={onPrevious}>
+            <Icon
+              name={'carret-right'}
+              size={12}
+              color={currentPage === 1 ? DisabledColor : ActiveColor}
+            />
+          </li>
+          {paginationRange.map((pageNumber, index) => (
+            <PageNumberComponent
+              key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
+              pageNumber={pageNumber}
+              currentPage={currentPage}
+              onPageChanged={onPageChanged}
+            />
+          ))}
+          <li key={'next'} onClick={onNext}>
+            <Icon
+              name={'carret-right'}
+              size={12}
+              color={isLastPage ? DisabledColor : ActiveColor}
+            />
+          </li>
+        </ul>
+      )}
     </div>
   )
 }
