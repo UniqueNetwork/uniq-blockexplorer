@@ -9,6 +9,7 @@ import { BlockComponentProps } from '../types'
 import { timeDifference } from '../../../utils/timestampUtils'
 import LoadingComponent from '../../../components/LoadingComponent'
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
+import config from '../../../config'
 
 const transferColumns = [
   {
@@ -41,7 +42,7 @@ const transferColumns = [
     key: 'amount',
     width: 100,
     render: (value: number | object) => (
-      <Text size={'s'}>{`${(Number(value) && value) || 0} QTZ`}</Text>
+      <Text size={'s'}>{`${(Number(value) && value) || 0} ${config.TOKEN_ID}`}</Text>
     ),
   },
 ]
@@ -110,7 +111,7 @@ const LastTransfersComponent = ({
                 </div>
                 <div>
                   <Text className={'title'}>Amount</Text>
-                  <Text>{`${(Number(item.amount) && item.amount) || 0} QTZ`}</Text>
+                  <Text>{`${(Number(item.amount) && item.amount) || 0} ${config.TOKEN_ID}`}</Text>
                 </div>
               </div>
             ))}

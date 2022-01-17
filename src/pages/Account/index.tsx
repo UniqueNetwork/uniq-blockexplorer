@@ -9,6 +9,7 @@ import {
   Variables as TransferVariables,
 } from '../../api/graphQL/transfers'
 import useDeviceSize, { DeviceSize } from '../../hooks/useDeviceSize'
+import config from '../../config'
 
 // const assetsTabs = ['Collections', 'Tokens']
 
@@ -66,7 +67,7 @@ const AccountPage = () => {
       {/*    <CollectionsComponent accountId={accountId} />,*/}
       {/*    <TokensComponent accountId={accountId} />]}*/}
       {/*/>*/}
-      <h2 className={'margin-top margin-bottom'}>Last QTZ transfers</h2>
+      <h2 className={'margin-top margin-bottom'}>Last {config.TOKEN_ID} transfers</h2>
       <LastTransfersComponent
         data={transfers}
         onPageChange={onTransfersPageChange}

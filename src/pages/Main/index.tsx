@@ -2,7 +2,11 @@ import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { Button, Heading, InputText } from '@unique-nft/ui-kit'
-import { Data as BlocksData, getLatestBlocksQuery, Variables as BlocksVariables } from '../../api/graphQL/block'
+import {
+  Data as BlocksData,
+  getLatestBlocksQuery,
+  Variables as BlocksVariables,
+} from '../../api/graphQL/block'
 import {
   Data as TransfersData,
   getLastTransfersQuery,
@@ -10,6 +14,7 @@ import {
 } from '../../api/graphQL/transfers'
 import LastTransfersComponent from './components/LastTransfersComponent'
 import LastBlocksComponent from './components/LastBlocksComponent'
+import config from '../../config'
 
 const MainPage = () => {
   const pageSize = 10 // default
@@ -48,7 +53,7 @@ const MainPage = () => {
           offset,
         },
       }),
-    [fetchMoreBlocks, searchString],
+    [fetchMoreBlocks, searchString]
   )
   const onTransfersPageChange = useCallback(
     (limit: number, offset: number) =>
@@ -58,11 +63,10 @@ const MainPage = () => {
           offset,
         },
       }),
-    [fetchMoreTransfers, searchString],
+    [fetchMoreTransfers, searchString]
   )
 
   const onSearchClick = useCallback(() => {
-
     if (/^\w{48}\w*$/.test(searchString)) {
       navigate(`/account/${searchString}`)
       return
@@ -107,7 +111,7 @@ const MainPage = () => {
     ({ key }) => {
       if (key === 'Enter') onSearchClick()
     },
-    [onSearchClick],
+    [onSearchClick]
   )
 
   return (
@@ -120,11 +124,10 @@ const MainPage = () => {
           onChange={(value) => setSearchString(value?.toString() || '')}
           onKeyDown={onSearchKeyDown}
         />
-        <Button onClick={onSearchClick} title='Search' role={'primary'} />
+        <Button onClick={onSearchClick} title="Search" role={'primary'} />
       </div>
-      {/* TODO: keep in mind - QTZ should be changed to different name based on data from rpc */}
       <div className={'main-block-container'}>
-        <Heading size={'2'}>Last QTZ transfers</Heading>
+        <Heading size={'2'}>{`Last ${config.TOKEN_ID} transfers`}</Heading>
         <LastTransfersComponent
           data={transfers}
           loading={isTransfersFetching}
