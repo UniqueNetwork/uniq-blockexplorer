@@ -1,11 +1,12 @@
 import React, { FC, useCallback, useMemo } from 'react'
-import { Select } from '@unique-nft/ui-kit'
+import styled from 'styled-components'
 import { Link, useNavigate } from 'react-router-dom'
+import { Select } from '@unique-nft/ui-kit'
 import { useApi } from '../hooks/useApi'
 import chains from '../chains'
 import { chain } from '@polkadot/types/interfaces/definitions'
 
-const Header: FC = () => {
+const Header: FC<{ className?: string }> = ({ className }) => {
   const { currentChain } = useApi()
 
   const navigate = useNavigate()
@@ -27,7 +28,7 @@ const Header: FC = () => {
   )
 
   return (
-    <div className={'flexbox-container flexbox-container_space-between full-width'}>
+    <div className={className}>
       <Link to={`/${currentChain ? currentChain?.id + '/' : ''}`}>
         <img src="/logos/unique.svg" alt="Logo" className="header__logo" />
       </Link>
@@ -36,4 +37,10 @@ const Header: FC = () => {
   )
 }
 
-export default Header
+export default styled(Header)`
+  display: flex;
+  column-gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`

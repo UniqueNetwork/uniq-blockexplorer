@@ -128,10 +128,6 @@ a {
   margin-bottom: calc(var(--gap) * 1.5) !important;
 }
 
-.main-block-container {
-  padding-top: calc(var(--gap) * 2);
-}
-
 .full-width {
   width: 100%;
 }
@@ -142,15 +138,6 @@ a {
 
 .margin-bottom {
   margin-bottom: var(--gap);
-}
-
-.search-wrap {
-  display: flex;
-  .input-width-612 {
-    box-sizing: border-box;
-    width: 612px;
-    margin-right: calc(var(--gap) / 2);
-  }
 }
 
 .loading {

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
 import { Button, Heading, InputText } from '@unique-nft/ui-kit'
 import { useGraphQlBlocks } from '../../api/graphQL/block'
 import { useGraphQlLastTransfers } from '../../api/graphQL/transfers'
@@ -68,7 +69,7 @@ const MainPage = () => {
   )
 
   return (
-    <div>
+    <Wrapper>
       <div className={'search-wrap'}>
         <InputText
           placeholder={'Extrinsic / account'}
@@ -99,8 +100,22 @@ const MainPage = () => {
           pageSize={pageSize}
         />
       </div>
-    </div>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.section`
+  > .search-wrap {
+    display: flex;
+    .input-width-612 {
+      box-sizing: border-box;
+      width: 612px;
+      margin-right: calc(var(--gap) / 2);
+    }
+  }
+  > .main-block-container {
+    padding-top: calc(var(--gap) * 2);
+  }
+`
 
 export default MainPage
