@@ -2,6 +2,6 @@
 
   w.ENV = w.ENV || {};
 
-  w.ENV.API_URL = String('${API_URL}');
+  // w.ENV.API_URL = String('${API_URL}');
 
 })(this);
