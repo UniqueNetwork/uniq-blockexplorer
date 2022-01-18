@@ -77,6 +77,7 @@ const LastTransfersComponent = ({
           }
           emptyText={() => (!loading ? 'No data' : <LoadingComponent />)}
           rowKey={'block_index'}
+          tableLayout={'fixed'}
         />
       )}
 
@@ -90,7 +91,7 @@ const LastTransfersComponent = ({
           )}
           {!loading &&
             transfersWithTimeDifference(data?.view_extrinsic).map((item) => (
-              <div className={'row'}>
+              <div key={`transfer-${item.block_index}`} className={'row'}>
                 <div>
                   <Text className={'title'}>Extrinsic</Text>
                   <Link to={`/extrinsic/${item.block_index}`}>
