@@ -1,5 +1,10 @@
-import React from 'react';
+import React from 'react'
+import ExtrinsicDetail from './components/ExtrinsicDetail'
 
-const ExampleComponent = () => <div>Example</div>;
+const ExtrinsicPage = () => {
+  return <div>
+    <ExtrinsicDetail />
+  </div>
+}
 
-export default ExampleComponent;
+export default ExtrinsicPage

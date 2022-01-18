@@ -1,39 +1,23 @@
+import './app.scss';
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { Account, Collections, Extrinsic, Main, Tokens, Transfers } from './pages'
-
-const ExamplePage = () => {
-  return <div>Example</div>
-}
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { Account, Extrinsic, Main } from './pages'
+import PageLayout from './components/PageLayout';
 
 export default function App() {
   return (
-    <>
+    <div className={'app-wrapper'}>
       <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">1</Link>
-              </li>
-              <li>
-                <Link to="/account">account</Link>
-              </li>
-              <li>
-                <Link to="/extrinsic">extrinsic</Link>
-              </li>
-            </ul>
-          </nav>
-
+        <PageLayout>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/extrinsic" element={<Extrinsic />} />
+            <Route path="/account/:accountId" element={<Account />} />
+            <Route path="/extrinsic/:blockIndex" element={<Extrinsic />} />
           </Routes>
-        </div>
+        </PageLayout>
       </Router>
-    </>
+    </div>
   )
 }
