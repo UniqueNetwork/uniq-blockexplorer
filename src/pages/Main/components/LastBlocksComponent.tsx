@@ -21,47 +21,68 @@ const blockColumns = [
   { title: 'Event', dataIndex: 'event_count', key: 'event_count', width: 100 },
 ]
 
-const blocksWithTimeDifference = (blocks: Block[] | undefined): (Block & { time_difference: string })[] => {
+const blocksWithTimeDifference = (
+  blocks: Block[] | undefined
+): (Block & { time_difference: string })[] => {
   if (!blocks) return []
-  return blocks.map(
-    (block: Block) => ({ ...block, time_difference: timeDifference(block.timestamp) }),
-  )
+  return blocks.map((block: Block) => ({
+    ...block,
+    time_difference: timeDifference(block.timestamp),
+  }))
 }
 
-const LastBlocksComponent = ({ data, pageSize, loading, onPageChange }: BlockComponentProps<BlocksData>) => {
-
+const LastBlocksComponent = ({
+  data,
+  pageSize,
+  loading,
+  onPageChange,
+}: BlockComponentProps<BlocksData>) => {
   const deviceSize = useDeviceSize()
 
   return (
     <div>
-      {deviceSize !== DeviceSize.sm && <Table
-        columns={blockColumns}
-        data={!loading && data?.view_last_block.length ? blocksWithTimeDifference(data?.view_last_block) : []}
-        emptyText={() => !loading ? 'No data' : <LoadingComponent />}
-        rowKey={'block_number'}
-      />}
-      {deviceSize === DeviceSize.sm && <div className={'table-sm'}>
-        {loading && <LoadingComponent />}
-        {!loading && data?.view_last_block.length === 0 && <Text className={'text_grey'}>No data</Text>}
-        {!loading && blocksWithTimeDifference(data?.view_last_block).map((item) => <div className={'row'}>
-          <div>
-            <Text color={'grey-500'}>Block</Text>
-            <Text>{item.block_number.toString()}</Text>
-          </div>
-          <div>
-            <Text color={'grey-500'}>Age</Text>
-            <Text>{item.time_difference}</Text>
-          </div>
-          <div>
-            <Text color={'grey-500'}>Extrinsic</Text>
-            <Text>{item.extrinsic_count?.toString() || '0'}</Text>
-          </div>
-          <div>
-            <Text color={'grey-500'}>Event</Text>
-            <Text>{item.event_count?.toString() || '0'}</Text>
-          </div>
-        </div>)}
-      </div>}
+      {deviceSize !== DeviceSize.sm && (
+        <Table
+          columns={blockColumns}
+          data={
+            !loading && data?.view_last_block.length
+              ? blocksWithTimeDifference(data?.view_last_block)
+              : []
+          }
+          emptyText={() => (!loading ? 'No data' : <LoadingComponent />)}
+          rowKey={'block_number'}
+          tableLayout={'fixed'}
+        />
+      )}
+      {deviceSize === DeviceSize.sm && (
+        <div className={'table-sm'}>
+          {loading && <LoadingComponent />}
+          {!loading && data?.view_last_block.length === 0 && (
+            <Text className={'text_grey'}>No data</Text>
+          )}
+          {!loading &&
+            blocksWithTimeDifference(data?.view_last_block).map((item) => (
+              <div key={`block-${item.block_number}`} className={'row'}>
+                <div>
+                  <Text color={'grey-500'}>Block</Text>
+                  <Text>{item.block_number.toString()}</Text>
+                </div>
+                <div>
+                  <Text color={'grey-500'}>Age</Text>
+                  <Text>{item.time_difference}</Text>
+                </div>
+                <div>
+                  <Text color={'grey-500'}>Extrinsic</Text>
+                  <Text>{item.extrinsic_count?.toString() || '0'}</Text>
+                </div>
+                <div>
+                  <Text color={'grey-500'}>Event</Text>
+                  <Text>{item.event_count?.toString() || '0'}</Text>
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
       <PaginationComponent
         pageSize={pageSize}
         count={data?.view_last_block_aggregate?.aggregate?.count || 0}
