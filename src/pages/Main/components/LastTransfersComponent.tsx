@@ -10,6 +10,7 @@ import { timeDifference } from '../../../utils/timestampUtils'
 import LoadingComponent from '../../../components/LoadingComponent'
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
 import config from '../../../config'
+import { formatAmount } from '../../../utils/textUtils'
 
 const transferColumns = [
   {
@@ -42,7 +43,7 @@ const transferColumns = [
     key: 'amount',
     width: 100,
     render: (value: number | object) => (
-      <Text size={'s'}>{`${(Number(value) && value) || 0} ${config.TOKEN_ID}`}</Text>
+      <Text size={'s'}>{`${formatAmount(Number(value))} ${config.TOKEN_ID}`}</Text>
     ),
   },
 ]
@@ -112,7 +113,7 @@ const LastTransfersComponent = ({
                 </div>
                 <div>
                   <Text className={'title'}>Amount</Text>
-                  <Text>{`${(Number(item.amount) && item.amount) || 0} ${config.TOKEN_ID}`}</Text>
+                  <Text>{`${formatAmount(Number(item.amount))} ${config.TOKEN_ID}`}</Text>
                 </div>
               </div>
             ))}

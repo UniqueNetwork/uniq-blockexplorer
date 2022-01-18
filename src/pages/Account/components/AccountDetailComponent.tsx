@@ -8,7 +8,7 @@ import {
 import Avatar from '../../../components/Avatar'
 import LoadingComponent from '../../../components/LoadingComponent'
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { shortcutText } from '../../../utils/textUtils'
+import { formatAmount, shortcutText } from '../../../utils/textUtils'
 import config from '../../../config'
 
 interface AccountProps {
@@ -59,13 +59,13 @@ const AccountDetailComponent: FC<AccountProps> = (props) => {
         <div className={'grid-item_col1 text_grey margin-top'}>Balance</div>
         <div className={'grid-item_col11 flexbox-container flexbox-container_wrap margin-top'}>
           <span>
-            {freeBalance || 'unavailable'} {config.TOKEN_ID} (total){' '}
+            {freeBalance ? formatAmount(Number(freeBalance)) : 'unavailable'} {config.TOKEN_ID} (total){' '}
           </span>
           <span className={'text_grey'}>
-            {lockedBalance || 'unavailable'} {config.TOKEN_ID} (locked){' '}
+            {lockedBalance ? formatAmount(Number(lockedBalance)) : 'unavailable'} {config.TOKEN_ID} (locked){' '}
           </span>
           <span className={'text_grey'}>
-            {availableBalance || 'unavailable'} {config.TOKEN_ID} (transferable){' '}
+            {availableBalance ? formatAmount(Number(availableBalance)) : 'unavailable'} {config.TOKEN_ID} (transferable){' '}
           </span>
         </div>
       </div>

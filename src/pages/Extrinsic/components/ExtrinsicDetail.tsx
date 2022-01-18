@@ -10,7 +10,7 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import LoadingComponent from '../../../components/LoadingComponent'
 import { Heading } from '@unique-nft/ui-kit'
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { shortcutText } from '../../../utils/textUtils'
+import { formatAmount, shortcutText } from '../../../utils/textUtils'
 import config from '../../../config'
 
 const ExtrinsicDetail: FC = () => {
@@ -71,12 +71,12 @@ const ExtrinsicDetail: FC = () => {
         {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
         <div className={'grid-item_col11 flexbox-container'}>
           <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {Number(amount) || 0} {config.TOKEN_ID}
+          {formatAmount(Number(amount))} {config.TOKEN_ID}
         </div>
         <div className={'grid-item_col1 text_grey'}>Fee</div>
         <div className={'grid-item_col11 flexbox-container'}>
           <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {Number(fee) || 0} {config.TOKEN_ID}
+          {formatAmount(Number(fee))} {config.TOKEN_ID}
         </div>
       </div>
       <div className={'grid-container grid-container_extrinsic-container'}>
