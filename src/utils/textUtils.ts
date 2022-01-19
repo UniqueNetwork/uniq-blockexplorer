@@ -4,9 +4,9 @@ export const shortcutText = (text: string) => {
   return start && end ? `${start}...${end}` : text
 }
 
-export const formatAmount = (amount: number) => {
+export const formatAmount = (amount: string | undefined) => {
   if (!amount) return '0'
-  const parts = amount.toString().split('.')
+  const parts = amount.split('.')
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   return parts.join('.')
 }

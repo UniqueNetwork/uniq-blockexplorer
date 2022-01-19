@@ -71,12 +71,12 @@ const ExtrinsicDetail: FC = () => {
         {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
         <div className={'grid-item_col11 flexbox-container'}>
           <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {formatAmount(Number(amount))} {config.TOKEN_ID}
+          {formatAmount(amount?.toString())} {config.TOKEN_ID}
         </div>
         <div className={'grid-item_col1 text_grey'}>Fee</div>
         <div className={'grid-item_col11 flexbox-container'}>
           <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {formatAmount(Number(fee))} {config.TOKEN_ID}
+          {formatAmount(fee?.toString())} {config.TOKEN_ID}
         </div>
       </div>
       <div className={'grid-container grid-container_extrinsic-container'}>

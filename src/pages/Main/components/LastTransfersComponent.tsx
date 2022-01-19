@@ -42,8 +42,8 @@ const transferColumns = [
     dataIndex: 'amount',
     key: 'amount',
     width: 100,
-    render: (value: number | object) => (
-      <Text size={'s'}>{`${formatAmount(Number(value))} ${config.TOKEN_ID}`}</Text>
+    render: (value: string) => (
+      <Text size={'s'}>{`${formatAmount(value)} ${config.TOKEN_ID}`}</Text>
     ),
   },
 ]
@@ -113,7 +113,7 @@ const LastTransfersComponent = ({
                 </div>
                 <div>
                   <Text className={'title'}>Amount</Text>
-                  <Text>{`${formatAmount(Number(item.amount))} ${config.TOKEN_ID}`}</Text>
+                  <Text>{`${formatAmount(item.amount)} ${config.TOKEN_ID}`}</Text>
                 </div>
               </div>
             ))}
