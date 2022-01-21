@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client'
-import { ExtrinsicData, ExtrinsicVariables } from './types'
+import { gql, useQuery } from '@apollo/client';
+import { ExtrinsicData, ExtrinsicVariables } from './types';
 
 const extrinsicQuery = gql`
   query getExtrinsic($limit: Int, $offset: Int, $block_index: String!) {
@@ -25,18 +25,19 @@ const extrinsicQuery = gql`
       }
     }
   }
-`
+`;
 
-export { extrinsicQuery }
+export { extrinsicQuery };
 
 export const useGraphQlExtrinsic = (blockIndex?: string) => {
-  const { loading: isExtrinsicFetching, data } = useQuery<ExtrinsicData, ExtrinsicVariables>(
+  const { data, loading: isExtrinsicFetching } = useQuery<ExtrinsicData, ExtrinsicVariables>(
     extrinsicQuery,
     {
-      variables: { block_index: blockIndex || '', limit: 1, offset: 0 },
       fetchPolicy: 'network-only',
       notifyOnNetworkStatusChange: true,
+      variables: { block_index: blockIndex || '', limit: 1, offset: 0 }
     }
-  )
-  return { extrinsic: data?.view_extrinsic[0], isExtrinsicFetching }
-}
+  );
+
+  return { extrinsic: data?.view_extrinsic[0], isExtrinsicFetching };
+};

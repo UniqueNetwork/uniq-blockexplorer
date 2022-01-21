@@ -1,7 +1,7 @@
-import React, { FC, Reducer, useCallback, useReducer, useState } from 'react'
-import { InputText, Checkbox, Button } from '@unique-nft/ui-kit'
-import { Collection, collections as gqlCollection } from '../../../api/graphQL'
-import CollectionCard from '../../../components/CollectionCard'
+import React, { FC, Reducer, useCallback, useReducer, useState } from 'react';
+import { InputText, Checkbox, Button } from '@unique-nft/ui-kit';
+import { Collection, collections as gqlCollection } from '../../../api/graphQL';
+import CollectionCard from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
   accountId: string
@@ -9,90 +9,105 @@ interface CollectionsComponentProps {
 
 type ActionType = 'All' | 'Owner' | 'Admin' | 'Sponsor' | 'Received'
 
-const pageSize = 6
+const pageSize = 6;
 
 const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
-  const { accountId } = props
+  const { accountId } = props;
 
   const [filter, dispatchFilter] = useReducer<
-    Reducer<Record<string, any> | undefined, { type: ActionType; value: string | boolean }>
+  Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
     if (action.type === 'All' && action.value) {
-      return undefined
+      return undefined;
     }
+
     if (action.type === 'Owner') {
-      return { ...state, owner: action.value ? { _eq: accountId } : undefined }
+      return { ...state, owner: action.value ? { _eq: accountId } : undefined };
     }
+
     if (action.type === 'Admin') {
-      return { ...state, admin: action.value ? { _eq: accountId } : undefined }
+      return { ...state, admin: action.value ? { _eq: accountId } : undefined };
     }
+
     if (action.type === 'Sponsor') {
-      return { ...state, sponsor: action.value ? { _eq: accountId } : undefined }
+      return { ...state, sponsor: action.value ? { _eq: accountId } : undefined };
     }
+
     if (action.type === 'Received') {
-      return { ...state, received: action.value ? { _eq: accountId } : undefined }
+      return { ...state, received: action.value ? { _eq: accountId } : undefined };
     }
-    return state
-  }, undefined)
 
-  const [searchString, setSearchString] = useState<string | undefined>()
+    return state;
+  }, undefined);
 
-  const { fetchMoreCollections, collections, collectionsCount } =
+  const [searchString, setSearchString] = useState<string | undefined>();
+
+  const { collections, collectionsCount, fetchMoreCollections } =
     gqlCollection.useGraphQlCollections({
-      pageSize,
-    })
+      pageSize
+    });
 
   const onCheckBoxChange = useCallback(
     (actionType: ActionType) => (value: boolean) => dispatchFilter({ type: actionType, value }),
     [dispatchFilter]
-  )
+  );
 
   const onSearchChange = useCallback(
     (value: string | number | undefined) => setSearchString(value?.toString()),
     [setSearchString]
-  )
+  );
 
   const onSearchClick = useCallback(() => {
     fetchMoreCollections({ searchString })
-  }, [fetchMoreCollections, searchString])
+      .catch((errMsg) => console.error(errMsg));
+  }, [fetchMoreCollections, searchString]);
+
+  const onClickSeeMore = useCallback(() => {}, []);
 
   return (
     <>
       <div className={'flexbox-container flexbox-container_space-between margin-top'}>
         <div className={'flexbox-container flexbox-container_half-gap'}>
-          <InputText placeholder={'Collection name'} onChange={onSearchChange} />
-          <Button title={'Search'} role="primary" onClick={onSearchClick} />
+          <InputText
+            onChange={onSearchChange}
+            placeholder={'Collection name'}
+          />
+          <Button
+            onClick={onSearchClick}
+            role='primary'
+            title={'Search'}
+          />
         </div>
         <div className={'flexbox-container'}>
           <Checkbox
-            label={'All'}
-            size={'s'}
             checked={filter === undefined}
+            label={'All'}
             onChange={onCheckBoxChange('All')}
+            size={'s'}
           />
           <Checkbox
-            label={'Owner'}
-            size={'s'}
             checked={!!filter?.owner}
+            label={'Owner'}
             onChange={onCheckBoxChange('Owner')}
+            size={'s'}
           />
           <Checkbox
-            label={'Admin'}
-            size={'s'}
             checked={!!filter?.admin}
+            label={'Admin'}
             onChange={onCheckBoxChange('Admin')}
+            size={'s'}
           />
           <Checkbox
-            label={'Sponsor'}
-            size={'s'}
             checked={!!filter?.sponsor}
+            label={'Sponsor'}
             onChange={onCheckBoxChange('Sponsor')}
+            size={'s'}
           />
           <Checkbox
-            label={'Received'}
-            size={'s'}
             checked={!!filter?.received}
+            label={'Received'}
             onChange={onCheckBoxChange('Received')}
+            size={'s'}
           />
         </div>
       </div>
@@ -100,21 +115,24 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
       <div className={'grid-container'}>
         {collections?.map &&
           collections.map((collection: Collection) => (
-            <CollectionCard key={`collection-${collection.collection_id}`} {...collection} />
+            <CollectionCard
+              key={`collection-${collection.collection_id}`}
+              {...collection}
+            />
           ))}
       </div>
       <Button
-        title={'See all'}
         iconRight={{
           color: '#fff',
           name: 'arrow-right',
-          size: 12,
+          size: 12
         }}
-        role="primary"
-        onClick={() => {}}
+        onClick={onClickSeeMore}
+        role='primary'
+        title={'See all'}
       />
     </>
-  )
-}
+  );
+};
 
-export default CollectionsComponent
+export default CollectionsComponent;

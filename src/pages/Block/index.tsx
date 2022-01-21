@@ -1,26 +1,21 @@
-import React, { useCallback, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Tabs } from '@unique-nft/ui-kit'
-import { useQuery } from '@apollo/client'
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Tabs } from '@unique-nft/ui-kit';
 
-import BlockDetailComponent from './components/BlockDetailComponent'
-import ExtrinsicsListComponent from './components/ExtrinsicsListComponent'
-import EventListComponent from './components/EventsListComponent'
+import BlockDetailComponent from './components/BlockDetailComponent';
+import ExtrinsicsListComponent from './components/ExtrinsicsListComponent';
+import EventListComponent from './components/EventsListComponent';
 
-const assetsTabs = ['Extrinsics', 'Events']
+const assetsTabs = ['Extrinsics', 'Events'];
 
 const BlockPage = () => {
-  const { blockIndex } = useParams()
-  const pageSize = 10 // default
+  const { blockIndex } = useParams();
 
-  const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0)
+  const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
   return (
     <div className={'block'}>
-      <BlockDetailComponent block_number={blockIndex} />
-
-      <div className={'margin-bottom'}></div>
-      <div className={'margin-bottom'}></div>
+      <BlockDetailComponent blockNumber={blockIndex} />
 
       <Tabs
         activeIndex={activeAssetsTabIndex}
@@ -30,12 +25,18 @@ const BlockPage = () => {
       <Tabs
         activeIndex={activeAssetsTabIndex}
         contents={[
-          <ExtrinsicsListComponent blockNumber={blockIndex} />,
-          <EventListComponent blockNumber={blockIndex} />,
+          <ExtrinsicsListComponent
+            blockNumber={blockIndex}
+            key={'extrinsic-list'}
+          />,
+          <EventListComponent
+            blockNumber={blockIndex}
+            key={'event-list'}
+          />
         ]}
       />
     </div>
-  )
-}
+  );
+};
 
-export default BlockPage
+export default BlockPage;

@@ -1,39 +1,37 @@
-import React, { FC } from 'react'
-import { Text } from '@unique-nft/ui-kit'
-import { account as gqlAccount } from '../../../api/graphQL'
-import Avatar from '../../../components/Avatar'
-import LoadingComponent from '../../../components/LoadingComponent'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { shortcutText } from '../../../utils/textUtils'
-import { useApi } from '../../../hooks/useApi'
+import React, { FC } from 'react';
+import { Text } from '@unique-nft/ui-kit';
+import { account as gqlAccount } from '../../../api/graphQL';
+import Avatar from '../../../components/Avatar';
+import LoadingComponent from '../../../components/LoadingComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { shortcutText } from '../../../utils/textUtils';
+import { useApi } from '../../../hooks/useApi';
 
 interface AccountProps {
   accountId: string
 }
 
 const AccountDetailComponent: FC<AccountProps> = (props) => {
-  const { accountId } = props
+  const { accountId } = props;
 
-  const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId)
+  const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
 
-  const deviceSize = useDeviceSize()
+  const deviceSize = useDeviceSize();
 
-  const { chainData } = useApi()
+  const { chainData } = useApi();
 
-  if (isAccountFetching) return <LoadingComponent />
+  if (isAccountFetching) return <LoadingComponent />;
 
-  const {
-    timestamp,
+  const { available_balance: availableBalance,
     free_balance: freeBalance,
     locked_balance: lockedBalance,
-    available_balance: availableBalance,
-  } = account || {}
+    timestamp } = account || {};
 
   return (
     <div className={'container-with-border'}>
       <div className={'grid-container grid-container_account-container'}>
         <div className={'grid-item_col1'}>
-          <Avatar size="large" />
+          <Avatar size='large' />
         </div>
         <div
           className={
@@ -47,29 +45,35 @@ const AccountDetailComponent: FC<AccountProps> = (props) => {
               : accountId}
           </h2>
         </div>
-        <Text className={'grid-item_col1'} color={'grey-500'}>
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
           Created on
         </Text>
         <Text className={'grid-item_col11'}>
           {timestamp ? new Date(timestamp).toLocaleString() : 'unavailable'}
         </Text>
-        <Text className={'grid-item_col1'} color={'grey-500'}>
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
           Balance
         </Text>
         <div className={'grid-item_col11 flexbox-container flexbox-container_wrap'}>
           <Text>{`${freeBalance || 'unavailable'} ${
-            chainData?.properties.tokenSymbol
+            chainData?.properties.tokenSymbol || ''
           } (total) `}</Text>
           <Text color={'grey-500'}>{`${lockedBalance || 'unavailable'} ${
-            chainData?.properties.tokenSymbol
+            chainData?.properties.tokenSymbol || ''
           } (locked) `}</Text>
           <Text color={'grey-500'}>{`${availableBalance || 'unavailable'} ${
-            chainData?.properties.tokenSymbol
+            chainData?.properties.tokenSymbol || ''
           } (transferable)`}</Text>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AccountDetailComponent
+export default AccountDetailComponent;

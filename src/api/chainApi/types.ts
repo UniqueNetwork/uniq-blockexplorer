@@ -1,10 +1,11 @@
-import { ChainData } from '../ApiContext'
-import { ApiPromise } from '@polkadot/api'
+import { ChainData } from '../ApiContext';
+import { ApiPromise } from '@polkadot/api';
+import { Codec } from '@polkadot/types/types';
 
 export interface IRpcClient {
   isApiConnected: boolean
-  controller?: INFTController<any, any>
-  chainData: any
+  controller?: INFTController
+  chainData?: ChainData
   rawRpcApi?: ApiPromise // allow access to the raw API for exceptions in the future
   setOnChainReadyListener(callback: (chainData: ChainData) => void): void
   changeEndpoint(endpoint: string, options?: IRpcClientOptions): void
@@ -14,10 +15,10 @@ export interface IRpcClientOptions {
   onChainReady?: (chainData: ChainData) => void
 }
 
-export interface INFTController<Collection, Token> {
+export interface INFTController<Collection = unknown, Token = unknown> {
   getCollection(collectionId: number): Promise<Collection | null>
-  getTokensOfCollection(collectionId: number, ownerId: number): Promise<Token[]>
   getToken(collectionId: number, tokenId: number): Promise<Token | null>
+  getTokensOfCollection(collectionId: number, ownerId: number): Promise<Codec | Token[]>
 }
 
 export type Chain = {

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 const getEventsQuery = gql`
   query getLastTransfers($limit: Int, $offset: Int, $where: event_bool_exp = {}) {
@@ -13,5 +13,6 @@ const getEventsQuery = gql`
       }
     }
   }
-`
-export { getEventsQuery }
+`;
+
+export { getEventsQuery };

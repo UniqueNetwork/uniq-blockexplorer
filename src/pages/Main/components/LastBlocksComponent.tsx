@@ -1,46 +1,45 @@
-import React from 'react'
-import Table from 'rc-table'
-import { Text } from '@unique-nft/ui-kit'
-import { LastBlock } from '../../../api/graphQL'
-import PaginationComponent from '../../../components/Pagination'
-import { timeDifference } from '../../../utils/timestampUtils'
-import { BlockComponentProps } from '../types'
-import LoadingComponent from '../../../components/LoadingComponent'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import Table from 'rc-table';
+import { Text } from '@unique-nft/ui-kit';
+import { LastBlock } from '../../../api/graphQL';
+import PaginationComponent from '../../../components/Pagination';
+import { timeDifference } from '../../../utils/timestampUtils';
+import { BlockComponentProps } from '../types';
+import LoadingComponent from '../../../components/LoadingComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { Link } from 'react-router-dom';
 
 const blockColumns = [
   {
-    title: 'Block',
     dataIndex: 'block_number',
     key: 'block_number',
-    width: 100,
     render: (value: string) => <Link to={`/block/${value}`}>{value}</Link>,
+    title: 'Block',
+    width: 100
   },
   // Age is calculated from timestamp aftter query execution
-  { title: 'Age', dataIndex: 'time_difference', key: 'time_difference', width: 100 },
-  { title: 'Extrinsic', dataIndex: 'extrinsic_count', key: 'extrinsic_count', width: 100 },
-  { title: 'Event', dataIndex: 'event_count', key: 'event_count', width: 100 },
-]
+  { dataIndex: 'time_difference', key: 'time_difference', title: 'Age', width: 100 },
+  { dataIndex: 'extrinsic_count', key: 'extrinsic_count', title: 'Extrinsic', width: 100 },
+  { dataIndex: 'event_count', key: 'event_count', title: 'Event', width: 100 }
+];
 
 const blocksWithTimeDifference = (
   blocks: LastBlock[] | undefined
 ): (LastBlock & { time_difference: string })[] => {
-  if (!blocks) return []
+  if (!blocks) return [];
+
   return blocks.map((block: LastBlock) => ({
     ...block,
-    time_difference: timeDifference(block.timestamp),
-  }))
-}
+    time_difference: timeDifference(block.timestamp)
+  }));
+};
 
-const LastBlocksComponent = ({
+const LastBlocksComponent = ({ count,
   data,
-  count,
-  pageSize,
   loading,
   onPageChange,
-}: BlockComponentProps<LastBlock[]>) => {
-  const deviceSize = useDeviceSize()
+  pageSize }: BlockComponentProps<LastBlock[]>) => {
+  const deviceSize = useDeviceSize();
 
   return (
     <div>
@@ -58,7 +57,10 @@ const LastBlocksComponent = ({
           {!loading && data?.length === 0 && <Text className={'text_grey'}>No data</Text>}
           {!loading &&
             blocksWithTimeDifference(data).map((item) => (
-              <div key={item.block_number} className={'row'}>
+              <div
+                className={'row'}
+                key={item.block_number}
+              >
                 <div>
                   <Text color={'grey-500'}>Block</Text>
                   <Text>{item.block_number.toString()}</Text>
@@ -80,13 +82,13 @@ const LastBlocksComponent = ({
         </div>
       )}
       <PaginationComponent
-        pageSize={pageSize}
         count={count || 0}
         onPageChange={onPageChange}
+        pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
     </div>
-  )
-}
+  );
+};
 
-export default LastBlocksComponent
+export default LastBlocksComponent;

@@ -16,7 +16,7 @@ export interface Collection {
 export interface CollectionsVariables {
   limit: number
   offset: number
-  where?: Record<string, any>
+  where?: Record<string, unknown>
 }
 
 export interface CollectionsData {
@@ -30,7 +30,7 @@ export interface CollectionsData {
 
 export type useGraphQlCollectionsProps = {
   pageSize: number
-  filter?: Record<string, any>
+  filter?: Record<string, unknown>
 }
 
 export type FetchMoreCollectionsOptions = {

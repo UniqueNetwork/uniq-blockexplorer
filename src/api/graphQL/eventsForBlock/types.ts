@@ -1,10 +1,10 @@
-import { Transfer } from '../transfers/types'
+import { Transfer } from '../transfers/types';
 
 export interface EventsForBlockVariables {
   limit: number
   offset: number
   order_by?: { [name: string]: 'asc' | 'desc' }
-  where?: { [key: string]: any }
+  where?: { [key: string]: unknown }
 }
 
 export interface EventsForBlockTransfer {

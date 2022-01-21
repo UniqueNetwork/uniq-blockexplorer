@@ -1,7 +1,7 @@
 export interface TokensVariables {
   limit: number
   offset: number
-  where?: Record<string, any>
+  where?: Record<string, unknown>
 }
 
 export interface Token {
@@ -29,7 +29,7 @@ export interface TokensData {
 
 export type useGraphQlTokensProps = {
   pageSize: number
-  filter?: Record<string, any>
+  filter?: Record<string, unknown>
 }
 
 export type FetchMoreTokensOptions = {
