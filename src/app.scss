@@ -153,15 +153,6 @@ a {
   margin-bottom: var(--gap);
 }
 
-.search-wrap {
-  display: flex;
-  .input-width-612 {
-    box-sizing: border-box;
-    width: 612px;
-    margin-right: calc(var(--gap) / 2);
-  }
-}
-
 .loading {
   width: 100%;
   display: flex;
