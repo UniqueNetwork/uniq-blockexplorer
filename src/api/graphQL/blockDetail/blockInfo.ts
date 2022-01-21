@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 const getBlockQuery = gql`
   query getBlockDetails($block_number: bigint!) {
@@ -12,6 +12,6 @@ const getBlockQuery = gql`
       state_root
     }
   }
-`
+`;
 
-export { getBlockQuery }
+export { getBlockQuery };

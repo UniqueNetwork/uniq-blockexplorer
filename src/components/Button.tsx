@@ -1,5 +1,5 @@
-import React, { FC, useMemo } from 'react'
-import { classNames } from '../utils/classNames'
+import React, { FC, useMemo } from 'react';
+import { classNames } from '../utils/classNames';
 
 interface ButtonProps {
   text: string;
@@ -12,21 +12,26 @@ interface ButtonProps {
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { text, icon, onClick, disabled, iconPosition = 'left', type = 'primary' } = props;
+  const { disabled, icon, iconPosition = 'left', onClick, text, type = 'primary' } = props;
 
   const _classNames = useMemo(() => classNames({
-    'primary': type === 'primary',
-    'secondary': type === 'secondary',
-    'disabled': !!disabled,
+    disabled: !!disabled,
     'icon-right': iconPosition === 'right',
+    primary: type === 'primary',
+    secondary: type === 'secondary'
   }), [type, disabled, iconPosition]);
 
   return (
-    <button className={`button ${_classNames}`} type="button" onClick={onClick} disabled={disabled}>
+    <button
+      className={`button ${_classNames}`}
+      disabled={disabled}
+      onClick={onClick}
+      type='button'
+    >
       {icon && <span className={'button__icon'}>{icon}</span>}
       {text}
     </button>
-  )
-}
+  );
+};
 
 export default React.memo(Button);

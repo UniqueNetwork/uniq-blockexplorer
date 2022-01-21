@@ -1,6 +1,6 @@
-import { gql, useQuery } from '@apollo/client'
-import { useCallback } from 'react'
-import { FetchMoreTokensOptions, TokensData, TokensVariables, useGraphQlTokensProps } from './types'
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
+import { FetchMoreTokensOptions, TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
   query getTokens($limit: Int, $offset: Int, $where: tokens_bool_exp = {}) {
@@ -21,43 +21,43 @@ const tokensQuery = gql`
       }
     }
   }
-`
-export const useGraphQlTokens = ({ pageSize, filter }: useGraphQlTokensProps) => {
+`;
+
+export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) => {
   const getWhere = useCallback(
     (searchString?: string) => ({
       _and: {
         ...(filter ? { _or: filter } : {}),
         ...(searchString
           ? {
-              collection: {
-                _or: {
-                  name: { _ilike: searchString },
-                  description: { _ilike: searchString },
-                  token_prefix: { _ilike: searchString },
-                },
-              },
+            collection: {
+              _or: {
+                description: { _ilike: searchString },
+                name: { _ilike: searchString },
+                token_prefix: { _ilike: searchString }
+              }
             }
-          : {}),
-      },
+          }
+          : {})
+      }
     }),
     [filter]
-  )
+  );
 
-  const {
-    fetchMore,
-    loading: isTokensFetching,
+  const { data,
     error: fetchTokensError,
-    data,
-  } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    fetchMore,
+    loading: isTokensFetching } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    fetchPolicy: 'network-only',
+    // Used for first execution
+    nextFetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
       offset: 0,
-      where: getWhere(),
-    },
-    fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
-  })
+      where: getWhere()
+    }
+  });
 
   const fetchMoreTokens = useCallback(
     ({ limit = pageSize, offset, searchString }: FetchMoreTokensOptions) => {
@@ -65,20 +65,20 @@ export const useGraphQlTokens = ({ pageSize, filter }: useGraphQlTokensProps) =>
         variables: {
           limit,
           offset,
-          where: getWhere(searchString),
-        },
-      })
+          where: getWhere(searchString)
+        }
+      });
     },
-    [fetchMore, filter, pageSize]
-  )
+    [fetchMore, getWhere, pageSize]
+  );
 
   return {
     fetchMoreTokens,
-    tokens: data?.tokens,
-    tokensCount: data?.tokens_aggregate.aggregate.count || 0,
-    isTokensFetching,
     fetchTokensError,
-  }
-}
+    isTokensFetching,
+    tokens: data?.tokens,
+    tokensCount: data?.tokens_aggregate.aggregate.count || 0
+  };
+};
 
-export { tokensQuery }
+export { tokensQuery };

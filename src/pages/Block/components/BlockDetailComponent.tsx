@@ -1,36 +1,31 @@
-import React, { FC } from 'react'
-import { useQuery } from '@apollo/client'
-import { Heading } from '@unique-nft/ui-kit'
+import React from 'react';
+import { useQuery } from '@apollo/client';
+import { Heading } from '@unique-nft/ui-kit';
 
-import LoadingComponent from '../../../components/LoadingComponent'
-import { BlockDetailData, BlockDetailVariables, blockDetail } from '../../../api/graphQL'
+import LoadingComponent from '../../../components/LoadingComponent';
+import { BlockDetailData, BlockDetailVariables, blockDetail } from '../../../api/graphQL';
 
-const BlockDetailComponent = (props: any) => {
-  const { block_number } = props
-  const {
-    loading: isBLockFetching,
-    error: fetchBlockError,
-    data: blockDetails,
-  } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
-    variables: { block_number },
+const BlockDetailComponent = (props: { blockNumber: string | undefined }) => {
+  const { blockNumber } = props;
+  const { data: blockDetails,
+    loading: isBLockFetching } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
     notifyOnNetworkStatusChange: true,
-  })
+    variables: { block_number: blockNumber || '' }
+  });
 
-  if (isBLockFetching) return <LoadingComponent />
+  if (isBLockFetching) return <LoadingComponent />;
 
-  const {
+  const { block_hash: blockHash,
+    extrinsics_root: extrinsicsRoot,
+    parent_hash: parentHash,
+    spec_version: specVersion,
+    state_root: stateRoot,
     timestamp,
-    total_events,
-    spec_version,
-    block_hash,
-    parent_hash,
-    extrinsics_root,
-    state_root,
-  } = blockDetails?.block[0] || {}
+    total_events: totalEvents } = blockDetails?.block[0] || {};
 
   return (
     <>
-      <Heading>{`Block ${block_number}`}</Heading>
+      <Heading>{`Block ${blockNumber || ''}`}</Heading>
       <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
         <div className={'grid-item_col2 text_grey'}>Status</div>
         <div className={'grid-item_col10'}>Unavailable</div>
@@ -42,42 +37,54 @@ const BlockDetailComponent = (props: any) => {
 
       <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
         <div className={'grid-item_col2 text_grey'}>Total events</div>
-        <div className={'grid-item_col10'}>{total_events}</div>
+        <div className={'grid-item_col10'}>{totalEvents}</div>
         <div className={'grid-item_col2 text_grey'}>Spec version</div>
-        <div className={'grid-item_col10'}>{spec_version}</div>
+        <div className={'grid-item_col10'}>{specVersion}</div>
       </div>
 
       <div className={'grid-container grid-container_extrinsic-container'}>
         <div className={'grid-item_col2 text_grey'}>Block hash</div>
         <div className={'grid-item_col10'}>
-          <div title={block_hash} className={'block__text-wrap'}>
-            {block_hash}
+          <div
+            className={'block__text-wrap'}
+            title={blockHash}
+          >
+            {blockHash}
           </div>
         </div>
 
         <div className={'grid-item_col2 text_grey'}>Parent hash</div>
         <div className={'grid-item_col10'}>
-          <div title={parent_hash} className={'block__text-wrap'}>
-            {parent_hash}
+          <div
+            className={'block__text-wrap'}
+            title={parentHash}
+          >
+            {parentHash}
           </div>
         </div>
 
         <div className={'grid-item_col2 text_grey'}>Extrinsic root</div>
         <div className={'grid-item_col10'}>
-          <div title={extrinsics_root} className={'block__text-wrap'}>
-            {extrinsics_root}
+          <div
+            className={'block__text-wrap'}
+            title={extrinsicsRoot}
+          >
+            {extrinsicsRoot}
           </div>
         </div>
 
         <div className={'grid-item_col2 text_grey'}>State root</div>
         <div className={'grid-item_col10'}>
-          <div title={state_root} className={'block__text-wrap'}>
-            {state_root}
+          <div
+            className={'block__text-wrap'}
+            title={stateRoot}
+          >
+            {stateRoot}
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default BlockDetailComponent
+export default BlockDetailComponent;

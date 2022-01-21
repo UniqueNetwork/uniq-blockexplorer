@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
-import { Icon } from '@unique-nft/ui-kit'
-import Button from '../../../components/Button'
-import Avatar from '../../../components/Avatar'
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
-import { Collection } from '../../../api/graphQL'
+import React, { FC } from 'react';
+import { Icon } from '@unique-nft/ui-kit';
+import Button from '../../../components/Button';
+import Avatar from '../../../components/Avatar';
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import { Collection } from '../../../api/graphQL';
 
 interface CollectionsComponentProps {
   collections: Collection[]
@@ -36,25 +36,32 @@ const CollectionCard: FC<Collection> = (props) => (
       </div>
     </div>
   </div>
-)
+);
 
 const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
-  const { collections } = props
+  const { collections } = props;
 
   return (
     <>
       <div className={'grid-container'}>
         {collections.map((collection) => (
-          <CollectionCard {...collection} />
+          <CollectionCard
+            key={`collection-${collection.collection_id}`}
+            {...collection}
+          />
         ))}
       </div>
       <Button
-        text={'See all'}
+        icon={<Icon
+          color={'white'}
+          name={'arrow-right'}
+          size={10}
+        />}
         iconPosition={'right'}
-        icon={<Icon name={'arrow-right'} size={10} color={'white'} />}
+        text={'See all'}
       />
     </>
-  )
-}
+  );
+};
 
-export default CollectionsComponent
+export default CollectionsComponent;

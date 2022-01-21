@@ -114,7 +114,7 @@ module.exports = {
     ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/jsx-closing-bracket-location": [1, "tag-aligned"],
+    "react/jsx-closing-bracket-location": [1, "line-aligned"],
     "react/jsx-first-prop-new-line": [1, "multiline-multiprop"],
     "react/jsx-fragments": "error",
     "react/jsx-max-props-per-line": [
@@ -159,6 +159,11 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-var-requires": "off",
+    "space-before-function-paren":["off", {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
   },
   settings: {
     "import/extensions": [".js", ".ts", ".tsx"],
