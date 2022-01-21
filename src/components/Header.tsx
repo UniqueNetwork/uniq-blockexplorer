@@ -1,23 +1,14 @@
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useCallback } from 'react'
 import styled from 'styled-components'
 import { Link, useNavigate } from 'react-router-dom'
 import { Select } from '@unique-nft/ui-kit'
 import { useApi } from '../hooks/useApi'
-import chains from '../chains'
-import { chain } from '@polkadot/types/interfaces/definitions'
+import config from '../config'
 
 const Header: FC<{ className?: string }> = ({ className }) => {
   const { currentChain } = useApi()
 
   const navigate = useNavigate()
-
-  const chainOptions = useMemo(() => {
-    return Object.values(chains).map(({ id, name }) => ({
-      id,
-      title: name,
-    }))
-  }, [])
-
   const onSelectChange = useCallback(
     (value?: string) => {
       if (value) {
@@ -28,11 +19,18 @@ const Header: FC<{ className?: string }> = ({ className }) => {
   )
 
   return (
-    <div className={className}>
-      <Link to={`/${currentChain ? currentChain?.id + '/' : ''}`}>
+    <div  className={className}>
+      <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
         <img src="/logos/unique.svg" alt="Logo" className="header__logo" />
       </Link>
-      <Select options={chainOptions} value={currentChain?.id} onChange={onSelectChange} />
+      <Select
+        options={Object.values(config.chains).map(({ network, name }) => ({
+          id: network,
+          title: name,
+        }))}
+        value={currentChain?.network}
+        onChange={onSelectChange}
+      />
     </div>
   )
 }
