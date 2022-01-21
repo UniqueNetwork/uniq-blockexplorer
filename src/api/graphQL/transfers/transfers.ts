@@ -1,7 +1,7 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client'
-import { useCallback, useEffect } from 'react'
-import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types'
-import { FetchMoreBlocksOptions } from '../blocks/types'
+import { gql, useApolloClient, useQuery } from '@apollo/client';
+import { useCallback, useEffect } from 'react';
+import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
+import { FetchMoreBlocksOptions } from '../blocks/types';
 
 const getLastTransfersQuery = gql`
   query getLastTransfers($limit: Int, $offset: Int, $where: view_extrinsic_bool_exp = {}) {
@@ -22,10 +22,10 @@ const getLastTransfersQuery = gql`
       }
     }
   }
-`
+`;
 
-export const useGraphQlLastTransfers = ({ pageSize, accountId }: useGraphQlLastTransfersProps) => {
-  const client = useApolloClient()
+export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastTransfersProps) => {
+  const client = useApolloClient();
 
   const getWhere = useCallback(
     (searchString?: string) => ({
@@ -33,42 +33,42 @@ export const useGraphQlLastTransfers = ({ pageSize, accountId }: useGraphQlLastT
         amount: { _neq: '0' },
         ...(accountId
           ? {
-              _or: [{ from_owner: { _eq: accountId } }, { to_owner: { _eq: accountId } }],
-            }
+            _or: [{ from_owner: { _eq: accountId } }, { to_owner: { _eq: accountId } }]
+          }
           : {}),
         ...(searchString
           ? {
-              _or: {
-                block_index: { _eq: searchString },
-                from_owner: { _eq: searchString },
-                to_owner: { _eq: searchString },
-              },
+            _or: {
+              block_index: { _eq: searchString },
+              from_owner: { _eq: searchString },
+              to_owner: { _eq: searchString }
             }
-          : {}),
-      },
+          }
+          : {})
+      }
     }),
     [accountId]
-  )
+  );
 
-  const {
-    fetchMore,
-    loading: isTransfersFetching,
+  const { data,
     error: fetchTransfersError,
-    data,
-  } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
+    fetchMore,
+    loading: isTransfersFetching } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
+    fetchPolicy: 'network-only',
+    // Used for first execution
+    nextFetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
       offset: 0,
-      where: getWhere(),
-    },
-    fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
-  })
+      where: getWhere()
+    }
+  });
 
   useEffect(() => {
     fetchMore({})
-  }, [client.link, fetchMore])
+      .catch((errMsg) => console.error(errMsg));
+  }, [client.link, fetchMore]);
 
   const fetchMoreTransfers = useCallback(
     ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
@@ -76,20 +76,20 @@ export const useGraphQlLastTransfers = ({ pageSize, accountId }: useGraphQlLastT
         variables: {
           limit,
           offset,
-          where: getWhere(searchString),
-        },
-      })
+          where: getWhere(searchString)
+        }
+      });
     },
-    [fetchMore, accountId, pageSize]
-  )
+    [fetchMore, pageSize, getWhere]
+  );
 
   return {
     fetchMoreTransfers,
-    transfers: data?.view_extrinsic,
-    transfersCount: data?.view_extrinsic_aggregate.aggregate.count || 0,
-    isTransfersFetching,
     fetchTransfersError,
-  }
-}
+    isTransfersFetching,
+    transfers: data?.view_extrinsic,
+    transfersCount: data?.view_extrinsic_aggregate.aggregate.count || 0
+  };
+};
 
-export { getLastTransfersQuery }
+export { getLastTransfersQuery };

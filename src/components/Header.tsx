@@ -8,32 +8,36 @@ import config from '../config'
 const Header: FC<{ className?: string }> = ({ className }) => {
   const { currentChain } = useApi()
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const onSelectChange = useCallback(
     (value?: string) => {
       if (value) {
-        navigate(`${value}/`)
+        navigate(`${value}/`);
       }
     },
-    [currentChain]
-  )
+    [navigate]
+  );
 
   return (
     <div  className={className}>
       <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
-        <img src="/logos/unique.svg" alt="Logo" className="header__logo" />
+        <img
+          alt='Logo'
+          className='header__logo'
+          src='/logos/unique.svg'
+        />
       </Link>
       <Select
-        options={Object.values(config.chains).map(({ network, name }) => ({
+        onChange={onSelectChange}
+        options={Object.values(config.chains).map(({ name, network }) => ({
           id: network,
-          title: name,
+          title: name
         }))}
         value={currentChain?.network}
-        onChange={onSelectChange}
       />
     </div>
-  )
-}
+  );
+};
 
 export default styled(Header)`
   display: flex;
@@ -41,4 +45,4 @@ export default styled(Header)`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-`
+`;

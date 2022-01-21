@@ -12,13 +12,6 @@ export interface Block {
   state_root: string
 }
 
-export interface Block {
-  timestamp: number
-  block_number: number
-  event_count: number
-  extrinsic_count: number
-}
-
 export interface BlockDetailData {
   block: Block[]
 }

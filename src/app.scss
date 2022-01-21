@@ -134,6 +134,13 @@ a {
   margin-bottom: calc(var(--gap) * 1.5) !important;
 }
 
+.main-block-container {
+  padding-top: calc(var(--gap) * 2);
+  h2 {
+    margin-bottom: calc(var(--gap) *1.5) !important;
+  }
+}
+
 .full-width {
   width: 100%;
 }

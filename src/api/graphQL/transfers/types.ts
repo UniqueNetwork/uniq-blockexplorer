@@ -2,7 +2,7 @@ export interface TransfersVariables {
   limit: number
   offset: number
   order_by?: { [name: string]: 'asc' | 'desc' }
-  where?: { [key: string]: any }
+  where?: { [key: string]: unknown }
 }
 
 export interface Transfer {

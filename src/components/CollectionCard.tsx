@@ -1,40 +1,38 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
-import Avatar from './Avatar'
-import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent'
-import { Collection } from '../api/graphQL'
-import { useApi } from '../hooks/useApi'
-import { NFTCollection } from '../api/chainApi/unique/types'
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import Avatar from './Avatar';
+import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
+import { Collection } from '../api/graphQL';
+import { useApi } from '../hooks/useApi';
+import { NFTCollection } from '../api/chainApi/unique/types';
 
 // tslint:disable-next-line:no-empty-interface
-interface CollectionCardProps extends Collection {}
+type CollectionCardProps = Collection
 
 const CollectionCard: FC<CollectionCardProps> = (props) => {
-  const {
+  const { collection_id: collectionId,
     name,
-    collection_id: collectionId,
-    token_prefix: tokenPrefix,
-    tokens_aggregate: tokensAggregate,
-    schema_version: schemaVersion,
-    offchain_schema: offchainSchema,
     owner,
-  } = props
+    token_prefix: tokenPrefix,
+    tokens_aggregate: tokensAggregate } = props;
 
-  const tokensCount = tokensAggregate.aggregate.count
+  const tokensCount = tokensAggregate.aggregate.count;
 
-  const [collectionImageUrl, setCollectionImageUrl] = useState<string>()
+  const [collectionImageUrl, setCollectionImageUrl] = useState<string>();
 
-  const { rpcClient, api } = useApi()
+  const { api, rpcClient } = useApi();
 
   const fetchCollection = useCallback(async () => {
     if (rpcClient?.isApiConnected) {
-      const collectionInfo: NFTCollection = await api?.getCollection(collectionId)
-      setCollectionImageUrl(collectionInfo?.coverImageUrl)
+      const collectionInfo = await api?.getCollection(collectionId) as NFTCollection;
+
+      setCollectionImageUrl(collectionInfo?.coverImageUrl);
     }
-  }, [collectionId, rpcClient?.isApiConnected])
+  }, [api, collectionId, rpcClient?.isApiConnected]);
 
   useEffect(() => {
     fetchCollection()
-  }, [])
+      .catch((errMsg) => console.error(errMsg));
+  }, [fetchCollection]);
 
   return (
     <div
@@ -43,7 +41,10 @@ const CollectionCard: FC<CollectionCardProps> = (props) => {
       }
     >
       <div style={{ minWidth: '40px' }}>
-        <Avatar size={'small'} src={collectionImageUrl} />
+        <Avatar
+          size={'small'}
+          src={collectionImageUrl}
+        />
       </div>
       <div className={'flexbox-container flexbox-container_column flexbox-container_without-gap'}>
         <h4>{name}</h4>
@@ -67,7 +68,7 @@ const CollectionCard: FC<CollectionCardProps> = (props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CollectionCard
+export default CollectionCard;

@@ -1,11 +1,6 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client'
-import { useCallback, useEffect } from 'react'
-import {
-  LastBlocksData,
-  LastBlocksVariables,
-  FetchMoreBlocksOptions,
-  useGraphQlBlocksProps,
-} from './types'
+import { gql, useApolloClient, useQuery } from '@apollo/client';
+import { useCallback, useEffect } from 'react';
+import { LastBlocksData, LastBlocksVariables, FetchMoreBlocksOptions, useGraphQlBlocksProps } from './types';
 
 const getLatestBlocksQuery = gql`
   query GetLatestBlocks(
@@ -26,26 +21,26 @@ const getLatestBlocksQuery = gql`
       }
     }
   }
-`
+`;
 
 export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
-  const client = useApolloClient()
+  const client = useApolloClient();
 
-  const {
-    fetchMore,
-    data,
-    loading: isBlocksFetching,
+  const { data,
     error: fetchBlocksError,
-  } = useQuery<LastBlocksData, LastBlocksVariables>(getLatestBlocksQuery, {
-    variables: { limit: pageSize, offset: 0, order_by: { block_number: 'desc' } },
-    fetchPolicy: 'network-only', // Used for first execution
+    fetchMore,
+    loading: isBlocksFetching } = useQuery<LastBlocksData, LastBlocksVariables>(getLatestBlocksQuery, {
+    fetchPolicy: 'network-only',
+    // Used for first execution
     nextFetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
-  })
+    variables: { limit: pageSize, offset: 0, order_by: { block_number: 'desc' } }
+  });
 
   useEffect(() => {
     fetchMore({})
-  }, [client.link, fetchMore])
+      .catch((errMsg) => console.error(errMsg));
+  }, [client.link, fetchMore]);
 
   const fetchMoreBlocks = useCallback(
     ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
@@ -56,26 +51,26 @@ export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
           where:
             (searchString &&
               searchString.length > 0 && {
-                _or: [
-                  {
-                    block_number: { _eq: searchString },
-                  },
-                ],
-              }) ||
-            undefined,
-        },
-      })
+              _or: [
+                {
+                  block_number: { _eq: searchString }
+                }
+              ]
+            }) ||
+            undefined
+        }
+      });
     },
     [fetchMore, pageSize]
-  )
+  );
 
   return {
-    fetchMoreBlocks,
-    blocks: data?.view_last_block,
     blockCount: data?.view_last_block_aggregate.aggregate.count || 0,
-    isBlocksFetching,
+    blocks: data?.view_last_block,
     fetchBlocksError,
-  }
-}
+    fetchMoreBlocks,
+    isBlocksFetching
+  };
+};
 
-export { getLatestBlocksQuery }
+export { getLatestBlocksQuery };

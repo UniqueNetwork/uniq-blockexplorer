@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 const getExtrinsicsQuery = gql`
   query getLastTransfers($limit: Int, $offset: Int, $where: view_extrinsic_bool_exp = {}) {
@@ -14,6 +14,6 @@ const getExtrinsicsQuery = gql`
       }
     }
   }
-`
+`;
 
-export { getExtrinsicsQuery }
+export { getExtrinsicsQuery };

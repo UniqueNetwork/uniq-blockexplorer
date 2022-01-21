@@ -1,32 +1,30 @@
-import { useQuery } from '@apollo/client'
-import Table from 'rc-table'
-import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { useQuery } from '@apollo/client';
+import Table from 'rc-table';
+import React, { useCallback, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
-import LoadingComponent from '../../../components/LoadingComponent'
-import { ExtrinsicData, ExtrinsicVariables, extrinsic as gqlExtrinsic } from '../../../api/graphQL'
-import { timeDifference } from '../../../utils/timestampUtils'
-import PaginationComponent from '../../../components/Pagination'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
+import LoadingComponent from '../../../components/LoadingComponent';
+import { ExtrinsicData, ExtrinsicVariables, extrinsic as gqlExtrinsic } from '../../../api/graphQL';
+import { timeDifference } from '../../../utils/timestampUtils';
+import PaginationComponent from '../../../components/Pagination';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 const blockColumns = [
   {
-    title: 'Action',
     dataIndex: 'method',
     key: 'method',
-    width: 100,
     render: (value: number) => (
       <div className={'block__table-box'}>
         <div className={'block__table-title'}>Action</div>
         <div className={'block__table-value'}>{value}</div>
       </div>
     ),
+    title: 'Action',
+    width: 100
   },
   {
-    title: 'ID',
     dataIndex: 'block_index',
     key: 'block_index',
-    width: 150,
     render: (value: number) => (
       <div className={'block__table-box'}>
         <div className={'block__table-title'}>ID</div>
@@ -35,25 +33,25 @@ const blockColumns = [
         </div>
       </div>
     ),
+    title: 'ID',
+    width: 150
   },
   {
-    title: 'Age',
     dataIndex: 'timestamp',
     key: 'timestamp',
-    width: 150,
     render: (value: number) => (
       <div className={'block__table-box'}>
         <div className={'block__table-title'}>Age</div>
         <div className={'block__table-value'}>{value ? timeDifference(value) : '---'}</div>
       </div>
     ),
+    title: 'Age',
+    width: 150
   },
 
   {
-    title: 'Hash',
     dataIndex: 'hash',
     key: 'hash',
-    width: 100,
     render: (value: number) => (
       <div className={'block__table-box'}>
         <div className={'block__table-title'}>Hash</div>
@@ -62,57 +60,59 @@ const blockColumns = [
         </div>
       </div>
     ),
-  },
-]
+    title: 'Hash',
+    width: 100
+  }
+];
 
-const ExtrinsicsListComponent = (props: any) => {
-  const deviceSize = useDeviceSize()
-  const { blockNumber } = props
-  const pageSize = 10
+const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => {
+  const deviceSize = useDeviceSize();
+  const { blockNumber } = props;
+  const pageSize = 10;
 
-  const {
-    loading,
-    error,
+  const { data: eventsList,
     fetchMore: fetchMoreExtrinsics,
-    data: eventsList,
-  } = useQuery<ExtrinsicData, ExtrinsicVariables>(gqlExtrinsic.extrinsicQuery, {
-    variables: {
-      limit: pageSize,
-      offset: 0,
-      block_index: blockNumber,
-    },
-    fetchPolicy: 'network-only', // Used for first execution
+    loading } = useQuery<ExtrinsicData, ExtrinsicVariables>(gqlExtrinsic.extrinsicQuery, {
+    fetchPolicy: 'network-only',
+    // Used for first execution
     nextFetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
-  })
+    variables: {
+      block_index: blockNumber || '',
+      limit: pageSize,
+      offset: 0
+    }
+  });
 
   const onPageChange = useCallback(
     (limit: number, offset: number) =>
       fetchMoreExtrinsics({
         variables: {
           limit,
-          offset,
-        },
+          offset
+        }
       }),
     [fetchMoreExtrinsics]
-  )
+  );
+
+  const loadingOrEmpty = useMemo(() => !loading ? 'No data' : <LoadingComponent />, [loading]);
 
   return (
     <>
       <Table
         columns={blockColumns}
         data={eventsList?.view_extrinsic}
-        emptyText={() => (!loading ? 'No data' : <LoadingComponent />)}
+        emptyText={loadingOrEmpty}
         rowKey={'block_index'}
       />
       <PaginationComponent
-        pageSize={pageSize}
         count={eventsList?.view_extrinsic_aggregate?.aggregate?.count || 0}
         onPageChange={onPageChange}
+        pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
     </>
-  )
-}
+  );
+};
 
-export default ExtrinsicsListComponent
+export default ExtrinsicsListComponent;

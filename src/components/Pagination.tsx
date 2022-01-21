@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Icon } from '@unique-nft/ui-kit'
-import usePagination, { DOTS } from '../hooks/usePagination'
+import React, { useCallback, useState } from 'react';
+import { Icon } from '@unique-nft/ui-kit';
+import usePagination, { DOTS } from '../hooks/usePagination';
 
 interface PaginationProps {
   count: number // total number of elements in DB
@@ -16,87 +16,102 @@ const PageNumberComponent = (props: {
   currentPage: number
   onPageChanged: (newPage: number) => void
 }) => {
-  const { pageNumber, currentPage, onPageChanged } = props
+  const { currentPage, onPageChanged, pageNumber } = props;
+
+  const onPagePillClick = useCallback(
+    () => {
+      onPageChanged(pageNumber as number);
+    },
+    [onPageChanged, pageNumber]
+  );
+
   if (pageNumber === DOTS) {
-    return <li>...</li>
+    return <li>...</li>;
   }
 
   // Render our Page Pills
   return (
     // highlight if selected
     <li
-      key={pageNumber}
       className={pageNumber === currentPage ? 'active' : ''}
-      onClick={() => onPageChanged(pageNumber as number)}
+      key={pageNumber}
+      onClick={onPagePillClick}
     >
       {pageNumber}
     </li>
-  )
-}
+  );
+};
 
-const PaginationComponent = ({
+const PaginationComponent = ({ count,
   currentPage: currentPageFromProps,
-  count,
-  siblingCount = 2,
-  pageSize = 10,
   onPageChange,
-}: PaginationProps) => {
-  const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1)
+  pageSize = 10,
+  siblingCount = 2 }: PaginationProps) => {
+  const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1);
   const paginationRange = usePagination({
-    total: count,
     currentPage,
-    siblingCount,
     pageSize,
-  })
+    siblingCount,
+    total: count
+  });
   const lastPage =
-    (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null
-  const onPageChanged = (newPage: number) => {
-    const offset = (newPage - 1) * pageSize
-    setCurrentPage(newPage)
-    onPageChange(pageSize, offset)
-  }
-  const onNext = () => {
-    if (currentPage === lastPage || count < pageSize) return
-    onPageChanged(currentPage + 1)
-  }
+    (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null;
 
-  const onPrevious = () => {
-    if (currentPage < 2 || count < pageSize) return
-    onPageChanged(currentPage - 1)
-  }
+  const onPageChanged = useCallback((newPage: number) => {
+    const offset = (newPage - 1) * pageSize;
+
+    setCurrentPage(newPage);
+    onPageChange(pageSize, offset);
+  }, [pageSize, setCurrentPage, onPageChange]);
+
+  const onNext = useCallback(() => {
+    if (currentPage === lastPage || count < pageSize) return;
+    onPageChanged(currentPage + 1);
+  }, [currentPage, lastPage, count, pageSize, onPageChanged]);
+
+  const onPrevious = useCallback(() => {
+    if (currentPage < 2 || count < pageSize) return;
+    onPageChanged(currentPage - 1);
+  }, [currentPage, count, pageSize, onPageChanged]);
 
   return (
     <div className={'flexbox-container flexbox-container_space-between pagination-wrapper'}>
       <div>{count} items</div>
       {count > pageSize && (
         <ul className={'pagination-container'}>
-          <li key={'prev'} onClick={onPrevious}>
+          <li
+            key={'prev'}
+            onClick={onPrevious}
+          >
             <Icon
+              color={currentPage === 1 ? '#ABB6C1' : '#040B1D'}
               name={'carret-right'}
               size={12}
-              color={currentPage === 1 ? '#ABB6C1' : '#040B1D'}
             />
           </li>
           {paginationRange.map((pageNumber, index) => (
             <PageNumberComponent
-              key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
-              pageNumber={pageNumber}
               currentPage={currentPage}
+              key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
               onPageChanged={onPageChanged}
+              pageNumber={pageNumber}
             />
           ))}
           {/* TODO: disabled={currentPage === lastPage} */}
-          <li key={'next'} onClick={onNext}>
+          <li
+            key={'next'}
+            onClick={onNext}
+          >
             <Icon
+              color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'}
               name={'carret-right'}
               size={12}
-              color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'}
             />
           </li>
         </ul>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default PaginationComponent
+export default PaginationComponent;

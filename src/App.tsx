@@ -1,9 +1,9 @@
-import './app.scss'
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
-import PageLayout from './components/PageLayout'
+import './app.scss';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import PageLayout from './components/PageLayout';
 // contains gql and rpc with contexts and providers
-import ApiWrapper from './api/ApiWrapper'
+import ApiWrapper from './api/ApiWrapper';
 
 export default function App() {
   return (
@@ -14,5 +14,5 @@ export default function App() {
         </PageLayout>
       </ApiWrapper>
     </div>
-  )
+  );
 }
