@@ -10,11 +10,11 @@ interface Props {
   withoutHl?: boolean
 }
 
-function sanitize (value?: string): string {
+function sanitize(value?: string): string {
   return value?.toLowerCase().replace('-', ' ') || '';
 }
 
-function ChainLogo ({ className = '',
+function ChainLogo({ className = '',
   isInline,
   logo,
   onClick,

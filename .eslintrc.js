@@ -159,6 +159,11 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-var-requires": "off",
+    "space-before-function-paren":["off", {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
   },
   settings: {
     "import/extensions": [".js", ".ts", ".tsx"],

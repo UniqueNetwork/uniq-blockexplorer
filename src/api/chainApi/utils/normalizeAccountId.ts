@@ -9,7 +9,7 @@ export type CrossAccountId =
     Ethereum: string
   }
 
-export function normalizeAccountId (
+export function normalizeAccountId(
   input: string | AccountId | CrossAccountId | IKeyringPair
 ): CrossAccountId {
   if (typeof input === 'string') {
