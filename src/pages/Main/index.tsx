@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-import { Button, Heading, InputText } from '@unique-nft/ui-kit'
-import { useApi } from '../../hooks/useApi'
-import LastTransfersComponent from './components/LastTransfersComponent'
-import LastBlocksComponent from './components/LastBlocksComponent'
-import { lastBlocks, transfers as gqlTransfers } from '../../api/graphQL/'
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { Button, Heading, InputText } from '@unique-nft/ui-kit';
+import { useApi } from '../../hooks/useApi';
+import LastTransfersComponent from './components/LastTransfersComponent';
+import LastBlocksComponent from './components/LastBlocksComponent';
+import { lastBlocks, transfers as gqlTransfers } from '../../api/graphQL/';
 
 const MainPage = () => {
   const pageSize = 10; // default

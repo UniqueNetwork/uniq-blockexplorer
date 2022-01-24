@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Account, Block, Extrinsic, Main } from './pages';
+import { Account, Block, Collections, Extrinsic, Main } from './pages';
+import Collection from './pages/Collection';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -32,6 +33,14 @@ ReactDOM.render(
             <Route
               element={<Block />}
               path={'block/:blockIndex'}
+            />
+            <Route
+              element={<Collections />}
+              path={'collections'}
+            />
+            <Route
+              element={<Collection />}
+              path={'collections/:collectionId'}
             />
           </Route>
         </Route>

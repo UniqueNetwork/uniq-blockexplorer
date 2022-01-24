@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import styled from 'styled-components';
 import Button from '../../../components/Button';
 import { Icon, Text } from '@unique-nft/ui-kit';
 import { Token } from '../../../api/graphQL';
@@ -6,18 +7,19 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import Picture from '../../../components/Picture';
 
 interface NewTokensComponentProps {
+  className?: string
   tokens: Token[]
 }
 
 const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
-  const { tokens } = props;
+  const { className, tokens } = props;
 
   return (
-    <div>
-      <div className={'flexbox-container flexbox-container_align-start margin-bottom'}>
+    <div className={className}>
+      <div className={'tokens-container'}>
         {tokens.map((token) => (
           <div
-            className={'flexbox-container_max-growth'}
+            className={'token-card'}
             key={`token-${token.id}`}
           >
             <Picture alt={token.id.toString()} />
@@ -50,4 +52,16 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
   );
 };
 
-export default NewTokensComponent;
+export default styled(NewTokensComponent)`
+  .tokens-container {
+    display: flex;
+    column-gap: calc(var(--gap) * 1.5);
+    row-gap: calc(var(--gap) * 1.5);
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: var(--gap);
+    .token-card {
+      max-width: 174px;
+    }
+  }
+`;

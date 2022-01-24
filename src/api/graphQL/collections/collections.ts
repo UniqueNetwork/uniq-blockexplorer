@@ -6,15 +6,35 @@ const collectionsQuery = gql`
   query getCollections($limit: Int, $offset: Int, $where: collections_bool_exp = {}) {
     collections(where: $where, limit: $limit, offset: $offset) {
       collection_id
+      const_chain_schema
       description
+      limits_accout_ownership
+      limits_sponsore_data_rate
+      limits_sponsore_data_size
+      mode
       name
-      owner
-      token_prefix
       offchain_schema
+      owner
+      owner_can_destroy
+      owner_can_trasfer
       schema_version
+      sponsorship_confirmed
+      token_limit
+      token_prefix
       tokens_aggregate {
         aggregate {
           count
+        }
+      }
+      variable_on_chain_schema
+      tokens {
+        data
+        id
+        owner
+        token_id
+        collection {
+          name
+          token_prefix
         }
       }
     }
@@ -79,6 +99,28 @@ export const useGraphQlCollections = ({ filter, pageSize }: useGraphQlCollection
     fetchCollectionsError,
     fetchMoreCollections,
     isCollectionsFetching
+  };
+};
+
+export const useGraphQlCollection = (collectionId: string) => {
+  const { data,
+    error: fetchCollectionsError,
+    loading: isCollectionFetching } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
+    fetchPolicy: 'network-only',
+    // Used for first execution
+    nextFetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      limit: 1,
+      offset: 0,
+      where: { collection_id: { _eq: collectionId } }
+    }
+  });
+
+  return {
+    collection: data?.collections[0] || undefined,
+    fetchCollectionsError,
+    isCollectionFetching
   };
 };
 
