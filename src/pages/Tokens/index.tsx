@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Button, InputText } from '@unique-nft/ui-kit';
 import TokensComponent from './components/TokensComponent';
 import { tokens as gqlTokens } from '../../api/graphQL/';
-import { useApi } from '../../hooks/useApi';
 
 const pageSize = 20; // default
 

@@ -12,8 +12,10 @@ export interface Token {
     hex: string
   }
   collection: {
+    collection_id: number
     name: string
     token_prefix: string
+    description: string
   }
   owner: string
 }

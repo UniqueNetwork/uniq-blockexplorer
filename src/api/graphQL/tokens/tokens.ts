@@ -11,8 +11,10 @@ const tokensQuery = gql`
       data
       owner
       collection {
+        collection_id
         name
         token_prefix
+        description
       }
     }
     tokens_aggregate {
@@ -97,9 +99,9 @@ export const useGraphQlToken = (tokenId: string) => {
   });
 
   return {
-    token: data?.tokens[0] || undefined,
     fetchTokensError,
-    isTokensFetching
+    isTokensFetching,
+    token: data?.tokens[0] || undefined
   };
 };
 

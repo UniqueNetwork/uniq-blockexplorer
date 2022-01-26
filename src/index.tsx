@@ -14,12 +14,12 @@ ReactDOM.render(
         >
           <Route
             element={<Main />}
-            index={true}
+            index
           />
           <Route path={':chainId/'}>
             <Route
               element={<Main />}
-              index={true}
+              index
             />
             <Route
               element={<Account />}
@@ -34,18 +34,24 @@ ReactDOM.render(
               path={'block/:blockIndex'}
             />
             <Route
-              element={<Collections />}
-              path={'collections'}
+              path={'collections/'}
             >
+              <Route
+                element={<Collections />}
+                index
+              />
               <Route
                 element={<Collection />}
                 path={':collectionId'}
               />
             </Route>
             <Route
-              element={<Tokens />}
-              path={'tokens'}
+              path={'tokens/'}
             >
+              <Route
+                element={<Tokens />}
+                index
+              />
               <Route
                 element={<Token />}
                 path={':tokenId'}
