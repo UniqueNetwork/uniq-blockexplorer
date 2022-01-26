@@ -10,3 +10,8 @@ export const formatAmount = (amount: number) => {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   return parts.join('.')
 }
+
+export const formatBlockNumber = (blockNumber: number | undefined) => {
+  if(!blockNumber) return ''
+  return blockNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}

@@ -10,8 +10,9 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import LoadingComponent from '../../../components/LoadingComponent'
 import { Heading } from '@unique-nft/ui-kit'
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { formatAmount, shortcutText } from '../../../utils/textUtils'
+import { formatAmount, formatBlockNumber, shortcutText } from '../../../utils/textUtils'
 import config from '../../../config'
+import { timestampFormat } from '../../../utils/timestampUtils'
 
 const ExtrinsicDetail: FC = () => {
   const { blockIndex } = useParams()
@@ -46,10 +47,10 @@ const ExtrinsicDetail: FC = () => {
       <Heading>{`Extrinsic ${blockIndex}`}</Heading>
       <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
         <div className={'grid-item_col1 text_grey'}>Block</div>
-        <div className={'grid-item_col11'}>{blockNumber}</div>
+        <div className={'grid-item_col11'}>{formatBlockNumber(blockNumber)}</div>
         <div className={'grid-item_col1 text_grey'}>Timestamp</div>
         <div className={'grid-item_col11'}>
-          {timestamp && new Date(timestamp * 1000).toLocaleString()}
+          {timestamp && timestampFormat(timestamp)}
         </div>
       </div>
       <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
