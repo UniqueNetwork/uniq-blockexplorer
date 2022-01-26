@@ -88,6 +88,7 @@ export default styled(ExtendedDataComponent)`
   .attributes-block {
     margin-bottom: calc(var(--gap) * 1.5);
     .tags {
+      margin-top: calc(var(--gap) / 2);
       display: flex;
       column-gap: calc(var(--gap) / 2);
       row-gap: calc(var(--gap) / 2);
@@ -104,9 +105,14 @@ export default styled(ExtendedDataComponent)`
     div {
       display: flex;
       align-items: center;
+      column-gap: calc(var(--gap) / 2);
     }
   }
   .sponsors-block {
     margin-bottom: 0;
+  }
+  .data-schema-block, .advanced-data-block {
+    display: grid;
+    grid-template-columns: 296px 1fr;
   }
 `;

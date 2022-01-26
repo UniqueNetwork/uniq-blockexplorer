@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import Button from '../../../components/Button';
-import { Icon, Text } from '@unique-nft/ui-kit';
+import { Text, Button } from '@unique-nft/ui-kit';
 import { Token } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import Picture from '../../../components/Picture';
@@ -40,13 +39,8 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
         ))}
       </div>
       <Button
-        icon={<Icon
-          color={'white'}
-          name={'arrow-right'}
-          size={10}
-        />}
-        iconPosition={'right'}
-        text={'See all'}
+        onClick={() => {}}
+        title={'See all'}
       />
     </div>
   );

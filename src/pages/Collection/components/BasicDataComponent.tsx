@@ -51,7 +51,7 @@ const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection
       </div>
       <div>
         <Heading size={'2'}>Tokens</Heading>
-        <NewTokensComponent tokens={tokens || []} />
+        <NewTokensComponent tokens={tokens?.slice(0, 18) || []} />
       </div>
     </div>
   );

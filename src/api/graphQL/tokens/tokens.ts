@@ -81,4 +81,26 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
   };
 };
 
+export const useGraphQlToken = (tokenId: string) => {
+  const { data,
+    error: fetchTokensError,
+    loading: isTokensFetching } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    fetchPolicy: 'network-only',
+    // Used for first execution
+    nextFetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      limit: 1,
+      offset: 0,
+      where: { id: { _eq: tokenId } }
+    }
+  });
+
+  return {
+    token: data?.tokens[0] || undefined,
+    fetchTokensError,
+    isTokensFetching
+  };
+};
+
 export { tokensQuery };
