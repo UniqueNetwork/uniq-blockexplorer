@@ -26,11 +26,15 @@ body {
     display: flex;
     column-gap: var(--gap);
   }
+  a {
+    font-size: 14px !important;
+  }
 }
 
 a {
   color: var(--link-color);
   text-decoration: none;
+  font-size: var(--font-size);
   &:hover {
     text-decoration: underline;
   }
