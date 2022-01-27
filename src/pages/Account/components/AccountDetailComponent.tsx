@@ -1,76 +1,119 @@
-import React, { FC } from 'react'
-import { useQuery } from '@apollo/client'
-import {
-  Data as AccountData,
-  Variables as AccountVariables,
-  accountQuery,
-} from '../../../api/graphQL/account'
-import Avatar from '../../../components/Avatar'
-import LoadingComponent from '../../../components/LoadingComponent'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { formatAmount, shortcutText } from '../../../utils/textUtils'
-import config from '../../../config'
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import { Text } from '@unique-nft/ui-kit';
+import { account as gqlAccount } from '../../../api/graphQL';
+import Avatar from '../../../components/Avatar';
+import LoadingComponent from '../../../components/LoadingComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { shortcutText } from '../../../utils/textUtils';
+import { useApi } from '../../../hooks/useApi';
 
 interface AccountProps {
   accountId: string
+  className?: string
 }
 
-const AccountDetailComponent: FC<AccountProps> = (props) => {
-  const { accountId } = props
+const AccountDetailComponent: FC<AccountProps> = ({ accountId, className }) => {
+  const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
 
-  const {
-    loading: isAccountFetching,
-    error: fetchAccountError,
-    data: account,
-  } = useQuery<AccountData, AccountVariables>(accountQuery, {
-    variables: { accountId },
-    notifyOnNetworkStatusChange: true,
-  })
+  const deviceSize = useDeviceSize();
 
-  const deviceSize = useDeviceSize()
+  const { chainData } = useApi();
 
-  if (isAccountFetching) return <LoadingComponent />
+  if (isAccountFetching) return <LoadingComponent />;
 
-  const {
-    timestamp,
+  const { available_balance: availableBalance,
     free_balance: freeBalance,
     locked_balance: lockedBalance,
-    available_balance: availableBalance,
-  } = account?.account_by_pk || {}
+    timestamp } = account || {};
 
   return (
-    <div className={'container-with-border'}>
-      <div className={'grid-container grid-container_account-container'}>
-        <div className={'grid-item_col1'}>
-          <Avatar size="large" />
+    <div className={className}>
+      <div className={'account-container'}>
+        <div className={'avatar-container'}>
+          <Avatar
+            size='large'
+            value={accountId}
+          />
         </div>
-        <div
-          className={
-            'flexbox-container flexbox-container_column flexbox-container_without-gap grid-item_col11'
-          }
-        >
-          <div>Account name</div>
+        <div className={'name-container'}>
+          <Text size={'l'}>Account name</Text>
           <h2>
             {deviceSize === DeviceSize.sm || deviceSize === DeviceSize.md
               ? shortcutText(accountId)
               : accountId}
           </h2>
         </div>
-        <div className={'grid-item_col1 text_grey margin-top'}>Balance</div>
-        <div className={'grid-item_col11 flexbox-container flexbox-container_wrap margin-top'}>
-          <span>
-            {freeBalance ? formatAmount(Number(freeBalance)) : 'unavailable'} {config.TOKEN_ID} (total){' '}
-          </span>
-          <span className={'text_grey'}>
-            {lockedBalance ? formatAmount(Number(lockedBalance)) : 'unavailable'} {config.TOKEN_ID} (locked){' '}
-          </span>
-          <span className={'text_grey'}>
-            {availableBalance ? formatAmount(Number(availableBalance)) : 'unavailable'} {config.TOKEN_ID} (transferable){' '}
-          </span>
+        <Text
+          color={'grey-500'}
+        >
+          Created on
+        </Text>
+        <Text>
+          {timestamp ? new Date(timestamp).toLocaleString() : 'unavailable'}
+        </Text>
+        <Text color={'grey-500'}>
+          Balance
+        </Text>
+        <div className={'balance-container'}>
+          <Text>{`${freeBalance || 'unavailable'} ${
+            chainData?.properties.tokenSymbol || ''
+          } (total) `}</Text>
+          <Text color={'grey-500'}>{`${lockedBalance || 'unavailable'} ${
+            chainData?.properties.tokenSymbol || ''
+          } (locked) `}</Text>
+          <Text color={'grey-500'}>{`${availableBalance || 'unavailable'} ${
+            chainData?.properties.tokenSymbol || ''
+          } (transferable)`}</Text>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AccountDetailComponent
+export default styled(AccountDetailComponent)`
+  padding-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed #D2D3D6;
+
+  .account-container {
+    display: grid;
+    grid-column-gap: var(--gap);
+    grid-template-columns: 85px 1fr;
+    grid-row-gap: var(--gap);
+    div:nth-child(3) {
+      margin-top: calc(var(--gap) / 2);
+    }
+    div:nth-child(4) {
+      margin-top: calc(var(--gap) / 2);
+    }
+    .balance-container {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: var(--gap);
+      align-items: center;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .account-container {
+      grid-row-gap: 0;
+      div:not(:first-child) {
+        grid-column: span 11;
+        margin-top: var(--gap);
+      }
+      div:nth-child(3) {
+        margin-top: calc(var(--gap) * 1.5);
+      }
+      div:not(:first-child) {
+        grid-column: span 11;
+      }
+      div:last-child {
+        flex-direction: column;
+        align-items: flex-start;
+        span:not(:first-child) {
+          margin-top: calc(var(--gap) / 4);
+        }
+      }
+    }
+  }
+`;

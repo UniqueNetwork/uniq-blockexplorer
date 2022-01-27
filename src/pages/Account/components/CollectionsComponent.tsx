@@ -1,129 +1,134 @@
-import React, { FC, Reducer, useCallback, useEffect, useReducer, useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { InputText, Checkbox, Icon, Button } from '@unique-nft/ui-kit';
-import Avatar from '../../../components/Avatar'
-import {
-  Collection,
-  collectionsQuery,
-  Data as collectionsData,
-  Variables as CollectionsVariables,
-} from '../../../api/graphQL/collections'
-import AccountLinkComponent from './AccountLinkComponent'
+import React, { FC, Reducer, useCallback, useReducer, useState } from 'react';
+import styled from 'styled-components';
+import { InputText, Checkbox, Button } from '@unique-nft/ui-kit';
+import { Collection, collections as gqlCollection } from '../../../api/graphQL';
+import CollectionCard from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
-  accountId: string;
+  className?: string
+  accountId: string
 }
 
-type ActionType = 'All' | 'Owner' | 'Admin' | 'Sponsor' | 'Received';
+type ActionType = 'All' | 'Owner';
 
-const CollectionCard: FC<Collection> = (props) => (
-  <div className={'grid-item_col4 flexbox-container flexbox-container_align-start card margin-bottom'}>
-    <Avatar size={'small'}/>
-    <div className={'flexbox-container flexbox-container_column flexbox-container_without-gap'}>
-      <h4>{props.name}</h4>
-      <div className={'flexbox-container'}>
-        <span><span className={'text_grey'}>ID:</span>{props.collection_id}</span>
-        <span><span className={'text_grey'}>Prefix:</span>{props.token_prefix}</span>
-        <span><span className={'text_grey'}>Items:</span>{props.tokens_aggregate.aggregate.count}</span>
-      </div>
-      <div><span className={'text_grey'}>Owner: </span><AccountLinkComponent value={props.owner}/></div>
-    </div>
-  </div>
-);
+const pageSize = 6;
 
-const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
-  const { accountId } = props;
-
-  const [filter, dispatchFilter] = useReducer<Reducer<Record<string, any> | undefined, {type: ActionType, value: string | boolean}>>((state, action) => {
+const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId, className }) => {
+  const [filter, dispatchFilter] = useReducer<
+  Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
+  >((state, action) => {
     if (action.type === 'All' && action.value) {
       return undefined;
     }
+
     if (action.type === 'Owner') {
       return { ...state, owner: action.value ? { _eq: accountId } : undefined };
     }
-    if (action.type === 'Admin') {
-      return { ...state, admin: action.value ? { _eq: accountId } : undefined };
-    }
-    if (action.type === 'Sponsor') {
-      return { ...state, sponsor: action.value ? { _eq: accountId } : undefined };
-    }
-    if (action.type === 'Received') {
-      return { ...state, received: action.value ? { _eq: accountId } : undefined };
-    }
+
     return state;
   }, undefined);
 
   const [searchString, setSearchString] = useState<string | undefined>();
 
-  const {
-    fetchMore,
-    data: collections,
-  } = useQuery<collectionsData, CollectionsVariables>(collectionsQuery, {
-    variables: {
-      limit: 6, offset: 0,
-  }});
-
-  const fetchMoreCollections = useCallback(() => {
-    const prettifiedBlockSearchString = searchString?.match(/[^$,.\d]/) ? -1 : searchString
-    fetchMore({
-      variables: {
-        where: {
-          ...(searchString &&
-          searchString.length > 0 ? {
-            name: { _eq: prettifiedBlockSearchString },
-          } : {}),
-          ...(filter ? {_or: filter} : {})
-        },
-      },
-    })
-  }, [filter, searchString]);
-
-  useEffect(() => {
-    fetchMoreCollections()
-  }, [filter])
+  const { collections, collectionsCount, fetchMoreCollections } =
+    gqlCollection.useGraphQlCollections({
+      pageSize
+    });
 
   const onCheckBoxChange = useCallback(
-    (actionType: ActionType) => (value: boolean) => dispatchFilter({type: actionType, value}),
+    (actionType: ActionType) => (value: boolean) => dispatchFilter({ type: actionType, value }),
     [dispatchFilter]
-  )
+  );
 
-  const onSearchChange = useCallback((value: string | number | undefined) => setSearchString(value?.toString()), [setSearchString])
+  const onSearchChange = useCallback(
+    (value: string | number | undefined) => setSearchString(value?.toString()),
+    [setSearchString]
+  );
 
   const onSearchClick = useCallback(() => {
-    fetchMoreCollections();
-  }, [fetchMoreCollections, searchString])
+    fetchMoreCollections({ searchString })
+      .catch((errMsg) => console.error(errMsg));
+  }, [fetchMoreCollections, searchString]);
+
+  const onClickSeeMore = useCallback(() => {}, []);
 
   return (
-    <>
-      <div className={'flexbox-container flexbox-container_space-between margin-top'}>
-        <div className={'flexbox-container flexbox-container_half-gap'} >
-          <InputText placeholder={'Collection name'}  onChange={onSearchChange} />
-          <Button title={'Search'} role="primary" onClick={onSearchClick} />
+    <div className={className}>
+      <div className={'controls-container'}>
+        <div className={'search-container'}>
+          <InputText
+            onChange={onSearchChange}
+            placeholder={'Collection name'}
+          />
+          <Button
+            onClick={onSearchClick}
+            role='primary'
+            title={'Search'}
+          />
         </div>
-        <div className={'flexbox-container'}>
-          <Checkbox label={'All'} size={'s'} checked={filter === undefined} onChange={onCheckBoxChange('All')}/>
-          <Checkbox label={'Owner'} size={'s'} checked={!!filter?.owner} onChange={onCheckBoxChange('Owner')}/>
-          <Checkbox label={'Admin'} size={'s'} checked={!!filter?.admin} onChange={onCheckBoxChange('Admin')}/>
-          <Checkbox label={'Sponsor'} size={'s'} checked={!!filter?.sponsor} onChange={onCheckBoxChange('Sponsor')}/>
-          <Checkbox label={'Received'} size={'s'} checked={!!filter?.received} onChange={onCheckBoxChange('Received')}/>
+        <div className={'filter-container'}>
+          <Checkbox
+            checked={filter === undefined}
+            label={'All'}
+            onChange={onCheckBoxChange('All')}
+            size={'s'}
+          />
+          <Checkbox
+            checked={!!filter?.owner}
+            label={'Owner'}
+            onChange={onCheckBoxChange('Owner')}
+            size={'s'}
+          />
         </div>
       </div>
-      <div className={'margin-top margin-bottom'}>{collections?.collections_aggregate?.aggregate?.count || 0} items</div>
-      <div className={'grid-container'}>
-        {collections?.collections.map((collection) => <CollectionCard {...collection} />)}
+      <div className={'items-count'}>{collectionsCount || 0} items</div>
+      <div className={'collections-container'}>
+        {collections?.map &&
+          collections.map((collection: Collection) => (
+            <CollectionCard
+              key={`collection-${collection.collection_id}`}
+              {...collection}
+            />
+          ))}
       </div>
       <Button
-        title={'See all'}
         iconRight={{
           color: '#fff',
           name: 'arrow-right',
           size: 12
         }}
-        role="primary"
-        onClick={() => {}}
+        onClick={onClickSeeMore}
+        role='primary'
+        title={'See all'}
       />
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default CollectionsComponent
+export default styled(CollectionsComponent)`
+  .controls-container {
+    display: flex;
+    column-gap: var(--gap);
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--gap);
+    .search-container {
+      display: flex;
+      column-gap: calc(var(--gap) / 2);
+      align-items: center;
+    }
+    .filter-container {
+      display: flex;
+      column-gap: var(--gap);
+      align-items: center;
+    }
+  }
+  .items-count {
+    margin: var(--gap) 0;
+  }
+  .collections-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: var(--gap);
+  }
+`;

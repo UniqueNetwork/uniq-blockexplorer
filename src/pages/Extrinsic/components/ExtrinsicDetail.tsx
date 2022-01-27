@@ -1,94 +1,166 @@
-import React, { FC } from 'react'
-import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import {
-  Data as extrinsicData,
-  extrinsicQuery,
-  Variables as ExtrinsicVariables,
-} from '../../../api/graphQL/extrinsic'
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
-import LoadingComponent from '../../../components/LoadingComponent'
-import { Heading } from '@unique-nft/ui-kit'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { formatAmount, shortcutText } from '../../../utils/textUtils'
-import config from '../../../config'
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import { Heading, Text } from '@unique-nft/ui-kit';
+import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import LoadingComponent from '../../../components/LoadingComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { shortcutText } from '../../../utils/textUtils';
+import ChainLogo from '../../../components/ChainLogo';
+import { useApi } from '../../../hooks/useApi';
 
-const ExtrinsicDetail: FC = () => {
-  const { blockIndex } = useParams()
+const ExtrinsicDetail: FC<{ className?: string }> = ({ className }) => {
+  const { blockIndex } = useParams();
 
-  const { loading: isExtrinsicFetching, data: extrinsics } = useQuery<
-    extrinsicData,
-    ExtrinsicVariables
-  >(extrinsicQuery, {
-    variables: { block_index: blockIndex || '' },
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
-  })
+  const { chainData } = useApi();
 
-  const deviceSize = useDeviceSize()
+  const { extrinsic, isExtrinsicFetching } = gqlExtrinsic.useGraphQlExtrinsic(blockIndex);
 
-  if (!blockIndex) return null
+  const deviceSize = useDeviceSize();
 
-  if (isExtrinsicFetching) return <LoadingComponent />
+  if (!blockIndex) return null;
 
-  const {
+  if (isExtrinsicFetching) return <LoadingComponent />;
+
+  const { amount,
     block_number: blockNumber,
-    from_owner: fromOwner,
-    to_owner: toOwner,
-    timestamp,
-    amount,
     fee,
+    from_owner: fromOwner,
     hash,
-  } = extrinsics?.view_extrinsic[0] || {}
+    timestamp,
+    to_owner: toOwner } = extrinsic || {};
 
   return (
-    <>
+    <div className={className}>
       <Heading>{`Extrinsic ${blockIndex}`}</Heading>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Block</div>
-        <div className={'grid-item_col11'}>{blockNumber}</div>
-        <div className={'grid-item_col1 text_grey'}>Timestamp</div>
-        <div className={'grid-item_col11'}>
-          {timestamp && new Date(timestamp * 1000).toLocaleString()}
-        </div>
+      <div className={'extrinsic-container'}>
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
+          Block
+        </Text>
+        <Text className={'grid-item_col11'}>{blockNumber?.toString() || ''}</Text>
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
+          Timestamp
+        </Text>
+        <Text className={'grid-item_col11'}>
+          {timestamp ? new Date(timestamp * 1000).toLocaleString() : ''}
+        </Text>
       </div>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Sender</div>
+      <div className={'extrinsic-container'}>
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
+          Sender
+        </Text>
         <div className={'grid-item_col11'}>
           {fromOwner && (
-            <AccountLinkComponent value={fromOwner} noShort={deviceSize !== DeviceSize.sm} />
+            <AccountLinkComponent
+              noShort={deviceSize !== DeviceSize.sm}
+              size={'m'}
+              value={fromOwner}
+            />
           )}
         </div>
-        <div className={'grid-item_col1 text_grey'}>Destination</div>
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
+          Destination
+        </Text>
         <div className={'grid-item_col11'}>
           {toOwner && (
-            <AccountLinkComponent value={toOwner} noShort={deviceSize !== DeviceSize.sm} />
+            <AccountLinkComponent
+              noShort={deviceSize !== DeviceSize.sm}
+              size={'m'}
+              value={toOwner}
+            />
           )}
         </div>
       </div>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Amount</div>
+      <div className={'extrinsic-container'}>
+        <Text
+          className={'grid-item_col1 '}
+          color={'grey-500'}
+        >
+          Amount
+        </Text>
         {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
-        <div className={'grid-item_col11 flexbox-container'}>
-          <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {formatAmount(Number(amount))} {config.TOKEN_ID}
-        </div>
-        <div className={'grid-item_col1 text_grey'}>Fee</div>
-        <div className={'grid-item_col11 flexbox-container'}>
-          <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {formatAmount(Number(fee))} {config.TOKEN_ID}
-        </div>
-      </div>
-      <div className={'grid-container grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Hash</div>
         <div className={'grid-item_col11'}>
-          {hash && deviceSize !== DeviceSize.sm ? hash : shortcutText(hash!)}
+          <ChainLogo isInline={true} />
+          {Number(amount) || 0} {chainData?.properties.tokenSymbol}
         </div>
-        <div className={'grid-item_col1 text_grey'}>Extrinsic</div>
-        <div className={'grid-item_col11'}>{blockIndex}</div>
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
+          Fee
+        </Text>
+        <div className={'grid-item_col11'}>
+          <ChainLogo isInline={true} />
+          {Number(fee) || 0} {chainData?.properties.tokenSymbol}
+        </div>
       </div>
-    </>
-  )
-}
+      <div className={'extrinsic-container'}>
+        {hash && <><Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
+          Hash
+        </Text>
+        <Text className={'grid-item_col11'}>
+          {deviceSize !== DeviceSize.sm ? hash : shortcutText(hash)}
+        </Text></>}
+        <Text
+          className={'grid-item_col1'}
+          color={'grey-500'}
+        >
+          Extrinsic
+        </Text>
+        <Text className={'grid-item_col11'}>{blockIndex}</Text>
+      </div>
+    </div>
+  );
+};
 
-export default ExtrinsicDetail
+export default styled(ExtrinsicDetail)`
+  .extrinsic-container {
+    display: grid;
+    grid-column-gap: var(--gap);
+    border-bottom: 1px dashed #D2D3D6;
+    grid-template-columns: 85px 1fr;
+    font-size: 16px;
+    line-height: 20px;
+    padding: calc(var(--gap) * 1.5) 0 !important;
+    grid-row-gap: var(--gap);
+    &:nth-child(2) {
+      padding-top: 0 !important;
+    }
+  }
+
+  .container-with-border {
+    padding-bottom: calc(var(--gap) * 2);
+    border-bottom: 1px dashed #D2D3D6;
+  }
+
+  @media (max-width: 767px) {
+    .extrinsic-container {
+      grid-row-gap: 0;
+      .grid-item_col1 {
+        grid-column: span 11;
+      }
+      .grid-item_col1:not(:first-child) {
+        margin-top: var(--gap);
+      }
+      .grid-item_col11 {
+        margin-top: calc(var(--gap) / 4);
+      }
+    }
+  }
+`;

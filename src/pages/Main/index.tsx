@@ -1,151 +1,159 @@
-import React, { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import { Button, Heading, InputText } from '@unique-nft/ui-kit'
-import {
-  Data as BlocksData,
-  getLatestBlocksQuery,
-  Variables as BlocksVariables,
-} from '../../api/graphQL/block'
-import {
-  Data as TransfersData,
-  getLastTransfersQuery,
-  Variables as TransferVariables,
-} from '../../api/graphQL/transfers'
-import LastTransfersComponent from './components/LastTransfersComponent'
-import LastBlocksComponent from './components/LastBlocksComponent'
-import config from '../../config'
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { Button, Heading, InputText } from '@unique-nft/ui-kit';
+import { useApi } from '../../hooks/useApi';
+import { lastBlocks, transfers as gqlTransfers, tokens as gqlTokens, collections as gqlCollections } from '../../api/graphQL/';
+import LastTransfersComponent from './components/LastTransfersComponent';
+import LastBlocksComponent from './components/LastBlocksComponent';
+import NewTokensComponent from './components/NewTokensComponent';
+import NewCollectionsComponent from './components/NewCollectionsComponent';
 
 const MainPage = () => {
-  const pageSize = 10 // default
-  const [searchString, setSearchString] = useState('')
-  const {
-    fetchMore: fetchMoreBlocks,
-    loading: isBlocksFetching,
-    error: fetchBlocksError,
-    data: blocks,
-  } = useQuery<BlocksData, BlocksVariables>(getLatestBlocksQuery, {
-    variables: { limit: pageSize, offset: 0, order_by: { block_number: 'desc' } },
-    fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
-  })
+  const pageSize = 10; // default
+  const [searchString, setSearchString] = useState('');
 
-  const {
-    fetchMore: fetchMoreTransfers,
-    loading: isTransfersFetching,
-    error: fetchTransfersError,
-    data: transfers,
-  } = useQuery<TransfersData, TransferVariables>(getLastTransfersQuery, {
-    variables: { limit: pageSize, offset: 0, where: { amount: { _neq: '0' } } },
-    fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
-  })
+  const { chainData } = useApi();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching } = lastBlocks.useGraphQlBlocks({
+    pageSize
+  });
+
+  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
+    gqlTransfers.useGraphQlLastTransfers({ pageSize });
+
+  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({ pageSize: 8 });
+  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize: 6 });
 
   const onBlocksPageChange = useCallback(
     (limit: number, offset: number) =>
       fetchMoreBlocks({
-        variables: {
-          limit,
-          offset,
-        },
+        limit,
+        offset
       }),
-    [fetchMoreBlocks, searchString]
-  )
+    [fetchMoreBlocks]
+  );
+
   const onTransfersPageChange = useCallback(
     (limit: number, offset: number) =>
       fetchMoreTransfers({
-        variables: {
-          limit,
-          offset,
-        },
+        limit,
+        offset
       }),
-    [fetchMoreTransfers, searchString]
-  )
+    [fetchMoreTransfers]
+  );
 
   const onSearchClick = useCallback(() => {
     if (/^\w{48}\w*$/.test(searchString)) {
-      navigate(`/account/${searchString}`)
-      return
+      navigate(`/account/${searchString}`);
+
+      return;
     }
 
     if (/^\d+-\d+$/.test(searchString)) {
-      navigate(`/extrinsic/${searchString}`)
-      return
+      navigate(`/extrinsic/${searchString}`);
+
+      return;
     }
 
-    const prettifiedBlockSearchString = searchString.match(/[^$,.\d]/) ? -1 : searchString
+    const prettifiedBlockSearchString = searchString.match(/[^$,.\d]/) ? '-1' : searchString;
 
     fetchMoreBlocks({
-      variables: {
-        where:
-          (searchString &&
-            searchString.length > 0 && { block_number: { _eq: prettifiedBlockSearchString } }) ||
-          undefined,
-      },
-    })
+      searchString:
+        searchString && searchString.length > 0 ? prettifiedBlockSearchString : undefined
+    }).catch((errMsg) => console.error(errMsg));
+
     fetchMoreTransfers({
-      variables: {
-        where:
-          (searchString &&
-            searchString.length > 0 && {
-              _or: [
-                {
-                  block_index: { _eq: searchString },
-                },
-                {
-                  from_owner: { _eq: searchString },
-                },
-                { to_owner: { _eq: searchString } },
-              ],
-            }) ||
-          undefined,
-      },
-    })
-  }, [fetchMoreTransfers, fetchMoreBlocks, searchString])
+      searchString
+    }).catch((errMsg) => console.error(errMsg));
+
+    fetchMoreCollections({
+      searchString
+    }).catch((errMsg) => console.error(errMsg));
+
+    fetchMoreTokens({
+      searchString
+    }).catch((errMsg) => console.error(errMsg));
+  }, [fetchMoreTransfers, fetchMoreBlocks, fetchMoreCollections, fetchMoreTokens, searchString, navigate]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {
-      if (key === 'Enter') onSearchClick()
+      if (key === 'Enter') onSearchClick();
     },
     [onSearchClick]
-  )
+  );
+
+  const onChangeSearchString = useCallback((value: string | undefined) => {
+    setSearchString(value?.toString() || '');
+  }, [setSearchString]);
 
   return (
-    <div>
+    <Wrapper>
       <div className={'search-wrap'}>
         <InputText
-          placeholder={'Extrinsic / account'}
           className={'input-width-612'}
           iconLeft={{ name: 'magnify', size: 18 }}
-          onChange={(value) => setSearchString(value?.toString() || '')}
+          onChange={onChangeSearchString}
           onKeyDown={onSearchKeyDown}
+          placeholder={'Extrinsic / account'}
         />
-        <Button onClick={onSearchClick} title="Search" role={'primary'} />
-      </div>
-      <div className={'main-block-container'}>
-        <Heading size={'2'}>{`Last ${config.TOKEN_ID} transfers`}</Heading>
-        <LastTransfersComponent
-          data={transfers}
-          loading={isTransfersFetching}
-          pageSize={pageSize}
-          onPageChange={onTransfersPageChange}
+        <Button
+          onClick={onSearchClick}
+          role={'primary'}
+          title='Search'
         />
       </div>
       <div className={'main-block-container'}>
-        <Heading size={'2'}>Last blocks</Heading>
+        <Heading size={'2'}>Latest blocks</Heading>
         <LastBlocksComponent
+          count={blockCount || 0}
           data={blocks}
           loading={isBlocksFetching}
           onPageChange={onBlocksPageChange}
           pageSize={pageSize}
         />
       </div>
-    </div>
-  )
-}
+      <div className={'main-block-container'}>
+        <Heading size={'2'}>New tokens</Heading>
+        <NewTokensComponent
+          loading={isTokensFetching}
+          tokens={tokens || []}
+        />
+      </div>
+      <div className={'main-block-container'}>
+        <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
+        <LastTransfersComponent
+          count={transfersCount}
+          data={transfers}
+          loading={isTransfersFetching}
+          onPageChange={onTransfersPageChange}
+          pageSize={pageSize}
+        />
+      </div>
+      <div className={'main-block-container'}>
+        <Heading size={'2'}>New collections</Heading>
+        <NewCollectionsComponent
+          collections={collections || []}
+          loading={isCollectionsFetching}
+        />
+      </div>
+    </Wrapper>
+  );
+};
 
-export default MainPage
+const Wrapper = styled.section`
+  > .search-wrap {
+    display: flex;
+    .input-width-612 {
+      box-sizing: border-box;
+      width: 612px;
+      margin-right: calc(var(--gap) / 2);
+    }
+  }
+  > .main-block-container {
+    padding-top: calc(var(--gap) * 2);
+  }
+`;
+
+export default MainPage;

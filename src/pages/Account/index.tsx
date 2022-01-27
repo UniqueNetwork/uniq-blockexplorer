@@ -1,81 +1,70 @@
-import React, { useCallback, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import AccountDetailComponent from './components/AccountDetailComponent'
-import LastTransfersComponent from '../Main/components/LastTransfersComponent'
-import {
-  Data as TransfersData,
-  getLastTransfersQuery,
-  Variables as TransferVariables,
-} from '../../api/graphQL/transfers'
-import useDeviceSize, { DeviceSize } from '../../hooks/useDeviceSize'
-import config from '../../config'
+import React, { useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Heading, Tabs } from '@unique-nft/ui-kit';
+import AccountDetailComponent from './components/AccountDetailComponent';
+import LastTransfersComponent from '../Main/components/LastTransfersComponent';
+import { transfers as gqlTransfers } from '../../api/graphQL';
+import CollectionsComponent from './components/CollectionsComponent';
+import TokensComponent from './components/TokensComponent';
+import { useApi } from '../../hooks/useApi';
 
-// const assetsTabs = ['Collections', 'Tokens']
+const assetsTabs = ['Collections', 'Tokens'];
 
 const AccountPage = () => {
-  const { accountId } = useParams()
+  const { accountId } = useParams();
+  const { chainData } = useApi();
 
-  const deviceSize = useDeviceSize()
+  const pageSize = 10; // default
 
-  const pageSize = useMemo(() => (deviceSize === DeviceSize.sm ? 5 : 20), [deviceSize])
+  const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
-  // const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0)
-
-  const {
-    fetchMore: fetchMoreTransfers,
-    loading: isTransfersFetching,
-    error: fetchTransfersError,
-    data: transfers,
-  } = useQuery<TransfersData, TransferVariables>(getLastTransfersQuery, {
-    variables: {
-      limit: pageSize,
-      offset: 0,
-      where: { _or: [{ from_owner: { _eq: accountId } }, { to_owner: { _eq: accountId } }] },
-    },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
-  })
+  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
+    gqlTransfers.useGraphQlLastTransfers({ accountId, pageSize });
 
   const onTransfersPageChange = useCallback(
     (limit: number, offset: number) => {
       return fetchMoreTransfers({
-        variables: {
-          limit,
-          offset,
-        },
-      })
+        limit,
+        offset
+      });
     },
     [fetchMoreTransfers]
-  )
+  );
 
-  if (!accountId) return null
+  if (!accountId) return null;
 
   return (
     <div>
       <AccountDetailComponent accountId={accountId} />
-      {/*<h2 className={'margin-top'}>Assets</h2>*/}
-      {/*<Tabs*/}
-      {/*  activeIndex={activeAssetsTabIndex}*/}
-      {/*  labels={assetsTabs}*/}
-      {/*  onClick={setActiveAssetsTabIndex}*/}
-      {/*/>*/}
-      {/*<Tabs*/}
-      {/*  activeIndex={activeAssetsTabIndex}*/}
-      {/*  contents={[*/}
-      {/*    <CollectionsComponent accountId={accountId} />,*/}
-      {/*    <TokensComponent accountId={accountId} />]}*/}
-      {/*/>*/}
-      <h2 className={'margin-top margin-bottom'}>Last {config.TOKEN_ID} transfers</h2>
+      <Heading size={'2'}>Assets</Heading>
+      <Tabs
+        activeIndex={activeAssetsTabIndex}
+        labels={assetsTabs}
+        onClick={setActiveAssetsTabIndex}
+      />
+      <Tabs
+        activeIndex={activeAssetsTabIndex}
+        contents={[
+          <CollectionsComponent
+            accountId={accountId}
+            key={'collections'}
+          />,
+          <TokensComponent
+            accountId={accountId}
+            key={'tokens'}
+          />
+        ]}
+      />
+      <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
       <LastTransfersComponent
-        data={transfers}
+        count={transfersCount}
+        data={transfers || []}
+        loading={isTransfersFetching}
         onPageChange={onTransfersPageChange}
         pageSize={pageSize}
-        loading={isTransfersFetching}
       />
     </div>
-  )
-}
+  );
+};
 
-export default AccountPage
+export default AccountPage;
