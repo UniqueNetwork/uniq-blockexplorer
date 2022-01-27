@@ -17,7 +17,7 @@ interface TokenDetailComponentProps {
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
   if (!token) return null;
-  const { collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, image_path: imagePath, owner, token_id: id, token_prefix: prefix } = token;
+  const { collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, data, image_path: imagePath, owner, token_id: id, token_prefix: prefix } = token;
 
   if (loading) return <LoadingComponent />;
 
@@ -43,11 +43,14 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         <TokenAttributes>
           <Heading size={'4'}>Attributes</Heading>
           <div className={'attributes-block'}>
-            <Text color={'grey-500'}>Traits</Text>
-            <div className={'tags'}>
-              <div>Eyes To The Right</div>
-              <div>Eyes To The Right</div>
-            </div>
+            {Object.keys(data).map((key) => (<div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
+              <div className={'tags'}>
+                {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => <div key={`item-${item}-${index}`}>{item}</div>)}
+                {typeof data[key] === 'string' && <div>{data[key]}</div>}
+              </div>
+            </div>)
+            )}
+
           </div>
         </TokenAttributes>
         <CollectionInfo>
@@ -111,7 +114,9 @@ const TokenAttributes = styled.div`
   margin-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed #D2D3D6;
   .attributes-block {
-    margin-bottom: calc(var(--gap) * 1.5);
+    &>div{
+      margin-bottom: calc(var(--gap) * 1.5);
+    }
     .tags {
       margin-top: calc(var(--gap) / 2);
       display: flex;

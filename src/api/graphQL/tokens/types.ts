@@ -8,9 +8,7 @@ export interface Token {
   token_id: number
   collection_id: number
   collection_name: string
-  data: {
-    hex: string
-  }
+  data: Record<string, string | string[]>
   token_prefix: string
   owner: string
   image_path: string
