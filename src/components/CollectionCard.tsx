@@ -1,51 +1,41 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 import Avatar from './Avatar';
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 import { Collection } from '../api/graphQL';
+import config from '../config';
 import { useApi } from '../hooks/useApi';
-import { NFTCollection } from '../api/chainApi/unique/types';
+
+const { IPFSGateway } = config;
 
 type CollectionCardProps = Collection & { className?: string}
 
 const CollectionCard: FC<CollectionCardProps> = ({ className,
+  collection_cover: cover,
   collection_id: collectionId,
   name,
   owner,
   token_prefix: tokenPrefix,
   tokens_aggregate: tokensAggregate }) => {
-  const tokensCount = tokensAggregate.aggregate.count;
+  const { currentChain } = useApi();
 
-  const [collectionImageUrl, setCollectionImageUrl] = useState<string>();
-
-  const { api, rpcClient } = useApi();
-
-  const fetchCollection = useCallback(async () => {
-    if (rpcClient?.isApiConnected) {
-      const collectionInfo = await api?.getCollection(collectionId) as NFTCollection;
-
-      setCollectionImageUrl(collectionInfo?.coverImageUrl);
-    }
-  }, [api, collectionId, rpcClient?.isApiConnected]);
-
-  useEffect(() => {
-    fetchCollection()
-      .catch((errMsg) => console.error(errMsg));
-  }, [fetchCollection]);
+  const tokensCount = tokensAggregate?.aggregate.count || 0;
 
   return (
-    <div
+    <Link
       className={className}
+      to={`/${currentChain.network}/collections/${collectionId}`}
     >
       <div className={'cover'}>
         <Avatar
           size={'small'}
-          src={collectionImageUrl}
+          src={cover ? `${IPFSGateway || ''}/${cover}` : undefined}
         />
       </div>
       <div className={'collection-info'}>
-        <h4>{name}</h4>
+        <Text>{name}</Text>
         <div className={'properties'}>
           <span>
             <Text color={'grey-500'}>ID:</Text>
@@ -65,7 +55,7 @@ const CollectionCard: FC<CollectionCardProps> = ({ className,
           <AccountLinkComponent value={owner} />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -91,6 +81,7 @@ export default styled(CollectionCard)`
     row-gap: 0;
     .properties {
       display: flex;
+      column-gap: var(--gap);
     }
   }
 `;

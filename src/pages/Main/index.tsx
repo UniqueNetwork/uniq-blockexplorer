@@ -23,7 +23,7 @@ const MainPage = () => {
   const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
     gqlTransfers.useGraphQlLastTransfers({ pageSize });
 
-  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({ pageSize: 7 });
+  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({ pageSize: 8 });
   const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize: 6 });
 
   const onBlocksPageChange = useCallback(

@@ -10,6 +10,9 @@ import Avatar from '../../../components/Avatar';
 import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import config from '../../../config';
+
+const { IPFSGateway } = config;
 
 const getCollectionsColumns = (chainId: string) => [
   {
@@ -21,7 +24,7 @@ const getCollectionsColumns = (chainId: string) => [
     >
       <Avatar
         size={'small'}
-        src={(item as Collection).cover_image_url}
+        src={(item as Collection).collection_cover ? `${IPFSGateway || ''}/${(item as Collection).collection_cover}` : undefined}
       />
       <div className={'collection-title'}>
         <Text color={'black'}>{(item as Collection).name}</Text>
@@ -93,6 +96,9 @@ export default styled(CollectionsComponent)`
       display: flex;
       flex-direction: column;
       color: black !important;
+    }
+    &:hover {
+      text-decoration: none;
     }
   }
 `;

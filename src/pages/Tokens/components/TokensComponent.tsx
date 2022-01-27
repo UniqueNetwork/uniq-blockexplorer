@@ -19,9 +19,12 @@ const getTokensColumns = (chainId: string) => [
       className={'token-link'}
       to={`/${chainId}/tokens/${value}`}
     >
-      <Avatar size={'small'} />
+      <Avatar
+        size={'small'}
+        src={(item as Token).image_path}
+      />
       <div className={'token-title'}>
-        <Text color={'black'}>{`${(item as Token).collection.token_prefix} #${(item as Token).id}`}</Text>
+        <Text color={'black'}>{`${(item as Token).token_prefix} #${(item as Token).token_id}`}</Text>
       </div>
     </Link>,
     title: 'Token',
@@ -36,7 +39,7 @@ const getTokensColumns = (chainId: string) => [
     >
       <Avatar size={'small'} />
       <div className={'collection-title'}>
-        <Text color={'black'}>{(item as Token).collection.name}</Text>
+        <Text color={'black'}>{(item as Token).collection_name}</Text>
         <Text color={'grey-500'}>{`ID ${value}`}</Text>
       </div>
     </Link>,
@@ -101,6 +104,10 @@ export default styled(TokensComponent)`
       flex-direction: column;
       color: black !important;
     }
+
+    &:hover {
+      text-decoration: none;
+    }
   }
   .collection-link {
     display: flex;
@@ -112,6 +119,10 @@ export default styled(TokensComponent)`
       display: flex;
       flex-direction: column;
       color: black !important;
+    }
+
+    &:hover {
+      text-decoration: none;
     }
   }
 `;

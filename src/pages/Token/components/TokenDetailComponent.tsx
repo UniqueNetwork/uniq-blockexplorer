@@ -15,8 +15,9 @@ interface TokenDetailComponentProps {
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ className, loading, token }) => {
   if (!token) return null;
-  const { collection, id } = token;
-  const { collection_id: collectionId, description, name, token_prefix: prefix } = collection;
+  const { collection_id: collectionId, collection_name: name, token_id: id, token_prefix: prefix } = token;
+
+  const description = ''; // it is missing in the view_tokens
 
   if (loading) return <LoadingComponent />;
 

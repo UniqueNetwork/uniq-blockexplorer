@@ -28,7 +28,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
         {loading && <LoadingComponent />}
         {tokens.map((token) => (
           <TokenCard
-            key={`token-${token.id}`}
+            key={`token-${token.token_id}`}
             {...token}
           />
         ))}
@@ -50,6 +50,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
 export default styled(NewTokensComponent)`
   .tokens-container {
     display: flex;
+    justify-content: space-between;
     column-gap: calc(var(--gap) * 1.5);
     row-gap: calc(var(--gap) * 1.5);
     align-items: flex-start;

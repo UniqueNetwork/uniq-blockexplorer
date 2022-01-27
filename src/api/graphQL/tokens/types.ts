@@ -5,25 +5,20 @@ export interface TokensVariables {
 }
 
 export interface Token {
-  id: number
   token_id: number
   collection_id: number
+  collection_name: string
   data: {
     hex: string
   }
-  collection: {
-    collection_id: number
-    name: string
-    token_prefix: string
-    description: string
-  }
+  token_prefix: string
   owner: string
   image_path: string
 }
 
 export interface TokensData {
-  tokens: Token[]
-  tokens_aggregate: {
+  view_tokens: Token[]
+  view_tokens_aggregate: {
     aggregate: {
       count: number
     }

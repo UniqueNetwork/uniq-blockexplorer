@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
-import { Collection } from '../../../api/graphQL';
+import { Collection, tokens as gqlTokens } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import NewTokensComponent from '../../Main/components/NewTokensComponent';
@@ -12,7 +12,9 @@ interface BasicDataComponentProps {
 }
 
 const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection }) => {
-  const { collection_id: id, date_of_creation: createdOn, description, holders_count: holders, owner, token_prefix: prefix, tokens, tokens_aggregate: tokensAggregate } = collection || {};
+  const { collection_id: id, date_of_creation: createdOn, description, holders_count: holders, owner, token_prefix: prefix, tokens_aggregate: tokensAggregate } = collection || {};
+
+  const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: id } }, pageSize: 8 });
 
   return (
     <div className={className}>
@@ -43,7 +45,9 @@ const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection
       </div>
       <div className={'description'}><Text color={'grey-500'}>{description || ''}</Text></div>
       <div className={'owner-account'}>
-        <Avatar size={'small'} />
+        <Avatar
+          size={'small'}
+        />
         <AccountLinkComponent
           noShort={true}
           value={owner || ''}

@@ -94,7 +94,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, className }) => 
           tokens.map((token: Token) => (
             <TokenCard
               {...token}
-              key={`token-${token.id}`}
+              key={`token-${token.token_id}`}
             />))}
       </div>
       <Button

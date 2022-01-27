@@ -4,11 +4,14 @@ import styled from 'styled-components';
 import Avatar from '../../components/Avatar';
 import BasicDataComponent from './components/BasicDataComponent';
 import ExtendedDataComponent from './components/ExtendedDataComponent';
-import { collections as gqlCollections } from '../../api/graphQL/';
+import { collections as gqlCollections, tokens as gqlTokens } from '../../api/graphQL/';
 import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
 import CollectionEventsComponent from './components/CollectionEventsComponent';
 import TokensEventsComponent from './components/TokensEventsComponent';
+import config from '../../config';
+
+const { IPFSGateway } = config;
 
 interface CollectionProps {
   className?: string
@@ -25,10 +28,15 @@ const CollectionPage: FC<CollectionProps> = ({ className }) => {
 
   const { collection } = gqlCollections.useGraphQlCollection(collectionId || '');
 
+  const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: collectionId } }, pageSize: 8 });
+
   return (
     <div className={className}>
       <div className={'collection-title'}>
-        <Avatar size={'large'} />
+        <Avatar
+          size={'large'}
+          src={collection?.collection_cover ? `${IPFSGateway || ''}/${collection?.collection_cover}` : undefined}
+        />
         <Heading size={'2'}>{collection?.name || ''}</Heading>
       </div>
       <Tabs
@@ -59,7 +67,7 @@ const CollectionPage: FC<CollectionProps> = ({ className }) => {
         contents={[
           <HoldersComponent
             key={'holder'}
-            tokens={collection?.tokens || []}
+            tokens={tokens || []}
           />,
           <TokensEventsComponent
             key={'tokens-events'}

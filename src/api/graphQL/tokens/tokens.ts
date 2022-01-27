@@ -3,21 +3,17 @@ import { useCallback } from 'react';
 import { FetchMoreTokensOptions, TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
-  query getTokens($limit: Int, $offset: Int, $where: tokens_bool_exp = {}) {
-    tokens(where: $where, limit: $limit, offset: $offset) {
-      id
-      token_id
-      collection_id
+  query getTokens($limit: Int, $offset: Int, $where: view_tokens_bool_exp = {}) {
+    view_tokens(where: $where, limit: $limit, offset: $offset) {
+      collection_id      
+      collection_name
       data
       owner
-      collection {
-        collection_id
-        name
-        token_prefix
-        description
-      }
+      image_path
+      token_id
+      token_prefix
     }
-    tokens_aggregate {
+    view_tokens_aggregate {
       aggregate {
         count
       }
@@ -32,12 +28,9 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
         ...(filter ? { _or: filter } : {}),
         ...(searchString
           ? {
-            collection: {
-              _or: {
-                description: { _ilike: searchString },
-                name: { _ilike: searchString },
-                token_prefix: { _ilike: searchString }
-              }
+            _or: {
+              collection_name: { _ilike: searchString },
+              token_prefix: { _ilike: searchString }
             }
           }
           : {})
@@ -78,8 +71,8 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
     fetchMoreTokens,
     fetchTokensError,
     isTokensFetching,
-    tokens: data?.tokens,
-    tokensCount: data?.tokens_aggregate.aggregate.count || 0
+    tokens: data?.view_tokens,
+    tokensCount: data?.view_tokens_aggregate.aggregate.count || 0
   };
 };
 
@@ -101,7 +94,7 @@ export const useGraphQlToken = (tokenId: string) => {
   return {
     fetchTokensError,
     isTokensFetching,
-    token: data?.tokens[0] || undefined
+    token: data?.view_tokens[0] || undefined
   };
 };
 

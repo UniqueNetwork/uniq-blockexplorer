@@ -2,17 +2,17 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 interface PictureProps {
+  className?: string
   src?: string
   alt: string
 }
 
-const Picture: FC<PictureProps> = (props) => {
-  const { alt, src } = props;
-
-  return (<div className={'picture'}>
+const Picture: FC<PictureProps> = ({ alt, className, src }) => {
+  return (<div className={className}>
     {src && <img
       alt={alt}
       src={src}
+      width={174}
     />}
     {!src && <svg
       fill={'white'}
@@ -34,7 +34,12 @@ const Picture: FC<PictureProps> = (props) => {
 };
 
 export default styled(Picture)`
+  width: 174px;
+  height: 174px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
   img {
-    max-width: 174px;
+  
   }
 `;

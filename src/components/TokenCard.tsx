@@ -1,27 +1,30 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 import { Token } from '../api/graphQL';
 import Picture from './Picture';
 import { useApi } from '../hooks/useApi';
-import { Link } from 'react-router-dom';
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
 type TokenCardProps = Token & { className?: string };
 
-const TokenCard: FC<TokenCardProps> = ({ className, collection, collection_id: collectionId, image_path: imagePath, owner, token_id: tokenId }) => {
+const TokenCard: FC<TokenCardProps> = ({ className, collection_id: collectionId, collection_name: name, image_path: imagePath, owner, token_id: tokenId, token_prefix: prefix }) => {
   const { currentChain } = useApi();
 
   return (
-    <div className={className}>
+    <Link
+      className={className}
+      to={`/${currentChain.network}/tokens/${tokenId}`}
+    >
       <Picture
         alt={tokenId.toString()}
         src={imagePath}
       />
       <div>
-        <Text>{`${collection.token_prefix || ''} #${tokenId}`}</Text>
+        <Text>{`${prefix || ''} #${tokenId}`}</Text>
         <div>
-          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}collections/${collectionId}`}>{collection.name} [ID {collectionId}]</Link>
+          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}collections/${collectionId}`}>{name} [ID {collectionId}]</Link>
         </div>
         <div>
           <Text
@@ -33,10 +36,13 @@ const TokenCard: FC<TokenCardProps> = ({ className, collection, collection_id: c
           <AccountLinkComponent value={owner} />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
 export default styled(TokenCard)`
   max-width: 174px;
+  svg {
+    max-height: 174px;
+  }
 `;
