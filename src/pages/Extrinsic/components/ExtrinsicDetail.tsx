@@ -10,12 +10,20 @@ import { shortcutText } from '../../../utils/textUtils';
 import ChainLogo from '../../../components/ChainLogo';
 import { useApi } from '../../../hooks/useApi';
 
-const ExtrinsicDetail: FC<{ className?: string }> = ({ className }) => {
-  const { blockIndex } = useParams();
+const ExtrinsicDetail: FC<{ className?: string }> = ({
+  className
+}) => {
+  const {
+    blockIndex
+  } = useParams();
 
-  const { chainData } = useApi();
+  const {
+    chainData
+  } = useApi();
 
-  const { extrinsic, isExtrinsicFetching } = gqlExtrinsic.useGraphQlExtrinsic(blockIndex);
+  const {
+    extrinsic, isExtrinsicFetching
+  } = gqlExtrinsic.useGraphQlExtrinsic(blockIndex);
 
   const deviceSize = useDeviceSize();
 
@@ -23,13 +31,15 @@ const ExtrinsicDetail: FC<{ className?: string }> = ({ className }) => {
 
   if (isExtrinsicFetching) return <LoadingComponent />;
 
-  const { amount,
+  const {
+    amount,
     block_number: blockNumber,
     fee,
     from_owner: fromOwner,
     hash,
     timestamp,
-    to_owner: toOwner } = extrinsic || {};
+    to_owner: toOwner
+  } = extrinsic || {};
 
   return (
     <div className={className}>

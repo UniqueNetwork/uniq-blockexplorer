@@ -8,7 +8,9 @@ interface PictureProps {
   size?: number
 }
 
-const Picture: FC<PictureProps> = ({ alt, className, size, src }) => {
+const Picture: FC<PictureProps> = ({
+  alt, className, size, src
+}) => {
   return (<div className={className}>
     {src && <img
       alt={alt}

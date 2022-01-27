@@ -12,7 +12,9 @@ interface ButtonProps {
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { disabled, icon, iconPosition = 'left', onClick, text, type = 'primary' } = props;
+  const {
+    disabled, icon, iconPosition = 'left', onClick, text, type = 'primary'
+  } = props;
 
   const _classNames = useMemo(() => classNames({
     disabled: !!disabled,

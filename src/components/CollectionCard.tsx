@@ -8,18 +8,24 @@ import { Collection } from '../api/graphQL';
 import config from '../config';
 import { useApi } from '../hooks/useApi';
 
-const { IPFSGateway } = config;
+const {
+  IPFSGateway
+} = config;
 
 type CollectionCardProps = Collection & { className?: string}
 
-const CollectionCard: FC<CollectionCardProps> = ({ className,
+const CollectionCard: FC<CollectionCardProps> = ({
+  className,
   collection_cover: cover,
   collection_id: collectionId,
   name,
   owner,
   token_prefix: tokenPrefix,
-  tokens_aggregate: tokensAggregate }) => {
-  const { currentChain } = useApi();
+  tokens_aggregate: tokensAggregate
+}) => {
+  const {
+    currentChain
+  } = useApi();
 
   const tokensCount = tokensAggregate?.aggregate.count || 0;
 

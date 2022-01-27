@@ -5,7 +5,9 @@ import Footer from './Footer';
 import Header from './Header';
 
 const PageLayout: FC = () => {
-  const { pathname } = useLocation();
+  const {
+    pathname
+  } = useLocation();
 
   const layoutProps = useMemo(() => {
     if (pathname === '/') return { heading: 'Block Explorer' };

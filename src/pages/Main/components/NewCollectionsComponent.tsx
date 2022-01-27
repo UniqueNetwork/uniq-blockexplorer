@@ -13,8 +13,12 @@ interface CollectionsComponentProps {
   loading?: boolean
 }
 
-const CollectionsComponent: FC<CollectionsComponentProps> = ({ className, collections, loading }) => {
-  const { currentChain } = useApi();
+const CollectionsComponent: FC<CollectionsComponentProps> = ({
+  className, collections, loading
+}) => {
+  const {
+    currentChain
+  } = useApi();
   const navigate = useNavigate();
 
   const onClick = useCallback(() => {

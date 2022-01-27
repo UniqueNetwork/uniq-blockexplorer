@@ -90,7 +90,7 @@ module.exports = {
       "error",
       {
         ImportDeclaration: "never",
-        ObjectPattern: "never",
+        ObjectPattern: "always",
       },
     ],
     "padding-line-between-statements": [

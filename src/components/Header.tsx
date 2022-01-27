@@ -5,8 +5,12 @@ import { Select } from '@unique-nft/ui-kit';
 import { useApi } from '../hooks/useApi';
 import config from '../config';
 
-const Header: FC<{ className?: string }> = ({ className }) => {
-  const { currentChain } = useApi();
+const Header: FC<{ className?: string }> = ({
+  className
+}) => {
+  const {
+    currentChain
+  } = useApi();
 
   const navigate = useNavigate();
   const onSelectChange = useCallback(
@@ -36,7 +40,9 @@ const Header: FC<{ className?: string }> = ({ className }) => {
 
       <Select
         onChange={onSelectChange}
-        options={Object.values(config.chains).map(({ name, network }) => ({
+        options={Object.values(config.chains).map(({
+          name, network
+        }) => ({
           id: network,
           title: name
         }))}

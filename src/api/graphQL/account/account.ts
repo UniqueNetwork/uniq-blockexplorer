@@ -18,7 +18,9 @@ const accountQuery = gql`
 `;
 
 export const useGraphQlAccount = (accountId: string) => {
-  const { data: account, loading: isAccountFetching } = useQuery<AccountData, AccountVariables>(
+  const {
+    data: account, loading: isAccountFetching
+  } = useQuery<AccountData, AccountVariables>(
     accountQuery,
     {
       notifyOnNetworkStatusChange: true,

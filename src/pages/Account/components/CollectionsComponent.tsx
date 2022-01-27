@@ -13,7 +13,9 @@ type ActionType = 'All' | 'Owner';
 
 const pageSize = 6;
 
-const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId, className }) => {
+const CollectionsComponent: FC<CollectionsComponentProps> = ({
+  accountId, className
+}) => {
   const [filter, dispatchFilter] = useReducer<
   Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
@@ -30,7 +32,9 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId, classN
 
   const [searchString, setSearchString] = useState<string | undefined>();
 
-  const { collections, collectionsCount, fetchMoreCollections } =
+  const {
+    collections, collectionsCount, fetchMoreCollections
+  } =
     gqlCollection.useGraphQlCollections({
       pageSize
     });

@@ -9,8 +9,12 @@ import AccountLinkComponent from '../pages/Account/components/AccountLinkCompone
 
 type TokenCardProps = Token & { className?: string };
 
-const TokenCard: FC<TokenCardProps> = ({ className, collection_id: collectionId, collection_name: name, image_path: imagePath, owner, token_id: tokenId, token_prefix: prefix }) => {
-  const { currentChain } = useApi();
+const TokenCard: FC<TokenCardProps> = ({
+  className, collection_id: collectionId, collection_name: name, image_path: imagePath, owner, token_id: tokenId, token_prefix: prefix
+}) => {
+  const {
+    currentChain
+  } = useApi();
 
   return (
     <Link

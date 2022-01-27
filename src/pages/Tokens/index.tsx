@@ -6,9 +6,13 @@ import { tokens as gqlTokens } from '../../api/graphQL/';
 
 const pageSize = 20; // default
 
-const TokensPage: FC<{ className?: string }> = ({ className }) => {
+const TokensPage: FC<{ className?: string }> = ({
+  className
+}) => {
   const [searchString, setSearchString] = useState('');
-  const { fetchMoreTokens, isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({ pageSize });
+  const {
+    fetchMoreTokens, isTokensFetching, tokens, tokensCount
+  } = gqlTokens.useGraphQlTokens({ pageSize });
 
   const onPageChange = useCallback(
     (limit: number, offset: number) =>
@@ -24,7 +28,9 @@ const TokensPage: FC<{ className?: string }> = ({ className }) => {
   }), [searchString, fetchMoreTokens]);
 
   const onSearchKeyDown = useCallback(
-    ({ key }) => {
+    ({
+      key
+    }) => {
       if (key === 'Enter') return onSearchClick();
     },
     [onSearchClick]

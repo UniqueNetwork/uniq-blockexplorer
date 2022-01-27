@@ -11,14 +11,20 @@ import { useApi } from '../../hooks/useApi';
 const assetsTabs = ['Collections', 'Tokens'];
 
 const AccountPage = () => {
-  const { accountId } = useParams();
-  const { chainData } = useApi();
+  const {
+    accountId
+  } = useParams();
+  const {
+    chainData
+  } = useApi();
 
   const pageSize = 10; // default
 
   const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
-  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
+  const {
+    fetchMoreTransfers, isTransfersFetching, transfers, transfersCount
+  } =
     gqlTransfers.useGraphQlLastTransfers({ accountId, pageSize });
 
   const onTransfersPageChange = useCallback(

@@ -23,7 +23,9 @@ const tokensQuery = gql`
   }
 `;
 
-export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) => {
+export const useGraphQlTokens = ({
+  filter, pageSize
+}: useGraphQlTokensProps) => {
   const getWhere = useCallback(
     (searchString?: string) => ({
       _and: {
@@ -41,10 +43,12 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
     [filter]
   );
 
-  const { data,
+  const {
+    data,
     error: fetchTokensError,
     fetchMore,
-    loading: isTokensFetching } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    loading: isTokensFetching
+  } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -57,7 +61,9 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
   });
 
   const fetchMoreTokens = useCallback(
-    ({ limit = pageSize, offset, searchString }: FetchMoreTokensOptions) => {
+    ({
+      limit = pageSize, offset, searchString
+    }: FetchMoreTokensOptions) => {
       return fetchMore({
         variables: {
           limit,
@@ -79,9 +85,11 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
 };
 
 export const useGraphQlToken = (collectionId: string, tokenId: string) => {
-  const { data,
+  const {
+    data,
     error: fetchTokensError,
-    loading: isTokensFetching } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    loading: isTokensFetching
+  } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',

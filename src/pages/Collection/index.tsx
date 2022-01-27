@@ -11,7 +11,9 @@ import CollectionEventsComponent from './components/CollectionEventsComponent';
 import TokensEventsComponent from './components/TokensEventsComponent';
 import config from '../../config';
 
-const { IPFSGateway } = config;
+const {
+  IPFSGateway
+} = config;
 
 interface CollectionProps {
   className?: string
@@ -20,15 +22,23 @@ interface CollectionProps {
 const detailTabs = ['Basic data', 'Extended'];
 const eventsTabs = ['Holders', 'Token events', 'Collection events'];
 
-const CollectionPage: FC<CollectionProps> = ({ className }) => {
+const CollectionPage: FC<CollectionProps> = ({
+  className
+}) => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
   const [activeEventsTabIndex, setActiveEventsTabIndex] = useState<number>(0);
 
-  const { collectionId } = useParams<{ collectionId: string }>();
+  const {
+    collectionId
+  } = useParams<{ collectionId: string }>();
 
-  const { collection } = gqlCollections.useGraphQlCollection(collectionId || '');
+  const {
+    collection
+  } = gqlCollections.useGraphQlCollection(collectionId || '');
 
-  const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: collectionId } }, pageSize: 8 });
+  const {
+    tokens
+  } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: collectionId } }, pageSize: 8 });
 
   return (
     <div className={className}>

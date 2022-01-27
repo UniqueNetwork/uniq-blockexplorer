@@ -20,7 +20,9 @@ export const getNetworkList = (config: Record<string, string | undefined>): stri
   return Object.keys(config).reduce<string[]>((acc, key) => {
     if (!key.includes('NET_')) return acc;
 
-    const { network } = configKeyRegexp.exec(key)?.groups || {};
+    const {
+      network
+    } = configKeyRegexp.exec(key)?.groups || {};
 
     if (network) {
       acc.push(network);

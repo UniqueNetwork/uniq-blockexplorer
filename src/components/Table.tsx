@@ -14,7 +14,9 @@ interface TableProps<RecordType = DefaultRecordType> {
   rowKey?: string
 }
 
-const Table: FC<TableProps> = ({ className, columns, data, loading, rowKey }) => {
+const Table: FC<TableProps> = ({
+  className, columns, data, loading, rowKey
+}) => {
   const deviceSize = useDeviceSize();
 
   return (

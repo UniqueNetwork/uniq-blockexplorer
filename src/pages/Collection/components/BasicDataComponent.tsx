@@ -11,10 +11,16 @@ interface BasicDataComponentProps {
   collection?: Collection
 }
 
-const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection }) => {
-  const { collection_id: id, date_of_creation: createdOn, description, holders_count: holders, owner, token_prefix: prefix, tokens_aggregate: tokensAggregate } = collection || {};
+const BasicDataComponent: FC<BasicDataComponentProps> = ({
+  className, collection
+}) => {
+  const {
+    collection_id: id, date_of_creation: createdOn, description, holders_count: holders, owner, token_prefix: prefix, tokens_aggregate: tokensAggregate
+  } = collection || {};
 
-  const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: id } }, pageSize: 8 });
+  const {
+    tokens
+  } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: id } }, pageSize: 8 });
 
   return (
     <div className={className}>

@@ -57,14 +57,18 @@ const transfersWithTimeDifference = (
   }));
 };
 
-const LastTransfersComponent = ({ count,
+const LastTransfersComponent = ({
+  count,
   data,
   loading,
   onPageChange,
-  pageSize }: BlockComponentProps<Transfer[]>) => {
+  pageSize
+}: BlockComponentProps<Transfer[]>) => {
   const deviceSize = useDeviceSize();
 
-  const { chainData, currentChain } = useApi();
+  const {
+    chainData, currentChain
+  } = useApi();
 
   return (
     <div>

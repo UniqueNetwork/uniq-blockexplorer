@@ -1,4 +1,4 @@
-import { Token } from '../../api/graphQL'
+import { Token } from '../../api/graphQL';
 
 export interface TokensComponentProps {
   className?: string

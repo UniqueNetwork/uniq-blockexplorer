@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-const LoadingComponent: FC<{className?: string}> = ({ className }) => {
+const LoadingComponent: FC<{className?: string}> = ({
+  className
+}) => {
   return <div className={className}>Loading...</div>;
 };
 

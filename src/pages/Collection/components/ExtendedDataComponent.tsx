@@ -10,7 +10,9 @@ interface ExtendedDataComponentProps {
   collection?: Collection
 }
 
-const ExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ className, collection }) => {
+const ExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
+  className, collection
+}) => {
   return (
     <div className={className}>
       <div className={'container-with-border'}>

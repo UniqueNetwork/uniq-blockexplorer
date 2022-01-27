@@ -14,8 +14,12 @@ interface NewTokensComponentProps {
 }
 
 const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
-  const { className, loading, tokens } = props;
-  const { currentChain } = useApi();
+  const {
+    className, loading, tokens
+  } = props;
+  const {
+    currentChain
+  } = useApi();
   const navigate = useNavigate();
 
   const onClick = useCallback(() => {

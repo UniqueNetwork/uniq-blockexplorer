@@ -13,7 +13,9 @@ type ActionType = 'All' | 'Minted' | 'Received'
 
 const pageSize = 18;
 
-const TokensComponent: FC<TokensComponentProps> = ({ accountId, className }) => {
+const TokensComponent: FC<TokensComponentProps> = ({
+  accountId, className
+}) => {
   const [filter, dispatchFilter] = useReducer<
   Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
@@ -34,7 +36,9 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, className }) => 
 
   const [searchString, setSearchString] = useState<string | undefined>();
 
-  const { fetchMoreTokens, tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter, pageSize });
+  const {
+    fetchMoreTokens, tokens, tokensCount
+  } = gqlTokens.useGraphQlTokens({ filter, pageSize });
 
   const onCheckBoxChange = useCallback(
     (actionType: ActionType) => (value: boolean) => dispatchFilter({ type: actionType, value }),

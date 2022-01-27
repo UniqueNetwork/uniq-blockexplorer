@@ -8,4 +8,3 @@ export type CollectionsComponentProps = {
   loading: boolean
   onPageChange: (limit: number, offset: number) => Promise<unknown>
 }
-

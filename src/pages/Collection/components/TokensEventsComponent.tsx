@@ -37,7 +37,9 @@ const columns = [
   { dataIndex: 'result', key: 'result', title: 'Result', width: 100 }
 ];
 
-const TokensEventsComponent: FC<TokensEventsComponentProps> = ({ className, events, loading }) => {
+const TokensEventsComponent: FC<TokensEventsComponentProps> = ({
+  className, events, loading
+}) => {
   return (
     <div className={className}>
       <Table

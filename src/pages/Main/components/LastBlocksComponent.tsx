@@ -32,11 +32,13 @@ const blocksWithTimeDifference = (
   }));
 };
 
-const LastBlocksComponent = ({ count,
+const LastBlocksComponent = ({
+  count,
   data,
   loading,
   onPageChange,
-  pageSize }: BlockComponentProps<LastBlock[]>) => {
+  pageSize
+}: BlockComponentProps<LastBlock[]>) => {
   const deviceSize = useDeviceSize();
 
   return (

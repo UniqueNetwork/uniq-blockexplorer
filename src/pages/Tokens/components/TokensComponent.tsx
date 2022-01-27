@@ -12,7 +12,9 @@ import { TokensComponentProps } from '../types';
 import Table from '../../../components/Table';
 import config from '../../../config';
 
-const { IPFSGateway } = config;
+const {
+  IPFSGateway
+} = config;
 
 const getTokensColumns = (chainId: string) => [
   {
@@ -70,14 +72,18 @@ const getTokensColumns = (chainId: string) => [
   }
 ];
 
-const TokensComponent: FC<TokensComponentProps> = ({ className,
+const TokensComponent: FC<TokensComponentProps> = ({
+  className,
   count,
   data,
   loading,
   onPageChange,
-  pageSize }) => {
+  pageSize
+}) => {
   const deviceSize = useDeviceSize();
-  const { currentChain } = useApi();
+  const {
+    currentChain
+  } = useApi();
 
   return (
     <div className={className}>

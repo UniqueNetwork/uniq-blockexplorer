@@ -8,16 +8,22 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import LoadingComponent from '../../../components/LoadingComponent';
 import config from '../../../config';
 
-const { IPFSGateway } = config;
+const {
+  IPFSGateway
+} = config;
 
 interface TokenDetailComponentProps {
   token?: Token
   loading?: boolean
 }
 
-const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
+const TokenDetailComponent: FC<TokenDetailComponentProps> = ({
+  loading, token
+}) => {
   if (!token) return null;
-  const { collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, data, image_path: imagePath, owner, token_id: id, token_prefix: prefix } = token;
+  const {
+    collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, data, image_path: imagePath, owner, token_id: id, token_prefix: prefix
+  } = token;
 
   if (loading) return <LoadingComponent />;
 

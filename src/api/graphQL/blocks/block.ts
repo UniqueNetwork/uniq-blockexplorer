@@ -23,13 +23,17 @@ const getLatestBlocksQuery = gql`
   }
 `;
 
-export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
+export const useGraphQlBlocks = ({
+  pageSize
+}: useGraphQlBlocksProps) => {
   const client = useApolloClient();
 
-  const { data,
+  const {
+    data,
     error: fetchBlocksError,
     fetchMore,
-    loading: isBlocksFetching } = useQuery<LastBlocksData, LastBlocksVariables>(getLatestBlocksQuery, {
+    loading: isBlocksFetching
+  } = useQuery<LastBlocksData, LastBlocksVariables>(getLatestBlocksQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -43,7 +47,9 @@ export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
   }, [client.link, fetchMore]);
 
   const fetchMoreBlocks = useCallback(
-    ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
+    ({
+      limit = pageSize, offset, searchString
+    }: FetchMoreBlocksOptions) => {
       return fetchMore({
         variables: {
           limit,

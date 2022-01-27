@@ -13,19 +13,27 @@ interface AccountProps {
   className?: string
 }
 
-const AccountDetailComponent: FC<AccountProps> = ({ accountId, className }) => {
-  const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
+const AccountDetailComponent: FC<AccountProps> = ({
+  accountId, className
+}) => {
+  const {
+    account, isAccountFetching
+  } = gqlAccount.useGraphQlAccount(accountId);
 
   const deviceSize = useDeviceSize();
 
-  const { chainData } = useApi();
+  const {
+    chainData
+  } = useApi();
 
   if (isAccountFetching) return <LoadingComponent />;
 
-  const { available_balance: availableBalance,
+  const {
+    available_balance: availableBalance,
     free_balance: freeBalance,
     locked_balance: lockedBalance,
-    timestamp } = account || {};
+    timestamp
+  } = account || {};
 
   return (
     <div className={className}>

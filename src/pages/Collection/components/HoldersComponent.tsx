@@ -31,7 +31,9 @@ const columns = [
   { dataIndex: 'sale', key: 'sale', title: 'Sale', width: 100 }
 ];
 
-const HoldersComponent: FC<HoldersComponentProps> = ({ className, loading, tokens }) => {
+const HoldersComponent: FC<HoldersComponentProps> = ({
+  className, loading, tokens
+}) => {
   const holders: Holder[] = useMemo(() => {
     return tokens.reduce<Holder[]>((acc, token) => {
       const holderIndex = acc.findIndex((item) => item.accountId === token.owner);

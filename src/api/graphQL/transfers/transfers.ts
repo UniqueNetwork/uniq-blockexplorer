@@ -24,7 +24,9 @@ const getLastTransfersQuery = gql`
   }
 `;
 
-export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastTransfersProps) => {
+export const useGraphQlLastTransfers = ({
+  accountId, pageSize
+}: useGraphQlLastTransfersProps) => {
   const client = useApolloClient();
 
   const getWhere = useCallback(
@@ -50,10 +52,12 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
     [accountId]
   );
 
-  const { data,
+  const {
+    data,
     error: fetchTransfersError,
     fetchMore,
-    loading: isTransfersFetching } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
+    loading: isTransfersFetching
+  } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -71,7 +75,9 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
   }, [client.link, fetchMore]);
 
   const fetchMoreTransfers = useCallback(
-    ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
+    ({
+      limit = pageSize, offset, searchString
+    }: FetchMoreBlocksOptions) => {
       return fetchMore({
         variables: {
           limit,

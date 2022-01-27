@@ -18,7 +18,9 @@ const PageNumberComponent = (props: {
   currentPage: number
   onPageChanged: (newPage: number) => void
 }) => {
-  const { currentPage, onPageChanged, pageNumber } = props;
+  const {
+    currentPage, onPageChanged, pageNumber
+  } = props;
 
   const onPagePillClick = useCallback(
     () => {
@@ -44,12 +46,14 @@ const PageNumberComponent = (props: {
   );
 };
 
-const PaginationComponent = ({ className,
+const PaginationComponent = ({
+  className,
   count,
   currentPage: currentPageFromProps,
   onPageChange,
   pageSize = 10,
-  siblingCount = 2 }: PaginationProps) => {
+  siblingCount = 2
+}: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1);
   const paginationRange = usePagination({
     currentPage,

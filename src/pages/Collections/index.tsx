@@ -6,9 +6,13 @@ import { collections as gqlCollections } from '../../api/graphQL/';
 
 const pageSize = 20; // default
 
-const CollectionsPage: FC<{ className?: string }> = ({ className }) => {
+const CollectionsPage: FC<{ className?: string }> = ({
+  className
+}) => {
   const [searchString, setSearchString] = useState('');
-  const { collections, collectionsCount, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize });
+  const {
+    collections, collectionsCount, fetchMoreCollections, isCollectionsFetching
+  } = gqlCollections.useGraphQlCollections({ pageSize });
 
   const onPageChange = useCallback(
     (limit: number, offset: number) =>
@@ -24,7 +28,9 @@ const CollectionsPage: FC<{ className?: string }> = ({ className }) => {
   }), [searchString, fetchMoreCollections]);
 
   const onSearchKeyDown = useCallback(
-    ({ key }) => {
+    ({
+      key
+    }) => {
       if (key === 'Enter') return onSearchClick();
     },
     [onSearchClick]

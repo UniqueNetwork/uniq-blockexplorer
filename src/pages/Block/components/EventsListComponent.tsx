@@ -49,12 +49,16 @@ const blockColumns = [
 
 const EventListComponent = (props: { blockNumber: string | undefined }) => {
   const deviceSize = useDeviceSize();
-  const { blockNumber } = props;
+  const {
+    blockNumber
+  } = props;
   const pageSize = 10;
 
-  const { data: eventsList,
+  const {
+    data: eventsList,
     fetchMore: fetchMoreExtrinsics,
-    loading } = useQuery<EventsForBlockData, EventsForBlockVariables>(eventsForBlock.getEventsQuery, {
+    loading
+  } = useQuery<EventsForBlockData, EventsForBlockVariables>(eventsForBlock.getEventsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',

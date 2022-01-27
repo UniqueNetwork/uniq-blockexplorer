@@ -12,7 +12,9 @@ import Table from '../../../components/Table';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import config from '../../../config';
 
-const { IPFSGateway } = config;
+const {
+  IPFSGateway
+} = config;
 
 const getCollectionsColumns = (chainId: string) => [
   {
@@ -58,14 +60,18 @@ const getCollectionsColumns = (chainId: string) => [
   { dataIndex: 'actions_count', key: 'actions_count', title: 'Action', width: 100 }
 ];
 
-const CollectionsComponent = ({ className,
+const CollectionsComponent = ({
+  className,
   count,
   data,
   loading,
   onPageChange,
-  pageSize }: CollectionsComponentProps) => {
+  pageSize
+}: CollectionsComponentProps) => {
   const deviceSize = useDeviceSize();
-  const { currentChain } = useApi();
+  const {
+    currentChain
+  } = useApi();
 
   return (
     <div className={className}>

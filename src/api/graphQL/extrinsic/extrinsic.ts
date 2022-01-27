@@ -30,7 +30,9 @@ const extrinsicQuery = gql`
 export { extrinsicQuery };
 
 export const useGraphQlExtrinsic = (blockIndex?: string) => {
-  const { data, loading: isExtrinsicFetching } = useQuery<ExtrinsicData, ExtrinsicVariables>(
+  const {
+    data, loading: isExtrinsicFetching
+  } = useQuery<ExtrinsicData, ExtrinsicVariables>(
     extrinsicQuery,
     {
       fetchPolicy: 'network-only',

@@ -13,18 +13,28 @@ const MainPage = () => {
   const pageSize = 10; // default
   const [searchString, setSearchString] = useState('');
 
-  const { chainData } = useApi();
+  const {
+    chainData
+  } = useApi();
   const navigate = useNavigate();
 
-  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching } = lastBlocks.useGraphQlBlocks({
+  const {
+    blockCount, blocks, fetchMoreBlocks, isBlocksFetching
+  } = lastBlocks.useGraphQlBlocks({
     pageSize
   });
 
-  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
+  const {
+    fetchMoreTransfers, isTransfersFetching, transfers, transfersCount
+  } =
     gqlTransfers.useGraphQlLastTransfers({ pageSize });
 
-  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({ pageSize: 8 });
-  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize: 6 });
+  const {
+    fetchMoreTokens, isTokensFetching, tokens
+  } = gqlTokens.useGraphQlTokens({ pageSize: 8 });
+  const {
+    collections, fetchMoreCollections, isCollectionsFetching
+  } = gqlCollections.useGraphQlCollections({ pageSize: 6 });
 
   const onBlocksPageChange = useCallback(
     (limit: number, offset: number) =>
@@ -78,7 +88,9 @@ const MainPage = () => {
   }, [fetchMoreTransfers, fetchMoreBlocks, fetchMoreCollections, fetchMoreTokens, searchString, navigate]);
 
   const onSearchKeyDown = useCallback(
-    ({ key }) => {
+    ({
+      key
+    }) => {
       if (key === 'Enter') onSearchClick();
     },
     [onSearchClick]

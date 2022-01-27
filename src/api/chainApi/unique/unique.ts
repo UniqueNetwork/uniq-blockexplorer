@@ -9,7 +9,9 @@ import { DecoratedRpc } from '@polkadot/api/types';
 import { RpcInterface } from '@polkadot/rpc-core/types.jsonrpc';
 import { Codec } from '@polkadot/types/types';
 
-const { IPFSGateway } = config;
+const {
+  IPFSGateway
+} = config;
 
 type UniqueDecoratedRpc = DecoratedRpc<'promise', RpcInterface> & {
   unique: {
@@ -27,7 +29,9 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
     this.api = api;
   }
 
-  private decodeStruct({ attr, data }: { attr?: string; data?: string }): AttributesDecoded {
+  private decodeStruct({
+    attr, data
+  }: { attr?: string; data?: string }): AttributesDecoded {
     if (attr && data) {
       try {
         const schema = JSON.parse(attr) as ProtobufAttributeType;

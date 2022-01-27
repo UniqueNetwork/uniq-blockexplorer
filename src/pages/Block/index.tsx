@@ -9,8 +9,12 @@ import EventListComponent from './components/EventsListComponent';
 
 const assetsTabs = ['Extrinsics', 'Events'];
 
-const BlockPage: FC<{ className?: string }> = ({ className }) => {
-  const { blockIndex } = useParams();
+const BlockPage: FC<{ className?: string }> = ({
+  className
+}) => {
+  const {
+    blockIndex
+  } = useParams();
 
   const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
