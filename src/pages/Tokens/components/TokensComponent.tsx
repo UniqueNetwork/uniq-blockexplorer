@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
-import { Token } from '../../../api/graphQL';
+import { Collection, Token } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
@@ -10,6 +10,9 @@ import PaginationComponent from '../../../components/Pagination';
 import { useApi } from '../../../hooks/useApi';
 import { TokensComponentProps } from '../types';
 import Table from '../../../components/Table';
+import config from '../../../config';
+
+const { IPFSGateway } = config;
 
 const getTokensColumns = (chainId: string) => [
   {
@@ -37,7 +40,11 @@ const getTokensColumns = (chainId: string) => [
       className={'collection-link'}
       to={`/${chainId}/collections/${value}`}
     >
-      <Avatar size={'small'} />
+      <Avatar
+        size={'small'}
+
+        src={(item as Token).collection_cover ? `${IPFSGateway || ''}/${(item as Token).collection_cover}` : undefined}
+      />
       <div className={'collection-title'}>
         <Text color={'black'}>{(item as Token).collection_name}</Text>
         <Text color={'grey-500'}>{`ID ${value}`}</Text>

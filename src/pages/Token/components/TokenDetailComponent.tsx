@@ -6,37 +6,42 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import LoadingComponent from '../../../components/LoadingComponent';
+import config from '../../../config';
+
+const { IPFSGateway } = config;
 
 interface TokenDetailComponentProps {
-  className?: string
   token?: Token
   loading?: boolean
 }
 
-const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ className, loading, token }) => {
+const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
   if (!token) return null;
-  const { collection_id: collectionId, collection_name: name, token_id: id, token_prefix: prefix } = token;
-
-  const description = ''; // it is missing in the view_tokens
+  const { collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, image_path: imagePath, token_id: id, token_prefix: prefix } = token;
 
   if (loading) return <LoadingComponent />;
 
   return (
-    <div className={className}>
-      <Picture alt={`${prefix}-${id}`} />
+    <Wrapper>
+      <Picture
+        alt={`${prefix}-${id}`}
+        className={'token-picture'}
+        size={557}
+        src={imagePath}
+      />
       <div>
         <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
-        <div className={'token-general'}>
+        <TokenInfo className={'token-general'}>
           <Text color={'grey-500'}>Created on</Text>
           <Text>{'undefined'}</Text>
           <Text color={'grey-500'}>Owner</Text>
-          <div className={'owner'}>
+          <OwnerWrapper>
             <Avatar size={'small'} />
             <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} />
-          </div>
-        </div>
-        <div>
-          <Heading size={'2'}>Attributes</Heading>
+          </OwnerWrapper>
+        </TokenInfo>
+        <TokenAttributes>
+          <Heading size={'4'}>Attributes</Heading>
           <div className={'attributes-block'}>
             <Text color={'grey-500'}>Traits</Text>
             <div className={'tags'}>
@@ -44,11 +49,14 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ className, loadin
               <div>Eyes To The Right</div>
             </div>
           </div>
-        </div>
-        <div>
-          <Heading size={'2'}>Collection</Heading>
+        </TokenAttributes>
+        <CollectionInfo>
+          <Heading size={'4'}>Collection</Heading>
           <div className={'collection-block'}>
-            <Avatar size={'small'} />
+            <Avatar
+              size={'small'}
+              src={collectionCover ? `${IPFSGateway || ''}/${collectionCover}` : undefined}
+            />
             <div className={'properties'}>
               <Text>{name}</Text>
               <div className={'description'}><Text color={'grey-500'}>{description || ''}</Text></div>
@@ -68,11 +76,76 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ className, loadin
               </div>
             </div>
           </div>
-        </div>
+        </CollectionInfo>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 
-export default styled(TokenDetailComponent)`
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: 557px 1fr;
+  grid-column-gap: var(--gap);
+  .token-picture {
+    width: 557px;
+    height: 557px;
+  }
 `;
+
+const TokenInfo = styled.div`
+  display: grid;
+  grid-template-columns: 85px 1fr;
+  grid-column-gap: calc(var(--gap) * 2);
+  grid-row-gap: var(--gap);
+  padding-bottom: calc(var(--gap) * 2);
+  margin-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed #D2D3D6;
+  span {
+    display: flex;
+    align-items: center;
+  }
+`;
+
+const TokenAttributes = styled.div`
+  padding-bottom: calc(var(--gap) * 2);
+  margin-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed #D2D3D6;
+  .attributes-block {
+    margin-bottom: calc(var(--gap) * 1.5);
+    .tags {
+      margin-top: calc(var(--gap) / 2);
+      display: flex;
+      column-gap: calc(var(--gap) / 2);
+      row-gap: calc(var(--gap) / 2);
+      & > div {
+        padding: 1px calc(var(--gap) / 2);
+        background-color: var(--blue-gray);
+      }
+    }
+  }
+`;
+
+const CollectionInfo = styled.div`
+  padding-bottom: calc(var(--gap) * 2);
+  margin-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed #D2D3D6;
+  .collection-block {
+    display: flex;
+    column-gap: var(--gap);
+    svg {
+      min-width: 40px;
+    }
+    .general {
+      display: flex;
+      column-gap: var(--gap);
+    }
+  }
+`;
+
+const OwnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: var(--gap);
+`;
+
+export default TokenDetailComponent;

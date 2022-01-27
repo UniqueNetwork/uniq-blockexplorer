@@ -14,6 +14,8 @@ export interface Token {
   token_prefix: string
   owner: string
   image_path: string
+  collection_cover: string
+  collection_description: string
 }
 
 export interface TokensData {

@@ -5,7 +5,9 @@ import { FetchMoreTokensOptions, TokensData, TokensVariables, useGraphQlTokensPr
 const tokensQuery = gql`
   query getTokens($limit: Int, $offset: Int, $where: view_tokens_bool_exp = {}) {
     view_tokens(where: $where, limit: $limit, offset: $offset) {
-      collection_id      
+      collection_cover
+      collection_description
+      collection_id
       collection_name
       data
       owner
@@ -87,7 +89,7 @@ export const useGraphQlToken = (tokenId: string) => {
     variables: {
       limit: 1,
       offset: 0,
-      where: { id: { _eq: tokenId } }
+      where: { token_id: { _eq: tokenId } }
     }
   });
 

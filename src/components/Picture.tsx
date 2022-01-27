@@ -5,14 +5,15 @@ interface PictureProps {
   className?: string
   src?: string
   alt: string
+  size?: number
 }
 
-const Picture: FC<PictureProps> = ({ alt, className, src }) => {
+const Picture: FC<PictureProps> = ({ alt, className, size, src }) => {
   return (<div className={className}>
     {src && <img
       alt={alt}
       src={src}
-      width={174}
+      width={size || 174}
     />}
     {!src && <svg
       fill={'white'}
