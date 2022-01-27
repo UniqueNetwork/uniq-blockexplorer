@@ -1,16 +1,25 @@
 export interface Collection {
+  collection_cover: string
   collection_id: number
   description: string
   name: string
-  owner: string
-  token_prefix: string
   offchain_schema: string
-  schema_version: string
-  tokens_aggregate: {
+  owner: string
+  token_limit: number
+  token_prefix: string
+  // additional properties needed
+  tokens_aggregate?: {
     aggregate: {
       count: number
     }
   }
+  type?: string
+  date_of_creation?: string
+  holders_count?: number
+  actions_count?: number
+  owner_can_trasfer?: string
+  owner_can_destroy?: string
+  schema_version?: string
 }
 
 export interface CollectionsVariables {
@@ -20,8 +29,8 @@ export interface CollectionsVariables {
 }
 
 export interface CollectionsData {
-  collections: Collection[]
-  collections_aggregate: {
+  view_collections: Collection[]
+  view_collections_aggregate: {
     aggregate: {
       count: number
     }

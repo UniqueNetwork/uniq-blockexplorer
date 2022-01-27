@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
+import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
 import { Heading } from '@unique-nft/ui-kit';
 
 import LoadingComponent from '../../../components/LoadingComponent';
 import { BlockDetailData, BlockDetailVariables, blockDetail } from '../../../api/graphQL';
 
-const BlockDetailComponent = (props: { blockNumber: string | undefined }) => {
-  const { blockNumber } = props;
+const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undefined }> = ({ blockNumber, className }) => {
   const { data: blockDetails,
     loading: isBLockFetching } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
     notifyOnNetworkStatusChange: true,
@@ -24,9 +24,9 @@ const BlockDetailComponent = (props: { blockNumber: string | undefined }) => {
     total_events: totalEvents } = blockDetails?.block[0] || {};
 
   return (
-    <>
+    <div className={className}>
       <Heading>{`Block ${blockNumber || ''}`}</Heading>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
+      <div className={'extrinsic-container'}>
         <div className={'grid-item_col2 text_grey'}>Status</div>
         <div className={'grid-item_col10'}>Unavailable</div>
         <div className={'grid-item_col2 text_grey'}>Timestamp</div>
@@ -35,14 +35,14 @@ const BlockDetailComponent = (props: { blockNumber: string | undefined }) => {
         </div>
       </div>
 
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
+      <div className={'extrinsic-container'}>
         <div className={'grid-item_col2 text_grey'}>Total events</div>
         <div className={'grid-item_col10'}>{totalEvents}</div>
         <div className={'grid-item_col2 text_grey'}>Spec version</div>
         <div className={'grid-item_col10'}>{specVersion}</div>
       </div>
 
-      <div className={'grid-container grid-container_extrinsic-container'}>
+      <div className={'extrinsic-container'}>
         <div className={'grid-item_col2 text_grey'}>Block hash</div>
         <div className={'grid-item_col10'}>
           <div
@@ -83,8 +83,42 @@ const BlockDetailComponent = (props: { blockNumber: string | undefined }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default BlockDetailComponent;
+export default styled(BlockDetailComponent)`
+  .block-container {
+    display: grid;
+    grid-column-gap: var(--gap);
+    border-bottom: 1px dashed #D2D3D6;
+    grid-template-columns: 85px 1fr;
+    font-size: 16px;
+    line-height: 20px;
+    padding: calc(var(--gap) * 1.5) 0 !important;
+    grid-row-gap: var(--gap);
+    &:nth-child(2) {
+      padding-top: 0 !important;
+    }
+  }
+
+  .container-with-border {
+    padding-bottom: calc(var(--gap) * 2);
+    border-bottom: 1px dashed #D2D3D6;
+  }
+
+  @media (max-width: 767px) {
+    .block-container {
+      grid-row-gap: 0;
+      .grid-item_col1 {
+        grid-column: span 11;
+      }
+      .grid-item_col1:not(:first-child) {
+        margin-top: var(--gap);
+      }
+      .grid-item_col11 {
+        margin-top: calc(var(--gap) / 4);
+      }
+    }
+  }
+`;

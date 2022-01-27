@@ -1,50 +1,48 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Heading } from '@unique-nft/ui-kit';
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { Text } from '@unique-nft/ui-kit';
 import { Token } from '../api/graphQL';
 import Picture from './Picture';
 import { useApi } from '../hooks/useApi';
-import { NFTToken } from '../api/chainApi/unique/types';
+import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
-// tslint:disable-next-line:no-empty-interface
-type TokenCardProps = Token
+type TokenCardProps = Token & { className?: string };
 
-const TokenCard: FC<TokenCardProps> = (props) => {
-  const { collection, collection_id: collectionId, token_id: tokenId } = props;
-
-  const [tokenImageUrl, setTokenImageUrl] = useState<string>();
-
-  const { api, rpcClient } = useApi();
-
-  const fetchToken = useCallback(async () => {
-    if (rpcClient?.isApiConnected) {
-      const token = await api?.getToken(collectionId, tokenId) as NFTToken;
-
-      setTokenImageUrl(token.imageUrl);
-    }
-  }, [collectionId, tokenId, rpcClient?.isApiConnected, api]);
-
-  useEffect(() => {
-    fetchToken()
-      .catch((errMsg) => console.error(errMsg));
-  }, [fetchToken]);
+const TokenCard: FC<TokenCardProps> = ({ className, collection_id: collectionId, collection_name: name, image_path: imagePath, owner, token_id: tokenId, token_prefix: prefix }) => {
+  const { currentChain } = useApi();
 
   return (
-    <div className={'grid-item_col1 card margin-bottom flexbox-container_column'}>
+    <Link
+      className={className}
+      to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
+    >
       <Picture
         alt={tokenId.toString()}
-        src={tokenImageUrl}
+        src={imagePath}
       />
-      <div className={'flexbox-container flexbox-container_column flexbox-container_without-gap'}>
-        <Heading size={'4'}>{`${collection.token_prefix || ''} #${tokenId}`}</Heading>
+      <div>
+        <Text>{`${prefix || ''} #${tokenId}`}</Text>
         <div>
-          <a>
-            {props.collection.name} [ID&nbsp;{collectionId}]
-          </a>
+          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}collections/${collectionId}`}>{name} [ID {collectionId}]</Link>
         </div>
-        <div className={'text_grey margin-top'}>Transfers: 0</div>
+        <div>
+          <Text
+            color={'grey-500'}
+            size={'s'}
+          >
+            Owner:
+          </Text>
+          <AccountLinkComponent value={owner} />
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
-export default TokenCard;
+export default styled(TokenCard)`
+  max-width: 174px;
+  svg {
+    max-height: 174px;
+  }
+`;

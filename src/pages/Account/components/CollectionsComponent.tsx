@@ -1,19 +1,19 @@
 import React, { FC, Reducer, useCallback, useReducer, useState } from 'react';
+import styled from 'styled-components';
 import { InputText, Checkbox, Button } from '@unique-nft/ui-kit';
 import { Collection, collections as gqlCollection } from '../../../api/graphQL';
 import CollectionCard from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
+  className?: string
   accountId: string
 }
 
-type ActionType = 'All' | 'Owner' | 'Admin' | 'Sponsor' | 'Received'
+type ActionType = 'All' | 'Owner';
 
 const pageSize = 6;
 
-const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
-  const { accountId } = props;
-
+const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId, className }) => {
   const [filter, dispatchFilter] = useReducer<
   Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
@@ -23,18 +23,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
 
     if (action.type === 'Owner') {
       return { ...state, owner: action.value ? { _eq: accountId } : undefined };
-    }
-
-    if (action.type === 'Admin') {
-      return { ...state, admin: action.value ? { _eq: accountId } : undefined };
-    }
-
-    if (action.type === 'Sponsor') {
-      return { ...state, sponsor: action.value ? { _eq: accountId } : undefined };
-    }
-
-    if (action.type === 'Received') {
-      return { ...state, received: action.value ? { _eq: accountId } : undefined };
     }
 
     return state;
@@ -65,9 +53,9 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
   const onClickSeeMore = useCallback(() => {}, []);
 
   return (
-    <>
-      <div className={'flexbox-container flexbox-container_space-between margin-top'}>
-        <div className={'flexbox-container flexbox-container_half-gap'}>
+    <div className={className}>
+      <div className={'controls-container'}>
+        <div className={'search-container'}>
           <InputText
             onChange={onSearchChange}
             placeholder={'Collection name'}
@@ -78,7 +66,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
             title={'Search'}
           />
         </div>
-        <div className={'flexbox-container'}>
+        <div className={'filter-container'}>
           <Checkbox
             checked={filter === undefined}
             label={'All'}
@@ -91,28 +79,10 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
             onChange={onCheckBoxChange('Owner')}
             size={'s'}
           />
-          <Checkbox
-            checked={!!filter?.admin}
-            label={'Admin'}
-            onChange={onCheckBoxChange('Admin')}
-            size={'s'}
-          />
-          <Checkbox
-            checked={!!filter?.sponsor}
-            label={'Sponsor'}
-            onChange={onCheckBoxChange('Sponsor')}
-            size={'s'}
-          />
-          <Checkbox
-            checked={!!filter?.received}
-            label={'Received'}
-            onChange={onCheckBoxChange('Received')}
-            size={'s'}
-          />
         </div>
       </div>
-      <div className={'margin-top margin-bottom'}>{collectionsCount || 0} items</div>
-      <div className={'grid-container'}>
+      <div className={'items-count'}>{collectionsCount || 0} items</div>
+      <div className={'collections-container'}>
         {collections?.map &&
           collections.map((collection: Collection) => (
             <CollectionCard
@@ -131,8 +101,34 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
         role='primary'
         title={'See all'}
       />
-    </>
+    </div>
   );
 };
 
-export default CollectionsComponent;
+export default styled(CollectionsComponent)`
+  .controls-container {
+    display: flex;
+    column-gap: var(--gap);
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--gap);
+    .search-container {
+      display: flex;
+      column-gap: calc(var(--gap) / 2);
+      align-items: center;
+    }
+    .filter-container {
+      display: flex;
+      column-gap: var(--gap);
+      align-items: center;
+    }
+  }
+  .items-count {
+    margin: var(--gap) 0;
+  }
+  .collections-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: var(--gap);
+  }
+`;

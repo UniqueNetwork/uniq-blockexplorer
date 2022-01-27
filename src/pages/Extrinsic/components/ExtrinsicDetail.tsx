@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
@@ -9,7 +10,7 @@ import { shortcutText } from '../../../utils/textUtils';
 import ChainLogo from '../../../components/ChainLogo';
 import { useApi } from '../../../hooks/useApi';
 
-const ExtrinsicDetail: FC = () => {
+const ExtrinsicDetail: FC<{ className?: string }> = ({ className }) => {
   const { blockIndex } = useParams();
 
   const { chainData } = useApi();
@@ -31,9 +32,9 @@ const ExtrinsicDetail: FC = () => {
     to_owner: toOwner } = extrinsic || {};
 
   return (
-    <>
+    <div className={className}>
       <Heading>{`Extrinsic ${blockIndex}`}</Heading>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
+      <div className={'extrinsic-container'}>
         <Text
           className={'grid-item_col1'}
           color={'grey-500'}
@@ -51,7 +52,7 @@ const ExtrinsicDetail: FC = () => {
           {timestamp ? new Date(timestamp * 1000).toLocaleString() : ''}
         </Text>
       </div>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
+      <div className={'extrinsic-container'}>
         <Text
           className={'grid-item_col1'}
           color={'grey-500'}
@@ -83,7 +84,7 @@ const ExtrinsicDetail: FC = () => {
           )}
         </div>
       </div>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
+      <div className={'extrinsic-container'}>
         <Text
           className={'grid-item_col1 '}
           color={'grey-500'}
@@ -106,7 +107,7 @@ const ExtrinsicDetail: FC = () => {
           {Number(fee) || 0} {chainData?.properties.tokenSymbol}
         </div>
       </div>
-      <div className={'grid-container grid-container_extrinsic-container'}>
+      <div className={'extrinsic-container'}>
         {hash && <><Text
           className={'grid-item_col1'}
           color={'grey-500'}
@@ -124,8 +125,42 @@ const ExtrinsicDetail: FC = () => {
         </Text>
         <Text className={'grid-item_col11'}>{blockIndex}</Text>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ExtrinsicDetail;
+export default styled(ExtrinsicDetail)`
+  .extrinsic-container {
+    display: grid;
+    grid-column-gap: var(--gap);
+    border-bottom: 1px dashed #D2D3D6;
+    grid-template-columns: 85px 1fr;
+    font-size: 16px;
+    line-height: 20px;
+    padding: calc(var(--gap) * 1.5) 0 !important;
+    grid-row-gap: var(--gap);
+    &:nth-child(2) {
+      padding-top: 0 !important;
+    }
+  }
+
+  .container-with-border {
+    padding-bottom: calc(var(--gap) * 2);
+    border-bottom: 1px dashed #D2D3D6;
+  }
+
+  @media (max-width: 767px) {
+    .extrinsic-container {
+      grid-row-gap: 0;
+      .grid-item_col1 {
+        grid-column: span 11;
+      }
+      .grid-item_col1:not(:first-child) {
+        margin-top: var(--gap);
+      }
+      .grid-item_col11 {
+        margin-top: calc(var(--gap) / 4);
+      }
+    }
+  }
+`;

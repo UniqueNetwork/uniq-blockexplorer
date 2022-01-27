@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 import { account as gqlAccount } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
@@ -9,11 +10,10 @@ import { useApi } from '../../../hooks/useApi';
 
 interface AccountProps {
   accountId: string
+  className?: string
 }
 
-const AccountDetailComponent: FC<AccountProps> = (props) => {
-  const { accountId } = props;
-
+const AccountDetailComponent: FC<AccountProps> = ({ accountId, className }) => {
   const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
 
   const deviceSize = useDeviceSize();
@@ -28,16 +28,15 @@ const AccountDetailComponent: FC<AccountProps> = (props) => {
     timestamp } = account || {};
 
   return (
-    <div className={'container-with-border'}>
-      <div className={'grid-container grid-container_account-container'}>
-        <div className={'grid-item_col1'}>
-          <Avatar size='large' />
+    <div className={className}>
+      <div className={'account-container'}>
+        <div className={'avatar-container'}>
+          <Avatar
+            size='large'
+            value={accountId}
+          />
         </div>
-        <div
-          className={
-            'flexbox-container flexbox-container_column flexbox-container_without-gap grid-item_col11'
-          }
-        >
+        <div className={'name-container'}>
           <Text size={'l'}>Account name</Text>
           <h2>
             {deviceSize === DeviceSize.sm || deviceSize === DeviceSize.md
@@ -46,21 +45,17 @@ const AccountDetailComponent: FC<AccountProps> = (props) => {
           </h2>
         </div>
         <Text
-          className={'grid-item_col1'}
           color={'grey-500'}
         >
           Created on
         </Text>
-        <Text className={'grid-item_col11'}>
+        <Text>
           {timestamp ? new Date(timestamp).toLocaleString() : 'unavailable'}
         </Text>
-        <Text
-          className={'grid-item_col1'}
-          color={'grey-500'}
-        >
+        <Text color={'grey-500'}>
           Balance
         </Text>
-        <div className={'grid-item_col11 flexbox-container flexbox-container_wrap'}>
+        <div className={'balance-container'}>
           <Text>{`${freeBalance || 'unavailable'} ${
             chainData?.properties.tokenSymbol || ''
           } (total) `}</Text>
@@ -76,4 +71,49 @@ const AccountDetailComponent: FC<AccountProps> = (props) => {
   );
 };
 
-export default AccountDetailComponent;
+export default styled(AccountDetailComponent)`
+  padding-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed #D2D3D6;
+
+  .account-container {
+    display: grid;
+    grid-column-gap: var(--gap);
+    grid-template-columns: 85px 1fr;
+    grid-row-gap: var(--gap);
+    div:nth-child(3) {
+      margin-top: calc(var(--gap) / 2);
+    }
+    div:nth-child(4) {
+      margin-top: calc(var(--gap) / 2);
+    }
+    .balance-container {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: var(--gap);
+      align-items: center;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .account-container {
+      grid-row-gap: 0;
+      div:not(:first-child) {
+        grid-column: span 11;
+        margin-top: var(--gap);
+      }
+      div:nth-child(3) {
+        margin-top: calc(var(--gap) * 1.5);
+      }
+      div:not(:first-child) {
+        grid-column: span 11;
+      }
+      div:last-child {
+        flex-direction: column;
+        align-items: flex-start;
+        span:not(:first-child) {
+          margin-top: calc(var(--gap) / 4);
+        }
+      }
+    }
+  }
+`;

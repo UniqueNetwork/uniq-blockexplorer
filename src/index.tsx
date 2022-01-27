@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Account, Block, Extrinsic, Main } from './pages';
+import { Account, Block, Collections, Collection, Extrinsic, Main, Tokens, Token } from './pages';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,12 +14,12 @@ ReactDOM.render(
         >
           <Route
             element={<Main />}
-            index={true}
+            index
           />
           <Route path={':chainId/'}>
             <Route
               element={<Main />}
-              index={true}
+              index
             />
             <Route
               element={<Account />}
@@ -33,6 +33,30 @@ ReactDOM.render(
               element={<Block />}
               path={'block/:blockIndex'}
             />
+            <Route
+              path={'collections/'}
+            >
+              <Route
+                element={<Collections />}
+                index
+              />
+              <Route
+                element={<Collection />}
+                path={':collectionId'}
+              />
+            </Route>
+            <Route
+              path={'tokens/'}
+            >
+              <Route
+                element={<Tokens />}
+                index
+              />
+              <Route
+                element={<Token />}
+                path={':collectionId/:tokenId'}
+              />
+            </Route>
           </Route>
         </Route>
       </Routes>

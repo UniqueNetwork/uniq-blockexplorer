@@ -1,49 +1,30 @@
-import React, { FC } from 'react';
-import { Icon } from '@unique-nft/ui-kit';
-import Button from '../../../components/Button';
-import Avatar from '../../../components/Avatar';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import React, { FC, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { Button } from '@unique-nft/ui-kit';
+import { useApi } from '../../../hooks/useApi';
 import { Collection } from '../../../api/graphQL';
+import LoadingComponent from '../../../components/LoadingComponent';
+import CollectionCard from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
+  className?: string
   collections: Collection[]
+  loading?: boolean
 }
 
-const CollectionCard: FC<Collection> = (props) => (
-  <div
-    className={'grid-item_col4 flexbox-container flexbox-container_align-start card margin-bottom'}
-  >
-    <Avatar size={'small'} />
-    <div className={'flexbox-container flexbox-container_column flexbox-container_without-gap'}>
-      <h4>{props.name}</h4>
-      <div className={'flexbox-container'}>
-        <span>
-          <span className={'text_grey'}>ID:</span>
-          {props.collection_id}
-        </span>
-        <span>
-          <span className={'text_grey'}>Prefix:</span>
-          {props.token_prefix}
-        </span>
-        <span>
-          <span className={'text_grey'}>Items:</span>
-          {props.tokens_aggregate.aggregate.count}
-        </span>
-      </div>
-      <div>
-        <span className={'text_grey'}>Owner: </span>
-        <AccountLinkComponent value={props.owner} />
-      </div>
-    </div>
-  </div>
-);
+const CollectionsComponent: FC<CollectionsComponentProps> = ({ className, collections, loading }) => {
+  const { currentChain } = useApi();
+  const navigate = useNavigate();
 
-const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
-  const { collections } = props;
+  const onClick = useCallback(() => {
+    navigate(`/${currentChain.network}/collections`);
+  }, [currentChain, navigate]);
 
   return (
-    <>
-      <div className={'grid-container'}>
+    <div className={className}>
+      <div className={'collections-container'}>
+        {loading && <LoadingComponent />}
         {collections.map((collection) => (
           <CollectionCard
             key={`collection-${collection.collection_id}`}
@@ -52,16 +33,23 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
         ))}
       </div>
       <Button
-        icon={<Icon
-          color={'white'}
-          name={'arrow-right'}
-          size={10}
-        />}
-        iconPosition={'right'}
-        text={'See all'}
+        iconRight={{
+          color: 'white',
+          name: 'arrow-right',
+          size: 10
+        }}
+        onClick={onClick}
+        role={'primary'}
+        title={'See all'}
       />
-    </>
+    </div>
   );
 };
 
-export default CollectionsComponent;
+export default styled(CollectionsComponent)`
+  .collections-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: var(--gap);
+  }
+`;
