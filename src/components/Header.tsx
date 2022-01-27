@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
 import { useApi } from '../hooks/useApi';
 import config from '../config';
@@ -29,8 +29,8 @@ const Header: FC<{ className?: string }> = ({ className }) => {
           />
         </Link>
         <nav>
-          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}>Collections</Link>
-          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}>Tokens</Link>
+          <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}>Collections</NavLink>
+          <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}>Tokens</NavLink>
         </nav>
       </div>
 
@@ -60,6 +60,13 @@ export default styled(Header)`
       display: flex;
       column-gap: var(--gap);
       align-items: center;
+      .active {
+        color: var(--black-color);
+        cursor: default;
+        &:hover {
+          text-decoration: none;
+        }
+      }
     }
   }
 `;
