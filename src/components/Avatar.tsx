@@ -1,6 +1,4 @@
 import React, { FC } from 'react';
-// import BaseIdentityIcon from '@polkadot/react-identicon';
-import type { IdentityProps } from '@polkadot/react-identicon/types';
 import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
 
 interface AvatarProps {
@@ -8,30 +6,12 @@ interface AvatarProps {
   src?: string,
   value?: AccountId | AccountIndex | Address | string | Uint8Array | null;
   className?: string
-  prefix?: IdentityProps['prefix']
-  theme?: IdentityProps['theme'];
 }
 
-// function isCodec (value?: AccountId | AccountIndex | Address | string | Uint8Array | null): value is AccountId | AccountIndex | Address {
-//   return !!(value && (value as AccountId).toHuman);
-// }
-
 const Avatar: FC<AvatarProps> = (props) => {
-  const { className, prefix, size, src, theme, value } = props;
+  const { className, size, src } = props;
 
   const sizeValue = size === 'large' ? 72 : 40;
-
-  // if (value) {
-  //   return (<BaseIdentityIcon
-  //   // Custom={Custom}
-  //     className={className}
-  //     // onCopy={!canNotCopy ? _onCopy : () => null}
-  //     prefix={prefix}
-  //     size={sizeValue}
-  //     theme={theme || 'substrate'}
-  //     value={isCodec(value) ? value.toString() : value}
-  //   />);
-  // }
 
   return (
     <svg
