@@ -17,7 +17,7 @@ interface TokenDetailComponentProps {
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
   if (!token) return null;
-  const { collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, image_path: imagePath, token_id: id, token_prefix: prefix } = token;
+  const { collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, image_path: imagePath, owner, token_id: id, token_prefix: prefix } = token;
 
   if (loading) return <LoadingComponent />;
 
@@ -37,7 +37,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           <Text color={'grey-500'}>Owner</Text>
           <OwnerWrapper>
             <Avatar size={'small'} />
-            <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} />
+            <AccountLinkComponent value={owner} />
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
