@@ -39,7 +39,7 @@ const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection
             <Text color={'black'}>{'yes'}</Text>
           </div>
         </div>
-        <Text>{`created on ${createdOn}`}</Text>
+        <Text>{`created on ${createdOn || 'undefined'}`}</Text>
       </div>
       <div className={'description'}><Text color={'grey-500'}>{description || ''}</Text></div>
       <div className={'owner-account'}>

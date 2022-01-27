@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Avatar from '../../components/Avatar';
 import BasicDataComponent from './components/BasicDataComponent';
 import ExtendedDataComponent from './components/ExtendedDataComponent';
-import { useGraphQlCollection } from '../../api/graphQL/collections/collections';
+import { collections as gqlCollections } from '../../api/graphQL/';
 import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
 import CollectionEventsComponent from './components/CollectionEventsComponent';
@@ -23,7 +23,7 @@ const CollectionPage: FC<CollectionProps> = ({ className }) => {
 
   const { collectionId } = useParams<{ collectionId: string }>();
 
-  const { collection, isCollectionFetching } = useGraphQlCollection(collectionId || '');
+  const { collection } = gqlCollections.useGraphQlCollection(collectionId || '');
 
   return (
     <div className={className}>

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import styled from 'styled-components';
 import { chainLogos, emptyLogos, namedLogos, nodeLogos } from '../logos';
 import { useApi } from '../hooks/useApi';
 
@@ -14,7 +15,7 @@ function sanitize(value?: string): string {
   return value?.toLowerCase().replace('-', ' ') || '';
 }
 
-function ChainLogo({ className = '',
+function ChainLogo({ className,
   isInline,
   logo,
   onClick,
@@ -32,7 +33,7 @@ function ChainLogo({ className = '',
   return (
     <img
       alt='chain logo'
-      className={`chain-logo ${className}${isEmpty && !withoutHl ? ' highlight--bg' : ''}${
+      className={`${className || ''}${isEmpty && !withoutHl ? ' highlight--bg' : ''}${
         isInline ? ' isInline' : ''
       }`}
       onClick={onClick}
@@ -41,4 +42,16 @@ function ChainLogo({ className = '',
   );
 }
 
-export default React.memo(ChainLogo);
+export default React.memo(styled(ChainLogo)`
+  background: white;
+  border-radius: 50%;
+  box-sizing: border-box;
+
+  &.isInline {
+    display: inline-block;
+    height: 24px;
+    margin-right: 0.75rem;
+    vertical-align: middle;
+    width: 24px;
+  }
+`);

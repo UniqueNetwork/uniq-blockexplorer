@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import styled from 'styled-components';
 
 interface PictureProps {
   src?: string
@@ -32,4 +33,8 @@ const Picture: FC<PictureProps> = (props) => {
   </div>);
 };
 
-export default Picture;
+export default styled(Picture)`
+  img {
+    max-width: 174px;
+  }
+`;

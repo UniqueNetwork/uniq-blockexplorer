@@ -19,7 +19,10 @@ const getCollectionsColumns = (chainId: string) => [
       className={'collection-link'}
       to={`/${chainId}/collections/${value}`}
     >
-      <Avatar size={'small'} src={(item as Collection).cover_image_url} />
+      <Avatar
+        size={'small'}
+        src={(item as Collection).cover_image_url}
+      />
       <div className={'collection-title'}>
         <Text color={'black'}>{(item as Collection).name}</Text>
         <Text color={'grey-500'}>{`ID ${value}`}</Text>

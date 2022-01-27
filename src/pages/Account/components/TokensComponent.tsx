@@ -1,19 +1,19 @@
 import React, { FC, Reducer, useCallback, useReducer, useState } from 'react';
+import styled from 'styled-components';
 import { Checkbox, InputText, Button } from '@unique-nft/ui-kit';
 import { Token, tokens as gqlTokens } from '../../../api/graphQL';
 import TokenCard from '../../../components/TokenCard';
 
 interface TokensComponentProps {
   accountId: string
+  className?: string
 }
 
 type ActionType = 'All' | 'Minted' | 'Received'
 
 const pageSize = 18;
 
-const TokensComponent: FC<TokensComponentProps> = (props) => {
-  const { accountId } = props;
-
+const TokensComponent: FC<TokensComponentProps> = ({ accountId, className }) => {
   const [filter, dispatchFilter] = useReducer<
   Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
@@ -54,9 +54,9 @@ const TokensComponent: FC<TokensComponentProps> = (props) => {
   const onClickSeeMore = useCallback(() => {}, []);
 
   return (
-    <>
-      <div className={'flexbox-container flexbox-container_space-between margin-top'}>
-        <div className={'flexbox-container flexbox-container_half-gap'}>
+    <div className={className}>
+      <div className={'controls-container'}>
+        <div className={'search-container'}>
           <InputText
             onChange={onSearchChange}
             placeholder={'Collection name'}
@@ -67,7 +67,7 @@ const TokensComponent: FC<TokensComponentProps> = (props) => {
             title={'Search'}
           />
         </div>
-        <div className={'flexbox-container'}>
+        <div className={'filter-container'}>
           <Checkbox
             checked={filter === undefined}
             label={'All'}
@@ -88,8 +88,8 @@ const TokensComponent: FC<TokensComponentProps> = (props) => {
           />
         </div>
       </div>
-      <div className={'margin-top margin-bottom'}>{tokensCount || 0} items</div>
-      <div className={'grid-container'}>
+      <div className={'items-count'}>{tokensCount || 0} items</div>
+      <div className={'tokens-container'}>
         {tokens?.map &&
           tokens.map((token: Token) => (
             <TokenCard
@@ -107,8 +107,34 @@ const TokensComponent: FC<TokensComponentProps> = (props) => {
         role='primary'
         title={'See all'}
       />
-    </>
+    </div>
   );
 };
 
-export default TokensComponent;
+export default styled(TokensComponent)`
+  .controls-container {
+    display: flex;
+    column-gap: var(--gap);
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--gap);
+    .search-container {
+      display: flex;
+      column-gap: calc(var(--gap) / 2);
+      align-items: center;
+    }
+    .filter-container {
+      display: flex;
+      column-gap: var(--gap);
+      align-items: center;
+    }
+  }
+  .items-count {
+    margin: var(--gap) 0;
+  }
+  .tokens-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: var(--gap);
+  }
+`;

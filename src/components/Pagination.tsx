@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { Icon } from '@unique-nft/ui-kit';
 import usePagination, { DOTS } from '../hooks/usePagination';
+import styled from 'styled-components';
 
 interface PaginationProps {
+  className?: string
   count: number // total number of elements in DB
   pageSize?: number // how many elements we present per single page
   onPageChange: (limit: number, offset: number) => void // fetch new page data
@@ -42,7 +44,8 @@ const PageNumberComponent = (props: {
   );
 };
 
-const PaginationComponent = ({ count,
+const PaginationComponent = ({ className,
+  count,
   currentPage: currentPageFromProps,
   onPageChange,
   pageSize = 10,
@@ -74,8 +77,8 @@ const PaginationComponent = ({ count,
     onPageChanged(currentPage - 1);
   }, [currentPage, count, pageSize, onPageChanged]);
 
-  return (
-    <div className={'flexbox-container flexbox-container_space-between pagination-wrapper'}>
+  return (<div className={className}>
+    <div className={'pagination-wrapper'}>
       <div>{count} items</div>
       {count > pageSize && (
         <ul className={'pagination-container'}>
@@ -111,7 +114,54 @@ const PaginationComponent = ({ count,
         </ul>
       )}
     </div>
-  );
+  </div>);
 };
 
-export default PaginationComponent;
+export default styled(PaginationComponent)`
+  .pagination-wrapper {
+    display: flex;
+    column-gap: var(--gap);
+    align-items: center;
+    justify-content: space-between;
+
+    .pagination-container {
+      list-style: none;
+      padding: 0;
+      display: flex;
+
+      li {
+        padding: 4px 6px;
+        min-width: 18px;
+        text-align: center;
+        cursor: pointer;
+
+        &.active {
+          border: 1px solid var(--primary-color);
+          color: var(--white-color);
+          background-color: var(--primary-color);
+          border-radius: 4px;
+          cursor: default;
+        }
+      }
+
+      li:last-child, li:first-child {
+        padding: 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      li:first-child {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .pagination-wrapper {
+      flex-direction: column;
+      align-items: flex-start !important;
+      row-gap: calc(var(--gap) * 1.5);
+    }
+  }
+`;

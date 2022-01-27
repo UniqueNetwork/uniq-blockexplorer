@@ -24,7 +24,7 @@ const blockColumns = [
 const blocksWithTimeDifference = (
   blocks: LastBlock[] | undefined
 ): (LastBlock & { time_difference: string })[] => {
-  if (!blocks) return [];
+  if (!blocks || !Array.isArray(blocks)) return [];
 
   return blocks.map((block: LastBlock) => ({
     ...block,

@@ -49,7 +49,7 @@ const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
 const transfersWithTimeDifference = (
   transfers: Transfer[] | undefined
 ): (Transfer & { time_difference: string })[] => {
-  if (!transfers) return [];
+  if (!transfers || !Array.isArray(transfers)) return [];
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,

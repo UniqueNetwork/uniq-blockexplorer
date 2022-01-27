@@ -1,12 +1,11 @@
 import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
-import { Text, Button } from '@unique-nft/ui-kit';
+import { Button } from '@unique-nft/ui-kit';
 import { Token } from '../../../api/graphQL';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import Picture from '../../../components/Picture';
 import LoadingComponent from '../../../components/LoadingComponent';
 import { useApi } from '../../../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
+import TokenCard from '../../../components/TokenCard';
 
 interface NewTokensComponentProps {
   className?: string
@@ -21,32 +20,17 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
 
   const onClick = useCallback(() => {
     navigate(`/${currentChain.network}/tokens`);
-  }, [currentChain]);
+  }, [currentChain, navigate]);
 
   return (
     <div className={className}>
       <div className={'tokens-container'}>
         {loading && <LoadingComponent />}
         {tokens.map((token) => (
-          <div
-            className={'token-card'}
+          <TokenCard
             key={`token-${token.id}`}
-          >
-            <Picture alt={token.id.toString()} />
-            <div>{token.id}</div>
-            <div>
-              {token.collection.name} [ID {token.collection_id}]
-            </div>
-            <div>
-              <Text
-                color={'grey-500'}
-                size={'s'}
-              >
-                Owner:
-              </Text>
-              <AccountLinkComponent value={token.owner} />
-            </div>
-          </div>
+            {...token}
+          />
         ))}
       </div>
       <Button

@@ -75,7 +75,7 @@ const MainPage = () => {
     fetchMoreTokens({
       searchString
     }).catch((errMsg) => console.error(errMsg));
-  }, [fetchMoreTransfers, fetchMoreBlocks, searchString, navigate]);
+  }, [fetchMoreTransfers, fetchMoreBlocks, fetchMoreCollections, fetchMoreTokens, searchString, navigate]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {

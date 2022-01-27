@@ -1,16 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Tabs } from '@unique-nft/ui-kit';
+import { Heading, Tabs } from '@unique-nft/ui-kit';
 import AccountDetailComponent from './components/AccountDetailComponent';
 import LastTransfersComponent from '../Main/components/LastTransfersComponent';
 import { transfers as gqlTransfers } from '../../api/graphQL';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
+import { useApi } from '../../hooks/useApi';
 
 const assetsTabs = ['Collections', 'Tokens'];
 
 const AccountPage = () => {
   const { accountId } = useParams();
+  const { chainData } = useApi();
 
   const pageSize = 10; // default
 
@@ -34,7 +36,7 @@ const AccountPage = () => {
   return (
     <div>
       <AccountDetailComponent accountId={accountId} />
-      <h2 className={'margin-top'}>Assets</h2>
+      <Heading size={'2'}>Assets</Heading>
       <Tabs
         activeIndex={activeAssetsTabIndex}
         labels={assetsTabs}
@@ -53,10 +55,10 @@ const AccountPage = () => {
           />
         ]}
       />
-      <h2 className={'margin-top margin-bottom'}>Last QTZ transfers</h2>
+      <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
       <LastTransfersComponent
         count={transfersCount}
-        data={transfers}
+        data={transfers || []}
         loading={isTransfersFetching}
         onPageChange={onTransfersPageChange}
         pageSize={pageSize}

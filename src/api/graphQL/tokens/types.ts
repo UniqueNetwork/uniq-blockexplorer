@@ -18,6 +18,7 @@ export interface Token {
     description: string
   }
   owner: string
+  image_path: string
 }
 
 export interface TokensData {

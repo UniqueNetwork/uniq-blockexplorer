@@ -1,20 +1,20 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { Text } from '@unique-nft/ui-kit';
 import Avatar from './Avatar';
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 import { Collection } from '../api/graphQL';
 import { useApi } from '../hooks/useApi';
 import { NFTCollection } from '../api/chainApi/unique/types';
 
-// tslint:disable-next-line:no-empty-interface
-type CollectionCardProps = Collection
+type CollectionCardProps = Collection & { className?: string}
 
-const CollectionCard: FC<CollectionCardProps> = (props) => {
-  const { collection_id: collectionId,
-    name,
-    owner,
-    token_prefix: tokenPrefix,
-    tokens_aggregate: tokensAggregate } = props;
-
+const CollectionCard: FC<CollectionCardProps> = ({ className,
+  collection_id: collectionId,
+  name,
+  owner,
+  token_prefix: tokenPrefix,
+  tokens_aggregate: tokensAggregate }) => {
   const tokensCount = tokensAggregate.aggregate.count;
 
   const [collectionImageUrl, setCollectionImageUrl] = useState<string>();
@@ -36,34 +36,32 @@ const CollectionCard: FC<CollectionCardProps> = (props) => {
 
   return (
     <div
-      className={
-        'grid-item_col4 flexbox-container flexbox-container_align-start card margin-bottom'
-      }
+      className={className}
     >
-      <div style={{ minWidth: '40px' }}>
+      <div className={'cover'}>
         <Avatar
           size={'small'}
           src={collectionImageUrl}
         />
       </div>
-      <div className={'flexbox-container flexbox-container_column flexbox-container_without-gap'}>
+      <div className={'collection-info'}>
         <h4>{name}</h4>
-        <div className={'flexbox-container'}>
+        <div className={'properties'}>
           <span>
-            <span className={'text_grey'}>ID:</span>
+            <Text color={'grey-500'}>ID:</Text>
             {collectionId}
           </span>
           <span>
-            <span className={'text_grey'}>Prefix:</span>
+            <Text color={'grey-500'}>Prefix:</Text>
             {tokenPrefix}
           </span>
           <span>
-            <span className={'text_grey'}>Items:</span>
+            <Text color={'grey-500'}>Items:</Text>
             {tokensCount}
           </span>
         </div>
         <div>
-          <span className={'text_grey'}>Owner: </span>
+          <Text color={'grey-500'}>Owner: </Text>
           <AccountLinkComponent value={owner} />
         </div>
       </div>
@@ -71,4 +69,28 @@ const CollectionCard: FC<CollectionCardProps> = (props) => {
   );
 };
 
-export default CollectionCard;
+export default styled(CollectionCard)`
+  background: var(--white-color);
+  border: 1px solid #DFE0E2;
+  box-sizing: border-box;
+  border-radius: 4px;
+  padding: calc(var(--gap) * 1.5) calc(var(--gap) * 2);
+  display: flex;
+  column-gap: var(--gap);
+  align-items: flex-start;
+  margin-bottom: var(--gap);
+  grid-column: span 4;
+  .cover {
+    min-width: 40px;
+  }
+  .collection-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    column-gap: 0;
+    row-gap: 0;
+    .properties {
+      display: flex;
+    }
+  }
+`;
