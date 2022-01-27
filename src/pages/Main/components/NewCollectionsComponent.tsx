@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
-import { Icon } from '@unique-nft/ui-kit';
-import Button from '../../../components/Button';
+import React, { FC, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Icon, Button } from '@unique-nft/ui-kit';
+import { useApi } from '../../../hooks/useApi';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import { Collection } from '../../../api/graphQL';
+import LoadingComponent from '../../../components/LoadingComponent';
 
 interface CollectionsComponentProps {
   collections: Collection[]
+  loading?: boolean
 }
 
 const CollectionCard: FC<Collection> = (props) => (
@@ -39,11 +42,18 @@ const CollectionCard: FC<Collection> = (props) => (
 );
 
 const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
-  const { collections } = props;
+  const { collections, loading } = props;
+  const { currentChain } = useApi();
+  const navigate = useNavigate();
+
+  const onClick = useCallback(() => {
+    navigate(`/${currentChain.network}/collections`);
+  }, [currentChain]);
 
   return (
     <>
       <div className={'grid-container'}>
+        {loading && <LoadingComponent />}
         {collections.map((collection) => (
           <CollectionCard
             key={`collection-${collection.collection_id}`}
@@ -52,13 +62,14 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
         ))}
       </div>
       <Button
-        icon={<Icon
-          color={'white'}
-          name={'arrow-right'}
-          size={10}
-        />}
-        iconPosition={'right'}
-        text={'See all'}
+        iconRight={{
+          color: 'white',
+          name: 'arrow-right',
+          size: 10
+        }}
+        onClick={onClick}
+        role={'primary'}
+        title={'See all'}
       />
     </>
   );

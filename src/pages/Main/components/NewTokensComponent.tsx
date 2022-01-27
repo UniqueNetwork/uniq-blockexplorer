@@ -1,21 +1,32 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Text, Button } from '@unique-nft/ui-kit';
 import { Token } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import Picture from '../../../components/Picture';
+import LoadingComponent from '../../../components/LoadingComponent';
+import { useApi } from '../../../hooks/useApi';
+import { useNavigate } from 'react-router-dom';
 
 interface NewTokensComponentProps {
   className?: string
+  loading?: boolean
   tokens: Token[]
 }
 
 const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
-  const { className, tokens } = props;
+  const { className, loading, tokens } = props;
+  const { currentChain } = useApi();
+  const navigate = useNavigate();
+
+  const onClick = useCallback(() => {
+    navigate(`/${currentChain.network}/tokens`);
+  }, [currentChain]);
 
   return (
     <div className={className}>
       <div className={'tokens-container'}>
+        {loading && <LoadingComponent />}
         {tokens.map((token) => (
           <div
             className={'token-card'}
@@ -39,7 +50,13 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
         ))}
       </div>
       <Button
-        onClick={() => {}}
+        iconRight={{
+          color: 'white',
+          name: 'arrow-right',
+          size: 10
+        }}
+        onClick={onClick}
+        role={'primary'}
         title={'See all'}
       />
     </div>

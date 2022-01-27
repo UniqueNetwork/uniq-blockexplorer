@@ -3,15 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Heading, InputText } from '@unique-nft/ui-kit';
 import { useApi } from '../../hooks/useApi';
+import { lastBlocks, transfers as gqlTransfers, tokens as gqlTokens, collections as gqlCollections } from '../../api/graphQL/';
 import LastTransfersComponent from './components/LastTransfersComponent';
 import LastBlocksComponent from './components/LastBlocksComponent';
-import { lastBlocks, transfers as gqlTransfers } from '../../api/graphQL/';
+import NewTokensComponent from './components/NewTokensComponent';
+import NewCollectionsComponent from './components/NewCollectionsComponent';
 
 const MainPage = () => {
   const pageSize = 10; // default
   const [searchString, setSearchString] = useState('');
 
   const { chainData } = useApi();
+  const navigate = useNavigate();
 
   const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching } = lastBlocks.useGraphQlBlocks({
     pageSize
@@ -20,7 +23,8 @@ const MainPage = () => {
   const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
     gqlTransfers.useGraphQlLastTransfers({ pageSize });
 
-  const navigate = useNavigate();
+  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({ pageSize: 7 });
+  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize: 6 });
 
   const onBlocksPageChange = useCallback(
     (limit: number, offset: number) =>
@@ -59,7 +63,16 @@ const MainPage = () => {
       searchString:
         searchString && searchString.length > 0 ? prettifiedBlockSearchString : undefined
     }).catch((errMsg) => console.error(errMsg));
+
     fetchMoreTransfers({
+      searchString
+    }).catch((errMsg) => console.error(errMsg));
+
+    fetchMoreCollections({
+      searchString
+    }).catch((errMsg) => console.error(errMsg));
+
+    fetchMoreTokens({
       searchString
     }).catch((errMsg) => console.error(errMsg));
   }, [fetchMoreTransfers, fetchMoreBlocks, searchString, navigate]);
@@ -92,6 +105,23 @@ const MainPage = () => {
         />
       </div>
       <div className={'main-block-container'}>
+        <Heading size={'2'}>Latest blocks</Heading>
+        <LastBlocksComponent
+          count={blockCount || 0}
+          data={blocks}
+          loading={isBlocksFetching}
+          onPageChange={onBlocksPageChange}
+          pageSize={pageSize}
+        />
+      </div>
+      <div className={'main-block-container'}>
+        <Heading size={'2'}>New tokens</Heading>
+        <NewTokensComponent
+          loading={isTokensFetching}
+          tokens={tokens || []}
+        />
+      </div>
+      <div className={'main-block-container'}>
         <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
         <LastTransfersComponent
           count={transfersCount}
@@ -102,13 +132,10 @@ const MainPage = () => {
         />
       </div>
       <div className={'main-block-container'}>
-        <Heading size={'2'}>Last blocks</Heading>
-        <LastBlocksComponent
-          count={blockCount || 0}
-          data={blocks}
-          loading={isBlocksFetching}
-          onPageChange={onBlocksPageChange}
-          pageSize={pageSize}
+        <Heading size={'2'}>New collections</Heading>
+        <NewCollectionsComponent
+          collections={collections || []}
+          loading={isCollectionsFetching}
         />
       </div>
     </Wrapper>
