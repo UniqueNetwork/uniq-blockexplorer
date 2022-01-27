@@ -5,22 +5,26 @@ import Picture from '../../../components/Picture';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import LoadingComponent from '../../../components/LoadingComponent';
 
 interface TokenDetailComponentProps {
   className?: string
   token?: Token
+  loading?: boolean
 }
 
-const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ className, token }) => {
+const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ className, loading, token }) => {
   if (!token) return null;
   const { collection, id, owner } = token;
-  const { collection_id, description, name, token_prefix } = collection;
+  const { collection_id: collectionId, description, name, token_prefix: prefix } = collection;
+
+  if (loading) return <LoadingComponent />;
 
   return (
     <div className={className}>
-      <Picture alt={`${token_prefix}-${id}`} />
+      <Picture alt={`${prefix}-${id}`} />
       <div>
-        <Heading size={'2'}>{`${token_prefix} #${id}`}</Heading>
+        <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
         <div className={'token-general'}>
           <Text color={'grey-500'}>Created on</Text>
           <Text>{'undefined'}</Text>
@@ -50,11 +54,11 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ className, token 
               <div className={'general'}>
                 <div>
                   <Text color={'grey-500'}>ID:</Text>
-                  <Text color={'black'}>{collection_id?.toString() || ''}</Text>
+                  <Text color={'black'}>{collectionId?.toString() || ''}</Text>
                 </div>
                 <div>
                   <Text color={'grey-500'}>Prefix:</Text>
-                  <Text color={'black'}>{token_prefix || ''}</Text>
+                  <Text color={'black'}>{prefix || ''}</Text>
                 </div>
                 <div>
                   <Text color={'grey-500'}>Items:</Text>

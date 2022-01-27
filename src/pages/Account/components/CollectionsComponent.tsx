@@ -7,7 +7,7 @@ interface CollectionsComponentProps {
   accountId: string
 }
 
-type ActionType = 'All' | 'Owner' | 'Admin' | 'Sponsor' | 'Received'
+type ActionType = 'All' | 'Owner';
 
 const pageSize = 6;
 
@@ -23,18 +23,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
 
     if (action.type === 'Owner') {
       return { ...state, owner: action.value ? { _eq: accountId } : undefined };
-    }
-
-    if (action.type === 'Admin') {
-      return { ...state, admin: action.value ? { _eq: accountId } : undefined };
-    }
-
-    if (action.type === 'Sponsor') {
-      return { ...state, sponsor: action.value ? { _eq: accountId } : undefined };
-    }
-
-    if (action.type === 'Received') {
-      return { ...state, received: action.value ? { _eq: accountId } : undefined };
     }
 
     return state;
@@ -89,24 +77,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = (props) => {
             checked={!!filter?.owner}
             label={'Owner'}
             onChange={onCheckBoxChange('Owner')}
-            size={'s'}
-          />
-          <Checkbox
-            checked={!!filter?.admin}
-            label={'Admin'}
-            onChange={onCheckBoxChange('Admin')}
-            size={'s'}
-          />
-          <Checkbox
-            checked={!!filter?.sponsor}
-            label={'Sponsor'}
-            onChange={onCheckBoxChange('Sponsor')}
-            size={'s'}
-          />
-          <Checkbox
-            checked={!!filter?.received}
-            label={'Received'}
-            onChange={onCheckBoxChange('Received')}
             size={'s'}
           />
         </div>

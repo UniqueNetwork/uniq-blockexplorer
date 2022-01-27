@@ -17,9 +17,12 @@ const TokenPage: FC<CollectionProps> = ({ className }) => {
 
   return (
     <div className={className}>
-      <TokenDetailComponent token={token} />
+      <TokenDetailComponent
+        loading={isTokensFetching}
+        token={token}
+      />
       <Heading size={'2'}>Events</Heading>
-      <TokensEventsComponent />
+      <TokensEventsComponent tokenId={token?.token_id} />
     </div>
   );
 };

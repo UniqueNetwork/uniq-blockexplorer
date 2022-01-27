@@ -1,11 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { Token } from '../../../api/graphQL';
-import { ColumnType } from 'rc-table/lib/interface';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import Table from 'rc-table';
-import LoadingComponent from '../../../components/LoadingComponent';
-import { Text } from '@unique-nft/ui-kit';
+import Table from '../../../components/Table';
 
 interface HoldersComponentProps {
   className?: string
@@ -21,7 +17,7 @@ type Holder = {
   sale?: number
 }
 
-const columns: ColumnType<Holder>[] = [
+const columns = [
   {
     dataIndex: 'accountId',
     key: 'accountId',
@@ -36,8 +32,6 @@ const columns: ColumnType<Holder>[] = [
 ];
 
 const HoldersComponent: FC<HoldersComponentProps> = ({ className, loading, tokens }) => {
-  const deviceSize = useDeviceSize();
-
   const holders: Holder[] = useMemo(() => {
     return tokens.reduce<Holder[]>((acc, token) => {
       const holderIndex = acc.findIndex((item) => item.accountId === token.owner);
@@ -54,35 +48,12 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ className, loading, token
 
   return (
     <div className={className}>
-      {deviceSize !== DeviceSize.sm && (
-        <Table
-          columns={columns}
-          data={!loading ? holders : []}
-          emptyText={!loading ? 'No data' : <LoadingComponent />}
-          rowKey={'collection_id'}
-        />
-      )}
-      {deviceSize === DeviceSize.sm && (
-        <div className={'table-sm'}>
-          {loading && <LoadingComponent />}
-          {!loading && holders?.length === 0 && <Text className={'text_grey'}>No data</Text>}
-          {!loading &&
-            holders?.map((item, index) => (
-              <div
-                className={'row'}
-                key={item.accountId}
-              >
-                {columns.map((column) => (
-                  <div key={`column-${column.key || ''}`}>
-                    <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>
-                    {column.render && <>{column.render(item[column.dataIndex as keyof Holder], item, index)}</>}
-                    {!column.render && <Text>{item[column.dataIndex as keyof Holder]?.toString() || ''}</Text>}
-                  </div>
-                ))}
-              </div>
-            ))}
-        </div>
-      )}
+      <Table
+        columns={columns}
+        data={!loading ? holders : []}
+        loading={loading}
+        rowKey={'accountId'}
+      />
     </div>
   );
 };

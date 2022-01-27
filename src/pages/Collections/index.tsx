@@ -2,14 +2,14 @@ import React, { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { Button, InputText } from '@unique-nft/ui-kit';
 import CollectionsComponent from './components/CollectionsComponent';
-import { useGraphQlCollections } from '../../api/graphQL/collections/collections';
+import { collections as gqlCollections } from '../../api/graphQL/';
 import { useApi } from '../../hooks/useApi';
 
 const pageSize = 20; // default
 
 const CollectionsPage: FC<{ className?: string }> = ({ className }) => {
   const [searchString, setSearchString] = useState('');
-  const { collections, collectionsCount, fetchMoreCollections, isCollectionsFetching } = useGraphQlCollections({ pageSize });
+  const { collections, collectionsCount, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize });
 
   const { api } = useApi();
 
@@ -22,13 +22,13 @@ const CollectionsPage: FC<{ className?: string }> = ({ className }) => {
     [fetchMoreCollections]
   );
 
-  const onSearchClick = useCallback(() => {
-
-  }, [searchString]);
+  const onSearchClick = useCallback(() => fetchMoreCollections({
+    searchString
+  }), [searchString]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {
-      if (key === 'Enter') onSearchClick();
+      if (key === 'Enter') return onSearchClick();
     },
     [onSearchClick]
   );

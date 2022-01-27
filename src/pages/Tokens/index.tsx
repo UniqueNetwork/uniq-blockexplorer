@@ -19,13 +19,13 @@ const TokensPage: FC<{ className?: string }> = ({ className }) => {
     [fetchMoreTokens]
   );
 
-  const onSearchClick = useCallback(() => {
-
-  }, [searchString]);
+  const onSearchClick = useCallback(() => fetchMoreTokens({
+    searchString
+  }), [searchString, fetchMoreTokens]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {
-      if (key === 'Enter') onSearchClick();
+      if (key === 'Enter') return onSearchClick();
     },
     [onSearchClick]
   );

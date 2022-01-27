@@ -1,13 +1,11 @@
 import React, { FC } from 'react';
-import { ColumnType } from 'rc-table/lib/interface';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import Table from 'rc-table';
-import LoadingComponent from '../../../components/LoadingComponent';
-import { Text } from '@unique-nft/ui-kit';
+import Table from '../../../components/Table';
 
 interface TokensEventsComponentProps {
   className?: string
   events?: Event[]
+  collectionId?: number
+  tokenId?: number
   loading?: boolean
 }
 
@@ -20,7 +18,7 @@ type Event = {
   result: string
 }
 
-const columns: ColumnType<Event>[] = [
+const columns = [
   {
     dataIndex: 'token',
     key: 'token',
@@ -40,39 +38,14 @@ const columns: ColumnType<Event>[] = [
 ];
 
 const TokensEventsComponent: FC<TokensEventsComponentProps> = ({ className, events, loading }) => {
-  const deviceSize = useDeviceSize();
-
   return (
     <div className={className}>
-      {deviceSize !== DeviceSize.sm && (
-        <Table
-          columns={columns}
-          data={!loading ? events : []}
-          emptyText={!loading ? 'No data' : <LoadingComponent />}
-          rowKey={'collection_id'}
-        />
-      )}
-      {deviceSize === DeviceSize.sm && (
-        <div className={'table-sm'}>
-          {loading && <LoadingComponent />}
-          {!loading && events?.length === 0 && <Text className={'text_grey'}>No data</Text>}
-          {!loading &&
-            events?.map((item, index) => (
-              <div
-                className={'row'}
-                key={item.id}
-              >
-                {columns.map((column) => (
-                  <div key={`column-${column.key || ''}`}>
-                    <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>
-                    {column.render && <>{column.render(item[column.dataIndex as keyof Event], item, index)}</>}
-                    {!column.render && <Text>{item[column.dataIndex as keyof Event]?.toString() || ''}</Text>}
-                  </div>
-                ))}
-              </div>
-            ))}
-        </div>
-      )}
+      <Table
+        columns={columns}
+        data={!loading ? events : []}
+        loading={loading}
+        rowKey={'collection_id'}
+      />
     </div>
   );
 };
