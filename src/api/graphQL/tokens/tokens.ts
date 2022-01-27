@@ -78,7 +78,7 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
   };
 };
 
-export const useGraphQlToken = (tokenId: string) => {
+export const useGraphQlToken = (collectionId: string, tokenId: string) => {
   const { data,
     error: fetchTokensError,
     loading: isTokensFetching } = useQuery<TokensData, TokensVariables>(tokensQuery, {

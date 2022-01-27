@@ -15,7 +15,7 @@ const TokenCard: FC<TokenCardProps> = ({ className, collection_id: collectionId,
   return (
     <Link
       className={className}
-      to={`/${currentChain.network}/tokens/${tokenId}`}
+      to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
     >
       <Picture
         alt={tokenId.toString()}

@@ -54,7 +54,7 @@ ReactDOM.render(
               />
               <Route
                 element={<Token />}
-                path={':tokenId'}
+                path={':collectionId/:tokenId'}
               />
             </Route>
           </Route>

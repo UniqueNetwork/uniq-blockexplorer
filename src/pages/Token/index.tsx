@@ -11,9 +11,9 @@ interface CollectionProps {
 }
 
 const TokenPage: FC<CollectionProps> = ({ className }) => {
-  const { tokenId } = useParams<{ tokenId: string }>();
+  const { collectionId, tokenId } = useParams<{ collectionId: string, tokenId: string }>();
 
-  const { isTokensFetching, token } = tokens.useGraphQlToken(tokenId || '');
+  const { isTokensFetching, token } = tokens.useGraphQlToken(collectionId || '', tokenId || '');
 
   return (
     <div className={className}>

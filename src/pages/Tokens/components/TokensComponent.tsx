@@ -20,7 +20,7 @@ const getTokensColumns = (chainId: string) => [
     key: 'id',
     render: (value: string, item: unknown) => <Link
       className={'token-link'}
-      to={`/${chainId}/tokens/${value}`}
+      to={`/${chainId}/tokens/${(item as Token).collection_id}/${value}`}
     >
       <Avatar
         size={'small'}
