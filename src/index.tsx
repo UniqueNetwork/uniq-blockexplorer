@@ -22,6 +22,10 @@ ReactDOM.render(
               index
             />
             <Route
+              element={<Block />}
+              path={'block/:blockIndex'}
+            />
+            <Route
               element={<Account />}
               path={'account/:accountId'}
             />
