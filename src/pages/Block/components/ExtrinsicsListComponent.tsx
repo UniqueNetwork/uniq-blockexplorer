@@ -1,13 +1,12 @@
 import { useQuery } from '@apollo/client';
-import Table from 'rc-table';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
-import LoadingComponent from '../../../components/LoadingComponent';
 import { ExtrinsicData, ExtrinsicVariables, extrinsic as gqlExtrinsic } from '../../../api/graphQL';
 import { timeDifference } from '../../../utils/timestampUtils';
 import PaginationComponent from '../../../components/Pagination';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import Table from '../../../components/Table';
 
 const blockColumns = [
   {
@@ -95,14 +94,12 @@ const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => 
     [fetchMoreExtrinsics]
   );
 
-  const loadingOrEmpty = useMemo(() => !loading ? 'No data' : <LoadingComponent />, [loading]);
-
   return (
     <>
       <Table
         columns={blockColumns}
         data={eventsList?.view_extrinsic}
-        emptyText={loadingOrEmpty}
+        loading={loading}
         rowKey={'block_index'}
       />
       <PaginationComponent

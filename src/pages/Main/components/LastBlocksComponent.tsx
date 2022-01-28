@@ -6,12 +6,13 @@ import { timeDifference } from '../../../utils/timestampUtils';
 import { BlockComponentProps } from '../types';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import Table from '../../../components/Table';
+import { useApi } from '../../../hooks/useApi';
 
-const blockColumns = [
+const blockColumns = (chainId: string) => [
   {
     dataIndex: 'block_number',
     key: 'block_number',
-    render: (value: string) => <Link to={`/block/${value}`}>{value}</Link>,
+    render: (value: string) => <Link to={`/${chainId}/block/${value}`}>{value}</Link>,
     title: 'Block',
     width: 100
   },
@@ -39,10 +40,12 @@ const LastBlocksComponent = ({ count,
   pageSize }: BlockComponentProps<LastBlock[]>) => {
   const deviceSize = useDeviceSize();
 
+  const { currentChain } = useApi();
+
   return (
     <div>
       <Table
-        columns={blockColumns}
+        columns={blockColumns(currentChain.network)}
         data={blocksWithTimeDifference(data)}
         loading={loading}
         rowKey={'block_number'}
