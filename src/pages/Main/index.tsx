@@ -64,19 +64,27 @@ const MainPage = () => {
     fetchMoreBlocks({
       searchString:
         searchString && searchString.length > 0 ? prettifiedBlockSearchString : undefined
-    }).catch((errMsg) => console.error(errMsg));
+    }).catch((errMsg) => {
+      throw new Error(errMsg);
+    });
 
     fetchMoreTransfers({
       searchString
-    }).catch((errMsg) => console.error(errMsg));
+    }).catch((errMsg) => {
+      throw new Error(errMsg);
+    });
 
     fetchMoreCollections({
       searchString
-    }).catch((errMsg) => console.error(errMsg));
+    }).catch((errMsg) => {
+      throw new Error(errMsg);
+    });
 
     fetchMoreTokens({
       searchString
-    }).catch((errMsg) => console.error(errMsg));
+    }).catch((errMsg) => {
+      throw new Error(errMsg);
+    });
   }, [fetchMoreTransfers, fetchMoreBlocks, fetchMoreCollections, fetchMoreTokens, searchString, navigate]);
 
   const onSearchKeyDown = useCallback(

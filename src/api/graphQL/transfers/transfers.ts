@@ -69,7 +69,9 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
 
   useEffect(() => {
     fetchMore({})
-      .catch((errMsg) => console.error(errMsg));
+      .catch((errMsg) => {
+        throw new Error(errMsg);
+      });
   }, [client.link, fetchMore]);
 
   const fetchMoreTransfers = useCallback(

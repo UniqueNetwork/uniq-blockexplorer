@@ -41,7 +41,9 @@ export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
 
   useEffect(() => {
     fetchMore({})
-      .catch((errMsg) => console.error(errMsg));
+      .catch((errMsg) => {
+        throw new Error(errMsg);
+      });
   }, [client.link, fetchMore]);
 
   const fetchMoreBlocks = useCallback(

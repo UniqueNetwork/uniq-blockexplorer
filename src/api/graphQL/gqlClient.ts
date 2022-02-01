@@ -18,6 +18,8 @@ export class GqlClient implements IGqlClient {
     this.client.clearStore().then(() => {
       // resets the entire store by clearing out the cache
       this.client.setLink(new HttpLink({ uri: gqlEndpoint }));
-    }).catch((errMsg) => console.error(errMsg));
+    }).catch((errMsg) => {
+      throw new Error(errMsg);
+    });
   }
 }
