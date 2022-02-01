@@ -24,9 +24,7 @@ const getLastTransfersQuery = gql`
   }
 `;
 
-export const useGraphQlLastTransfers = ({
-  accountId, pageSize
-}: useGraphQlLastTransfersProps) => {
+export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastTransfersProps) => {
   const client = useApolloClient();
 
   const getWhere = useCallback(
@@ -75,9 +73,7 @@ export const useGraphQlLastTransfers = ({
   }, [client.link, fetchMore]);
 
   const fetchMoreTransfers = useCallback(
-    ({
-      limit = pageSize, offset, searchString
-    }: FetchMoreBlocksOptions) => {
+    ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
       return fetchMore({
         variables: {
           limit,

@@ -14,13 +14,11 @@ interface TableProps<RecordType = DefaultRecordType> {
   rowKey?: string
 }
 
-const Table: FC<TableProps> = ({
-  className, columns, data, loading, rowKey
-}) => {
+const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
   const deviceSize = useDeviceSize();
 
   return (
-    <div className={className}>
+    <TableWrapper>
       {deviceSize !== DeviceSize.sm && (
         <RCTable
           columns={columns}
@@ -30,13 +28,12 @@ const Table: FC<TableProps> = ({
         />
       )}
       {deviceSize === DeviceSize.sm && (
-        <div className={'table-sm'}>
+        <MobileTable>
           {loading && <LoadingComponent />}
           {!loading && data?.length === 0 && <Text className={'text_grey'}>No data</Text>}
           {!loading &&
             data?.map((item, index) => (
-              <div
-                className={'row'}
+              <MobileTableRow
                 key={item[rowKey as keyof DefaultRecordType]}
               >
                 {columns?.map((column) => (
@@ -46,15 +43,15 @@ const Table: FC<TableProps> = ({
                     {!column.render && <Text>{item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}</Text>}
                   </div>
                 ))}
-              </div>
+              </MobileTableRow>
             ))}
-        </div>
+        </MobileTable>
       )}
-    </div>
+    </TableWrapper>
   );
 };
 
-export default styled(Table)`
+const TableWrapper = styled.div`
   .rc-table {
     margin-bottom: calc(var(--gap) * 1.5);
     table {
@@ -101,21 +98,21 @@ export default styled(Table)`
     .rc-table {
       display: none;
     }
-
-    .table-sm {
-      margin: var(--gap) 0;
-      .row {
-        border-bottom: 1px dashed #D2D3D6;
-        div {
-          margin: var(--gap) 0;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-        }
-        .title {
-          color: var(--blue-gray-600);
-        }
-      }
-    }
   }
 `;
+
+const MobileTable = styled.div`
+  margin: var(--gap) 0;
+`;
+
+const MobileTableRow = styled.div`
+  border-bottom: 1px dashed var(--border-color);
+  div {
+    margin: var(--gap) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+export default Table;

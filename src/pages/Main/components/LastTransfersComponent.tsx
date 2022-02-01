@@ -66,12 +66,10 @@ const LastTransfersComponent = ({
 }: BlockComponentProps<Transfer[]>) => {
   const deviceSize = useDeviceSize();
 
-  const {
-    chainData, currentChain
-  } = useApi();
+  const { chainData, currentChain } = useApi();
 
   return (
-    <div>
+    <>
       <Table
         columns={getTransferColumns(
           chainData?.properties.tokenSymbol || '',
@@ -87,7 +85,7 @@ const LastTransfersComponent = ({
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
-    </div>
+    </>
   );
 };
 

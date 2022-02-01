@@ -12,27 +12,24 @@ import Table from '../../../components/Table';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import config from '../../../config';
 
-const {
-  IPFSGateway
-} = config;
+const { IPFSGateway } = config;
 
 const getCollectionsColumns = (chainId: string) => [
   {
     dataIndex: 'collection_id',
     key: 'collection_id',
-    render: (value: string, item: unknown) => <Link
-      className={'collection-link'}
+    render: (value: string, item: unknown) => <CollectionLink
       to={`/${chainId}/collections/${value}`}
     >
       <Avatar
         size={'small'}
         src={(item as Collection).collection_cover ? `${IPFSGateway || ''}/${(item as Collection).collection_cover}` : undefined}
       />
-      <div className={'collection-title'}>
+      <CollectionTitle>
         <Text color={'black'}>{(item as Collection).name}</Text>
         <Text color={'grey-500'}>{`ID ${value}`}</Text>
-      </div>
-    </Link>,
+      </CollectionTitle>
+    </CollectionLink>,
     title: 'Collection',
     width: 100
   },
@@ -61,7 +58,6 @@ const getCollectionsColumns = (chainId: string) => [
 ];
 
 const CollectionsComponent = ({
-  className,
   count,
   data,
   loading,
@@ -69,12 +65,10 @@ const CollectionsComponent = ({
   pageSize
 }: CollectionsComponentProps) => {
   const deviceSize = useDeviceSize();
-  const {
-    currentChain
-  } = useApi();
+  const { currentChain } = useApi();
 
   return (
-    <div className={className}>
+    <>
       <Table
         columns={getCollectionsColumns(currentChain.network)}
         data={!loading && data?.length ? data : []}
@@ -87,24 +81,25 @@ const CollectionsComponent = ({
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
-    </div>
+    </>
   );
 };
 
-export default styled(CollectionsComponent)`
-  .collection-link {
-    display: flex;
-    column-gap: var(--gap);
-    svg {
-      min-width: 40px;
-    }
-    .collection-title {
-      display: flex;
-      flex-direction: column;
-      color: black !important;
-    }
-    &:hover {
-      text-decoration: none;
-    }
+const CollectionLink = styled(Link)`
+  display: flex;
+  column-gap: var(--gap);
+  svg {
+    min-width: 40px;
+  }
+  &:hover {
+    text-decoration: none;
   }
 `;
+
+const CollectionTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  color: black !important;
+`;
+
+export default CollectionsComponent;

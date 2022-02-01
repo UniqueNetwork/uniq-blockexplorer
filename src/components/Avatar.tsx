@@ -13,9 +13,7 @@ interface AvatarProps {
 // }
 
 const Avatar: FC<AvatarProps> = (props) => {
-  const {
-    className, size, src
-  } = props;
+  const { className, size, src } = props;
 
   const sizeValue = size === 'large' ? 72 : 40;
 

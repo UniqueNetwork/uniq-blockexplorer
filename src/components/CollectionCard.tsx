@@ -2,20 +2,18 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
+
 import Avatar from './Avatar';
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 import { Collection } from '../api/graphQL';
 import config from '../config';
 import { useApi } from '../hooks/useApi';
 
-const {
-  IPFSGateway
-} = config;
+const { IPFSGateway } = config;
 
-type CollectionCardProps = Collection & { className?: string}
+type CollectionCardProps = Collection
 
 const CollectionCard: FC<CollectionCardProps> = ({
-  className,
   collection_cover: cover,
   collection_id: collectionId,
   name,
@@ -23,26 +21,23 @@ const CollectionCard: FC<CollectionCardProps> = ({
   token_prefix: tokenPrefix,
   tokens_aggregate: tokensAggregate
 }) => {
-  const {
-    currentChain
-  } = useApi();
+  const { currentChain } = useApi();
 
   const tokensCount = tokensAggregate?.aggregate.count || 0;
 
   return (
-    <Link
-      className={className}
+    <CollectionCardLink
       to={`/${currentChain.network}/collections/${collectionId}`}
     >
-      <div className={'cover'}>
+      <CollectionCover>
         <Avatar
           size={'small'}
           src={cover ? `${IPFSGateway || ''}/${cover}` : undefined}
         />
-      </div>
-      <div className={'collection-info'}>
+      </CollectionCover>
+      <CollectionInfo>
         <Text>{name}</Text>
-        <div className={'properties'}>
+        <CollectionProperties>
           <span>
             <Text color={'grey-500'}>ID:</Text>
             {collectionId}
@@ -55,17 +50,17 @@ const CollectionCard: FC<CollectionCardProps> = ({
             <Text color={'grey-500'}>Items:</Text>
             {tokensCount}
           </span>
-        </div>
+        </CollectionProperties>
         <div>
           <Text color={'grey-500'}>Owner: </Text>
           <AccountLinkComponent value={owner} />
         </div>
-      </div>
-    </Link>
+      </CollectionInfo>
+    </CollectionCardLink>
   );
 };
 
-export default styled(CollectionCard)`
+const CollectionCardLink = styled(Link)`
   background: var(--white-color);
   border: 1px solid #DFE0E2;
   box-sizing: border-box;
@@ -76,18 +71,23 @@ export default styled(CollectionCard)`
   align-items: flex-start;
   margin-bottom: var(--gap);
   grid-column: span 4;
-  .cover {
-    min-width: 40px;
-  }
-  .collection-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    column-gap: 0;
-    row-gap: 0;
-    .properties {
-      display: flex;
-      column-gap: var(--gap);
-    }
-  }
 `;
+
+const CollectionCover = styled.div`
+  min-width: 40px;
+`;
+
+const CollectionInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  column-gap: 0;
+  row-gap: 0;
+`;
+
+const CollectionProperties = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+`;
+
+export default CollectionCard;

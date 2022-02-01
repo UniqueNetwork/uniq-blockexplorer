@@ -6,41 +6,38 @@ import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 interface ExtendedDataComponentProps {
-  className?: string
   collection?: Collection
 }
 
-const ExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
-  className, collection
-}) => {
+const ExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ collection }) => {
   return (
-    <div className={className}>
-      <div className={'container-with-border'}>
+    <>
+      <ContainerWithBorder>
         <Heading size={'4'}>Token attributes</Heading>
-        <div className={'attributes-block'}>
+        <AttributesContainer>
           <Text color={'grey-500'}>Background</Text>
-          <div className={'tags'}>
-            <div>Eyes To The Right</div>
-          </div>
-        </div>
-        <div className={'attributes-block'}>
+          <TagsContainer>
+            <Tag>Eyes To The Right</Tag>
+          </TagsContainer>
+        </AttributesContainer>
+        <AttributesContainer>
           <Text color={'grey-500'}>Traits</Text>
-          <div className={'tags'}>
-            <div>Eyes To The Right</div>
-            <div>Eyes To The Right</div>
-          </div>
-        </div>
-      </div>
-      <div className={'container-with-border'}>
+          <TagsContainer>
+            <Tag>Eyes To The Right</Tag>
+            <Tag>Eyes To The Right</Tag>
+          </TagsContainer>
+        </AttributesContainer>
+      </ContainerWithBorder>
+      <ContainerWithBorder>
         <Heading size={'4'}>Admins</Heading>
-        <div className={'admins-block'}>
+        <AccountsContainer>
           <div>
             <Avatar size={'small'} />
             <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} />
           </div>
-        </div>
+        </AccountsContainer>
         <Heading size={'4'}>Sponsors</Heading>
-        <div className={'sponsors-block'}>
+        <AccountsContainer>
           <div>
             <Avatar size={'small'} />
             <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} />
@@ -49,20 +46,20 @@ const ExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
             <Avatar size={'small'} />
             <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} />
           </div>
-        </div>
-      </div>
-      <div className={'container-with-border'}>
+        </AccountsContainer>
+      </ContainerWithBorder>
+      <ContainerWithBorder>
         <Heading size={'4'}>Data schema</Heading>
-        <div className={'data-schema-block'}>
+        <DataBlockContainer>
           <Text color={'grey-500'}>Schema version</Text>
           <Text>{collection?.schema_version || ''}</Text>
           <Text color={'grey-500'}>Offchain schema   </Text>
           <Text>{collection?.offchain_schema || ''}</Text>
-        </div>
-      </div>
-      <div className={'container-with-border'}>
+        </DataBlockContainer>
+      </ContainerWithBorder>
+      <ContainerWithBorder>
         <Heading size={'4'}>Advanced data</Heading>
-        <div className={'advanced-data-block'}>
+        <DataBlockContainer>
           <Text color={'grey-500'}>Token limit</Text>
           <Text>{collection?.token_limit.toString() || ''}</Text>
           <Text color={'grey-500'}>Account token ownership limit</Text>
@@ -77,44 +74,48 @@ const ExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
           <Text>{collection?.owner_can_destroy || 'false'}</Text>
           <Text color={'grey-500'}>Variable metadata sponsoring rate limit</Text>
           <Text>{'never sponsored'}</Text>
-        </div>
-      </div>
-    </div>
+        </DataBlockContainer>
+      </ContainerWithBorder>
+    </>
   );
 };
 
-export default styled(ExtendedDataComponent)`
-  .container-with-border {
-    padding-top: var(--gap);
-  }
-  .attributes-block {
-    margin-bottom: calc(var(--gap) * 1.5);
-    .tags {
-      margin-top: calc(var(--gap) / 2);
-      display: flex;
-      column-gap: calc(var(--gap) / 2);
-      row-gap: calc(var(--gap) / 2);
-      & > div {
-        padding: 1px calc(var(--gap) / 2);
-        background-color: var(--blue-gray);
-      }
-    }
-  }
-  .admins-block, .sponsors-block {
+const AttributesContainer = styled.div`
+  margin-bottom: calc(var(--gap) * 1.5);
+`;
+
+const TagsContainer = styled.div`
+  margin: calc(var(--gap) / 2) 0;
+  display: flex;
+  column-gap: calc(var(--gap) / 2);
+  row-gap: calc(var(--gap) / 2);
+`;
+
+const Tag = styled.div`
+  padding: 1px calc(var(--gap) / 2);
+  background-color: var(--blue-gray);
+`;
+
+const AccountsContainer = styled.div`
+  display: flex;
+  column-gap: calc(var(--gap) / 1.5);
+  margin-bottom: calc(var(--gap) * 1.5);
+  div {
     display: flex;
-    column-gap: calc(var(--gap) / 1.5);
-    margin-bottom: calc(var(--gap) * 1.5);
-    div {
-      display: flex;
-      align-items: center;
-      column-gap: calc(var(--gap) / 2);
-    }
-  }
-  .sponsors-block {
-    margin-bottom: 0;
-  }
-  .data-schema-block, .advanced-data-block {
-    display: grid;
-    grid-template-columns: 296px 1fr;
+    align-items: center;
+    column-gap: calc(var(--gap) / 2);
   }
 `;
+
+const ContainerWithBorder = styled.div`
+  padding-top: var(--gap);
+  padding-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed var(--border-color);
+`;
+
+const DataBlockContainer = styled.div`
+  display: grid;
+  grid-template-columns: 296px 1fr;
+`;
+
+export default ExtendedDataComponent;

@@ -22,9 +22,7 @@ const collectionsQuery = gql`
   }
 `;
 
-export const useGraphQlCollections = ({
-  filter, pageSize
-}: useGraphQlCollectionsProps) => {
+export const useGraphQlCollections = ({ filter, pageSize }: useGraphQlCollectionsProps) => {
   const getWhere = useCallback(
     (searchString?: string) => ({
       _and: {
@@ -61,9 +59,7 @@ export const useGraphQlCollections = ({
   });
 
   const fetchMoreCollections = useCallback(
-    ({
-      limit = pageSize, offset, searchString
-    }: FetchMoreCollectionsOptions) => {
+    ({ limit = pageSize, offset, searchString }: FetchMoreCollectionsOptions) => {
       return fetchMore({
         variables: {
           limit,

@@ -3,15 +3,17 @@ import styled from 'styled-components';
 import { Button, InputText } from '@unique-nft/ui-kit';
 import TokensComponent from './components/TokensComponent';
 import { tokens as gqlTokens } from '../../api/graphQL/';
+import SearchComponent from '../../components/SearchComponent';
 
 const pageSize = 20; // default
 
-const TokensPage: FC<{ className?: string }> = ({
-  className
-}) => {
+const TokensPage: FC = () => {
   const [searchString, setSearchString] = useState('');
   const {
-    fetchMoreTokens, isTokensFetching, tokens, tokensCount
+    fetchMoreTokens,
+    isTokensFetching,
+    tokens,
+    tokensCount
   } = gqlTokens.useGraphQlTokens({ pageSize });
 
   const onPageChange = useCallback(
@@ -28,9 +30,7 @@ const TokensPage: FC<{ className?: string }> = ({
   }), [searchString, fetchMoreTokens]);
 
   const onSearchKeyDown = useCallback(
-    ({
-      key
-    }) => {
+    ({ key }) => {
       if (key === 'Enter') return onSearchClick();
     },
     [onSearchClick]
@@ -40,21 +40,13 @@ const TokensPage: FC<{ className?: string }> = ({
     setSearchString(value?.toString() || '');
   }, [setSearchString]);
 
-  return (<div className={className}>
-    <div className={'search-wrap'}>
-      <InputText
-        className={'input-width-612'}
-        iconLeft={{ name: 'magnify', size: 18 }}
-        onChange={onChangeSearchString}
-        onKeyDown={onSearchKeyDown}
-        placeholder={'Extrinsic / account'}
-      />
-      <Button
-        onClick={onSearchClick}
-        role={'primary'}
-        title='Search'
-      />
-    </div>
+  return (<>
+    <SearchComponent
+      onChangeSearchString={onChangeSearchString}
+      onSearchClick={onSearchClick}
+      onSearchKeyDown={onSearchKeyDown}
+      placeholder={'NFT / collection / account'}
+    />
     <div>
       <TokensComponent
         count={tokensCount}
@@ -64,17 +56,7 @@ const TokensPage: FC<{ className?: string }> = ({
         pageSize={pageSize}
       />
     </div>
-  </div>);
+  </>);
 };
 
-export default styled(TokensPage)`
-  > .search-wrap {
-    display: flex;
-    margin-bottom: calc(var(--gap) * 2);
-    .input-width-612 {
-      box-sizing: border-box;
-      width: 612px;
-      margin-right: calc(var(--gap) / 2);
-    }
-  }
-`;
+export default TokensPage;

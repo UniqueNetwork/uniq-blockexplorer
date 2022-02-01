@@ -23,9 +23,7 @@ const tokensQuery = gql`
   }
 `;
 
-export const useGraphQlTokens = ({
-  filter, pageSize
-}: useGraphQlTokensProps) => {
+export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) => {
   const getWhere = useCallback(
     (searchString?: string) => ({
       _and: {
@@ -61,9 +59,7 @@ export const useGraphQlTokens = ({
   });
 
   const fetchMoreTokens = useCallback(
-    ({
-      limit = pageSize, offset, searchString
-    }: FetchMoreTokensOptions) => {
+    ({ limit = pageSize, offset, searchString }: FetchMoreTokensOptions) => {
       return fetchMore({
         variables: {
           limit,

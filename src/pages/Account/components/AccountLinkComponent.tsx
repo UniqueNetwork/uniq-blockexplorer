@@ -10,16 +10,10 @@ interface AccountLinkProps {
   noShort?: boolean
 }
 
-const AccountLinkComponent: FC<AccountLinkProps> = ({
-  noShort, size = 'm', value
-}) => {
-  const {
-    accountId
-  } = useParams();
+const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value }) => {
+  const { accountId } = useParams();
 
-  const {
-    currentChain
-  } = useApi();
+  const { currentChain } = useApi();
 
   const shortcut = useMemo(() => (noShort ? value : shortcutText(value)), [value, noShort]);
 

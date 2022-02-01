@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import Table from '../../../components/Table';
 
 interface TokensEventsComponentProps {
-  className?: string
   events?: Event[]
   collectionId?: number
   tokenId?: number
@@ -37,18 +36,14 @@ const columns = [
   { dataIndex: 'result', key: 'result', title: 'Result', width: 100 }
 ];
 
-const TokensEventsComponent: FC<TokensEventsComponentProps> = ({
-  className, events, loading
-}) => {
+const TokensEventsComponent: FC<TokensEventsComponentProps> = ({ events, loading }) => {
   return (
-    <div className={className}>
-      <Table
-        columns={columns}
-        data={!loading ? events : []}
-        loading={loading}
-        rowKey={'collection_id'}
-      />
-    </div>
+    <Table
+      columns={columns}
+      data={!loading ? events : []}
+      loading={loading}
+      rowKey={'collection_id'}
+    />
   );
 };
 

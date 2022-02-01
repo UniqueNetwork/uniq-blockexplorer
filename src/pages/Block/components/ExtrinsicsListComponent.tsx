@@ -67,9 +67,7 @@ const blockColumns = [
 
 const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => {
   const deviceSize = useDeviceSize();
-  const {
-    blockNumber
-  } = props;
+  const { blockNumber } = props;
   const pageSize = 10;
 
   const {

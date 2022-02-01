@@ -42,7 +42,7 @@ const LastBlocksComponent = ({
   const deviceSize = useDeviceSize();
 
   return (
-    <div>
+    <>
       <Table
         columns={blockColumns}
         data={blocksWithTimeDifference(data)}
@@ -55,7 +55,7 @@ const LastBlocksComponent = ({
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
-    </div>
+    </>
   );
 };
 

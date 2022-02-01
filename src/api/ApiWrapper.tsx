@@ -14,17 +14,11 @@ interface ChainProviderProps {
   rpcClient?: IRpcClient
 }
 
-const {
-  chains, defaultChain
-} = config;
+const { chains, defaultChain } = config;
 
-const ApiWrapper = ({
-  children, gqlClient = gql, rpcClient = rpc
-}: ChainProviderProps) => {
+const ApiWrapper = ({ children, gqlClient = gql, rpcClient = rpc }: ChainProviderProps) => {
   const [chainData, setChainData] = useState<ChainData>();
-  const {
-    chainId
-  } = useParams<'chainId'>();
+  const { chainId } = useParams<'chainId'>();
 
   useEffect(() => {
     rpcClient?.setOnChainReadyListener(setChainData);

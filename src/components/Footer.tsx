@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
+import styled from 'styled-components';
 
 const Footer: FC = () => {
   return (
-    <div className={'app-footer'}>
+    <FooterContainer>
       <div className={'app-footer__info'}>
-        <div className={'app-footer__info__powered'}>Powered by <a href='https://unique.network/'>Unique Network</a> — the NFT chain built for Polkadot and Kusama.</div>
-        <div className={'app-footer__info__version'}>Version 22.18.1560 </div>
+        <div>Powered by <a href='https://unique.network/'>Unique Network</a> — the NFT chain built for Polkadot and Kusama.</div>
+        <div>Version 22.18.1560 </div>
       </div>
-      <div className={'app-footer__social-links'}>
+      <SocialLinks>
         <a href='https://t.me/Uniquechain'>
           <img
             alt='telegram'
@@ -38,9 +39,31 @@ const Footer: FC = () => {
             src='/logos/subsocial.svg'
           />
         </a>
-      </div>
-    </div>
+      </SocialLinks>
+    </FooterContainer>
   );
 };
+
+const FooterContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: var(--blue-gray-500);
+  line-height: 22px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const SocialLinks = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  @media (max-width: 767px) {
+    margin-top: var(--gap);
+  }
+`;
 
 export default Footer;

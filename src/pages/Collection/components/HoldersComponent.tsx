@@ -4,7 +4,6 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import Table from '../../../components/Table';
 
 interface HoldersComponentProps {
-  className?: string
   tokens: Token[]
   loading?: boolean
 }
@@ -31,9 +30,7 @@ const columns = [
   { dataIndex: 'sale', key: 'sale', title: 'Sale', width: 100 }
 ];
 
-const HoldersComponent: FC<HoldersComponentProps> = ({
-  className, loading, tokens
-}) => {
+const HoldersComponent: FC<HoldersComponentProps> = ({ loading, tokens }) => {
   const holders: Holder[] = useMemo(() => {
     return tokens.reduce<Holder[]>((acc, token) => {
       const holderIndex = acc.findIndex((item) => item.accountId === token.owner);
@@ -49,14 +46,12 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
   }, [tokens]);
 
   return (
-    <div className={className}>
-      <Table
-        columns={columns}
-        data={!loading ? holders : []}
-        loading={loading}
-        rowKey={'accountId'}
-      />
-    </div>
+    <Table
+      columns={columns}
+      data={!loading ? holders : []}
+      loading={loading}
+      rowKey={'accountId'}
+    />
   );
 };
 

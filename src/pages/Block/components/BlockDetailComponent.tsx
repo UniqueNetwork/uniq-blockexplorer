@@ -6,9 +6,7 @@ import { Heading } from '@unique-nft/ui-kit';
 import LoadingComponent from '../../../components/LoadingComponent';
 import { BlockDetailData, BlockDetailVariables, blockDetail } from '../../../api/graphQL';
 
-const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undefined }> = ({
-  blockNumber, className
-}) => {
+const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undefined }> = ({ blockNumber, className }) => {
   const {
     data: blockDetails,
     loading: isBLockFetching
@@ -97,7 +95,7 @@ export default styled(BlockDetailComponent)`
   .block-container {
     display: grid;
     grid-column-gap: var(--gap);
-    border-bottom: 1px dashed #D2D3D6;
+    border-bottom: 1px dashed var(--border-color);
     grid-template-columns: 85px 1fr;
     font-size: 16px;
     line-height: 20px;
@@ -110,7 +108,7 @@ export default styled(BlockDetailComponent)`
 
   .container-with-border {
     padding-bottom: calc(var(--gap) * 2);
-    border-bottom: 1px dashed #D2D3D6;
+    border-bottom: 1px dashed var(--border-color);
   }
 
   @media (max-width: 767px) {

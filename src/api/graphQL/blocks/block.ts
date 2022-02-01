@@ -23,9 +23,7 @@ const getLatestBlocksQuery = gql`
   }
 `;
 
-export const useGraphQlBlocks = ({
-  pageSize
-}: useGraphQlBlocksProps) => {
+export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
   const client = useApolloClient();
 
   const {
@@ -47,9 +45,7 @@ export const useGraphQlBlocks = ({
   }, [client.link, fetchMore]);
 
   const fetchMoreBlocks = useCallback(
-    ({
-      limit = pageSize, offset, searchString
-    }: FetchMoreBlocksOptions) => {
+    ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
       return fetchMore({
         variables: {
           limit,
