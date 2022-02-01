@@ -10,7 +10,7 @@ interface BasicDataComponentProps {
   collection?: Collection
 }
 
-const BasicDataComponent: FC<BasicDataComponentProps> = ({ collection }) => {
+const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection }) => {
   const {
     collection_id: id,
     date_of_creation: createdOn,
@@ -96,4 +96,4 @@ const OwnerAccountContainer = styled.div`
   margin-bottom: calc(var(--gap) * 2.5);
 `;
 
-export default BasicDataComponent;
+export default CollectionBasicDataComponent;

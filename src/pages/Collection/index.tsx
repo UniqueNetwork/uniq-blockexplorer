@@ -2,13 +2,13 @@ import { Heading, Tabs } from '@unique-nft/ui-kit';
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import Avatar from '../../components/Avatar';
-import BasicDataComponent from './components/BasicDataComponent';
-import ExtendedDataComponent from './components/ExtendedDataComponent';
+import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
+import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
 import { collections as gqlCollections, tokens as gqlTokens } from '../../api/graphQL/';
 import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
 import CollectionEventsComponent from './components/CollectionEventsComponent';
-import TokensEventsComponent from './components/TokensEventsComponent';
+import TokenEventsComponent from './components/TokenEventsComponent';
 import config from '../../config';
 
 const { IPFSGateway } = config;
@@ -43,11 +43,11 @@ const CollectionPage: FC = () => {
       <Tabs
         activeIndex={activeDetailTabIndex}
         contents={[
-          <BasicDataComponent
+          <CollectionBasicDataComponent
             collection={collection}
             key={'collections'}
           />,
-          <ExtendedDataComponent
+          <CollectionExtendedDataComponent
             collection={collection}
             key={'tokens'}
           />
@@ -65,7 +65,7 @@ const CollectionPage: FC = () => {
             key={'holder'}
             tokens={tokens || []}
           />,
-          <TokensEventsComponent
+          <TokenEventsComponent
             key={'tokens-events'}
           />,
           <CollectionEventsComponent

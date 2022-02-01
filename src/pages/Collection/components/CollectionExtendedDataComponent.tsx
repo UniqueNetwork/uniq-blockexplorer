@@ -9,7 +9,7 @@ interface ExtendedDataComponentProps {
   collection?: Collection
 }
 
-const ExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ collection }) => {
+const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ collection }) => {
   return (
     <>
       <ContainerWithBorder>
@@ -118,4 +118,4 @@ const DataBlockContainer = styled.div`
   grid-template-columns: 296px 1fr;
 `;
 
-export default ExtendedDataComponent;
+export default CollectionExtendedDataComponent;
