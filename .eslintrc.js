@@ -87,10 +87,10 @@ module.exports = {
     "react/prop-types": [0], // this is a completely broken rule
     "react/jsx-key": "warn",
     "object-curly-newline": [
-      "error",
+      "warn",
       {
-        ImportDeclaration: "never",
-        ObjectPattern: "always",
+        ImportDeclaration: {multiline: true},
+        ObjectPattern: {multiline: true},
       },
     ],
     "padding-line-between-statements": [
