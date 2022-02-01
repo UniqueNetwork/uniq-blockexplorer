@@ -32,7 +32,8 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
           ? {
             _or: {
               collection_name: { _ilike: searchString },
-              token_prefix: { _ilike: searchString }
+              token_prefix: { _ilike: searchString },
+              token_id: { _eq: searchString }
             }
           }
           : {})

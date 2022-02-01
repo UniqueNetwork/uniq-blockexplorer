@@ -7,7 +7,7 @@ export interface Collection {
   owner: string
   token_limit: number
   token_prefix: string
-  // additional properties needed
+  // TODO: additional properties needed, but aren't in schema
   tokens_aggregate?: {
     aggregate: {
       count: number
