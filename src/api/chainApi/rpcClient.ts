@@ -99,9 +99,8 @@ export class RpcClient implements IRpcClient {
     this.options.onChainReady = callback;
   }
 
-  public changeEndpoint(rpcEndpoint: string, options?: IRpcClientOptions) {
+  public changeEndpoint(rpcEndpoint: string) {
     this.rpcEndpoint = rpcEndpoint;
-    this.options.onChainReady = options?.onChainReady;
     this.setApi();
   }
 }

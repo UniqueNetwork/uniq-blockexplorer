@@ -1,12 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
-import Table from 'rc-table';
+import React, { useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 
-import LoadingComponent from '../../../components/LoadingComponent';
 import { EventsForBlockVariables, EventsForBlockData, eventsForBlock } from '../../../api/graphQL/';
 import { timeDifference } from '../../../utils/timestampUtils';
 import PaginationComponent from '../../../components/Pagination';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import Table from '../../../components/Table';
 
 const blockColumns = [
   {
@@ -80,14 +79,12 @@ const EventListComponent = (props: { blockNumber: string | undefined }) => {
     [fetchMoreExtrinsics]
   );
 
-  const loadingOrEmpty = useMemo(() => !loading ? 'No data' : <LoadingComponent />, [loading]);
-
   return (
     <>
       <Table
         columns={blockColumns}
         data={eventsList?.event}
-        emptyText={loadingOrEmpty}
+        loading={loading}
         rowKey={'event_index'}
       />
       <PaginationComponent

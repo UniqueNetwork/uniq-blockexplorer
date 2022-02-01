@@ -13,30 +13,28 @@ const BlockPage: FC = () => {
 
   const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
-  return (
-    <>
-      <BlockDetailComponent blockNumber={blockIndex} />
+  return (<>
+    <BlockDetailComponent blockNumber={blockIndex} />
 
-      <Tabs
-        activeIndex={activeAssetsTabIndex}
-        labels={assetsTabs}
-        onClick={setActiveAssetsTabIndex}
-      />
-      <Tabs
-        activeIndex={activeAssetsTabIndex}
-        contents={[
-          <ExtrinsicsListComponent
-            blockNumber={blockIndex}
-            key={'extrinsic-list'}
-          />,
-          <EventListComponent
-            blockNumber={blockIndex}
-            key={'event-list'}
-          />
-        ]}
-      />
-    </>
-  );
+    <Tabs
+      activeIndex={activeAssetsTabIndex}
+      labels={assetsTabs}
+      onClick={setActiveAssetsTabIndex}
+    />
+    <Tabs
+      activeIndex={activeAssetsTabIndex}
+      contents={[
+        <ExtrinsicsListComponent
+          blockNumber={blockIndex}
+          key={'extrinsic-list'}
+        />,
+        <EventListComponent
+          blockNumber={blockIndex}
+          key={'event-list'}
+        />
+      ]}
+    />
+  </>);
 };
 
 export default BlockPage;

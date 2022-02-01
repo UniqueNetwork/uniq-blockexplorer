@@ -1,53 +1,49 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
-import { Heading } from '@unique-nft/ui-kit';
+import { Heading, Text } from '@unique-nft/ui-kit';
 
 import LoadingComponent from '../../../components/LoadingComponent';
 import { BlockDetailData, BlockDetailVariables, blockDetail } from '../../../api/graphQL';
 
-const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undefined }> = ({ blockNumber, className }) => {
-  const {
-    data: blockDetails,
-    loading: isBLockFetching
-  } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
+const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undefined }> = ({ blockNumber }) => {
+  const { data: blockDetails,
+    loading: isBLockFetching } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
     notifyOnNetworkStatusChange: true,
     variables: { block_number: blockNumber || '' }
   });
 
   if (isBLockFetching) return <LoadingComponent />;
 
-  const {
-    block_hash: blockHash,
+  const { block_hash: blockHash,
     extrinsics_root: extrinsicsRoot,
     parent_hash: parentHash,
     spec_version: specVersion,
     state_root: stateRoot,
     timestamp,
-    total_events: totalEvents
-  } = blockDetails?.block[0] || {};
+    total_events: totalEvents } = blockDetails?.block[0] || {};
 
   return (
-    <div className={className}>
+    <BlockDetailWrapper>
       <Heading>{`Block ${blockNumber || ''}`}</Heading>
-      <div className={'extrinsic-container'}>
-        <div className={'grid-item_col2 text_grey'}>Status</div>
+      <div className={'block-container'}>
+        <Text color={'grey-500'}>Status</Text>
         <div className={'grid-item_col10'}>Unavailable</div>
-        <div className={'grid-item_col2 text_grey'}>Timestamp</div>
+        <Text color={'grey-500'}>Timestamp</Text>
         <div className={'grid-item_col10'}>
           {timestamp && new Date(timestamp * 1000).toLocaleString()}
         </div>
       </div>
 
-      <div className={'extrinsic-container'}>
-        <div className={'grid-item_col2 text_grey'}>Total events</div>
+      <div className={'block-container'}>
+        <Text color={'grey-500'}>Total events</Text>
         <div className={'grid-item_col10'}>{totalEvents}</div>
-        <div className={'grid-item_col2 text_grey'}>Spec version</div>
+        <Text color={'grey-500'}>Spec version</Text>
         <div className={'grid-item_col10'}>{specVersion}</div>
       </div>
 
-      <div className={'extrinsic-container'}>
-        <div className={'grid-item_col2 text_grey'}>Block hash</div>
+      <div className={'block-container'}>
+        <Text color={'grey-500'}>Block hash</Text>
         <div className={'grid-item_col10'}>
           <div
             className={'block__text-wrap'}
@@ -57,7 +53,7 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
           </div>
         </div>
 
-        <div className={'grid-item_col2 text_grey'}>Parent hash</div>
+        <Text color={'grey-500'}>Parent hash</Text>
         <div className={'grid-item_col10'}>
           <div
             className={'block__text-wrap'}
@@ -67,7 +63,7 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
           </div>
         </div>
 
-        <div className={'grid-item_col2 text_grey'}>Extrinsic root</div>
+        <Text color={'grey-500'}>Extrinsic root</Text>
         <div className={'grid-item_col10'}>
           <div
             className={'block__text-wrap'}
@@ -77,7 +73,7 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
           </div>
         </div>
 
-        <div className={'grid-item_col2 text_grey'}>State root</div>
+        <Text color={'grey-500'}>State root</Text>
         <div className={'grid-item_col10'}>
           <div
             className={'block__text-wrap'}
@@ -87,16 +83,17 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
           </div>
         </div>
       </div>
-    </div>
+    </BlockDetailWrapper>
   );
 };
 
-export default styled(BlockDetailComponent)`
+const BlockDetailWrapper = styled.div`
+  margin-bottom: calc(var(--gap) * 2);
   .block-container {
     display: grid;
     grid-column-gap: var(--gap);
-    border-bottom: 1px dashed var(--border-color);
-    grid-template-columns: 85px 1fr;
+    border-bottom: 1px dashed #D2D3D6;
+    grid-template-columns: 120px 1fr;
     font-size: 16px;
     line-height: 20px;
     padding: calc(var(--gap) * 1.5) 0 !important;
@@ -108,16 +105,16 @@ export default styled(BlockDetailComponent)`
 
   .container-with-border {
     padding-bottom: calc(var(--gap) * 2);
-    border-bottom: 1px dashed var(--border-color);
+    border-bottom: 1px dashed #D2D3D6;
   }
 
   @media (max-width: 767px) {
     .block-container {
       grid-row-gap: 0;
-      .grid-item_col1 {
-        grid-column: span 11;
+      div {
+        grid-column: span 2;
       }
-      .grid-item_col1:not(:first-child) {
+      div:not(:first-child) {
         margin-top: var(--gap);
       }
       .grid-item_col11 {
@@ -126,3 +123,5 @@ export default styled(BlockDetailComponent)`
     }
   }
 `;
+
+export default BlockDetailComponent;

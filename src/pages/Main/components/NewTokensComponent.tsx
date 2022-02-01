@@ -27,7 +27,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
         {loading && <LoadingComponent />}
         {tokens.map((token) => (
           <TokenCard
-            key={`token-${token.token_id}`}
+            key={`token-${token.collection_id}-${token.token_id}`}
             {...token}
           />
         ))}
