@@ -8,26 +8,10 @@ interface AvatarProps {
   className?: string
 }
 
-// function isCodec (value?: AccountId | AccountIndex | Address | string | Uint8Array | null): value is AccountId | AccountIndex | Address {
-//   return !!(value && (value as AccountId).toHuman);
-// }
-
 const Avatar: FC<AvatarProps> = (props) => {
   const { className, size, src } = props;
 
   const avatarHeight = size === 'large' ? 72 : 40;
-
-  // if (value) {
-  //   return (<BaseIdentityIcon
-  //   // Custom={Custom}
-  //     className={className}
-  //     // onCopy={!canNotCopy ? _onCopy : () => null}
-  //     prefix={prefix}
-  //     size={sizeValue}
-  //     theme={theme || 'substrate'}
-  //     value={isCodec(value) ? value.toString() : value}
-  //   />);
-  // }
 
   return (
     <svg
