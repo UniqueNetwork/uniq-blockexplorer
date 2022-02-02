@@ -40,10 +40,13 @@ const Avatar: FC<AvatarProps> = (props) => {
         </pattern>
       </defs>
       {src && <image
-        height='72'
+        height='100%'
         href={src}
+        preserveAspectRatio='xMinYMin slice'
         style={{ clipPath: 'circle(50% at 50% 50%)' }}
-        width='72'
+        width='100%'
+        x='0'
+        y='0'
       />}
       {!src && (
         <image

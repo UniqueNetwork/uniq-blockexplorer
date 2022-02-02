@@ -27,8 +27,8 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
         src={coverImageUrl}
       />
       <CollectionTitle>
-        <Text color={'black'}>{collectionName}</Text>
-        <Text color={'grey-500'}>{`ID ${collectionId}`}</Text>
+        <Text color={'secondary-500'}>{collectionName}</Text>
+        <Text size={'xs'} color={'grey-500'}>{`ID ${collectionId}`}</Text>
       </CollectionTitle>
     </CollectionLink>
   );
@@ -36,7 +36,7 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
 
 const CollectionLink = styled(Link)`
   display: flex;
-  column-gap: var(--gap);
+  column-gap: calc(var(--gap) / 2);
   svg {
     min-width: 40px;
   }
@@ -48,7 +48,12 @@ const CollectionLink = styled(Link)`
 const CollectionTitle = styled.div`
   display: flex;
   flex-direction: column;
-  color: black !important;
+  &:hover {
+    text-decoration: none;
+    .unique-text[class*=size-m] {
+      color: var(--primary-500) !important;  
+    }
+  }
 `;
 
 export default CollectionTableCell;

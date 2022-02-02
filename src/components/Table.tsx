@@ -70,9 +70,6 @@ const TableWrapper = styled.div`
         font-size: 16px;
         border-bottom: 1px dashed #D2D3D6;
         color: var(--grey-600);
-        .unique-text[class^="primary-"], .unique-text[class*="secondary-"] {
-          color: var(--grey-600);
-        }
       }
     }
     &-placeholder {
