@@ -35,7 +35,7 @@ const blocksWithTimeDifference = (
 };
 
 const LastBlocksComponent = ({
-  pageSize = 10,
+  pageSize = 5,
   searchString
 }: BlockComponentProps) => {
   const deviceSize = useDeviceSize();

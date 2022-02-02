@@ -59,7 +59,7 @@ const transfersWithTimeDifference = (
 };
 
 const LastTransfersComponent = ({
-  pageSize = 10,
+  pageSize = 5,
   searchString
 }: LastTransfersComponentProps) => {
   const deviceSize = useDeviceSize();
