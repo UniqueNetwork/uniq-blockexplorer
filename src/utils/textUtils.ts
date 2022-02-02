@@ -14,3 +14,9 @@ export const formatAmount = (amount: number) => {
 
   return parts.join('.');
 };
+
+export const formatBlockNumber = (blockNumber: number | undefined) => {
+  if (!blockNumber) return '';
+
+  return blockNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+};

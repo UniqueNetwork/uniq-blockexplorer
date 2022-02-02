@@ -4,7 +4,6 @@ import usePagination, { DOTS } from '../hooks/usePagination';
 import styled from 'styled-components';
 
 interface PaginationProps {
-  className?: string
   count: number // total number of elements in DB
   pageSize?: number // how many elements we present per single page
   onPageChange: (limit: number, offset: number) => void // fetch new page data
@@ -44,12 +43,13 @@ const PageNumberComponent = (props: {
   );
 };
 
-const PaginationComponent = ({ className,
+const PaginationComponent = ({
   count,
   currentPage: currentPageFromProps,
   onPageChange,
   pageSize = 10,
-  siblingCount = 2 }: PaginationProps) => {
+  siblingCount = 2
+}: PaginationProps) => {
   const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1);
   const paginationRange = usePagination({
     currentPage,
@@ -77,11 +77,11 @@ const PaginationComponent = ({ className,
     onPageChanged(currentPage - 1);
   }, [currentPage, count, pageSize, onPageChanged]);
 
-  return (<div className={className}>
-    <div className={'pagination-wrapper'}>
+  return (
+    <PaginationWrapper>
       <div>{count} items</div>
       {count > pageSize && (
-        <ul className={'pagination-container'}>
+        <PageNumbersWrapper>
           <li
             key={'prev'}
             onClick={onPrevious}
@@ -111,57 +111,55 @@ const PaginationComponent = ({ className,
               size={12}
             />
           </li>
-        </ul>
+        </PageNumbersWrapper>
       )}
-    </div>
-  </div>);
+    </PaginationWrapper>
+  );
 };
 
-export default styled(PaginationComponent)`
-  .pagination-wrapper {
-    display: flex;
-    column-gap: var(--gap);
-    align-items: center;
-    justify-content: space-between;
-
-    .pagination-container {
-      list-style: none;
-      padding: 0;
-      display: flex;
-
-      li {
-        padding: 4px 6px;
-        min-width: 18px;
-        text-align: center;
-        cursor: pointer;
-
-        &.active {
-          border: 1px solid var(--primary-color);
-          color: var(--white-color);
-          background-color: var(--primary-color);
-          border-radius: 4px;
-          cursor: default;
-        }
-      }
-
-      li:last-child, li:first-child {
-        padding: 0 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      li:first-child {
-        transform: rotate(180deg);
-      }
-    }
-  }
+const PaginationWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
 
   @media (max-width: 767px) {
-    .pagination-wrapper {
-      flex-direction: column;
-      align-items: flex-start !important;
-      row-gap: calc(var(--gap) * 1.5);
+    flex-direction: column;
+    align-items: flex-start !important;
+    row-gap: calc(var(--gap) * 1.5);
+  }
+`;
+
+const PageNumbersWrapper = styled.ul`
+  list-style: none;
+  padding: 0;
+  display: flex;
+
+  li:last-child, li:first-child {
+    padding: 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  li:first-child {
+    transform: rotate(180deg);
+  }
+  
+  li {
+    padding: 4px 6px;
+    min-width: 18px;
+    text-align: center;
+    cursor: pointer;
+
+    &.active {
+      border: 1px solid var(--primary-color);
+      color: var(--white-color);
+      background-color: var(--primary-color);
+      border-radius: 4px;
+      cursor: default;
     }
   }
 `;
+
+export default PaginationComponent;

@@ -2,9 +2,9 @@ import React from 'react';
 import ExtrinsicDetail from './components/ExtrinsicDetail';
 
 const ExtrinsicPage = () => {
-  return <div>
+  return (
     <ExtrinsicDetail />
-  </div>;
+  );
 };
 
 export default ExtrinsicPage;

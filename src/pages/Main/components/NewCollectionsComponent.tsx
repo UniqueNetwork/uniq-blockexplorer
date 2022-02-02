@@ -8,12 +8,14 @@ import LoadingComponent from '../../../components/LoadingComponent';
 import CollectionCard from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
-  className?: string
   collections: Collection[]
   loading?: boolean
 }
 
-const CollectionsComponent: FC<CollectionsComponentProps> = ({ className, collections, loading }) => {
+const CollectionsComponent: FC<CollectionsComponentProps> = ({
+  collections,
+  loading
+}) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
 
@@ -22,8 +24,8 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ className, collec
   }, [currentChain, navigate]);
 
   return (
-    <div className={className}>
-      <div className={'collections-container'}>
+    <>
+      <CollectionsWrapper>
         {loading && <LoadingComponent />}
         {collections.map((collection) => (
           <CollectionCard
@@ -31,7 +33,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ className, collec
             {...collection}
           />
         ))}
-      </div>
+      </CollectionsWrapper>
       <Button
         iconRight={{
           color: 'white',
@@ -42,14 +44,14 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ className, collec
         role={'primary'}
         title={'See all'}
       />
-    </div>
+    </>
   );
 };
 
-export default styled(CollectionsComponent)`
-  .collections-container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-column-gap: var(--gap);
-  }
+const CollectionsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: var(--gap);
 `;
+
+export default CollectionsComponent;

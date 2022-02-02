@@ -8,13 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import TokenCard from '../../../components/TokenCard';
 
 interface NewTokensComponentProps {
-  className?: string
   loading?: boolean
   tokens: Token[]
 }
 
 const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
-  const { className, loading, tokens } = props;
+  const { loading, tokens } = props;
   const { currentChain } = useApi();
   const navigate = useNavigate();
 
@@ -23,8 +22,8 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
   }, [currentChain, navigate]);
 
   return (
-    <div className={className}>
-      <div className={'tokens-container'}>
+    <>
+      <TokensWrapper>
         {loading && <LoadingComponent />}
         {tokens.map((token) => (
           <TokenCard
@@ -32,7 +31,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
             {...token}
           />
         ))}
-      </div>
+      </TokensWrapper>
       <Button
         iconRight={{
           color: 'white',
@@ -43,21 +42,18 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
         role={'primary'}
         title={'See all'}
       />
-    </div>
+    </>
   );
 };
 
-export default styled(NewTokensComponent)`
-  .tokens-container {
-    display: flex;
-    justify-content: space-between;
-    column-gap: calc(var(--gap) * 1.5);
-    row-gap: calc(var(--gap) * 1.5);
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: var(--gap);
-    .token-card {
-      max-width: 174px;
-    }
-  }
+const TokensWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  column-gap: calc(var(--gap) * 1.5);
+  row-gap: calc(var(--gap) * 1.5);
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: var(--gap);
 `;
+
+export default NewTokensComponent;

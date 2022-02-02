@@ -32,7 +32,8 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
           ? {
             _or: {
               collection_name: { _ilike: searchString },
-              token_prefix: { _ilike: searchString }
+              token_prefix: { _ilike: searchString },
+              token_id: { _eq: searchString }
             }
           }
           : {})
@@ -41,10 +42,12 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
     [filter]
   );
 
-  const { data,
+  const {
+    data,
     error: fetchTokensError,
     fetchMore,
-    loading: isTokensFetching } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    loading: isTokensFetching
+  } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -79,9 +82,11 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
 };
 
 export const useGraphQlToken = (collectionId: string, tokenId: string) => {
-  const { data,
+  const {
+    data,
     error: fetchTokensError,
-    loading: isTokensFetching } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    loading: isTokensFetching
+  } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',

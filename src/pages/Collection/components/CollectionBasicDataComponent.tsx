@@ -7,19 +7,26 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import NewTokensComponent from '../../Main/components/NewTokensComponent';
 
 interface BasicDataComponentProps {
-  className?: string,
   collection?: Collection
 }
 
-const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection }) => {
-  const { collection_id: id, date_of_creation: createdOn, description, holders_count: holders, owner, token_prefix: prefix, tokens_aggregate: tokensAggregate } = collection || {};
+const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection }) => {
+  const {
+    collection_id: id,
+    date_of_creation: createdOn,
+    description,
+    holders_count: holders,
+    owner,
+    token_prefix: prefix,
+    tokens_aggregate: tokensAggregate
+  } = collection || {};
 
   const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: id } }, pageSize: 8 });
 
   return (
-    <div className={className}>
-      <div className={'properties'}>
-        <div className={'general'}>
+    <>
+      <PropertiesWrapper>
+        <GeneralInfoWrapper>
           <div>
             <Text color={'grey-500'}>ID:</Text>
             <Text color={'black'}>{id?.toString() || ''}</Text>
@@ -40,11 +47,13 @@ const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection
             <Text color={'grey-500'}>Minting:</Text>
             <Text color={'black'}>{'yes'}</Text>
           </div>
-        </div>
+        </GeneralInfoWrapper>
         <Text>{`created on ${createdOn || 'undefined'}`}</Text>
-      </div>
-      <div className={'description'}><Text color={'grey-500'}>{description || ''}</Text></div>
-      <div className={'owner-account'}>
+      </PropertiesWrapper>
+      <DescriptionWrapper>
+        <Text color={'grey-500'}>{description || ''}</Text>
+      </DescriptionWrapper>
+      <OwnerAccountWrapper>
         <Avatar
           size={'small'}
         />
@@ -52,36 +61,39 @@ const BasicDataComponent: FC<BasicDataComponentProps> = ({ className, collection
           noShort={true}
           value={owner || ''}
         />
-      </div>
+      </OwnerAccountWrapper>
       <div>
         <Heading size={'2'}>Tokens</Heading>
         <NewTokensComponent tokens={tokens?.slice(0, 18) || []} />
       </div>
-    </div>
+    </>
   );
 };
 
-export default styled(BasicDataComponent)`
-  .properties {
+const PropertiesWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
+
+const GeneralInfoWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  div {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    .general {
-      display: flex;
-      column-gap: var(--gap);
-      div {
-        display: flex;
-        column-gap: calc(var(--gap) / 4);
-      }
-    }
-  }
-  .description {
-    margin-bottom: calc(var(--gap) * 1.5);
-  }
-  .owner-account {
-    display: flex;
-    align-items: center;
-    column-gap: var(--gap);
-    margin-bottom: calc(var(--gap) * 2.5);
+    column-gap: calc(var(--gap) / 4);
   }
 `;
+
+const DescriptionWrapper = styled.div`
+  margin-bottom: calc(var(--gap) * 1.5);
+`;
+
+const OwnerAccountWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: var(--gap);
+  margin-bottom: calc(var(--gap) * 2.5);
+`;
+
+export default CollectionBasicDataComponent;

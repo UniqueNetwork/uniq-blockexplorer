@@ -33,17 +33,19 @@ const blocksWithTimeDifference = (
   }));
 };
 
-const LastBlocksComponent = ({ count,
+const LastBlocksComponent = ({
+  count,
   data,
   loading,
   onPageChange,
-  pageSize }: BlockComponentProps<LastBlock[]>) => {
+  pageSize
+}: BlockComponentProps<LastBlock[]>) => {
   const deviceSize = useDeviceSize();
 
   const { currentChain } = useApi();
 
   return (
-    <div>
+    <>
       <Table
         columns={blockColumns(currentChain.network)}
         data={blocksWithTimeDifference(data)}
@@ -56,7 +58,7 @@ const LastBlocksComponent = ({ count,
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
-    </div>
+    </>
   );
 };
 

@@ -26,10 +26,12 @@ const getLatestBlocksQuery = gql`
 export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
   const client = useApolloClient();
 
-  const { data,
+  const {
+    data,
     error: fetchBlocksError,
     fetchMore,
-    loading: isBlocksFetching } = useQuery<LastBlocksData, LastBlocksVariables>(getLatestBlocksQuery, {
+    loading: isBlocksFetching
+  } = useQuery<LastBlocksData, LastBlocksVariables>(getLatestBlocksQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -39,7 +41,9 @@ export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
 
   useEffect(() => {
     fetchMore({})
-      .catch((errMsg) => console.error(errMsg));
+      .catch((errMsg) => {
+        throw new Error(errMsg);
+      });
   }, [client.link, fetchMore]);
 
   const fetchMoreBlocks = useCallback(

@@ -11,7 +11,6 @@ type Event = {
 }
 
 interface CollectionEventsComponentProps {
-  className?: string
   events?: Event[]
   loading?: boolean
 }
@@ -29,16 +28,14 @@ const columns = [
   { dataIndex: 'result', key: 'result', title: 'Result', width: 100 }
 ];
 
-const CollectionEventsComponent: FC<CollectionEventsComponentProps> = ({ className, events, loading }) => {
+const CollectionEventsComponent: FC<CollectionEventsComponentProps> = ({ events, loading }) => {
   return (
-    <div className={className}>
-      <Table
-        columns={columns}
-        data={!loading ? events : []}
-        loading={loading}
-        rowKey={'collection_id'}
-      />
-    </div>
+    <Table
+      columns={columns}
+      data={!loading ? events : []}
+      loading={loading}
+      rowKey={'collection_id'}
+    />
   );
 };
 

@@ -2,23 +2,23 @@ import React, { FC } from 'react';
 import { ColumnType, DefaultRecordType } from 'rc-table/lib/interface';
 import RCTable from 'rc-table';
 import styled from 'styled-components';
-import { Text } from '@unique-nft/ui-kit';
+
 import useDeviceSize, { DeviceSize } from '../hooks/useDeviceSize';
 import LoadingComponent from './LoadingComponent';
+import MobileTable from './MobileTable';
 
 interface TableProps<RecordType = DefaultRecordType> {
-  className?: string
   columns?: ColumnType<RecordType>[]
   data?: RecordType[]
   loading?: boolean
   rowKey?: string
 }
 
-const Table: FC<TableProps> = ({ className, columns, data, loading, rowKey }) => {
+const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
   const deviceSize = useDeviceSize();
 
   return (
-    <div className={className}>
+    <TableWrapper>
       {deviceSize !== DeviceSize.sm && (
         <RCTable
           columns={columns}
@@ -28,31 +28,18 @@ const Table: FC<TableProps> = ({ className, columns, data, loading, rowKey }) =>
         />
       )}
       {deviceSize === DeviceSize.sm && (
-        <div className={'table-sm'}>
-          {loading && <LoadingComponent />}
-          {!loading && data?.length === 0 && <Text className={'text_grey'}>No data</Text>}
-          {!loading &&
-            data?.map((item, index) => (
-              <div
-                className={'row'}
-                key={item[rowKey as keyof DefaultRecordType]}
-              >
-                {columns?.map((column) => (
-                  <div key={`column-${column.key || ''}`}>
-                    <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>
-                    {column.render && <>{column.render(item[column.dataIndex as keyof DefaultRecordType], item, index)}</>}
-                    {!column.render && <Text>{item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}</Text>}
-                  </div>
-                ))}
-              </div>
-            ))}
-        </div>
+        <MobileTable
+          columns={columns}
+          data={!loading ? data : []}
+          loading={loading}
+          rowKey={rowKey}
+        />
       )}
-    </div>
+    </TableWrapper>
   );
 };
 
-export default styled(Table)`
+const TableWrapper = styled.div`
   .rc-table {
     margin-bottom: calc(var(--gap) * 1.5);
     table {
@@ -99,21 +86,7 @@ export default styled(Table)`
     .rc-table {
       display: none;
     }
-
-    .table-sm {
-      margin: var(--gap) 0;
-      .row {
-        border-bottom: 1px dashed #D2D3D6;
-        div {
-          margin: var(--gap) 0;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-        }
-        .title {
-          color: var(--blue-gray-600);
-        }
-      }
-    }
   }
 `;
+
+export default Table;

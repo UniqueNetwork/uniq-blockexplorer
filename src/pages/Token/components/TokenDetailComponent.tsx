@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { Heading, Text } from '@unique-nft/ui-kit';
+
 import { Token } from '../../../api/graphQL';
 import Picture from '../../../components/Picture';
-import { Heading, Text } from '@unique-nft/ui-kit';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import LoadingComponent from '../../../components/LoadingComponent';
@@ -23,15 +24,14 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   return (
     <Wrapper>
-      <Picture
+      <TokenPicture
         alt={`${prefix}-${id}`}
-        className={'token-picture'}
         size={557}
         src={imagePath}
       />
       <div>
         <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
-        <TokenInfo className={'token-general'}>
+        <TokenInfo>
           <Text color={'grey-500'}>Created on</Text>
           <Text>{'undefined'}</Text>
           <Text color={'grey-500'}>Owner</Text>
@@ -42,28 +42,30 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         </TokenInfo>
         <TokenAttributes>
           <Heading size={'4'}>Attributes</Heading>
-          <div className={'attributes-block'}>
+          <div>
             {Object.keys(data).map((key) => (<div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
-              <div className={'tags'}>
-                {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => <div key={`item-${item}-${index}`}>{item}</div>)}
-                {typeof data[key] === 'string' && <div>{data[key]}</div>}
-              </div>
+              <TagsWrapper>
+                {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => <Tag key={`item-${item}-${index}`}>{item}</Tag>)}
+                {typeof data[key] === 'string' && <Tag>{data[key]}</Tag>}
+              </TagsWrapper>
             </div>)
             )}
 
           </div>
         </TokenAttributes>
-        <CollectionInfo>
+        <CollectionInfoWrapper>
           <Heading size={'4'}>Collection</Heading>
-          <div className={'collection-block'}>
+          <CollectionTitle>
             <Avatar
               size={'small'}
               src={collectionCover ? `${IPFSGateway || ''}/${collectionCover}` : undefined}
             />
-            <div className={'properties'}>
+            <div>
               <Text>{name}</Text>
-              <div className={'description'}><Text color={'grey-500'}>{description || ''}</Text></div>
-              <div className={'general'}>
+              <div>
+                <Text color={'grey-500'}>{description || ''}</Text>
+              </div>
+              <CollectionProperties>
                 <div>
                   <Text color={'grey-500'}>ID:</Text>
                   <Text color={'black'}>{collectionId?.toString() || ''}</Text>
@@ -76,10 +78,10 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
                   <Text color={'grey-500'}>Items:</Text>
                   <Text color={'black'}>{0 || ''}</Text>
                 </div>
-              </div>
+              </CollectionProperties>
             </div>
-          </div>
-        </CollectionInfo>
+          </CollectionTitle>
+        </CollectionInfoWrapper>
       </div>
     </Wrapper>
   );
@@ -89,10 +91,11 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 557px 1fr;
   grid-column-gap: var(--gap);
-  .token-picture {
-    width: 557px;
-    height: 557px;
-  }
+`;
+
+const TokenPicture = styled(Picture)`
+  width: 557px;
+  height: 557px;
 `;
 
 const TokenInfo = styled.div`
@@ -102,7 +105,7 @@ const TokenInfo = styled.div`
   grid-row-gap: var(--gap);
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
-  border-bottom: 1px dashed #D2D3D6;
+  border-bottom: 1px dashed var(--border-color);
   span {
     display: flex;
     align-items: center;
@@ -112,38 +115,42 @@ const TokenInfo = styled.div`
 const TokenAttributes = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
-  border-bottom: 1px dashed #D2D3D6;
-  .attributes-block {
-    &>div{
-      margin-bottom: calc(var(--gap) * 1.5);
-    }
-    .tags {
-      margin-top: calc(var(--gap) / 2);
-      display: flex;
-      column-gap: calc(var(--gap) / 2);
-      row-gap: calc(var(--gap) / 2);
-      & > div {
-        padding: 1px calc(var(--gap) / 2);
-        background-color: var(--blue-gray);
-      }
-    }
-  }
+  border-bottom: 1px dashed var(--border-color);
 `;
 
-const CollectionInfo = styled.div`
+const TagsWrapper = styled.div`
+  margin: calc(var(--gap) / 2) 0;
+  display: flex;
+  column-gap: calc(var(--gap) / 2);
+  row-gap: calc(var(--gap) / 2);
+`;
+
+const Tag = styled.div`
+  padding: 1px calc(var(--gap) / 2);
+  background-color: var(--blue-gray);
+`;
+
+const CollectionInfoWrapper = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
-  border-bottom: 1px dashed #D2D3D6;
-  .collection-block {
-    display: flex;
-    column-gap: var(--gap);
-    svg {
-      min-width: 40px;
-    }
-    .general {
-      display: flex;
-      column-gap: var(--gap);
-    }
+  border-bottom: 1px dashed var(--border-color);
+`;
+
+const CollectionTitle = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  svg {
+    min-width: 40px;
+  }  
+`;
+
+const CollectionProperties = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  div {
+    span:first-child {
+      margin-right: calc(var(--gap) / 2);
+    } 
   }
 `;
 

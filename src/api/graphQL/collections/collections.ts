@@ -41,10 +41,12 @@ export const useGraphQlCollections = ({ filter, pageSize }: useGraphQlCollection
     [filter]
   );
 
-  const { data,
+  const {
+    data,
     error: fetchCollectionsError,
     fetchMore,
-    loading: isCollectionsFetching } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
+    loading: isCollectionsFetching
+  } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -79,9 +81,11 @@ export const useGraphQlCollections = ({ filter, pageSize }: useGraphQlCollection
 };
 
 export const useGraphQlCollection = (collectionId: string) => {
-  const { data,
+  const {
+    data,
     error: fetchCollectionsError,
-    loading: isCollectionFetching } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
+    loading: isCollectionFetching
+  } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',

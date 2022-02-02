@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
-import { Collection, Token } from '../../../api/graphQL';
+
+import { Token } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
@@ -18,26 +19,24 @@ const getTokensColumns = (chainId: string) => [
   {
     dataIndex: 'id',
     key: 'id',
-    render: (value: string, item: unknown) => <Link
-      className={'token-link'}
+    render: (value: string, item: unknown) => <TokenLink
       to={`/${chainId}/tokens/${(item as Token).collection_id}/${value}`}
     >
       <Avatar
         size={'small'}
         src={(item as Token).image_path}
       />
-      <div className={'token-title'}>
+      <TokenTitle>
         <Text color={'black'}>{`${(item as Token).token_prefix} #${(item as Token).token_id}`}</Text>
-      </div>
-    </Link>,
+      </TokenTitle>
+    </TokenLink>,
     title: 'Token',
     width: 100
   },
   {
     dataIndex: 'collection_id',
     key: 'collection_id',
-    render: (value: string, item: unknown) => <Link
-      className={'collection-link'}
+    render: (value: string, item: unknown) => <CollectionLink
       to={`/${chainId}/collections/${value}`}
     >
       <Avatar
@@ -45,11 +44,11 @@ const getTokensColumns = (chainId: string) => [
 
         src={(item as Token).collection_cover ? `${IPFSGateway || ''}/${(item as Token).collection_cover}` : undefined}
       />
-      <div className={'collection-title'}>
+      <CollectionTitle>
         <Text color={'black'}>{(item as Token).collection_name}</Text>
         <Text color={'grey-500'}>{`ID ${value}`}</Text>
-      </div>
-    </Link>,
+      </CollectionTitle>
+    </CollectionLink>,
     title: 'Collection',
     width: 100
   },
@@ -70,17 +69,18 @@ const getTokensColumns = (chainId: string) => [
   }
 ];
 
-const TokensComponent: FC<TokensComponentProps> = ({ className,
+const TokensComponent: FC<TokensComponentProps> = ({
   count,
   data,
   loading,
   onPageChange,
-  pageSize }) => {
+  pageSize
+}) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
   return (
-    <div className={className}>
+    <>
       <Table
         columns={getTokensColumns(currentChain.network)}
         data={!loading && data?.length ? data : []}
@@ -94,42 +94,43 @@ const TokensComponent: FC<TokensComponentProps> = ({ className,
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
-    </div>
+    </>
   );
 };
 
-export default styled(TokensComponent)`
-  .token-link {
-    display: flex;
-    column-gap: var(--gap);
-    svg {
-      min-width: 40px;
-    }
-    .token-title {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      color: black !important;
-    }
-
-    &:hover {
-      text-decoration: none;
-    }
+const TokenLink = styled(Link)`
+  display: flex;
+  column-gap: var(--gap);
+  svg {
+    min-width: 40px;
   }
-  .collection-link {
-    display: flex;
-    column-gap: var(--gap);
-    svg {
-      min-width: 40px;
-    }
-    .collection-title {
-      display: flex;
-      flex-direction: column;
-      color: black !important;
-    }
-
-    &:hover {
-      text-decoration: none;
-    }
+  &:hover {
+    text-decoration: none;
   }
 `;
+
+const TokenTitle = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: black !important;
+`;
+
+const CollectionLink = styled(Link)`
+  display: flex;
+  column-gap: var(--gap);
+  svg {
+    min-width: 40px;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+`;
+
+const CollectionTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  color: black !important;
+`;
+
+export default TokensComponent;

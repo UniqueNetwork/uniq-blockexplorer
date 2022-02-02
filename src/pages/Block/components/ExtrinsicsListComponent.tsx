@@ -69,9 +69,11 @@ const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => 
   const { blockNumber } = props;
   const pageSize = 10;
 
-  const { data: eventsList,
+  const {
+    data: eventsList,
     fetchMore: fetchMoreExtrinsics,
-    loading } = useQuery<ExtrinsicData, ExtrinsicVariables>(gqlExtrinsic.extrinsicQuery, {
+    loading
+  } = useQuery<ExtrinsicData, ExtrinsicVariables>(gqlExtrinsic.extrinsicQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',

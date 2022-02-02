@@ -34,7 +34,7 @@ const AccountPage = () => {
   if (!accountId) return null;
 
   return (
-    <div>
+    <>
       <AccountDetailComponent accountId={accountId} />
       <Heading size={'2'}>Assets</Heading>
       <Tabs
@@ -63,7 +63,7 @@ const AccountPage = () => {
         onPageChange={onTransfersPageChange}
         pageSize={pageSize}
       />
-    </div>
+    </>
   );
 };
 

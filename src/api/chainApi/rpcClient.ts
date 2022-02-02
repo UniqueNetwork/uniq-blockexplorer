@@ -40,7 +40,9 @@ export class RpcClient implements IRpcClient {
     if (this.rawRpcApi) {
       this.setIsApiConnected(false);
       this.rawRpcApi.disconnect()
-        .catch((errMsg) => console.error(errMsg));
+        .catch((errMsg) => {
+          throw new Error(errMsg);
+        });
     }
 
     const typesBundle: OverrideBundleType = {

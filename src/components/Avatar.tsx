@@ -11,15 +11,15 @@ interface AvatarProps {
 const Avatar: FC<AvatarProps> = (props) => {
   const { className, size, src } = props;
 
-  const sizeValue = size === 'large' ? 72 : 40;
+  const avatarHeight = size === 'large' ? 72 : 40;
 
   return (
     <svg
       className={className}
       fill='none'
-      height={sizeValue}
+      height={avatarHeight}
       viewBox='0 0 72 72'
-      width={sizeValue}
+      width={avatarHeight}
       xmlns='http://www.w3.org/2000/svg'
     >
       <rect

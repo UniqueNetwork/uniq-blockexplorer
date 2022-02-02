@@ -1,11 +1,14 @@
 import React, { FC, Reducer, useCallback, useReducer, useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { InputText, Checkbox, Button } from '@unique-nft/ui-kit';
+
 import { Collection, collections as gqlCollection } from '../../../api/graphQL';
 import CollectionCard from '../../../components/CollectionCard';
+import { useApi } from '../../../hooks/useApi';
+import SearchComponent from '../../../components/SearchComponent';
 
 interface CollectionsComponentProps {
-  className?: string
   accountId: string
 }
 
@@ -13,7 +16,7 @@ type ActionType = 'All' | 'Owner';
 
 const pageSize = 6;
 
-const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId, className }) => {
+const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const [filter, dispatchFilter] = useReducer<
   Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
@@ -27,6 +30,10 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId, classN
 
     return state;
   }, undefined);
+
+  const { currentChain } = useApi();
+
+  const navigate = useNavigate();
 
   const [searchString, setSearchString] = useState<string | undefined>();
 
@@ -45,90 +52,89 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId, classN
     [setSearchString]
   );
 
-  const onSearchClick = useCallback(() => {
-    fetchMoreCollections({ searchString })
-      .catch((errMsg) => console.error(errMsg));
-  }, [fetchMoreCollections, searchString]);
+  const onSearchClick = useCallback(() =>
+    fetchMoreCollections({ searchString }),
+  [fetchMoreCollections, searchString]);
 
-  const onClickSeeMore = useCallback(() => {}, []);
+  const onClickSeeMore = useCallback(() => {
+    navigate(`/${currentChain.network}/collections`);
+  }, [currentChain, navigate]);
 
-  return (
-    <div className={className}>
-      <div className={'controls-container'}>
-        <div className={'search-container'}>
-          <InputText
-            onChange={onSearchChange}
-            placeholder={'Collection name'}
-          />
-          <Button
-            onClick={onSearchClick}
-            role='primary'
-            title={'Search'}
-          />
-        </div>
-        <div className={'filter-container'}>
-          <Checkbox
-            checked={filter === undefined}
-            label={'All'}
-            onChange={onCheckBoxChange('All')}
-            size={'s'}
-          />
-          <Checkbox
-            checked={!!filter?.owner}
-            label={'Owner'}
-            onChange={onCheckBoxChange('Owner')}
-            size={'s'}
-          />
-        </div>
-      </div>
-      <div className={'items-count'}>{collectionsCount || 0} items</div>
-      <div className={'collections-container'}>
-        {collections?.map &&
+  const onSearchKeyDown = useCallback(
+    ({ key }) => {
+      if (key === 'Enter') return onSearchClick();
+    },
+    [onSearchClick]
+  );
+
+  return (<>
+    <ControlsWrapper>
+      <SearchComponent
+        onChangeSearchString={onSearchChange}
+        onSearchClick={onSearchClick}
+        onSearchKeyDown={onSearchKeyDown}
+        placeholder={'Collection'}
+      />
+      <FilterWrapper>
+        <Checkbox
+          checked={filter === undefined}
+          label={'All'}
+          onChange={onCheckBoxChange('All')}
+          size={'s'}
+        />
+        <Checkbox
+          checked={!!filter?.owner}
+          label={'Owner'}
+          onChange={onCheckBoxChange('Owner')}
+          size={'s'}
+        />
+      </FilterWrapper>
+    </ControlsWrapper>
+    <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
+    <CollectionsWrapper>
+      {collections?.map &&
           collections.map((collection: Collection) => (
             <CollectionCard
               key={`collection-${collection.collection_id}`}
               {...collection}
             />
           ))}
-      </div>
-      <Button
-        iconRight={{
-          color: '#fff',
-          name: 'arrow-right',
-          size: 12
-        }}
-        onClick={onClickSeeMore}
-        role='primary'
-        title={'See all'}
-      />
-    </div>
-  );
+    </CollectionsWrapper>
+    <Button
+      iconRight={{
+        color: '#fff',
+        name: 'arrow-right',
+        size: 12
+      }}
+      onClick={onClickSeeMore}
+      role='primary'
+      title={'See all'}
+    />
+  </>);
 };
 
-export default styled(CollectionsComponent)`
-  .controls-container {
-    display: flex;
-    column-gap: var(--gap);
-    align-items: center;
-    justify-content: space-between;
-    margin-top: var(--gap);
-    .search-container {
-      display: flex;
-      column-gap: calc(var(--gap) / 2);
-      align-items: center;
-    }
-    .filter-container {
-      display: flex;
-      column-gap: var(--gap);
-      align-items: center;
-    }
-  }
-  .items-count {
-    margin: var(--gap) 0;
-  }
-  .collections-container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-column-gap: var(--gap);
-  }
+const ControlsWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--gap);
 `;
+
+const FilterWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  align-items: center;
+`;
+
+const ItemsCountWrapper = styled.div`
+  margin: var(--gap) 0;
+`;
+
+const CollectionsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: var(--gap);
+`;
+
+export default CollectionsComponent;

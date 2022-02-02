@@ -47,4 +47,16 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
   return `${amount} ${timeType}${amount >= 2 ? 's' : ''} ago`;
 };
 
-export { timeDifference };
+const timestampFormat = (timestamp: number) => new Date(timestamp * 1000).toLocaleString('en-US', {
+  day: '2-digit',
+  hour: '2-digit',
+  hour12: false,
+  minute: '2-digit',
+  month: 'long',
+  second: 'numeric',
+  timeZone: 'GMT',
+  timeZoneName: 'short',
+  year: 'numeric'
+});
+
+export { timeDifference, timestampFormat };

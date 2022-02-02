@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { Tabs } from '@unique-nft/ui-kit';
 
@@ -14,7 +13,7 @@ const BlockPage: FC = () => {
 
   const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
-  return (<BlockWrapper>
+  return (<>
     <BlockDetailComponent blockNumber={blockIndex} />
 
     <Tabs
@@ -35,11 +34,7 @@ const BlockPage: FC = () => {
         />
       ]}
     />
-  </BlockWrapper>);
+  </>);
 };
-
-const BlockWrapper = styled.div`
-  
-`;
 
 export default BlockPage;

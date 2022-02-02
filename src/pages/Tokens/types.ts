@@ -1,7 +1,6 @@
-import { Token } from '../../api/graphQL'
+import { Token } from '../../api/graphQL';
 
 export interface TokensComponentProps {
-  className?: string
   data?: Token[]
   count: number
   pageSize: number

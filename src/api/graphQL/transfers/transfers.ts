@@ -50,10 +50,12 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
     [accountId]
   );
 
-  const { data,
+  const {
+    data,
     error: fetchTransfersError,
     fetchMore,
-    loading: isTransfersFetching } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
+    loading: isTransfersFetching
+  } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -67,7 +69,9 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
 
   useEffect(() => {
     fetchMore({})
-      .catch((errMsg) => console.error(errMsg));
+      .catch((errMsg) => {
+        throw new Error(errMsg);
+      });
   }, [client.link, fetchMore]);
 
   const fetchMoreTransfers = useCallback(
