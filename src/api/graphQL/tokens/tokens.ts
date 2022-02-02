@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { FetchMoreTokensOptions, TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
-  query getTokens($limit: Int, $offset: Int, $where: view_tokens_bool_exp = {}) {
-    view_tokens(where: $where, limit: $limit, offset: $offset) {
+  query getTokens($limit: Int, $offset: Int, $where: view_tokens_bool_exp = {}, $orderBy: [view_tokens_order_by!] = {}) {
+    view_tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       collection_cover
       collection_description
       collection_id
@@ -15,7 +15,7 @@ const tokensQuery = gql`
       token_id
       token_prefix
     }
-    view_tokens_aggregate {
+    view_tokens_aggregate(where: $where) {
       aggregate {
         count
       }
@@ -23,23 +23,23 @@ const tokensQuery = gql`
   }
 `;
 
-export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) => {
+export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokensProps) => {
   const getWhere = useCallback(
-    (searchString?: string) => ({
+    (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
         ...(filter ? { _or: filter } : {}),
         ...(searchString
           ? {
-            _or: {
-              collection_name: { _ilike: searchString },
-              token_prefix: { _ilike: searchString },
-              token_id: { _eq: searchString }
-            }
+            _or: [
+              { collection_name: { _iregex: searchString } },
+              { token_prefix: { _iregex: searchString } },
+              ...(Number(searchString) ? [{ token_id: { _eq: searchString } }] : [])
+            ]
           }
           : {})
       }
     }),
-    [filter]
+    []
   );
 
   const {
@@ -55,17 +55,19 @@ export const useGraphQlTokens = ({ filter, pageSize }: useGraphQlTokensProps) =>
     variables: {
       limit: pageSize,
       offset: 0,
-      where: getWhere()
+      orderBy,
+      where: getWhere(filter)
     }
   });
 
   const fetchMoreTokens = useCallback(
-    ({ limit = pageSize, offset, searchString }: FetchMoreTokensOptions) => {
+    ({ limit = pageSize, offset, searchString, orderBy, filter }: FetchMoreTokensOptions) => {
       return fetchMore({
         variables: {
           limit,
           offset,
-          where: getWhere(searchString)
+          orderBy,
+          where: getWhere(filter, searchString)
         }
       });
     },

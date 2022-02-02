@@ -6,7 +6,7 @@ import styled from 'styled-components';
 interface PaginationProps {
   count: number // total number of elements in DB
   pageSize?: number // how many elements we present per single page
-  onPageChange: (limit: number, offset: number) => void // fetch new page data
+  onPageChange: (page: number) => void // fetch new page data
   siblingCount?: number // how many pages to show, the rest will be "..."
   currentPage?: number
 }
@@ -45,12 +45,11 @@ const PageNumberComponent = (props: {
 
 const PaginationComponent = ({
   count,
-  currentPage: currentPageFromProps,
+  currentPage = 1,
   onPageChange,
   pageSize = 10,
   siblingCount = 2
 }: PaginationProps) => {
-  const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1);
   const paginationRange = usePagination({
     currentPage,
     pageSize,
@@ -61,11 +60,8 @@ const PaginationComponent = ({
     (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null;
 
   const onPageChanged = useCallback((newPage: number) => {
-    const offset = (newPage - 1) * pageSize;
-
-    setCurrentPage(newPage);
-    onPageChange(pageSize, offset);
-  }, [pageSize, setCurrentPage, onPageChange]);
+    onPageChange(newPage);
+  }, [pageSize, onPageChange]);
 
   const onNext = useCallback(() => {
     if (currentPage === lastPage || count < pageSize) return;

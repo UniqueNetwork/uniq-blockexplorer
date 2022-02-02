@@ -1,32 +1,38 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '@unique-nft/ui-kit';
+
 import { useApi } from '../../../hooks/useApi';
-import { Collection } from '../../../api/graphQL';
+import { collections as gqlCollections } from '../../../api/graphQL';
 import LoadingComponent from '../../../components/LoadingComponent';
 import CollectionCard from '../../../components/CollectionCard';
 
-interface CollectionsComponentProps {
-  collections: Collection[]
-  loading?: boolean
+interface NewCollectionsComponentProps {
+  searchString?: string
+  pageSize?: number
 }
 
-const CollectionsComponent: FC<CollectionsComponentProps> = ({
-  collections,
-  loading
-}) => {
+const NewCollectionsComponent: FC<NewCollectionsComponentProps> = ({ pageSize = 6, searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
+
+  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize });
 
   const onClick = useCallback(() => {
     navigate(`/${currentChain.network}/collections`);
   }, [currentChain, navigate]);
 
+  useEffect(() => {
+    void fetchMoreCollections({
+      searchString
+    });
+  }, [searchString, fetchMoreCollections]);
+
   return (
     <>
       <CollectionsWrapper>
-        {loading && <LoadingComponent />}
+        {isCollectionsFetching && <LoadingComponent />}
         {collections.map((collection) => (
           <CollectionCard
             key={`collection-${collection.collection_id}`}
@@ -54,4 +60,4 @@ const CollectionsWrapper = styled.div`
   grid-column-gap: var(--gap);
 `;
 
-export default CollectionsComponent;
+export default NewCollectionsComponent;

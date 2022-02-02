@@ -2,6 +2,7 @@ export interface TokensVariables {
   limit: number
   offset: number
   where?: Record<string, unknown>
+  orderBy?: Record<string, 'asc' | 'desc'>
 }
 
 export interface Token {
@@ -25,13 +26,20 @@ export interface TokensData {
   }
 }
 
+export type TokenSorting = {
+  [P in keyof Token]?: 'asc' | 'desc'
+}
+
 export type useGraphQlTokensProps = {
   pageSize: number
   filter?: Record<string, unknown>
+  orderBy?: TokenSorting
 }
 
 export type FetchMoreTokensOptions = {
   limit?: number
   offset?: number
   searchString?: string
+  orderBy?: TokenSorting
+  filter?: Record<string, unknown>
 }

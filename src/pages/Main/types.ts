@@ -1,9 +1,10 @@
-type BlockComponentProps<T> = {
-  data?: T
-  count: number
-  pageSize: number
-  loading: boolean
-  onPageChange: (limit: number, offset: number) => Promise<unknown>
+export type BlockComponentProps = {
+  searchString?: string
+  pageSize?: number
 }
 
-export type { BlockComponentProps };
+export type LastTransfersComponentProps = {
+  searchString?: string
+  pageSize?: number
+  accountId?: string
+}

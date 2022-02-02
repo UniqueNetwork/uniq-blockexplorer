@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ExtrinsicData, ExtrinsicVariables, extrinsic as gqlExtrinsic } from '../../../api/graphQL';
@@ -64,10 +64,13 @@ const blockColumns = [
   }
 ];
 
+const pageSize = 10;
+
 const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => {
   const deviceSize = useDeviceSize();
   const { blockNumber } = props;
-  const pageSize = 10;
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const {
     data: eventsList,
@@ -86,13 +89,17 @@ const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => 
   });
 
   const onPageChange = useCallback(
-    (limit: number, offset: number) =>
+    (page: number) => {
+      setCurrentPage(page);
+      const offset = (page - 1) * pageSize;
+
       fetchMoreExtrinsics({
         variables: {
-          limit,
+          limit: pageSize,
           offset
         }
-      }),
+      });
+    },
     [fetchMoreExtrinsics]
   );
 
@@ -106,6 +113,7 @@ const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => 
       />
       <PaginationComponent
         count={eventsList?.view_extrinsic_aggregate?.aggregate?.count || 0}
+        currentPage={currentPage}
         onPageChange={onPageChange}
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
