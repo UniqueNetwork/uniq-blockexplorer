@@ -2,6 +2,7 @@ import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
+
 import { useApi } from '../hooks/useApi';
 import config from '../config';
 
@@ -62,13 +63,18 @@ const HeaderNavWrapper = styled.div`
 const HeaderNav = styled.nav`
   font-size: 16px;
   display: flex;
-  column-gap: var(--gap);
+  column-gap: calc(var(--gap) * 1.5);
   align-items: center;
+  a {
+    color: var(--primary-500);
+    font-weight: 500;
+  }
   .active {
-    color: var(--black-color);
+    color: var(--dark);
     cursor: default;
+    text-decoration: underline;
     &:hover {
-      text-decoration: none;
+      text-decoration: underline;
     }
   }
 `;
