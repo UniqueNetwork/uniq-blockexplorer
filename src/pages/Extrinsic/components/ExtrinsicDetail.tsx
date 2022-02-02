@@ -36,7 +36,7 @@ const ExtrinsicDetail: FC = () => {
   return (
     <>
       <Heading>{`Extrinsic ${blockIndex}`}</Heading>
-      <ExtrinsicContainer>
+      <ExtrinsicWrapper>
         <Text
           color={'grey-500'}
         >
@@ -51,8 +51,8 @@ const ExtrinsicDetail: FC = () => {
         <Text>
           {timestamp ? new Date(timestamp * 1000).toLocaleString() : ''}
         </Text>
-      </ExtrinsicContainer>
-      <ExtrinsicContainer>
+      </ExtrinsicWrapper>
+      <ExtrinsicWrapper>
         <Text
           color={'grey-500'}
         >
@@ -81,8 +81,8 @@ const ExtrinsicDetail: FC = () => {
             />
           )}
         </div>
-      </ExtrinsicContainer>
-      <ExtrinsicContainer>
+      </ExtrinsicWrapper>
+      <ExtrinsicWrapper>
         <Text
           color={'grey-500'}
         >
@@ -102,8 +102,8 @@ const ExtrinsicDetail: FC = () => {
           <ChainLogo isInline={true} />
           {Number(fee) || 0} {chainData?.properties.tokenSymbol}
         </div>
-      </ExtrinsicContainer>
-      <ExtrinsicContainer>
+      </ExtrinsicWrapper>
+      <ExtrinsicWrapper>
         {hash && <><Text
           color={'grey-500'}
         >
@@ -118,12 +118,12 @@ const ExtrinsicDetail: FC = () => {
           Extrinsic
         </Text>
         <Text>{blockIndex}</Text>
-      </ExtrinsicContainer>
+      </ExtrinsicWrapper>
     </>
   );
 };
 
-const ExtrinsicContainer = styled.div`
+const ExtrinsicWrapper = styled.div`
   display: grid;
   grid-column-gap: var(--gap);
   border-bottom: 1px dashed var(--border-color);

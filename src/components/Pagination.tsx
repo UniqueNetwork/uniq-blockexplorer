@@ -81,7 +81,7 @@ const PaginationComponent = ({
     <PaginationWrapper>
       <div>{count} items</div>
       {count > pageSize && (
-        <PaginationContainer>
+        <PageNumbersWrapper>
           <li
             key={'prev'}
             onClick={onPrevious}
@@ -111,7 +111,7 @@ const PaginationComponent = ({
               size={12}
             />
           </li>
-        </PaginationContainer>
+        </PageNumbersWrapper>
       )}
     </PaginationWrapper>
   );
@@ -123,6 +123,17 @@ const PaginationWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start !important;
+    row-gap: calc(var(--gap) * 1.5);
+  }
+`;
+
+const PageNumbersWrapper = styled.ul`
+  list-style: none;
+  padding: 0;
+  display: flex;
 
   li:last-child, li:first-child {
     padding: 0 0;
@@ -134,19 +145,7 @@ const PaginationWrapper = styled.div`
   li:first-child {
     transform: rotate(180deg);
   }
-
-  @media (max-width: 767px) {
-    flex-direction: column;
-    align-items: flex-start !important;
-    row-gap: calc(var(--gap) * 1.5);
-  }
-`;
-
-const PaginationContainer = styled.ul`
-  list-style: none;
-  padding: 0;
-  display: flex;
-
+  
   li {
     padding: 4px 6px;
     min-width: 18px;

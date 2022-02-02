@@ -22,14 +22,16 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   if (isAccountFetching) return <LoadingComponent />;
 
   const {
-    available_balance: availableBalance,
-    free_balance: freeBalance,
-    locked_balance: lockedBalance,
+    available_balance: availableBalance = 'unavailable',
+    free_balance: freeBalance = 'unavailable',
+    locked_balance: lockedBalance = 'unavailable',
     timestamp
   } = account || {};
 
+  const { tokenSymbol = '' } = chainData?.properties || {};
+
   return (
-    <AccountContainer>
+    <AccountWrapper>
       <div>
         <Avatar
           size='large'
@@ -55,22 +57,16 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
       <Text color={'grey-500'}>
           Balance
       </Text>
-      <BalanceContainer>
-        <Text>{`${freeBalance || 'unavailable'} ${
-          chainData?.properties.tokenSymbol || ''
-        } (total) `}</Text>
-        <Text color={'grey-500'}>{`${lockedBalance || 'unavailable'} ${
-          chainData?.properties.tokenSymbol || ''
-        } (locked) `}</Text>
-        <Text color={'grey-500'}>{`${availableBalance || 'unavailable'} ${
-          chainData?.properties.tokenSymbol || ''
-        } (transferable)`}</Text>
-      </BalanceContainer>
-    </AccountContainer>
+      <BalanceWrapper>
+        <Text>{`${freeBalance} ${tokenSymbol} (total) `}</Text>
+        <Text color={'grey-500'}>{`${lockedBalance} ${tokenSymbol} (locked) `}</Text>
+        <Text color={'grey-500'}>{`${availableBalance} ${tokenSymbol} (transferable)`}</Text>
+      </BalanceWrapper>
+    </AccountWrapper>
   );
 };
 
-const AccountContainer = styled.div`
+const AccountWrapper = styled.div`
   display: grid;
   grid-column-gap: var(--gap);
   grid-template-columns: 85px 1fr;
@@ -110,7 +106,7 @@ const AccountContainer = styled.div`
   }
 `;
 
-const BalanceContainer = styled.div`
+const BalanceWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   column-gap: var(--gap);

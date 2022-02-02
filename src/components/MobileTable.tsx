@@ -19,25 +19,27 @@ const MobileTable: FC<MobileTableProps> = ({
   loading,
   rowKey
 }) => {
-  return (
-    <MobileTableWrapper>
-      {loading && <LoadingComponent />}
-      {!loading && data?.length === 0 && <Text className={'text_grey'}>No data</Text>}
-      {!loading &&
-        data?.map((item, index) => (
-          <MobileTableRow
-            key={item[rowKey as keyof DefaultRecordType]}
-          >
-            {columns?.map((column) => (
-              <div key={`column-${column.key || ''}`}>
-                <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>
-                {column.render && <>{column.render(item[column.dataIndex as keyof DefaultRecordType], item, index)}</>}
-                {!column.render && <Text>{item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}</Text>}
-              </div>
-            ))}
-          </MobileTableRow>
+  let children = <LoadingComponent />;
+
+  if (!loading && data?.length === 0) children = <Text className={'text_grey'}>No data</Text>;
+  else if (!loading) {
+    children = <>{data?.map((item, index) => (
+      <MobileTableRow
+        key={item[rowKey as keyof DefaultRecordType]}
+      >
+        {columns?.map((column) => (
+          <div key={`column-${column.key || ''}`}>
+            <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>
+            {column.render && <>{column.render(item[column.dataIndex as keyof DefaultRecordType], item, index)}</>}
+            {!column.render && <Text>{item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}</Text>}
+          </div>
         ))}
-    </MobileTableWrapper>
+      </MobileTableRow>
+    ))}</>;
+  }
+
+  return (
+    <MobileTableWrapper>{children}</MobileTableWrapper>
   );
 };
 

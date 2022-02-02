@@ -12,7 +12,7 @@ interface SearchComponentProps {
 
 const SearchComponent: FC<SearchComponentProps> = ({ onChangeSearchString, onSearchClick, onSearchKeyDown, placeholder }) => {
   return (
-    <SearchContainer>
+    <SearchWrapper>
       <SearchInput
         iconLeft={{ name: 'magnify', size: 18 }}
         onChange={onChangeSearchString}
@@ -24,11 +24,11 @@ const SearchComponent: FC<SearchComponentProps> = ({ onChangeSearchString, onSea
         role={'primary'}
         title='Search'
       />
-    </SearchContainer>
+    </SearchWrapper>
   );
 };
 
-const SearchContainer = styled.div`
+const SearchWrapper = styled.div`
   display: flex;
   margin-bottom: calc(var(--gap) * 2);
 

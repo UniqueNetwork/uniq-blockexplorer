@@ -25,8 +25,8 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
 
   return (
     <>
-      <PropertiesContainer>
-        <GeneralInfoContainer>
+      <PropertiesWrapper>
+        <GeneralInfoWrapper>
           <div>
             <Text color={'grey-500'}>ID:</Text>
             <Text color={'black'}>{id?.toString() || ''}</Text>
@@ -47,13 +47,13 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
             <Text color={'grey-500'}>Minting:</Text>
             <Text color={'black'}>{'yes'}</Text>
           </div>
-        </GeneralInfoContainer>
+        </GeneralInfoWrapper>
         <Text>{`created on ${createdOn || 'undefined'}`}</Text>
-      </PropertiesContainer>
-      <DescriptionContainer>
+      </PropertiesWrapper>
+      <DescriptionWrapper>
         <Text color={'grey-500'}>{description || ''}</Text>
-      </DescriptionContainer>
-      <OwnerAccountContainer>
+      </DescriptionWrapper>
+      <OwnerAccountWrapper>
         <Avatar
           size={'small'}
         />
@@ -61,7 +61,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
           noShort={true}
           value={owner || ''}
         />
-      </OwnerAccountContainer>
+      </OwnerAccountWrapper>
       <div>
         <Heading size={'2'}>Tokens</Heading>
         <NewTokensComponent tokens={tokens?.slice(0, 18) || []} />
@@ -70,13 +70,13 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
   );
 };
 
-const PropertiesContainer = styled.div`
+const PropertiesWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 `;
 
-const GeneralInfoContainer = styled.div`
+const GeneralInfoWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
   div {
@@ -85,11 +85,11 @@ const GeneralInfoContainer = styled.div`
   }
 `;
 
-const DescriptionContainer = styled.div`
+const DescriptionWrapper = styled.div`
   margin-bottom: calc(var(--gap) * 1.5);
 `;
 
-const OwnerAccountContainer = styled.div`
+const OwnerAccountWrapper = styled.div`
   display: flex;
   align-items: center;
   column-gap: var(--gap);

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Footer: FC = () => {
   return (
-    <FooterContainer>
+    <FooterWrapper>
       <div className={'app-footer__info'}>
         <div>Powered by <a href='https://unique.network/'>Unique Network</a> — the NFT chain built for Polkadot and Kusama.</div>
         <div>Version 22.18.1560 </div>
@@ -40,11 +40,11 @@ const Footer: FC = () => {
           />
         </a>
       </SocialLinks>
-    </FooterContainer>
+    </FooterWrapper>
   );
 };
 
-const FooterContainer = styled.div`
+const FooterWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

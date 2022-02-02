@@ -25,7 +25,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({
 
   return (
     <>
-      <CollectionsContainer>
+      <CollectionsWrapper>
         {loading && <LoadingComponent />}
         {collections.map((collection) => (
           <CollectionCard
@@ -33,7 +33,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({
             {...collection}
           />
         ))}
-      </CollectionsContainer>
+      </CollectionsWrapper>
       <Button
         iconRight={{
           color: 'white',
@@ -48,7 +48,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({
   );
 };
 
-const CollectionsContainer = styled.div`
+const CollectionsWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-column-gap: var(--gap);

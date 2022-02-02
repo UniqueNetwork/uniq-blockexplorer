@@ -23,7 +23,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
 
   return (
     <>
-      <TokensContainer>
+      <TokensWrapper>
         {loading && <LoadingComponent />}
         {tokens.map((token) => (
           <TokenCard
@@ -31,7 +31,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
             {...token}
           />
         ))}
-      </TokensContainer>
+      </TokensWrapper>
       <Button
         iconRight={{
           color: 'white',
@@ -46,7 +46,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = (props) => {
   );
 };
 
-const TokensContainer = styled.div`
+const TokensWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   column-gap: calc(var(--gap) * 1.5);

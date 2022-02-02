@@ -44,16 +44,16 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           <Heading size={'4'}>Attributes</Heading>
           <div>
             {Object.keys(data).map((key) => (<div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
-              <TagsContainer>
+              <TagsWrapper>
                 {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => <Tag key={`item-${item}-${index}`}>{item}</Tag>)}
                 {typeof data[key] === 'string' && <Tag>{data[key]}</Tag>}
-              </TagsContainer>
+              </TagsWrapper>
             </div>)
             )}
 
           </div>
         </TokenAttributes>
-        <CollectionInfoContainer>
+        <CollectionInfoWrapper>
           <Heading size={'4'}>Collection</Heading>
           <CollectionTitle>
             <Avatar
@@ -81,7 +81,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
               </CollectionProperties>
             </div>
           </CollectionTitle>
-        </CollectionInfoContainer>
+        </CollectionInfoWrapper>
       </div>
     </Wrapper>
   );
@@ -118,7 +118,7 @@ const TokenAttributes = styled.div`
   border-bottom: 1px dashed var(--border-color);
 `;
 
-const TagsContainer = styled.div`
+const TagsWrapper = styled.div`
   margin: calc(var(--gap) / 2) 0;
   display: flex;
   column-gap: calc(var(--gap) / 2);
@@ -130,7 +130,7 @@ const Tag = styled.div`
   background-color: var(--blue-gray);
 `;
 
-const CollectionInfoContainer = styled.div`
+const CollectionInfoWrapper = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);

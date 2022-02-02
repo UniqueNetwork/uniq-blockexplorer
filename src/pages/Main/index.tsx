@@ -106,7 +106,7 @@ const MainPage = () => {
         onSearchKeyDown={onSearchKeyDown}
         placeholder={'Collection / account'}
       />
-      <MainBlockContainer>
+      <MainBlockWrapper>
         <Heading size={'2'}>Latest blocks</Heading>
         <LastBlocksComponent
           count={blockCount || 0}
@@ -115,15 +115,15 @@ const MainPage = () => {
           onPageChange={onBlocksPageChange}
           pageSize={pageSize}
         />
-      </MainBlockContainer>
-      <MainBlockContainer>
+      </MainBlockWrapper>
+      <MainBlockWrapper>
         <Heading size={'2'}>New tokens</Heading>
         <NewTokensComponent
           loading={isTokensFetching}
           tokens={tokens || []}
         />
-      </MainBlockContainer>
-      <MainBlockContainer>
+      </MainBlockWrapper>
+      <MainBlockWrapper>
         <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
         <LastTransfersComponent
           count={transfersCount}
@@ -132,19 +132,19 @@ const MainPage = () => {
           onPageChange={onTransfersPageChange}
           pageSize={pageSize}
         />
-      </MainBlockContainer>
-      <MainBlockContainer>
+      </MainBlockWrapper>
+      <MainBlockWrapper>
         <Heading size={'2'}>New collections</Heading>
         <NewCollectionsComponent
           collections={collections || []}
           loading={isCollectionsFetching}
         />
-      </MainBlockContainer>
+      </MainBlockWrapper>
     </>
   );
 };
 
-const MainBlockContainer = styled.div`
+const MainBlockWrapper = styled.div`
   padding-top: calc(var(--gap) * 2);
 `;
 

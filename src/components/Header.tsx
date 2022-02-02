@@ -21,7 +21,7 @@ const Header: FC = () => {
 
   return (
     <HeaderWrapper>
-      <HeaderNavContainer>
+      <HeaderNavWrapper>
         <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
           <img
             alt='Logo'
@@ -32,7 +32,7 @@ const Header: FC = () => {
           <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}>Collections</NavLink>
           <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}>Tokens</NavLink>
         </HeaderNav>
-      </HeaderNavContainer>
+      </HeaderNavWrapper>
 
       <Select
         onChange={onSelectChange}
@@ -54,7 +54,7 @@ const HeaderWrapper = styled.div`
   width: 100%;
 `;
 
-const HeaderNavContainer = styled.div`
+const HeaderNavWrapper = styled.div`
   display: flex;
   column-gap: calc(var(--gap) * 2.5);
 `;

@@ -68,14 +68,14 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   );
 
   return (<>
-    <ControlsContainer>
+    <ControlsWrapper>
       <SearchComponent
         onChangeSearchString={onSearchChange}
         onSearchClick={onSearchClick}
         onSearchKeyDown={onSearchKeyDown}
         placeholder={'Collection'}
       />
-      <FilterContainer>
+      <FilterWrapper>
         <Checkbox
           checked={filter === undefined}
           label={'All'}
@@ -88,10 +88,10 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
           onChange={onCheckBoxChange('Owner')}
           size={'s'}
         />
-      </FilterContainer>
-    </ControlsContainer>
-    <ItemsCountContainer>{collectionsCount || 0} items</ItemsCountContainer>
-    <CollectionsContainer>
+      </FilterWrapper>
+    </ControlsWrapper>
+    <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
+    <CollectionsWrapper>
       {collections?.map &&
           collections.map((collection: Collection) => (
             <CollectionCard
@@ -99,7 +99,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
               {...collection}
             />
           ))}
-    </CollectionsContainer>
+    </CollectionsWrapper>
     <Button
       iconRight={{
         color: '#fff',
@@ -113,7 +113,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   </>);
 };
 
-const ControlsContainer = styled.div`
+const ControlsWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
   align-items: center;
@@ -121,17 +121,17 @@ const ControlsContainer = styled.div`
   margin-top: var(--gap);
 `;
 
-const FilterContainer = styled.div`
+const FilterWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
   align-items: center;
 `;
 
-const ItemsCountContainer = styled.div`
+const ItemsCountWrapper = styled.div`
   margin: var(--gap) 0;
 `;
 
-const CollectionsContainer = styled.div`
+const CollectionsWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-column-gap: var(--gap);

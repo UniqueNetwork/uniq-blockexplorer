@@ -49,14 +49,14 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
 
 const timestampFormat = (timestamp: number) => new Date(timestamp * 1000).toLocaleString('en-US', {
   day: '2-digit',
-  month: 'long',
-  year: 'numeric',
-  hour12: false,
   hour: '2-digit',
+  hour12: false,
   minute: '2-digit',
+  month: 'long',
   second: 'numeric',
+  timeZone: 'GMT',
   timeZoneName: 'short',
-  timeZone: 'GMT'
+  year: 'numeric'
 });
 
 export { timeDifference, timestampFormat };

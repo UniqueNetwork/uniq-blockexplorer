@@ -60,14 +60,14 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId }) => {
   const onClickSeeMore = useCallback(() => {}, []);
 
   return (<>
-    <ControlsContainer>
+    <ControlsWrapper>
       <SearchComponent
         onChangeSearchString={onSearchChange}
         onSearchClick={onSearchClick}
         onSearchKeyDown={onSearchKeyDown}
         placeholder={'NFT / collection'}
       />
-      <FilterContainer>
+      <FilterWrapper>
         <Checkbox
           checked={filter === undefined}
           label={'All'}
@@ -86,17 +86,17 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId }) => {
           onChange={onCheckBoxChange('Received')}
           size={'s'}
         />
-      </FilterContainer>
-    </ControlsContainer>
-    <ItemsCountContainer>{tokensCount || 0} items</ItemsCountContainer>
-    <TokensContainer>
+      </FilterWrapper>
+    </ControlsWrapper>
+    <ItemsCountWrapper>{tokensCount || 0} items</ItemsCountWrapper>
+    <TokensWrapper>
       {tokens?.map &&
           tokens.map((token: Token) => (
             <TokenCard
               {...token}
               key={`token-${token.token_id}`}
             />))}
-    </TokensContainer>
+    </TokensWrapper>
     <Button
       iconRight={{
         color: '#fff',
@@ -110,7 +110,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId }) => {
   </>);
 };
 
-const ControlsContainer = styled.div`
+const ControlsWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
   align-items: center;
@@ -118,17 +118,17 @@ const ControlsContainer = styled.div`
   margin-top: var(--gap);
 `;
 
-const FilterContainer = styled.div`
+const FilterWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
   align-items: center;
 `;
 
-const ItemsCountContainer = styled.div`
+const ItemsCountWrapper = styled.div`
   margin: var(--gap) 0;
 `;
 
-const TokensContainer = styled.div`
+const TokensWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-column-gap: var(--gap);
