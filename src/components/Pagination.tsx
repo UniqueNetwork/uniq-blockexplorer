@@ -141,7 +141,7 @@ const PageNumbersWrapper = styled.ul`
   li:first-child {
     transform: rotate(180deg);
   }
-  
+
   li {
     padding: 4px 6px;
     min-width: 18px;
@@ -149,9 +149,9 @@ const PageNumbersWrapper = styled.ul`
     cursor: pointer;
 
     &.active {
-      border: 1px solid var(--primary-color);
+      border: 1px solid var(--primary-500);
       color: var(--white-color);
-      background-color: var(--primary-color);
+      background-color: var(--primary-500);
       border-radius: 4px;
       cursor: default;
     }
