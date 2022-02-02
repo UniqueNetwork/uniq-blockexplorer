@@ -13,7 +13,7 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
   return (
     <>
       <WrapperWithBorder>
-        <Heading size={'4'}>Token attributes</Heading>
+        <Heading size={'4'}>NFTs attributes</Heading>
         <AttributesWrapper>
           <Text color={'grey-500'}>Background</Text>
           <TagsWrapper>

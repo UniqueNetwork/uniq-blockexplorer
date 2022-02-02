@@ -61,7 +61,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
         />
       </OwnerAccountWrapper>
       <div>
-        <Heading size={'2'}>Tokens</Heading>
+        <Heading size={'2'}>NFTs</Heading>
         <NewTokensComponent
           collectionId={id}
           pageSize={8}

@@ -22,7 +22,7 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
 }) => {
   return (
     <TokenLink
-      to={`/${chainId}/tokens/${collectionId}/${chainId}`}
+      to={`/${chainId}/tokens/${collectionId}/${tokenId}`}
     >
       <Avatar
         size={'small'}

@@ -30,7 +30,7 @@ const Header: FC = () => {
         </Link>
         <HeaderNav>
           <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}>Collections</NavLink>
-          <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}>Tokens</NavLink>
+          <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}>NFTs</NavLink>
         </HeaderNav>
       </HeaderNavWrapper>
 

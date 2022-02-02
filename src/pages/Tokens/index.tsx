@@ -9,7 +9,7 @@ const TokensPage: FC = () => {
   return (<>
     <SearchComponent
       onSearchChange={setSearchString}
-      placeholder={'NFT / collection / account'}
+      placeholder={'Extrinsic / collection / NFT / account'}
     />
     <div>
       <TokensComponent

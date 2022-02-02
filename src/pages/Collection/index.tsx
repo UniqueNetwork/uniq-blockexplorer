@@ -14,7 +14,7 @@ import config from '../../config';
 const { IPFSGateway } = config;
 
 const detailTabs = ['Basic data', 'Extended'];
-const eventsTabs = ['Holders', 'Token events', 'Collection events'];
+const eventsTabs = ['Holders', 'NFTs events', 'Collection events'];
 
 const CollectionPage: FC = () => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);

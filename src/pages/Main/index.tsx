@@ -17,7 +17,7 @@ const MainPage = () => {
     <>
       <SearchComponent
         onSearchChange={setSearchString}
-        placeholder={'Collection / account'}
+        placeholder={'Extrinsic / collection / NFT / account'}
       />
       <MainBlockWrapper>
         <Heading size={'2'}>Latest blocks</Heading>
@@ -26,7 +26,7 @@ const MainPage = () => {
         />
       </MainBlockWrapper>
       <MainBlockWrapper>
-        <Heading size={'2'}>New tokens</Heading>
+        <Heading size={'2'}>New NFTs</Heading>
         <NewTokensComponent
           searchString={searchString}
         />

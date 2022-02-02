@@ -8,7 +8,7 @@ import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import { useApi } from '../../hooks/useApi';
 
-const assetsTabs = ['Collections', 'Tokens'];
+const assetsTabs = ['Collections', 'NFTs'];
 
 const AccountPage = () => {
   const { accountId } = useParams();

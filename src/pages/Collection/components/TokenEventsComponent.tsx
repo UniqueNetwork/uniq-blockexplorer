@@ -21,7 +21,7 @@ const columns = [
   {
     dataIndex: 'token',
     key: 'token',
-    title: 'Token',
+    title: 'Item',
     width: 100
   },
   {
@@ -32,7 +32,7 @@ const columns = [
   },
   { dataIndex: 'age', key: 'age', title: 'Time', width: 100 },
   { dataIndex: 'fee', key: 'fee', title: 'Fee', width: 100 },
-  { dataIndex: 'author', key: 'author', title: 'author', width: 100 },
+  { dataIndex: 'author', key: 'author', title: 'Author', width: 100 },
   { dataIndex: 'result', key: 'result', title: 'Result', width: 100 }
 ];
 

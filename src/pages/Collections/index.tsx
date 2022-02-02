@@ -8,7 +8,7 @@ const CollectionsPage: FC = () => {
   return (<>
     <SearchComponent
       onSearchChange={setSearchString}
-      placeholder={'Collection / account'}
+      placeholder={'Extrinsic / collection / account'}
     />
     <div>
       <CollectionsComponent
