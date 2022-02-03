@@ -8,6 +8,7 @@ import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import LoadingComponent from '../../../components/LoadingComponent';
 import config from '../../../config';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 const { IPFSGateway } = config;
 
@@ -17,8 +18,10 @@ interface TokenDetailComponentProps {
 }
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
+  const deviceSize = useDeviceSize();
+
   if (!token) return null;
-  const { collection_cover: collectionCover, collection_description: description, collection_id: collectionId, collection_name: name, data, image_path: imagePath, owner, token_id: id, token_prefix: prefix } = token;
+  const { collection_cover: collectionCover, collection_description: description, collection_name: name, data, image_path: imagePath, owner, token_id: id, token_prefix: prefix } = token;
 
   if (loading) return <LoadingComponent />;
 
@@ -26,7 +29,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     <Wrapper>
       <TokenPicture
         alt={`${prefix}-${id}`}
-        size={557}
         src={imagePath}
       />
       <div>
@@ -36,8 +38,11 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           <Text>{'undefined'}</Text>
           <Text color={'grey-500'}>Owner</Text>
           <OwnerWrapper>
-            <Avatar size={'small'} />
-            <AccountLinkComponent value={owner} />
+            <Avatar size={'x-small'} />
+            <AccountLinkComponent
+              noShort={deviceSize >= DeviceSize.lg}
+              value={owner}
+            />
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
@@ -54,31 +59,16 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
         </TokenAttributes>
         <CollectionInfoWrapper>
-          <Heading size={'4'}>Collection</Heading>
           <CollectionTitle>
             <Avatar
               size={'small'}
               src={collectionCover ? `${IPFSGateway || ''}/${collectionCover}` : undefined}
             />
             <div>
-              <Text>{name}</Text>
+              <Heading size={'4'}>{name}</Heading>
               <div>
                 <Text color={'grey-500'}>{description || ''}</Text>
               </div>
-              <CollectionProperties>
-                <div>
-                  <Text color={'grey-500'}>ID:</Text>
-                  <Text color={'black'}>{collectionId?.toString() || ''}</Text>
-                </div>
-                <div>
-                  <Text color={'grey-500'}>Prefix:</Text>
-                  <Text color={'black'}>{prefix || ''}</Text>
-                </div>
-                <div>
-                  <Text color={'grey-500'}>Items:</Text>
-                  <Text color={'black'}>{0 || ''}</Text>
-                </div>
-              </CollectionProperties>
             </div>
           </CollectionTitle>
         </CollectionInfoWrapper>
@@ -89,13 +79,41 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 557px 1fr;
+  grid-template-columns: 536px 1fr;
   grid-column-gap: var(--gap);
+
+
+  @media(max-width: 1024px) {
+    grid-template-columns: 326px 1fr;
+  }
+  @media(max-width: 768px) {
+    grid-template-columns: 224px 1fr;
+  }
+  @media(max-width: 568px) {
+    grid-template-columns: 1fr;
+  }
+  
 `;
 
 const TokenPicture = styled(Picture)`
-  width: 557px;
-  height: 557px;
+  width: 536px;
+  height: 536px;
+  svg {
+    width: 100%;
+  }
+  
+  @media(max-width: 1024px) {
+    width: 326px;
+    height: 326px;
+  }
+  @media(max-width: 768px) {
+    width: 224px;
+    height: 224px;
+  }
+  @media(max-width: 568px) {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const TokenInfo = styled.div`
@@ -119,10 +137,11 @@ const TokenAttributes = styled.div`
 `;
 
 const TagsWrapper = styled.div`
-  margin: calc(var(--gap) / 2) 0;
   display: flex;
+  margin: calc(var(--gap) / 2) 0;
   column-gap: calc(var(--gap) / 2);
   row-gap: calc(var(--gap) / 2);
+  flex-wrap: wrap;
 `;
 
 const Tag = styled.div`
@@ -133,7 +152,6 @@ const Tag = styled.div`
 const CollectionInfoWrapper = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
-  border-bottom: 1px dashed var(--border-color);
 `;
 
 const CollectionTitle = styled.div`

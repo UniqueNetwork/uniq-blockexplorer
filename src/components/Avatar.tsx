@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
 
 interface AvatarProps {
-  size: 'large' | 'middle' | 'small'
+  size: 'large' | 'middle' | 'small' | 'x-small'
   src?: string,
   value?: AccountId | AccountIndex | Address | string | Uint8Array | null;
   className?: string
 }
 
-const avatarSizes = { large: 72, middle: 64, small: 40 };
+const avatarSizes = { large: 72, middle: 64, small: 40, 'x-small': 24 };
 
 const Avatar: FC<AvatarProps> = (props) => {
   const { className, size, src } = props;

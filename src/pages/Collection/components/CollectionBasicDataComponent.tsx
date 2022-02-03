@@ -56,7 +56,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
           </div>
           <OwnerAccountWrapper>
             <Avatar
-              size={'small'}
+              size={'x-small'}
             />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
