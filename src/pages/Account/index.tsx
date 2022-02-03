@@ -29,17 +29,16 @@ const AccountPage = () => {
       />
       <Tabs
         activeIndex={activeAssetsTabIndex}
-        contents={[
-          <CollectionsComponent
-            accountId={accountId}
-            key={'collections'}
-          />,
-          <TokensComponent
-            accountId={accountId}
-            key={'tokens'}
-          />
-        ]}
-      />
+      >
+        <CollectionsComponent
+          accountId={accountId}
+          key={'collections'}
+        />
+        <TokensComponent
+          accountId={accountId}
+          key={'tokens'}
+        />
+      </Tabs>
       <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
       <LastTransfersComponent
         accountId={accountId}

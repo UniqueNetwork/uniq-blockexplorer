@@ -4,7 +4,7 @@ import { Heading } from '@unique-nft/ui-kit';
 
 import { tokens } from '../../api/graphQL/';
 import TokenDetailComponent from './components/TokenDetailComponent';
-import TokenEventsComponent from '../Collection/components/TokenEventsComponent';
+// import TokenEventsComponent from '../Collection/components/TokenEventsComponent';
 
 const TokenPage: FC = () => {
   const { collectionId, tokenId } = useParams<{ collectionId: string, tokenId: string }>();
@@ -17,8 +17,8 @@ const TokenPage: FC = () => {
         loading={isTokensFetching}
         token={token}
       />
-      <Heading size={'2'}>Events</Heading>
-      <TokenEventsComponent tokenId={token?.token_id} />
+      {/* <Heading size={'2'}>Events</Heading> */}
+      {/* <TokenEventsComponent tokenId={token?.token_id} /> */}
     </>
   );
 };
