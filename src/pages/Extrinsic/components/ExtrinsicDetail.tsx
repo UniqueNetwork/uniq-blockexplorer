@@ -171,7 +171,9 @@ const ExtrinsicWrapper = styled.div`
   display: flex;
   flex-direction: row;
   column-gap: calc(var(--gap) * 2);
-
+  div:last-child {
+    flex-grow: 1;
+  }
 
   @media (max-width: 767px) {
     flex-direction: column;
