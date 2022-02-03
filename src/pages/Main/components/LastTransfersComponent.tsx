@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
+
 import PaginationComponent from '../../../components/Pagination';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import { Transfer } from '../../../api/graphQL';
-import { BlockComponentProps } from '../types';
+import { Transfer, transfers as gqlTransfers } from '../../../api/graphQL';
+import { LastTransfersComponentProps } from '../types';
 import { timeDifference } from '../../../utils/timestampUtils';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import { useApi } from '../../../hooks/useApi';
@@ -58,15 +59,27 @@ const transfersWithTimeDifference = (
 };
 
 const LastTransfersComponent = ({
-  count,
-  data,
-  loading,
-  onPageChange,
-  pageSize
-}: BlockComponentProps<Transfer[]>) => {
+  pageSize = 5,
+  searchString
+}: LastTransfersComponentProps) => {
   const deviceSize = useDeviceSize();
 
   const { chainData, currentChain } = useApi();
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
+    gqlTransfers.useGraphQlLastTransfers({ pageSize });
+
+  useEffect(() => {
+    const offset = (currentPage - 1) * pageSize;
+
+    void fetchMoreTransfers({
+      limit: pageSize,
+      offset,
+      searchString
+    });
+  }, [pageSize, searchString, currentPage, fetchMoreTransfers]);
 
   return (
     <>
@@ -75,13 +88,14 @@ const LastTransfersComponent = ({
           chainData?.properties.tokenSymbol || '',
           currentChain?.network
         )}
-        data={transfersWithTimeDifference(data)}
-        loading={loading}
+        data={transfersWithTimeDifference(transfers)}
+        loading={isTransfersFetching}
         rowKey={'block_index'}
       />
       <PaginationComponent
-        count={count}
-        onPageChange={onPageChange}
+        count={transfersCount}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />

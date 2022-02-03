@@ -1,6 +1,5 @@
 import React, { FC, useMemo } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 import { Layout } from '@unique-nft/ui-kit';
 
 import Footer from './Footer';
@@ -18,32 +17,14 @@ const PageLayout: FC = () => {
   }, [pathname]);
 
   return (
-    <StyledLayout
+    <Layout
       {...layoutProps}
       footer={<Footer />}
       header={<Header />}
     >
       <Outlet />
-    </StyledLayout>
+    </Layout>
   );
 };
-
-const StyledLayout = styled(Layout)`
-  @media (max-width: 1024px) {
-    margin-top: 40px;
-    
-  }
-
-  @media (max-width: 767px) {
-    footer {
-      margin-top: 40px;
-      padding: 16px !important;
-      height: 100px !important;
-      flex-direction: column !important;
-      justify-content: center !important;
-      align-items: flex-start !important;
-    }
-  }
-`;
 
 export default PageLayout;

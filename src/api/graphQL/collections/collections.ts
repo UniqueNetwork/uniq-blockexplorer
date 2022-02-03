@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { CollectionsData, CollectionsVariables, FetchMoreCollectionsOptions, useGraphQlCollectionsProps } from './types';
 
 const collectionsQuery = gql`
-  query getCollections($limit: Int, $offset: Int, $where: view_collections_bool_exp = {}) {
-    view_collections(where: $where, limit: $limit, offset: $offset) {
+  query getCollections($limit: Int, $offset: Int, $where: view_collections_bool_exp = {}, $orderBy: [view_collections_order_by!] = {}) {
+    view_collections(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       collection_cover
       collection_id
       description
@@ -14,7 +14,7 @@ const collectionsQuery = gql`
       token_limit
       token_prefix
     }
-    view_collections_aggregate {
+    view_collections_aggregate(where: $where) {
       aggregate {
         count
       }
@@ -22,30 +22,31 @@ const collectionsQuery = gql`
   }
 `;
 
-export const useGraphQlCollections = ({ filter, pageSize }: useGraphQlCollectionsProps) => {
+export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlCollectionsProps) => {
   const getWhere = useCallback(
-    (searchString?: string) => ({
+    (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
         ...(filter ? { _or: filter } : {}),
         ...(searchString
           ? {
-            _or: {
-              description: { _ilike: searchString },
-              name: { _ilike: searchString },
-              token_prefix: { _ilike: searchString }
-            }
+            _or: [
+              { name: { _iregex: searchString } },
+              { description: { _iregex: searchString } },
+              { token_prefix: { _ilike: searchString } }
+            ]
           }
           : {})
       }
     }),
-    [filter]
+    []
   );
 
   const {
     data,
     error: fetchCollectionsError,
     fetchMore,
-    loading: isCollectionsFetching
+    loading: isCollectionsFetching,
+    refetch
   } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -54,21 +55,32 @@ export const useGraphQlCollections = ({ filter, pageSize }: useGraphQlCollection
     variables: {
       limit: pageSize,
       offset: 0,
-      where: getWhere()
+      orderBy: orderBy,
+      where: getWhere(filter)
     }
   });
 
   const fetchMoreCollections = useCallback(
-    ({ limit = pageSize, offset, searchString }: FetchMoreCollectionsOptions) => {
+    ({ limit = pageSize, offset, searchString, orderBy, filter }: FetchMoreCollectionsOptions) => {
       return fetchMore({
         variables: {
           limit,
           offset,
-          where: getWhere(searchString)
+          orderBy,
+          where: getWhere(filter, searchString)
         }
       });
     },
     [fetchMore, getWhere, pageSize]
+  );
+
+  const fetchOrderedCollections = useCallback(
+    ({ orderBy }: FetchMoreCollectionsOptions) => {
+      return refetch({
+        orderBy
+      });
+    },
+    [refetch]
   );
 
   return {
@@ -76,6 +88,7 @@ export const useGraphQlCollections = ({ filter, pageSize }: useGraphQlCollection
     collectionsCount: data?.view_collections_aggregate.aggregate.count || 0,
     fetchCollectionsError,
     fetchMoreCollections,
+    fetchOrderedCollections,
     isCollectionsFetching
   };
 };

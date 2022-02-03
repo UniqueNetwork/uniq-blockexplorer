@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ColumnType, DefaultRecordType } from 'rc-table/lib/interface';
+import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
@@ -10,7 +10,7 @@ interface MobileTableProps<RecordType = DefaultRecordType> {
   columns?: ColumnType<RecordType>[]
   data?: RecordType[]
   loading?: boolean
-  rowKey?: string
+  rowKey?: string | GetRowKey<RecordType>
 }
 
 const MobileTable: FC<MobileTableProps> = ({
@@ -25,7 +25,7 @@ const MobileTable: FC<MobileTableProps> = ({
   else if (!loading) {
     children = <>{data?.map((item, index) => (
       <MobileTableRow
-        key={item[rowKey as keyof DefaultRecordType]}
+        key={typeof rowKey === 'function' ? rowKey(item, index) : item[rowKey as keyof DefaultRecordType]}
       >
         {columns?.map((column) => (
           <div key={`column-${column.key || ''}`}>

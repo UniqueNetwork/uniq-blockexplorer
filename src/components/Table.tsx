@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ColumnType, DefaultRecordType } from 'rc-table/lib/interface';
+import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
 import RCTable from 'rc-table';
 import styled from 'styled-components';
 
@@ -11,7 +11,7 @@ interface TableProps<RecordType = DefaultRecordType> {
   columns?: ColumnType<RecordType>[]
   data?: RecordType[]
   loading?: boolean
-  rowKey?: string
+  rowKey?: string | GetRowKey<RecordType>
 }
 
 const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
@@ -19,14 +19,15 @@ const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
 
   return (
     <TableWrapper>
-      {deviceSize !== DeviceSize.sm && (
+      {deviceSize !== DeviceSize.sm && (<>
         <RCTable
           columns={columns}
-          data={!loading ? data : []}
-          emptyText={!loading ? 'No data' : <LoadingComponent />}
+          data={data || []}
+          emptyText={'No data'}
           rowKey={rowKey}
         />
-      )}
+        {loading && <TableLoading />}
+      </>)}
       {deviceSize === DeviceSize.sm && (
         <MobileTable
           columns={columns}
@@ -40,6 +41,7 @@ const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
 };
 
 const TableWrapper = styled.div`
+  position: relative;
   .rc-table {
     margin-bottom: calc(var(--gap) * 1.5);
     table {
@@ -68,9 +70,6 @@ const TableWrapper = styled.div`
         font-size: 16px;
         border-bottom: 1px dashed #D2D3D6;
         color: var(--grey-600);
-        .unique-text[class^="primary-"], .unique-text[class*="secondary-"] {
-          color: var(--grey-600);
-        }
       }
     }
     &-placeholder {
@@ -87,6 +86,16 @@ const TableWrapper = styled.div`
       display: none;
     }
   }
+`;
+
+const TableLoading = styled(LoadingComponent)`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.7);
 `;
 
 export default Table;

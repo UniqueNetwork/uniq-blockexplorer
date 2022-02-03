@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Heading } from '@unique-nft/ui-kit';
+
 import { useApi } from '../../hooks/useApi';
-import { lastBlocks, transfers as gqlTransfers, tokens as gqlTokens, collections as gqlCollections } from '../../api/graphQL/';
 import LastTransfersComponent from './components/LastTransfersComponent';
 import LastBlocksComponent from './components/LastBlocksComponent';
 import NewTokensComponent from './components/NewTokensComponent';
@@ -11,133 +10,37 @@ import NewCollectionsComponent from './components/NewCollectionsComponent';
 import SearchComponent from '../../components/SearchComponent';
 
 const MainPage = () => {
-  const pageSize = 10; // default
-  const [searchString, setSearchString] = useState('');
-
+  const [searchString, setSearchString] = useState<string | undefined>();
   const { chainData } = useApi();
-
-  const navigate = useNavigate();
-
-  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching } = lastBlocks.useGraphQlBlocks({
-    pageSize
-  });
-
-  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
-    gqlTransfers.useGraphQlLastTransfers({ pageSize });
-
-  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({ pageSize: 8 });
-  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize: 6 });
-
-  const onBlocksPageChange = useCallback(
-    (limit: number, offset: number) =>
-      fetchMoreBlocks({
-        limit,
-        offset
-      }),
-    [fetchMoreBlocks]
-  );
-
-  const onTransfersPageChange = useCallback(
-    (limit: number, offset: number) =>
-      fetchMoreTransfers({
-        limit,
-        offset
-      }),
-    [fetchMoreTransfers]
-  );
-
-  const onSearchClick = useCallback(() => {
-    if (/^\w{48}\w*$/.test(searchString)) {
-      navigate(`/account/${searchString}`);
-
-      return;
-    }
-
-    if (/^\d+-\d+$/.test(searchString)) {
-      navigate(`/extrinsic/${searchString}`);
-
-      return;
-    }
-
-    const prettifiedBlockSearchString = searchString.match(/[^$,.\d]/) ? '-1' : searchString;
-
-    fetchMoreBlocks({
-      searchString:
-        searchString && searchString.length > 0 ? prettifiedBlockSearchString : undefined
-    }).catch((errMsg) => {
-      throw new Error(errMsg);
-    });
-
-    fetchMoreTransfers({
-      searchString
-    }).catch((errMsg) => {
-      throw new Error(errMsg);
-    });
-
-    fetchMoreCollections({
-      searchString
-    }).catch((errMsg) => {
-      throw new Error(errMsg);
-    });
-
-    fetchMoreTokens({
-      searchString
-    }).catch((errMsg) => {
-      throw new Error(errMsg);
-    });
-  }, [fetchMoreTransfers, fetchMoreBlocks, fetchMoreCollections, fetchMoreTokens, searchString, navigate]);
-
-  const onSearchKeyDown = useCallback(
-    ({ key }) => {
-      if (key === 'Enter') return onSearchClick();
-    },
-    [onSearchClick]
-  );
-
-  const onChangeSearchString = useCallback((value: string | undefined) => {
-    setSearchString(value?.toString() || '');
-  }, [setSearchString]);
 
   return (
     <>
       <SearchComponent
-        onChangeSearchString={onChangeSearchString}
-        onSearchClick={onSearchClick}
-        onSearchKeyDown={onSearchKeyDown}
-        placeholder={'Collection / account'}
+        onSearchChange={setSearchString}
+        placeholder={'Extrinsic / collection / NFT / account'}
       />
       <MainBlockWrapper>
         <Heading size={'2'}>Latest blocks</Heading>
         <LastBlocksComponent
-          count={blockCount || 0}
-          data={blocks}
-          loading={isBlocksFetching}
-          onPageChange={onBlocksPageChange}
-          pageSize={pageSize}
+          searchString={searchString}
         />
       </MainBlockWrapper>
       <MainBlockWrapper>
-        <Heading size={'2'}>New tokens</Heading>
+        <Heading size={'2'}>New NFTs</Heading>
         <NewTokensComponent
-          loading={isTokensFetching}
-          tokens={tokens || []}
+          searchString={searchString}
         />
       </MainBlockWrapper>
       <MainBlockWrapper>
         <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
         <LastTransfersComponent
-          count={transfersCount}
-          data={transfers}
-          loading={isTransfersFetching}
-          onPageChange={onTransfersPageChange}
-          pageSize={pageSize}
+          searchString={searchString}
         />
       </MainBlockWrapper>
       <MainBlockWrapper>
         <Heading size={'2'}>New collections</Heading>
         <NewCollectionsComponent
-          collections={collections || []}
-          loading={isCollectionsFetching}
+          searchString={searchString}
         />
       </MainBlockWrapper>
     </>

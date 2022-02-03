@@ -24,10 +24,8 @@ const columns = [
     title: 'Owner',
     width: 100
   },
-  { dataIndex: 'tokens', key: 'tokens', title: 'Tokens', width: 100 },
-  { dataIndex: 'transfers', key: 'transfers', title: 'Transfers', width: 100 },
-  { dataIndex: 'purchase', key: 'purchase', title: 'Purchase', width: 100 },
-  { dataIndex: 'sale', key: 'sale', title: 'Sale', width: 100 }
+  { dataIndex: 'tokens', key: 'tokens', title: 'Items', width: 100 },
+  { dataIndex: 'transfers', key: 'transfers', title: 'Transfers', width: 100 }
 ];
 
 const HoldersComponent: FC<HoldersComponentProps> = ({ loading, tokens }) => {

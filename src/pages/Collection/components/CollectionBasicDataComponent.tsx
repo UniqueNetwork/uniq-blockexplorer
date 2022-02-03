@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
-import { Collection, tokens as gqlTokens } from '../../../api/graphQL';
+import { Collection } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import NewTokensComponent from '../../Main/components/NewTokensComponent';
@@ -20,8 +20,6 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
     token_prefix: prefix,
     tokens_aggregate: tokensAggregate
   } = collection || {};
-
-  const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: id } }, pageSize: 8 });
 
   return (
     <>
@@ -63,8 +61,11 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
         />
       </OwnerAccountWrapper>
       <div>
-        <Heading size={'2'}>Tokens</Heading>
-        <NewTokensComponent tokens={tokens?.slice(0, 18) || []} />
+        <Heading size={'2'}>NFTs</Heading>
+        <NewTokensComponent
+          collectionId={id}
+          pageSize={8}
+        />
       </div>
     </>
   );

@@ -26,6 +26,7 @@ export interface CollectionsVariables {
   limit: number
   offset: number
   where?: Record<string, unknown>
+  orderBy?: Record<string, 'asc' | 'desc'>
 }
 
 export interface CollectionsData {
@@ -37,8 +38,13 @@ export interface CollectionsData {
   }
 }
 
+export type CollectionSorting = {
+  [P in keyof Collection]?: 'asc' | 'desc'
+}
+
 export type useGraphQlCollectionsProps = {
   pageSize: number
+  orderBy?: CollectionSorting
   filter?: Record<string, unknown>
 }
 
@@ -46,4 +52,6 @@ export type FetchMoreCollectionsOptions = {
   limit?: number
   offset?: number
   searchString?: string
+  orderBy?: CollectionSorting
+  filter?: Record<string, unknown>
 }

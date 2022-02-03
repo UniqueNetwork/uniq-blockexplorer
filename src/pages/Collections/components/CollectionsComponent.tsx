@@ -1,105 +1,59 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { Text } from '@unique-nft/ui-kit';
-import { Collection } from '../../../api/graphQL';
+import React, { useEffect, useState } from 'react';
+
 import { CollectionsComponentProps } from '../types';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import { useApi } from '../../../hooks/useApi';
-import Avatar from '../../../components/Avatar';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import config from '../../../config';
-
-const { IPFSGateway } = config;
-
-const getCollectionsColumns = (chainId: string) => [
-  {
-    dataIndex: 'collection_id',
-    key: 'collection_id',
-    render: (value: string, item: unknown) => <CollectionLink
-      to={`/${chainId}/collections/${value}`}
-    >
-      <Avatar
-        size={'small'}
-        src={(item as Collection).collection_cover ? `${IPFSGateway || ''}/${(item as Collection).collection_cover}` : undefined}
-      />
-      <CollectionTitle>
-        <Text color={'black'}>{(item as Collection).name}</Text>
-        <Text color={'grey-500'}>{`ID ${value}`}</Text>
-      </CollectionTitle>
-    </CollectionLink>,
-    title: 'Collection',
-    width: 100
-  },
-  { dataIndex: 'date_of_creation', key: 'date_of_creation', title: 'Date of creation', width: 100 },
-  {
-    dataIndex: 'owner',
-    key: 'owner',
-    render: (value: string) => <AccountLinkComponent value={value} />,
-    title: 'Owner',
-    width: 100
-  },
-  { dataIndex: 'holders_count', key: 'holders_count', title: 'Holders', width: 100 },
-  { dataIndex: 'type', key: 'type', title: 'Type', width: 100 },
-  {
-    dataIndex: 'tokens_aggregate',
-    key: 'event_count',
-    render: (tokens: { aggregate?: { count: number }}, item: unknown) => {
-      return <Link
-        to={`/${chainId}/collections/${(item as Collection).collection_id}`}
-      >{tokens?.aggregate?.count || 0}</Link>;
-    },
-    title: 'Tokens',
-    width: 100
-  },
-  { dataIndex: 'actions_count', key: 'actions_count', title: 'Action', width: 100 }
-];
+import { getCollectionsColumns } from './collectionsColumnsSchema';
+import { collections as gqlCollections, CollectionSorting } from '../../../api/graphQL';
 
 const CollectionsComponent = ({
-  count,
-  data,
-  loading,
-  onPageChange,
-  pageSize
+  pageSize = 20,
+  orderBy: defaultOrderBy = { collection_id: 'desc' },
+  searchString
 }: CollectionsComponentProps) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
+  const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const {
+    collections,
+    collectionsCount,
+    fetchMoreCollections,
+    isCollectionsFetching
+  } = gqlCollections.useGraphQlCollections({ orderBy: defaultOrderBy, pageSize });
+
+  useEffect(() => {
+    const offset = (currentPage - 1) * pageSize;
+
+    void fetchMoreCollections({
+      limit: pageSize,
+      offset,
+      orderBy,
+      searchString
+    });
+  }, [pageSize, currentPage, orderBy, searchString, fetchMoreCollections]);
+
   return (
     <>
       <Table
-        columns={getCollectionsColumns(currentChain.network)}
-        data={!loading && data?.length ? data : []}
-        loading={loading}
+        columns={getCollectionsColumns(currentChain.network, orderBy, setOrderBy)}
+        data={collections || []}
+        loading={isCollectionsFetching}
         rowKey={'collection_id'}
       />
       <PaginationComponent
-        count={count || 0}
-        onPageChange={onPageChange}
+        count={collectionsCount || 0}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
     </>
   );
 };
-
-const CollectionLink = styled(Link)`
-  display: flex;
-  column-gap: var(--gap);
-  svg {
-    min-width: 40px;
-  }
-  &:hover {
-    text-decoration: none;
-  }
-`;
-
-const CollectionTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  color: black !important;
-`;
 
 export default CollectionsComponent;

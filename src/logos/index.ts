@@ -60,6 +60,7 @@ const nodePolkadex = '/logos/nodes/polkadex.svg';
 const nodePolkadot = '/logos/nodes/polkadot-circle.svg';
 const nodePolkadotJs = '/logos/nodes/polkadot-js.svg';
 const nodeQuartz = '/logos/nodes/quartz.png';
+const nodeOpal = '/logos/nodes/opal.svg';
 const nodeRealis = '/logos/nodes/realis.png';
 const nodeRobonomics = '/logos/nodes/robonomics.svg';
 const nodeSgc = '/logos/nodes/sgc.svg';
@@ -102,6 +103,7 @@ export const chainLogos: Record<string, unknown> = [
   ['Moonbase Alpha', moonbeam],
   ['Moonbase Stage', moonbeam],
   ['Moonbase Development Testnet', moonbeam],
+  ['OPAL by UNIQUE', nodeOpal],
   ['PolkaBTC', nodePolkaBTC],
   ['PolkaBTC Staging', nodePolkaBTC],
   ['Polkadex Testnet', nodePolkadex],
@@ -239,6 +241,7 @@ export const namedLogos: Record<string, unknown> = {
   laminar: nodeLaminar,
   moonbaseAlpha: moonbeam,
   nodle: nodeNodle,
+  opal: nodeOpal,
   phala: nodePhala,
   plasm: nodePlasm,
   polkabtc: nodePolkaBTC,

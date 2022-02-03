@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LastBlock } from '../../../api/graphQL';
+
+import { LastBlock, lastBlocks } from '../../../api/graphQL';
 import PaginationComponent from '../../../components/Pagination';
 import { timeDifference } from '../../../utils/timestampUtils';
 import { BlockComponentProps } from '../types';
@@ -34,27 +35,41 @@ const blocksWithTimeDifference = (
 };
 
 const LastBlocksComponent = ({
-  count,
-  data,
-  loading,
-  onPageChange,
-  pageSize
-}: BlockComponentProps<LastBlock[]>) => {
+  pageSize = 5,
+  searchString
+}: BlockComponentProps) => {
   const deviceSize = useDeviceSize();
 
   const { currentChain } = useApi();
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching } = lastBlocks.useGraphQlBlocks({
+    pageSize
+  });
+
+  useEffect(() => {
+    const offset = (currentPage - 1) * pageSize;
+
+    void fetchMoreBlocks({
+      limit: pageSize,
+      offset,
+      searchString
+    });
+  }, [pageSize, searchString, currentPage, fetchMoreBlocks]);
 
   return (
     <>
       <Table
         columns={blockColumns(currentChain.network)}
-        data={blocksWithTimeDifference(data)}
-        loading={loading}
+        data={blocksWithTimeDifference(blocks)}
+        loading={isBlocksFetching}
         rowKey={'block_number'}
       />
       <PaginationComponent
-        count={count || 0}
-        onPageChange={onPageChange}
+        count={blockCount || 0}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />

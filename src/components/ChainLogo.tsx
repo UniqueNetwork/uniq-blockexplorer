@@ -29,8 +29,10 @@ function ChainLogo({ logo, onClick }: Props): React.ReactElement<Props> {
   return (
     <ChainLogoImg
       alt='chain logo'
+      height={24}
       onClick={onClick}
       src={img}
+      width={24}
     />
   );
 }

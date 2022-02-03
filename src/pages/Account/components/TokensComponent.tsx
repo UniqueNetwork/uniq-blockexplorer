@@ -1,19 +1,24 @@
-import React, { FC, Reducer, useCallback, useReducer, useState } from 'react';
+import React, { FC, Reducer, useCallback, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
-import { Checkbox, InputText, Button } from '@unique-nft/ui-kit';
+import { useNavigate } from 'react-router-dom';
+import { Checkbox, Button } from '@unique-nft/ui-kit';
+
 import { Token, tokens as gqlTokens } from '../../../api/graphQL';
 import TokenCard from '../../../components/TokenCard';
 import SearchComponent from '../../../components/SearchComponent';
+import { useApi } from '../../../hooks/useApi';
 
 interface TokensComponentProps {
   accountId: string
+  pageSize?: number
 }
 
 type ActionType = 'All' | 'Minted' | 'Received'
 
-const pageSize = 18;
+const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 }) => {
+  const { currentChain } = useApi();
+  const navigate = useNavigate();
 
-const TokensComponent: FC<TokensComponentProps> = ({ accountId }) => {
   const [filter, dispatchFilter] = useReducer<
   Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
@@ -41,30 +46,21 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId }) => {
     [dispatchFilter]
   );
 
-  const onSearchChange = useCallback(
-    (value: string | number | undefined) => setSearchString(value?.toString()),
-    [setSearchString]
-  );
+  const onClickSeeMore = useCallback(() => {
+    navigate(`/${currentChain.network}/tokens`);
+  }, [currentChain.network, navigate]);
 
-  const onSearchClick = useCallback(() =>
-    fetchMoreTokens({ searchString })
-  , [fetchMoreTokens, searchString]);
-
-  const onSearchKeyDown = useCallback(
-    ({ key }) => {
-      if (key === 'Enter') return onSearchClick();
-    },
-    [onSearchClick]
-  );
-
-  const onClickSeeMore = useCallback(() => {}, []);
+  useEffect(() => {
+    void fetchMoreTokens({
+      filter,
+      searchString
+    });
+  }, [searchString, filter, fetchMoreTokens]);
 
   return (<>
     <ControlsWrapper>
       <SearchComponent
-        onChangeSearchString={onSearchChange}
-        onSearchClick={onSearchClick}
-        onSearchKeyDown={onSearchKeyDown}
+        onSearchChange={setSearchString}
         placeholder={'NFT / collection'}
       />
       <FilterWrapper>

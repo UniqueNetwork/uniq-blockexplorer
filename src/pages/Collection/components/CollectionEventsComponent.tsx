@@ -24,7 +24,7 @@ const columns = [
   },
   { dataIndex: 'age', key: 'age', title: 'Age', width: 100 },
   { dataIndex: 'fee', key: 'fee', title: 'Fee', width: 100 },
-  { dataIndex: 'author', key: 'author', title: 'author', width: 100 },
+  { dataIndex: 'author', key: 'author', title: 'Author', width: 100 },
   { dataIndex: 'result', key: 'result', title: 'Result', width: 100 }
 ];
 

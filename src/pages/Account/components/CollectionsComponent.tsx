@@ -1,4 +1,4 @@
-import React, { FC, Reducer, useCallback, useReducer, useState } from 'react';
+import React, { FC, Reducer, useCallback, useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { InputText, Checkbox, Button } from '@unique-nft/ui-kit';
@@ -17,6 +17,9 @@ type ActionType = 'All' | 'Owner';
 const pageSize = 6;
 
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
+  const { currentChain } = useApi();
+  const navigate = useNavigate();
+
   const [filter, dispatchFilter] = useReducer<
   Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
   >((state, action) => {
@@ -31,10 +34,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     return state;
   }, undefined);
 
-  const { currentChain } = useApi();
-
-  const navigate = useNavigate();
-
   const [searchString, setSearchString] = useState<string | undefined>();
 
   const { collections, collectionsCount, fetchMoreCollections } =
@@ -47,33 +46,22 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     [dispatchFilter]
   );
 
-  const onSearchChange = useCallback(
-    (value: string | number | undefined) => setSearchString(value?.toString()),
-    [setSearchString]
-  );
-
-  const onSearchClick = useCallback(() =>
-    fetchMoreCollections({ searchString }),
-  [fetchMoreCollections, searchString]);
-
   const onClickSeeMore = useCallback(() => {
     navigate(`/${currentChain.network}/collections`);
   }, [currentChain, navigate]);
 
-  const onSearchKeyDown = useCallback(
-    ({ key }) => {
-      if (key === 'Enter') return onSearchClick();
-    },
-    [onSearchClick]
-  );
+  useEffect(() => {
+    void fetchMoreCollections({
+      filter,
+      searchString
+    });
+  }, [searchString, filter, fetchMoreCollections]);
 
   return (<>
     <ControlsWrapper>
       <SearchComponent
-        onChangeSearchString={onSearchChange}
-        onSearchClick={onSearchClick}
-        onSearchKeyDown={onSearchKeyDown}
-        placeholder={'Collection'}
+        onSearchChange={setSearchString}
+        placeholder={'NFT / collection'}
       />
       <FilterWrapper>
         <Checkbox

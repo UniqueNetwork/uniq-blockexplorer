@@ -2,16 +2,18 @@ import React, { FC } from 'react';
 import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
 
 interface AvatarProps {
-  size: 'large' | 'small'
+  size: 'large' | 'middle' | 'small'
   src?: string,
   value?: AccountId | AccountIndex | Address | string | Uint8Array | null;
   className?: string
 }
 
+const avatarSizes = { large: 72, middle: 64, small: 40 };
+
 const Avatar: FC<AvatarProps> = (props) => {
   const { className, size, src } = props;
 
-  const avatarHeight = size === 'large' ? 72 : 40;
+  const avatarHeight = avatarSizes[size];
 
   return (
     <svg
@@ -38,10 +40,13 @@ const Avatar: FC<AvatarProps> = (props) => {
         </pattern>
       </defs>
       {src && <image
-        height='72'
+        height='100%'
         href={src}
+        preserveAspectRatio='xMinYMin slice'
         style={{ clipPath: 'circle(50% at 50% 50%)' }}
-        width='72'
+        width='100%'
+        x='0'
+        y='0'
       />}
       {!src && (
         <image
