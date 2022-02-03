@@ -53,7 +53,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
           />
         ))}
       </TokensWrapper>
-      <Button
+      {tokensCount !== 0 && <Button
         iconRight={{
           color: 'white',
           name: 'arrow-right',
@@ -62,7 +62,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
         onClick={onClick}
         role={'primary'}
         title={'See all'}
-      />
+      />}
     </>
   );
 };
