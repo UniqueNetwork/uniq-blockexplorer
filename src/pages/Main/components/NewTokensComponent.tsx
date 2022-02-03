@@ -72,6 +72,9 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
 const TokensWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: calc(var(--gap) * 1.5);
+  grid-row-gap: calc(var(--gap) * 1.5);
+  margin-bottom: calc(var(--gap) * 1.5);
   
   @media(max-width: 1439px) {
     grid-template-columns: repeat(4, 1fr);
