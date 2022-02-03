@@ -171,6 +171,12 @@ const ExtrinsicWrapper = styled.div`
   display: flex;
   flex-direction: row;
   column-gap: calc(var(--gap) * 2);
+
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    row-gap: calc(var(--gap) * 2);
+  }
 `;
 
 const TokenWrapper = styled.div`
@@ -215,10 +221,14 @@ const ExtrinsicDataWrapper = styled.div`
   }
   @media (max-width: 767px) {
     grid-row-gap: 0;
-    div {
+    &>div, &>span {
       grid-column: span 2;
-      margin-top: calc(var(--gap) / 4);
+      margin-top: calc(var(--gap) / 2);
+      &:nth-child(even) {
+        margin-top: calc(var(--gap) / 4);
+      }
     }
+    
   }
 `;
 
