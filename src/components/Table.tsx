@@ -19,7 +19,7 @@ const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
 
   return (
     <TableWrapper>
-      {deviceSize !== DeviceSize.sm && (<>
+      {deviceSize > DeviceSize.sm && (<>
         <RCTable
           columns={columns}
           data={data || []}
@@ -28,7 +28,7 @@ const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
         />
         {loading && <TableLoading />}
       </>)}
-      {deviceSize === DeviceSize.sm && (
+      {deviceSize <= DeviceSize.sm && (
         <MobileTable
           columns={columns}
           data={!loading ? data : []}
