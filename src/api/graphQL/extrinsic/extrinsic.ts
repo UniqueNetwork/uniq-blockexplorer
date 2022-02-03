@@ -7,7 +7,6 @@ const extrinsicQuery = gql`
       limit: $limit
       offset: $offset
       where: { block_index: { _eq: $block_index } }
-      order_by: { block_number: "desc" }
     ) {
       amount
       block_index
@@ -18,8 +17,11 @@ const extrinsicQuery = gql`
       timestamp
       from_owner
       to_owner
+      method
+      section
+      success
     }
-    view_extrinsic_aggregate(where: $where) {
+    view_extrinsic_aggregate {
       aggregate {
         count
       }
