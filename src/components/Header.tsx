@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
 
 import { useApi } from '../hooks/useApi';
@@ -37,9 +37,13 @@ const Header: FC = () => {
         </HeaderNav>
       </HeaderNavWrapper>
 
-      <Select
+      <ChainsSelect
         onChange={onSelectChange}
         options={Object.values(config.chains).map(({ name, network }) => ({
+          iconLeft: {
+            name: `chain-${network.toLowerCase()}`,
+            size: 16
+          },
           id: network,
           title: name
         }))}
@@ -82,6 +86,56 @@ const HeaderNav = styled.nav`
   }
   @media (max-width: 1024px) {
     display: none;
+  }
+`;
+
+const ChainsSelect = styled(Select)`
+  .select-wrapper {
+    .icon-triangle {
+      z-index: auto;
+      margin: 21px;
+    }
+    .select-value {
+      border-radius: 8px;
+      padding: var(--gap);
+    }
+    .select-dropdown {
+      top: 54px;
+      border-radius: 8px;
+    }
+  }
+  
+  @media (max-width: 568px) {
+    width: auto;
+    position: static;
+    
+    .select-wrapper {
+      position: static;
+      display: flex;
+      .select-value {
+        font-size: 0;
+        width: 50px;
+        svg, img {
+          margin-right: 0 !important;
+        }
+      }
+      .icon-triangle {     
+        top: auto;
+        right: 18px;
+      }
+      .select-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        border: 0;
+        border-radius: 0;
+        height: calc(100vh - 80px);
+        background-color: var(--white-color);
+        padding: calc(var(--gap) * 1.5) var(--gap);
+        box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset, 0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
+      }
+    }
   }
 `;
 
