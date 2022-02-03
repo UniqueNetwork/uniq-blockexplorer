@@ -1,50 +1,49 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
-import { Button } from '@unique-nft/ui-kit';
+import { useNavigate } from 'react-router-dom';
+import { Button, Heading, Text } from '@unique-nft/ui-kit';
 
 import { tokens as gqlTokens } from '../../../api/graphQL';
 import LoadingComponent from '../../../components/LoadingComponent';
 import { useApi } from '../../../hooks/useApi';
-import { useNavigate } from 'react-router-dom';
 import TokenCard from '../../../components/TokenCard';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
-interface NewTokensComponentProps {
+interface TokensComponentProps {
   searchString?: string
   pageSize?: number
   collectionId?: number
 }
 
-const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSize = 6, searchString }) => {
+const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
 
   const deviceSize = useDeviceSize();
 
   const tokensLimit = useMemo(() => {
-    if (deviceSize === DeviceSize.sm || deviceSize === DeviceSize.xs || deviceSize === DeviceSize.xxs) return 6;
-    if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.md) return 4;
+    if (deviceSize === DeviceSize.xs || deviceSize === DeviceSize.xxs) return 10;
+    if (deviceSize === DeviceSize.sm) return 12;
+    if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.md) return 16;
 
-    return 5;
+    return 10;
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
     navigate(`/${currentChain.network}/tokens`);
   }, [currentChain, navigate]);
 
-  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({
+  const { isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
     pageSize
   });
 
-  useEffect(() => {
-    void fetchMoreTokens({
-      searchString
-    });
-  }, [searchString, fetchMoreTokens]);
-
   return (
     <>
+      <TokenHeadingWrapper>
+        <Heading size={'2'}>NFTs</Heading>
+        <Text>{`${tokensCount} items`}</Text>
+      </TokenHeadingWrapper>
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
         {tokens?.slice(0, tokensLimit).map((token) => (
@@ -92,4 +91,10 @@ const TokensWrapper = styled.div`
   }
 `;
 
-export default NewTokensComponent;
+const TokenHeadingWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  align-items: baseline;
+`;
+
+export default TokensComponent;

@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Heading, Text } from '@unique-nft/ui-kit';
+import { Text } from '@unique-nft/ui-kit';
+
 import { Collection } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import NewTokensComponent from '../../Main/components/NewTokensComponent';
+import TokensComponent from './TokensComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 interface BasicDataComponentProps {
   collection?: Collection
@@ -20,6 +22,8 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
     token_prefix: prefix,
     tokens_aggregate: tokensAggregate
   } = collection || {};
+
+  const deviceSize = useDeviceSize();
 
   return (
     <>
@@ -46,25 +50,28 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
             <Text color={'black'}>{'yes'}</Text>
           </div>
         </GeneralInfoWrapper>
-        <Text>{`created on ${createdOn || 'undefined'}`}</Text>
+        <CreatedAccountWrapper>
+          <div>
+            <Text color={'grey-500'}>{`created on ${createdOn || 'undefined'}`}</Text>
+          </div>
+          <OwnerAccountWrapper>
+            <Avatar
+              size={'small'}
+            />
+            <AccountLinkComponent
+              noShort={deviceSize >= DeviceSize.lg}
+              value={owner || ''}
+            />
+          </OwnerAccountWrapper>
+        </CreatedAccountWrapper>
+
       </PropertiesWrapper>
       <DescriptionWrapper>
         <Text color={'grey-500'}>{description || ''}</Text>
       </DescriptionWrapper>
-      <OwnerAccountWrapper>
-        <Avatar
-          size={'small'}
-        />
-        <AccountLinkComponent
-          noShort={true}
-          value={owner || ''}
-        />
-      </OwnerAccountWrapper>
       <div>
-        <Heading size={'2'}>NFTs</Heading>
-        <NewTokensComponent
+        <TokensComponent
           collectionId={id}
-          pageSize={8}
         />
       </div>
     </>
@@ -88,6 +95,13 @@ const GeneralInfoWrapper = styled.div`
 
 const DescriptionWrapper = styled.div`
   margin-bottom: calc(var(--gap) * 1.5);
+`;
+
+const CreatedAccountWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  row-gap: calc(var(--gap) / 2);
+  flex-direction: column;
 `;
 
 const OwnerAccountWrapper = styled.div`
