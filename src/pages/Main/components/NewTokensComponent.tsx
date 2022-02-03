@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Button } from '@unique-nft/ui-kit';
 
@@ -7,6 +7,7 @@ import LoadingComponent from '../../../components/LoadingComponent';
 import { useApi } from '../../../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import TokenCard from '../../../components/TokenCard';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 interface NewTokensComponentProps {
   searchString?: string
@@ -14,9 +15,19 @@ interface NewTokensComponentProps {
   collectionId?: number
 }
 
-const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSize = 8, searchString }) => {
+const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSize = 6, searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
+
+  const deviceSize = useDeviceSize();
+
+  const tokensLimit = useMemo(() => {
+    if (deviceSize === DeviceSize.xxs) return 2;
+    if (deviceSize === DeviceSize.sm || deviceSize === DeviceSize.xs) return 6;
+    if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.md) return 4;
+
+    return 5;
+  }, [deviceSize]);
 
   const onClick = useCallback(() => {
     navigate(`/${currentChain.network}/tokens`);
@@ -37,7 +48,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
     <>
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
-        {tokens?.map((token) => (
+        {tokens?.slice(0, tokensLimit).map((token) => (
           <TokenCard
             key={`token-${token.collection_id}-${token.token_id}`}
             {...token}
@@ -59,13 +70,24 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
 };
 
 const TokensWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  column-gap: calc(var(--gap) * 1.5);
-  row-gap: calc(var(--gap) * 1.5);
-  align-items: flex-start;
-  flex-wrap: wrap;
-  margin-bottom: var(--gap);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  
+  @media(max-width: 1439px) {
+    grid-template-columns: repeat(4, 1fr);
+  }  
+  
+  @media(max-width: 1023px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @media(max-width: 767px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media(max-width: 567px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export default NewTokensComponent;
