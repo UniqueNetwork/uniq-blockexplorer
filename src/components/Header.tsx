@@ -5,6 +5,8 @@ import { Select } from '@unique-nft/ui-kit';
 
 import { useApi } from '../hooks/useApi';
 import config from '../config';
+import MobileMenu from './MobileMenu';
+import Menu from './Menu';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
@@ -23,6 +25,7 @@ const Header: FC = () => {
   return (
     <HeaderWrapper>
       <HeaderNavWrapper>
+        <MobileMenu />
         <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
           <img
             alt='Logo'
@@ -30,8 +33,7 @@ const Header: FC = () => {
           />
         </Link>
         <HeaderNav>
-          <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}>Collections</NavLink>
-          <NavLink to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}>NFTs</NavLink>
+          <Menu />
         </HeaderNav>
       </HeaderNavWrapper>
 
@@ -58,6 +60,7 @@ const HeaderWrapper = styled.div`
 const HeaderNavWrapper = styled.div`
   display: flex;
   column-gap: calc(var(--gap) * 2.5);
+  align-items: center;
 `;
 
 const HeaderNav = styled.nav`
@@ -76,6 +79,9 @@ const HeaderNav = styled.nav`
     &:hover {
       text-decoration: underline;
     }
+  }
+  @media (max-width: 1024px) {
+    display: none;
   }
 `;
 

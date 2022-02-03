@@ -32,7 +32,11 @@ a {
   }
 
   @media (max-width: 1024px) {
-    margin-top: 40px;
+    header {
+      top: 0;
+      position: sticky !important;
+      z-index: 1000;
+    }
   }
 
   @media (max-width: 767px) {
@@ -46,3 +50,4 @@ a {
     }
   }
 }
+
