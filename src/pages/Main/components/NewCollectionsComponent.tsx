@@ -56,8 +56,24 @@ const NewCollectionsComponent: FC<NewCollectionsComponentProps> = ({ pageSize = 
 
 const CollectionsWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-column-gap: var(--gap);
+  grid-row-gap: var(--gap);
+  position: relative;
+  margin-bottom: calc(var(--gap) * 1.5);
+  
+  @media (max-width: 1919px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 1279px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 767px) {
+    border: none;
+    padding: 0;
+  }
 `;
 
 export default NewCollectionsComponent;

@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Heading, Text } from '@unique-nft/ui-kit';
+import { Text } from '@unique-nft/ui-kit';
+
 import { Collection } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import NewTokensComponent from '../../Main/components/NewTokensComponent';
+import TokensComponent from './TokensComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 interface BasicDataComponentProps {
   collection?: Collection
@@ -21,50 +23,56 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
     tokens_aggregate: tokensAggregate
   } = collection || {};
 
+  const deviceSize = useDeviceSize();
+
   return (
     <>
       <PropertiesWrapper>
         <GeneralInfoWrapper>
-          <div>
-            <Text color={'grey-500'}>ID:</Text>
-            <Text color={'black'}>{id?.toString() || ''}</Text>
-          </div>
-          <div>
-            <Text color={'grey-500'}>Items:</Text>
-            <Text color={'black'}>{tokensAggregate?.aggregate.count.toString() || ''}</Text>
-          </div>
-          <div>
-            <Text color={'grey-500'}>Prefix:</Text>
-            <Text color={'black'}>{prefix?.toString() || ''}</Text>
-          </div>
-          <div>
-            <Text color={'grey-500'}>Holders:</Text>
-            <Text color={'black'}>{holders?.toString() || '0'}</Text>
-          </div>
-          <div>
-            <Text color={'grey-500'}>Minting:</Text>
-            <Text color={'black'}>{'yes'}</Text>
-          </div>
+          <GeneralInfo>
+            <div>
+              <Text color={'grey-500'}>ID:</Text>
+              <Text color={'black'}>{id?.toString() || ''}</Text>
+            </div>
+            <div>
+              <Text color={'grey-500'}>Items:</Text>
+              <Text color={'black'}>{tokensAggregate?.aggregate.count.toString() || '0'}</Text>
+            </div>
+            <div>
+              <Text color={'grey-500'}>Prefix:</Text>
+              <Text color={'black'}>{prefix?.toString() || ''}</Text>
+            </div>
+            <div>
+              <Text color={'grey-500'}>Holders:</Text>
+              <Text color={'black'}>{holders?.toString() || '0'}</Text>
+            </div>
+            <div>
+              <Text color={'grey-500'}>Minting:</Text>
+              <Text color={'black'}>{'yes'}</Text>
+            </div>
+          </GeneralInfo>
+          <DescriptionWrapper>
+            <Text color={'grey-500'}>{description || ''}</Text>
+          </DescriptionWrapper>
         </GeneralInfoWrapper>
-        <Text>{`created on ${createdOn || 'undefined'}`}</Text>
+        <CreatedAccountWrapper>
+          <div>
+            <Text color={'grey-500'}>{`created on ${createdOn || 'undefined'}`}</Text>
+          </div>
+          <OwnerAccountWrapper>
+            <Avatar
+              size={'x-small'}
+            />
+            <AccountLinkComponent
+              noShort={deviceSize >= DeviceSize.lg}
+              value={owner || ''}
+            />
+          </OwnerAccountWrapper>
+        </CreatedAccountWrapper>
       </PropertiesWrapper>
-      <DescriptionWrapper>
-        <Text color={'grey-500'}>{description || ''}</Text>
-      </DescriptionWrapper>
-      <OwnerAccountWrapper>
-        <Avatar
-          size={'small'}
-        />
-        <AccountLinkComponent
-          noShort={true}
-          value={owner || ''}
-        />
-      </OwnerAccountWrapper>
       <div>
-        <Heading size={'2'}>NFTs</Heading>
-        <NewTokensComponent
+        <TokensComponent
           collectionId={id}
-          pageSize={8}
         />
       </div>
     </>
@@ -72,12 +80,25 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
 };
 
 const PropertiesWrapper = styled.div`
+  border-top: 1px dashed var(--border-color);
+  padding-top: calc(var(--gap) * 1.5);
+  margin-top: var(--gap);
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+
+  @media(max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 
 const GeneralInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--gap);
+`;
+
+const GeneralInfo = styled.div`
   display: flex;
   column-gap: var(--gap);
   div {
@@ -88,6 +109,18 @@ const GeneralInfoWrapper = styled.div`
 
 const DescriptionWrapper = styled.div`
   margin-bottom: calc(var(--gap) * 1.5);
+  word-break: break-word;
+`;
+
+const CreatedAccountWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
+  row-gap: calc(var(--gap) / 2);
+  flex-direction: column;
+
+  @media(max-width: 767px) {
+    align-items: flex-start;
+  }
 `;
 
 const OwnerAccountWrapper = styled.div`

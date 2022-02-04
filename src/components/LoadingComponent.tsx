@@ -6,11 +6,16 @@ const LoadingComponent: FC<{className?: string }> = ({ className }) => {
 };
 
 const LoadingWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.7);
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;
   span {
     animation: pulse 1.5s infinite;  
   }

@@ -14,7 +14,7 @@ import config from '../../config';
 const { IPFSGateway } = config;
 
 const detailTabs = ['Basic data', 'Extended'];
-const eventsTabs = ['Holders', 'NFTs events', 'Collection events'];
+const eventsTabs = ['Holders'/*, 'Collection events' */];
 
 const CollectionPage: FC = () => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
@@ -42,17 +42,16 @@ const CollectionPage: FC = () => {
       />
       <Tabs
         activeIndex={activeDetailTabIndex}
-        contents={[
-          <CollectionBasicDataComponent
-            collection={collection}
-            key={'collections'}
-          />,
-          <CollectionExtendedDataComponent
-            collection={collection}
-            key={'tokens'}
-          />
-        ]}
-      />
+      >
+        <CollectionBasicDataComponent
+          collection={collection}
+          key={'collections'}
+        />
+        <CollectionExtendedDataComponent
+          collection={collection}
+          key={'tokens'}
+        />
+      </Tabs>
       <Tabs
         activeIndex={activeEventsTabIndex}
         labels={eventsTabs}
@@ -60,19 +59,19 @@ const CollectionPage: FC = () => {
       />
       <Tabs
         activeIndex={activeEventsTabIndex}
-        contents={[
-          <HoldersComponent
-            key={'holder'}
-            tokens={tokens || []}
-          />,
-          <TokenEventsComponent
-            key={'tokens-events'}
-          />,
-          <CollectionEventsComponent
-            key={'collection-events'}
-          />
-        ]}
-      />
+      >
+        <HoldersComponent
+          key={'holder'}
+          tokens={tokens || []}
+        />
+        <></>
+        {/* <TokenEventsComponent */}
+        {/*  key={'tokens-events'} */}
+        {/* /> */}
+        {/* <CollectionEventsComponent */}
+        {/*  key={'collection-events'} */}
+        {/* /> */}
+      </Tabs>
     </div>
   );
 };

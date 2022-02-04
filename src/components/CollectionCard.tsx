@@ -75,14 +75,12 @@ const CollectionCard: FC<CollectionCardProps> = ({
 const CollectionCardLink = styled(Link)`
   background: var(--white-color);
   border: 1px solid #DFE0E2;
+  border-radius: var(--bradius);
   box-sizing: border-box;
-  border-radius: 4px;
   padding: calc(var(--gap) * 1.5) calc(var(--gap) * 1.5);
   display: flex;
   column-gap: var(--gap);
   align-items: flex-start;
-  margin-bottom: var(--gap);
-  grid-column: span 4;
   &:hover {
     text-decoration: none;
   }
@@ -94,6 +92,11 @@ const CollectionCardLink = styled(Link)`
     &:hover {
       color: var(--primary-500);
     }
+  }
+  
+  @media (max-width: 767px) {
+    border: none;
+    padding: 0;
   }
 `;
 

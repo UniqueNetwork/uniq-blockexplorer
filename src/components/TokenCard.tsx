@@ -6,7 +6,7 @@ import { Text } from '@unique-nft/ui-kit';
 import { Token } from '../api/graphQL';
 import Picture from './Picture';
 import { useApi } from '../hooks/useApi';
-import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
+import { shortcutText } from '../utils/textUtils';
 
 type TokenCardProps = Token;
 
@@ -24,34 +24,56 @@ const TokenCard: FC<TokenCardProps> = ({
     <TokenCardLink
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
     >
-      <Picture
+      <TokenPicture
         alt={tokenId.toString()}
         src={imagePath}
       />
-      <div>
+      <TokenTitle>
         <Text>{`${prefix || ''} #${tokenId}`}</Text>
         <div>
           <Link to={`/${currentChain ? currentChain?.network + '/' : ''}collections/${collectionId}`}>{name} [ID {collectionId}]</Link>
         </div>
-        <div>
+        <TokenProperties>
           <Text
             color={'grey-500'}
-            size={'s'}
+            size={'xs'}
           >
             Owner:
           </Text>
-          <AccountLinkComponent value={owner} />
-        </div>
-      </div>
+          <Text
+            color={'grey-500'}
+            size={'xs'}
+          >{shortcutText(owner)}</Text>
+        </TokenProperties>
+      </TokenTitle>
     </TokenCardLink>
   );
 };
 
 const TokenCardLink = styled(Link)`
-  max-width: 174px;
-  svg {
-    max-height: 174px;
+  transition: 50ms;
+  &:hover {
+    transform: translate(0, -5px);
+    text-decoration: none;
   }
+`;
+
+const TokenPicture = styled(Picture)`
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  border-radius: 8px;
+  svg, img {
+    width: 100%
+  }
+`;
+
+const TokenTitle = styled.div`
+  margin-top: calc(var(--gap) / 2);
+`;
+
+const TokenProperties = styled.div`
+  margin-top: calc(var(--gap) / 2);
 `;
 
 export default TokenCard;

@@ -48,12 +48,19 @@ const MobileTableWrapper = styled.div`
 `;
 
 const MobileTableRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   border-bottom: 1px dashed var(--border-color);
+  grid-row-gap: var(--gap);
+  padding: var(--gap) 0;
   div {
-    margin: var(--gap) 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+  
+  @media(max-width: 320px) {
+    grid-template-columns: 1fr;
   }
 `;
 

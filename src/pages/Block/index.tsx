@@ -6,7 +6,7 @@ import BlockDetailComponent from './components/BlockDetailComponent';
 import ExtrinsicsListComponent from './components/ExtrinsicsListComponent';
 import EventListComponent from './components/EventsListComponent';
 
-const assetsTabs = ['Extrinsics', 'Events'];
+const assetsTabs = ['Extrinsics'/* , 'Events' */];
 
 const BlockPage: FC = () => {
   const { blockIndex } = useParams();
@@ -16,6 +16,10 @@ const BlockPage: FC = () => {
   return (<>
     <BlockDetailComponent blockNumber={blockIndex} />
 
+    <ExtrinsicsListComponent
+      blockNumber={blockIndex}
+      key={'extrinsic-list'}
+    />
     <Tabs
       activeIndex={activeAssetsTabIndex}
       labels={assetsTabs}
@@ -23,17 +27,17 @@ const BlockPage: FC = () => {
     />
     <Tabs
       activeIndex={activeAssetsTabIndex}
-      contents={[
-        <ExtrinsicsListComponent
-          blockNumber={blockIndex}
-          key={'extrinsic-list'}
-        />,
-        <EventListComponent
-          blockNumber={blockIndex}
-          key={'event-list'}
-        />
-      ]}
-    />
+    >
+      <ExtrinsicsListComponent
+        blockNumber={blockIndex}
+        key={'extrinsic-list'}
+      />
+      <></>
+      {/* <EventListComponent */}
+      {/*  blockNumber={blockIndex} */}
+      {/*  key={'event-list'} */}
+      {/* /> */}
+    </Tabs>
   </>);
 };
 
