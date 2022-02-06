@@ -31,8 +31,6 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
     <BlockDetailWrapper>
       <Heading>{`Block ${blockNumber || ''}`}</Heading>
       <div className={'block-container'}>
-        <Text color={'grey-500'}>Status</Text>
-        <div className={'grid-item_col10'}>Unavailable</div>
         <Text color={'grey-500'}>Timestamp</Text>
         <div className={'grid-item_col10'}>
           {timestamp && new Date(timestamp * 1000).toLocaleString()}
