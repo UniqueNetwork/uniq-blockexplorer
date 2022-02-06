@@ -62,16 +62,5 @@ export const getTokensColumns = (chainId: string, orderBy: TokenSorting, onOrder
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100
-  },
-  {
-    dataIndex: 'transfers_count',
-    key: 'transfers_count',
-    title: <TableSortableColumnTitle
-      dataIndex={'transfers_count'}
-      onOrderChange={onOrderChange}
-      orderBy={orderBy}
-      title={'Transfers'}
-    />,
-    width: 100
   }
 ];
