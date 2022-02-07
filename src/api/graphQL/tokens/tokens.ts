@@ -96,7 +96,7 @@ export const useGraphQlToken = (collectionId: string, tokenId: string) => {
     variables: {
       limit: 1,
       offset: 0,
-      where: { token_id: { _eq: tokenId } }
+      where: { collection_id: { _eq: collectionId }, token_id: { _eq: tokenId } }
     }
   });
 
