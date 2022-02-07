@@ -79,10 +79,28 @@ const ItemsCountWrapper = styled.div`
 `;
 
 const TokensWrapper = styled.div`
+
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-column-gap: var(--gap);
-  margin-bottom: var(--gap);
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: calc(var(--gap) * 1.5);
+  grid-row-gap: calc(var(--gap) * 1.5);
+  margin-bottom: calc(var(--gap) * 1.5);
+
+  @media(max-width: 1279px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  @media(max-width: 767px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media(max-width: 567px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media(max-width: 319px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export default TokensComponent;
