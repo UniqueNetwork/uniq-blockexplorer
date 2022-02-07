@@ -11,6 +11,7 @@ import config from '../../../config';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../../hooks/useApi';
+import { getImageURL } from '../../../utils/tokenImage';
 
 const { IPFSGateway } = config;
 
@@ -36,13 +37,15 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_prefix: prefix
   } = token;
 
+  const imageUrl = getImageURL(imagePath);
+
   if (loading) return <LoadingComponent />;
 
   return (
     <Wrapper>
       <TokenPicture
         alt={`${prefix}-${id}`}
-        src={imagePath}
+        src={imageUrl}
       />
       <div>
         <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
@@ -180,15 +183,15 @@ const CollectionLink = styled(Link)`
   }  
 `;
 
-const CollectionProperties = styled.div`
-  display: flex;
-  column-gap: var(--gap);
-  div {
-    span:first-child {
-      margin-right: calc(var(--gap) / 2);
-    } 
-  }
-`;
+// const CollectionProperties = styled.div`
+//   display: flex;
+//   column-gap: var(--gap);
+//   div {
+//     span:first-child {
+//       margin-right: calc(var(--gap) / 2);
+//     }
+//   }
+// `;
 
 const OwnerWrapper = styled.div`
   display: flex;

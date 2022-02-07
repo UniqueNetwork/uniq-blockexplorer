@@ -6,6 +6,7 @@ import CollectionTableCell from '../../../components/CollectionTableCell';
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import config from '../../../config';
+import { getImageURL } from '../../../utils/tokenImage';
 
 const { IPFSGateway } = config;
 
@@ -16,7 +17,7 @@ export const getTokensColumns = (chainId: string, orderBy: TokenSorting, onOrder
     render: (value: string, item: unknown) => <TokenTableCell
       chainId={chainId}
       collectionId={(item as Token).collection_id}
-      imageUrl={(item as Token).image_path}
+      imageUrl={getImageURL((item as Token).image_path)}
       tokenId={value}
       tokenPrefix={(item as Token).token_prefix}
     />,
