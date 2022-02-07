@@ -1,3 +1,21 @@
+export interface ConstChainSchemaField {
+  id: number,
+  rule: 'required' | 'optional',
+  type: string,
+}
+
+export interface ConstChainSchema {
+  nested: {
+    onChainMetaData: {
+      nested: {
+        NFTMeta: {
+          fields: Record<string, ConstChainSchemaField>
+        }
+      }
+    }
+  }
+}
+
 export interface Collection {
   collection_cover: string
   collection_id: number
@@ -15,6 +33,10 @@ export interface Collection {
   owner_can_destroy: string
   schema_version: string
   actions_count: number
+  limits_accout_ownership: number
+  limits_sponsore_data_rate: null
+  limits_sponsore_data_size: null
+  const_chain_schema: ConstChainSchema | null
   // TODO: additional properties needed, but aren't in schema
   date_of_creation?: string
 }

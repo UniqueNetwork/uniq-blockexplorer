@@ -1,4 +1,6 @@
 import React, { FC, useMemo } from 'react';
+import styled from 'styled-components';
+
 import { Token } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import Table from '../../../components/Table';
@@ -43,13 +45,19 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ loading, tokens }) => {
   }, [tokens]);
 
   return (
-    <Table
-      columns={columns}
-      data={!loading ? holders : []}
-      loading={loading}
-      rowKey={'accountId'}
-    />
+    <HolderWrapper>
+      <Table
+        columns={columns}
+        data={!loading ? holders : []}
+        loading={loading}
+        rowKey={'accountId'}
+      />
+    </HolderWrapper>
   );
 };
+
+const HolderWrapper = styled.div`
+  margin-top: var(--gap);
+`;
 
 export default HoldersComponent;

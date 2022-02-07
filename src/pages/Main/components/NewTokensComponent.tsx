@@ -46,7 +46,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
       orderBy: { collection_id: 'desc', token_id: 'desc' },
       searchString
     });
-  }, [searchString, collectionId, fetchMoreTokens]);
+  }, [searchString, collectionId, fetchMoreTokens, pageSize]);
 
   return (
     <>
