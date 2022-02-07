@@ -61,7 +61,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         <TokenAttributes>
           <Heading size={'4'}>Attributes</Heading>
           <div>
-            {Object.keys(data).map((key) => (<div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
+            {Object.keys(data).filter((key) => key !== 'ipfsJson').map((key) => (<div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
               <TagsWrapper>
                 {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => <Tag key={`item-${item}-${index}`}>{item}</Tag>)}
                 {typeof data[key] === 'string' && <Tag>{data[key]}</Tag>}
@@ -172,6 +172,9 @@ const CollectionLink = styled(Link)`
   column-gap: var(--gap);
   &:hover {
     text-decoration: none;
+    h4 {
+      color: var(--primary-500);
+    }
   }
   svg {
     min-width: 40px;
