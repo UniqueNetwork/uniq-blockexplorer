@@ -59,6 +59,7 @@ const transfersWithTimeDifference = (
 };
 
 const LastTransfersComponent = ({
+  accountId,
   pageSize = 5,
   searchString
 }: LastTransfersComponentProps) => {
@@ -69,7 +70,7 @@ const LastTransfersComponent = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
-    gqlTransfers.useGraphQlLastTransfers({ pageSize });
+    gqlTransfers.useGraphQlLastTransfers({ accountId, pageSize });
 
   useEffect(() => {
     const offset = (currentPage - 1) * pageSize;
@@ -79,7 +80,7 @@ const LastTransfersComponent = ({
       offset,
       searchString
     });
-  }, [pageSize, searchString, currentPage, fetchMoreTransfers]);
+  }, [pageSize, searchString, currentPage, fetchMoreTransfers, accountId]);
 
   return (
     <>
