@@ -72,16 +72,16 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
       title={'Items'}
     />,
     width: 100
-  },
-  {
-    dataIndex: 'transfers',
-    key: 'transfers',
-    title: <TableSortableColumnTitle
-      dataIndex={'transfers'}
-      onOrderChange={onOrderChange}
-      orderBy={orderBy}
-      title={'Transfers'}
-    />,
-    width: 100
   }
+  // {
+  //   dataIndex: 'transfers',
+  //   key: 'transfers',
+  //   title: <TableSortableColumnTitle
+  //     dataIndex={'transfers'}
+  //     onOrderChange={onOrderChange}
+  //     orderBy={orderBy}
+  //     title={'Transfers'}
+  //   />,
+  //   width: 100
+  // }
 ];
