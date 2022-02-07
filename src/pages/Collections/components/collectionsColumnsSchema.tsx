@@ -7,6 +7,7 @@ import TableSortableColumnTitle from '../../../components/TableSortableColumnTit
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 import config from '../../../config';
+import { timestampTableFormat } from '../../../utils/timestampUtils';
 
 const { IPFSGateway } = config;
 
@@ -31,6 +32,7 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
+    render: timestampTableFormat,
     title: <TableSortableColumnTitle
       dataIndex={'date_of_creation'}
       onOrderChange={onOrderChange}

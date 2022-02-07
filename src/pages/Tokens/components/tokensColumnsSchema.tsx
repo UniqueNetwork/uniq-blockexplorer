@@ -7,6 +7,7 @@ import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import config from '../../../config';
 import { getImageURL } from '../../../utils/tokenImage';
+import { timestampTableFormat } from '../../../utils/timestampUtils';
 
 const { IPFSGateway } = config;
 
@@ -49,6 +50,7 @@ export const getTokensColumns = (chainId: string, orderBy: TokenSorting, onOrder
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
+    render: timestampTableFormat,
     title: <TableSortableColumnTitle
       dataIndex={'date_of_creation'}
       onOrderChange={onOrderChange}

@@ -12,6 +12,7 @@ import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../../hooks/useApi';
 import { getImageURL } from '../../../utils/tokenImage';
+import { timestampFormat } from '../../../utils/timestampUtils';
 
 const { IPFSGateway } = config;
 
@@ -31,6 +32,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     collection_id: collectionId,
     collection_name: name,
     data,
+    date_of_creation: createdOn,
     image_path: imagePath,
     owner,
     token_id: id,
@@ -51,7 +53,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
         <TokenInfo>
           <Text color={'grey-500'}>Created on</Text>
-          <Text>{'undefined'}</Text>
+          <Text>{timestampFormat(createdOn)}</Text>
           <Text color={'grey-500'}>Owner</Text>
           <OwnerWrapper>
             <Avatar size={'x-small'} />
@@ -113,6 +115,8 @@ const Wrapper = styled.div`
 const TokenPicture = styled(Picture)`
   width: 536px;
   height: 536px;
+  border-radius: 8px;
+  overflow: hidden;
   svg {
     width: 100%;
   }

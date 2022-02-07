@@ -37,8 +37,7 @@ export interface Collection {
   limits_sponsore_data_rate: null
   limits_sponsore_data_size: null
   const_chain_schema: ConstChainSchema | null
-  // TODO: additional properties needed, but aren't in schema
-  date_of_creation?: string
+  date_of_creation: number
 }
 
 export interface CollectionsVariables {

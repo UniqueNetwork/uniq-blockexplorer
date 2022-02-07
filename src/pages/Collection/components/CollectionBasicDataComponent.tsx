@@ -7,6 +7,7 @@ import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import TokensComponent from './TokensComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { timestampFormat } from '../../../utils/timestampUtils';
 
 interface BasicDataComponentProps {
   collection?: Collection
@@ -57,7 +58,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
         </GeneralInfoWrapper>
         <CreatedAccountWrapper>
           <div>
-            <Text color={'grey-500'}>{`created on ${createdOn || 'undefined'}`}</Text>
+            <Text color={'grey-500'}>{`created on ${timestampFormat(createdOn)}`}</Text>
           </div>
           <OwnerAccountWrapper>
             <Avatar

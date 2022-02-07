@@ -47,16 +47,24 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
   return `${amount} ${timeType}${amount >= 2 ? 's' : ''} ago`;
 };
 
-const timestampFormat = (timestamp: number) => new Date(timestamp * 1000).toLocaleString('en-US', {
-  day: '2-digit',
-  hour: '2-digit',
-  hour12: false,
-  minute: '2-digit',
-  month: 'long',
-  second: 'numeric',
-  timeZone: 'GMT',
-  timeZoneName: 'short',
-  year: 'numeric'
-});
+const timestampFormat = (timestamp: number | undefined) => {
+  if (!timestamp) return 'undefined';
 
-export { timeDifference, timestampFormat };
+  return new Date(timestamp * 1000).toLocaleString('en-US', {
+    day: '2-digit',
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit',
+    month: 'long',
+    second: 'numeric',
+    timeZone: 'GMT',
+    timeZoneName: 'short',
+    year: 'numeric'
+  });
+};
+
+const timestampTableFormat = (timestamp: number) => new Date(timestamp * 1000).toLocaleString('en-GB', {
+  hour12: false
+}).replaceAll('/', '-');
+
+export { timeDifference, timestampFormat, timestampTableFormat };
