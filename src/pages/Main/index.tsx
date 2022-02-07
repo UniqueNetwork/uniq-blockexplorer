@@ -12,7 +12,6 @@ import PagePaper from '../../components/PagePaper';
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
-  const { chainData } = useApi();
 
   return (
     <PagePaper>
@@ -21,7 +20,6 @@ const MainPage = () => {
         placeholder={'Extrinsic / collection / NFT / account'}
       />
       <MainBlockWrapper>
-        <Heading size={'2'}>Latest blocks</Heading>
         <LastBlocksComponent
           searchString={searchString}
         />
@@ -33,7 +31,6 @@ const MainPage = () => {
         />
       </MainBlockWrapper>
       <MainBlockWrapper>
-        <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
         <LastTransfersComponent
           searchString={searchString}
         />
