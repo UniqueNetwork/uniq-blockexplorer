@@ -8,6 +8,7 @@ import LastTransfersComponent from '../Main/components/LastTransfersComponent';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import { useApi } from '../../hooks/useApi';
+import PagePaper from '../../components/PagePaper';
 
 const assetsTabs = ['Collections', 'NFTs'];
 
@@ -20,7 +21,7 @@ const AccountPage = () => {
   if (!accountId) return null;
 
   return (
-    <>
+    <PagePaper>
       <AccountDetailComponent accountId={accountId} />
       <AssetsWrapper>
         <Heading size={'2'}>Assets</Heading>
@@ -47,7 +48,7 @@ const AccountPage = () => {
         accountId={accountId}
         pageSize={10}
       />
-    </>
+    </PagePaper>
   );
 };
 

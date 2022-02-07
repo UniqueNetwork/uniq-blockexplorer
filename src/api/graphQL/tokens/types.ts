@@ -10,6 +10,7 @@ export interface Token {
   collection_id: number
   collection_name: string
   data: Record<string, string | string[]>
+  date_of_creation: number
   token_prefix: string
   owner: string
   image_path: string

@@ -9,6 +9,7 @@ const collectionsQuery = gql`
       collection_cover
       collection_id
       const_chain_schema
+      date_of_creation
       description
       holders_count
       limits_accout_ownership

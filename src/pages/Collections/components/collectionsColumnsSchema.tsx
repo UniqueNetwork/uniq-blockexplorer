@@ -7,6 +7,7 @@ import TableSortableColumnTitle from '../../../components/TableSortableColumnTit
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 import config from '../../../config';
+import { timestampTableFormat } from '../../../utils/timestampUtils';
 
 const { IPFSGateway } = config;
 
@@ -31,6 +32,7 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
+    render: timestampTableFormat,
     title: <TableSortableColumnTitle
       dataIndex={'date_of_creation'}
       onOrderChange={onOrderChange}
@@ -58,30 +60,30 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
     width: 100
   },
   {
-    dataIndex: 'items',
-    key: 'items',
-    render: (tokens: { aggregate?: { count: number }}, item: unknown) => {
+    dataIndex: 'tokens_count',
+    key: 'tokens_count',
+    render: (items: number, item: unknown) => {
       return <Link
         to={`/${chainId}/collections/${(item as Collection).collection_id}`}
-      >{tokens?.aggregate?.count || 0}</Link>;
+      >{items || 0}</Link>;
     },
     title: <TableSortableColumnTitle
-      dataIndex={'items'}
+      dataIndex={'tokens_count'}
       onOrderChange={onOrderChange}
       orderBy={orderBy}
       title={'Items'}
     />,
     width: 100
-  },
-  {
-    dataIndex: 'transfers',
-    key: 'transfers',
-    title: <TableSortableColumnTitle
-      dataIndex={'transfers'}
-      onOrderChange={onOrderChange}
-      orderBy={orderBy}
-      title={'Transfers'}
-    />,
-    width: 100
   }
+  // {
+  //   dataIndex: 'transfers',
+  //   key: 'transfers',
+  //   title: <TableSortableColumnTitle
+  //     dataIndex={'transfers'}
+  //     onOrderChange={onOrderChange}
+  //     orderBy={orderBy}
+  //     title={'Transfers'}
+  //   />,
+  //   width: 100
+  // }
 ];

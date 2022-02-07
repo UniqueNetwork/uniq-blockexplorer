@@ -18,7 +18,7 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
         <Heading size={'4'}>NFTs attributes</Heading>
         <AttributesWrapper>
           <TagsWrapper>
-            {Object.keys(fields || {}).map((key) => (
+            {Object.keys(fields || {}).filter((key) => key !== 'ipfsJson').map((key) => (
               <Tag key={key}>{key}</Tag>
             ))}
           </TagsWrapper>

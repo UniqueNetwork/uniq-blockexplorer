@@ -7,6 +7,7 @@ import { Token } from '../api/graphQL';
 import Picture from './Picture';
 import { useApi } from '../hooks/useApi';
 import { shortcutText } from '../utils/textUtils';
+import { getImageURL } from '../utils/tokenImage';
 
 type TokenCardProps = Token;
 
@@ -20,13 +21,15 @@ const TokenCard: FC<TokenCardProps> = ({
 }) => {
   const { currentChain } = useApi();
 
+  const imageUrl = getImageURL(imagePath);
+
   return (
     <TokenCardLink
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
     >
       <TokenPicture
         alt={tokenId.toString()}
-        src={imagePath}
+        src={imageUrl}
       />
       <TokenTitle>
         <Text>{`${prefix || ''} #${tokenId}`}</Text>

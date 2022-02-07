@@ -11,6 +11,8 @@ import config from '../../../config';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../../hooks/useApi';
+import { getImageURL } from '../../../utils/tokenImage';
+import { timestampFormat } from '../../../utils/timestampUtils';
 
 const { IPFSGateway } = config;
 
@@ -30,11 +32,14 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     collection_id: collectionId,
     collection_name: name,
     data,
+    date_of_creation: createdOn,
     image_path: imagePath,
     owner,
     token_id: id,
     token_prefix: prefix
   } = token;
+
+  const imageUrl = getImageURL(imagePath);
 
   if (loading) return <LoadingComponent />;
 
@@ -42,13 +47,13 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     <Wrapper>
       <TokenPicture
         alt={`${prefix}-${id}`}
-        src={imagePath}
+        src={imageUrl}
       />
       <div>
         <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
         <TokenInfo>
           <Text color={'grey-500'}>Created on</Text>
-          <Text>{'undefined'}</Text>
+          <Text>{timestampFormat(createdOn)}</Text>
           <Text color={'grey-500'}>Owner</Text>
           <OwnerWrapper>
             <Avatar size={'x-small'} />
@@ -68,7 +73,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
               </TagsWrapper>
             </div>)
             )}
-
           </div>
         </TokenAttributes>
         <CollectionInfoWrapper>
@@ -111,6 +115,8 @@ const Wrapper = styled.div`
 const TokenPicture = styled(Picture)`
   width: 536px;
   height: 536px;
+  border-radius: 8px;
+  overflow: hidden;
   svg {
     width: 100%;
   }
@@ -181,15 +187,15 @@ const CollectionLink = styled(Link)`
   }  
 `;
 
-const CollectionProperties = styled.div`
-  display: flex;
-  column-gap: var(--gap);
-  div {
-    span:first-child {
-      margin-right: calc(var(--gap) / 2);
-    } 
-  }
-`;
+// const CollectionProperties = styled.div`
+//   display: flex;
+//   column-gap: var(--gap);
+//   div {
+//     span:first-child {
+//       margin-right: calc(var(--gap) / 2);
+//     }
+//   }
+// `;
 
 const OwnerWrapper = styled.div`
   display: flex;

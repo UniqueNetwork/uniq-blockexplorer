@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import BlockDetailComponent from './components/BlockDetailComponent';
 // import ExtrinsicsListComponent from './components/ExtrinsicsListComponent';
 // import EventListComponent from './components/EventsListComponent';
+import PagePaper from '../../components/PagePaper';
 
 // const assetsTabs = ['Extrinsics', 'Events'];
 
@@ -13,7 +14,7 @@ const BlockPage: FC = () => {
 
   // const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
-  return (<>
+  return (<PagePaper>
     <BlockDetailComponent blockNumber={blockIndex} />
 
     {/* <ExtrinsicsListComponent */}
@@ -38,7 +39,7 @@ const BlockPage: FC = () => {
     {/*  key={'event-list'} */}
     {/* /> */}
     {/* </Tabs> */}
-  </>);
+  </PagePaper>);
 };
 
 export default BlockPage;

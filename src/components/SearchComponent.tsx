@@ -19,13 +19,13 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
 
   const onSearch = useCallback(() => {
     if (/^\w{48}\w*$/.test(searchString || '')) {
-      navigate(`${currentChain.network}/account/${searchString || ''}`);
+      navigate(`/${currentChain.network}/account/${searchString || ''}`);
 
       return;
     }
 
     if (/^\d+-\d+$/.test(searchString || '')) {
-      navigate(`${currentChain.network}/extrinsic/${searchString || ''}`);
+      navigate(`/${currentChain.network}/extrinsic/${searchString || ''}`);
 
       return;
     }
