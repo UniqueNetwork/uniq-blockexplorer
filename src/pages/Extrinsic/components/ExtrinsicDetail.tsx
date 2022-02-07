@@ -49,17 +49,17 @@ const ExtrinsicDetail: FC = () => {
 
   return (
     <ExtrinsicWrapper>
-      <TokenWrapper>
-        <TokenPicture alt={`${tokenMock.prefix} #${tokenMock.token_id}`} />
-        <TokenTitle>
-          <Text
-            color={'secondary-500'}
-            size={'l'}
-            weight={'medium'}
-          >{`${tokenMock.prefix} #${tokenMock.token_id}`}</Text>
-          <Link to={'/'}>{`${tokenMock.collection_name} [ID ${tokenMock.collection_id}]`}</Link>
-        </TokenTitle>
-      </TokenWrapper>
+      {/* <TokenWrapper> */}
+      {/*  <TokenPicture alt={`${tokenMock.prefix} #${tokenMock.token_id}`} /> */}
+      {/*  <TokenTitle> */}
+      {/*    <Text */}
+      {/*      color={'secondary-500'} */}
+      {/*      size={'l'} */}
+      {/*      weight={'medium'} */}
+      {/*    >{`${tokenMock.prefix} #${tokenMock.token_id}`}</Text> */}
+      {/*    <Link to={'/'}>{`${tokenMock.collection_name} [ID ${tokenMock.collection_id}]`}</Link> */}
+      {/*  </TokenTitle> */}
+      {/* </TokenWrapper> */}
       <div>
         <Heading>{`Extrinsic ${blockIndex}`}</Heading>
         <ExtrinsicDataWrapper>
@@ -87,7 +87,7 @@ const ExtrinsicDetail: FC = () => {
           <div>
             {fromOwner && (
               <AccountLinkComponent
-                noShort={deviceSize !== DeviceSize.sm}
+                noShort={deviceSize >= DeviceSize.md}
                 size={'m'}
                 value={fromOwner}
               />
@@ -101,6 +101,7 @@ const ExtrinsicDetail: FC = () => {
           <div>
             {toOwner && (
               <AccountLinkComponent
+                noShort={deviceSize >= DeviceSize.md}
                 size={'m'}
                 value={toOwner}
               />
@@ -135,7 +136,7 @@ const ExtrinsicDetail: FC = () => {
             Hash
           </Text>
           <Text>
-            {deviceSize !== DeviceSize.sm ? hash : shortcutText(hash)}
+            {deviceSize >= DeviceSize.md ? hash : shortcutText(hash)}
           </Text></>}
           <Text
             color={'grey-500'}

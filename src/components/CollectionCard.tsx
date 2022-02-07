@@ -19,11 +19,9 @@ const CollectionCard: FC<CollectionCardProps> = ({
   name,
   owner,
   token_prefix: tokenPrefix,
-  tokens_aggregate: tokensAggregate
+  tokens_count: tokensCount
 }) => {
   const { currentChain } = useApi();
-
-  const tokensCount = tokensAggregate?.aggregate.count || 0;
 
   return (
     <CollectionCardLink
@@ -57,7 +55,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
               color={'grey-500'}
               size={'s'}
             >Items:</Text>
-            <Text size={'s'}>{tokensCount.toString()}</Text>
+            <Text size={'s'}>{tokensCount?.toString() || '0'}</Text>
           </span>
         </CollectionProperties>
         <div>

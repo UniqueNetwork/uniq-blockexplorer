@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { Heading, Tabs } from '@unique-nft/ui-kit';
 
 import AccountDetailComponent from './components/AccountDetailComponent';
@@ -21,24 +22,26 @@ const AccountPage = () => {
   return (
     <>
       <AccountDetailComponent accountId={accountId} />
-      <Heading size={'2'}>Assets</Heading>
-      <Tabs
-        activeIndex={activeAssetsTabIndex}
-        labels={assetsTabs}
-        onClick={setActiveAssetsTabIndex}
-      />
-      <Tabs
-        activeIndex={activeAssetsTabIndex}
-      >
-        <CollectionsComponent
-          accountId={accountId}
-          key={'collections'}
+      <AssetsWrapper>
+        <Heading size={'2'}>Assets</Heading>
+        <Tabs
+          activeIndex={activeAssetsTabIndex}
+          labels={assetsTabs}
+          onClick={setActiveAssetsTabIndex}
         />
-        <TokensComponent
-          accountId={accountId}
-          key={'tokens'}
-        />
-      </Tabs>
+        <Tabs
+          activeIndex={activeAssetsTabIndex}
+        >
+          <CollectionsComponent
+            accountId={accountId}
+            key={'collections'}
+          />
+          <TokensComponent
+            accountId={accountId}
+            key={'tokens'}
+          />
+        </Tabs>
+      </AssetsWrapper>
       <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
       <LastTransfersComponent
         accountId={accountId}
@@ -47,5 +50,9 @@ const AccountPage = () => {
     </>
   );
 };
+
+const AssetsWrapper = styled.div`
+  padding-top: calc(var(--gap) * 1.5);
+`;
 
 export default AccountPage;

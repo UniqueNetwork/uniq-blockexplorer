@@ -20,7 +20,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
     holders_count: holders,
     owner,
     token_prefix: prefix,
-    tokens_aggregate: tokensAggregate
+    tokens_count: tokensCount
   } = collection || {};
 
   const deviceSize = useDeviceSize();
@@ -36,7 +36,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
             </div>
             <div>
               <Text color={'grey-500'}>Items:</Text>
-              <Text color={'black'}>{tokensAggregate?.aggregate.count.toString() || '0'}</Text>
+              <Text color={'black'}>{tokensCount?.toString() || '0'}</Text>
             </div>
             <div>
               <Text color={'grey-500'}>Prefix:</Text>

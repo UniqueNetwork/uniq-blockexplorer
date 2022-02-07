@@ -49,12 +49,14 @@ const LastBlocksComponent = ({
   });
 
   useEffect(() => {
+    const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
+
     const offset = (currentPage - 1) * pageSize;
 
     void fetchMoreBlocks({
       limit: pageSize,
       offset,
-      searchString
+      searchString: prettifiedBlockSearchString
     });
   }, [pageSize, searchString, currentPage, fetchMoreBlocks]);
 

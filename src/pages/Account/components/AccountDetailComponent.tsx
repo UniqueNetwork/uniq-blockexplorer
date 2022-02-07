@@ -5,7 +5,7 @@ import { account as gqlAccount } from '../../../api/graphQL';
 import Avatar from '../../../components/Avatar';
 import LoadingComponent from '../../../components/LoadingComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { shortcutText } from '../../../utils/textUtils';
+import { formatAmount, shortcutText } from '../../../utils/textUtils';
 import { useApi } from '../../../hooks/useApi';
 
 interface AccountProps {
@@ -41,26 +41,18 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
       <div>
         <Text size={'l'}>Account name</Text>
         <h2>
-          {deviceSize === DeviceSize.sm || deviceSize === DeviceSize.md
+          {deviceSize <= DeviceSize.md
             ? shortcutText(accountId)
             : accountId}
         </h2>
       </div>
-      <Text
-        color={'grey-500'}
-      >
-          Created on
-      </Text>
-      <Text>
-        {timestamp ? new Date(timestamp).toLocaleString() : 'unavailable'}
-      </Text>
       <Text color={'grey-500'}>
           Balance
       </Text>
       <BalanceWrapper>
-        <Text>{`${freeBalance} ${tokenSymbol} (total) `}</Text>
-        <Text color={'grey-500'}>{`${lockedBalance} ${tokenSymbol} (locked) `}</Text>
-        <Text color={'grey-500'}>{`${availableBalance} ${tokenSymbol} (transferable)`}</Text>
+        <Text>{`${formatAmount(freeBalance)} ${tokenSymbol} (total) `}</Text>
+        <Text color={'grey-500'}>{`${formatAmount(lockedBalance)} ${tokenSymbol} (locked) `}</Text>
+        <Text color={'grey-500'}>{`${formatAmount(availableBalance)} ${tokenSymbol} (transferable)`}</Text>
       </BalanceWrapper>
     </AccountWrapper>
   );
@@ -70,32 +62,27 @@ const AccountWrapper = styled.div`
   display: grid;
   grid-column-gap: var(--gap);
   grid-template-columns: 85px 1fr;
-  grid-row-gap: var(--gap);
+  grid-row-gap: calc(var(--gap) * 1.5);
   padding-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);
-  div:nth-child(3) {
-    margin-top: calc(var(--gap) / 2);
-  }
-  div:nth-child(4) {
-    margin-top: calc(var(--gap) / 2);
-  }
+
   
   @media (max-width: 767px) {
     grid-row-gap: 0;
     div:not(:first-child) {
-      grid-column: span 11;
+      grid-column: span 2;
       margin-top: var(--gap);
     }
 
-    div:nth-child(3) {
+    *:nth-child(3) {
       margin-top: calc(var(--gap) * 1.5);
     }
 
-    div:not(:first-child) {
-      grid-column: span 11;
+    *:not(:first-child) {
+      grid-column: span 2;
     }
 
-    div:last-child {
+    *:last-child {
       flex-direction: column;
       align-items: flex-start;
 

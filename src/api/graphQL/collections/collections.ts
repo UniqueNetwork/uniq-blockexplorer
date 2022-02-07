@@ -5,14 +5,27 @@ import { CollectionsData, CollectionsVariables, FetchMoreCollectionsOptions, use
 const collectionsQuery = gql`
   query getCollections($limit: Int, $offset: Int, $where: view_collections_bool_exp = {}, $orderBy: [view_collections_order_by!] = {}) {
     view_collections(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+      actions_count
       collection_cover
       collection_id
+      const_chain_schema
       description
+      holders_count
+      limits_accout_ownership
+      limits_sponsore_data_rate
+      limits_sponsore_data_size
+      mint_mode
       name
       offchain_schema
       owner
+      owner_can_destroy
+      owner_can_trasfer
+      schema_version
+      sponsorship_confirmed
       token_limit
       token_prefix
+      tokens_count
+      type
     }
     view_collections_aggregate(where: $where) {
       aggregate {
@@ -24,9 +37,9 @@ const collectionsQuery = gql`
 
 export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlCollectionsProps) => {
   const getWhere = useCallback(
-    (filter?: Record<string, unknown>, searchString?: string) => ({
+    (_filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
-        ...(filter ? { _or: filter } : {}),
+        ...(_filter || {}),
         ...(searchString
           ? {
             _or: [
@@ -56,7 +69,7 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
     variables: {
       limit: pageSize,
       offset: 0,
-      orderBy: orderBy,
+      orderBy,
       where: getWhere(filter)
     }
   });

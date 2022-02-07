@@ -32,7 +32,7 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({ dataIndex, onO
   return (
     <>
       <ColumnTitleText color={'grey-500'}>{title}</ColumnTitleText>
-      <ArrowDownUp
+      <StyledArrowDownUp
         direction={direction}
         onClick={onArrowsClick}
       />
@@ -42,6 +42,12 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({ dataIndex, onO
 
 const ColumnTitleText = styled(Text)`
   margin-right: calc(var(--gap) / 2);
+`;
+
+const StyledArrowDownUp = styled(ArrowDownUp)`
+  @media(max-width: 1023px) {
+    display: none;
+  }
 `;
 
 export default TableSortableColumnTitle;
