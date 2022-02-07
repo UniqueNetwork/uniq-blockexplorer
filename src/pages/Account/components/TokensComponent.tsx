@@ -19,70 +19,30 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
   const { currentChain } = useApi();
   const navigate = useNavigate();
 
-  const [filter, dispatchFilter] = useReducer<
-  Reducer<Record<string, unknown> | undefined, { type: ActionType; value: string | boolean }>
-  >((state, action) => {
-    if (action.type === 'All' && action.value) {
-      return undefined;
-    }
-
-    if (action.type === 'Minted') {
-      return { ...state, minted: action.value ? { _eq: accountId } : undefined };
-    }
-
-    if (action.type === 'Received') {
-      return { ...state, received: action.value ? { _eq: accountId } : undefined };
-    }
-
-    return state;
-  }, undefined);
-
-  const [searchString, setSearchString] = useState<string | undefined>();
-
-  const { fetchMoreTokens, tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter, pageSize });
-
-  const onCheckBoxChange = useCallback(
-    (actionType: ActionType) => (value: boolean) => dispatchFilter({ type: actionType, value }),
-    [dispatchFilter]
-  );
+  const { fetchMoreTokens, tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
+    owner: { _eq: accountId }
+  },
+  pageSize });
 
   const onClickSeeMore = useCallback(() => {
     navigate(`/${currentChain.network}/tokens`);
   }, [currentChain.network, navigate]);
 
-  useEffect(() => {
+  const onSearch = useCallback((searchString: string) => {
     void fetchMoreTokens({
-      filter,
+      filter: {
+        owner: { _eq: accountId }
+      },
       searchString
     });
-  }, [searchString, filter, fetchMoreTokens]);
+  }, [accountId, fetchMoreTokens]);
 
   return (<>
     <ControlsWrapper>
       <SearchComponent
-        onSearchChange={setSearchString}
+        onSearchChange={onSearch}
         placeholder={'NFT / collection'}
       />
-      <FilterWrapper>
-        <Checkbox
-          checked={filter === undefined}
-          label={'All'}
-          onChange={onCheckBoxChange('All')}
-          size={'s'}
-        />
-        <Checkbox
-          checked={!!filter?.owner}
-          label={'Minted'}
-          onChange={onCheckBoxChange('Minted')}
-          size={'s'}
-        />
-        <Checkbox
-          checked={!!filter?.admin}
-          label={'Received'}
-          onChange={onCheckBoxChange('Received')}
-          size={'s'}
-        />
-      </FilterWrapper>
     </ControlsWrapper>
     <ItemsCountWrapper>{tokensCount || 0} items</ItemsCountWrapper>
     <TokensWrapper>
@@ -114,20 +74,33 @@ const ControlsWrapper = styled.div`
   margin-top: var(--gap);
 `;
 
-const FilterWrapper = styled.div`
-  display: flex;
-  column-gap: var(--gap);
-  align-items: center;
-`;
-
 const ItemsCountWrapper = styled.div`
   margin: var(--gap) 0;
 `;
 
 const TokensWrapper = styled.div`
+
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-column-gap: var(--gap);
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: calc(var(--gap) * 1.5);
+  grid-row-gap: calc(var(--gap) * 1.5);
+  margin-bottom: calc(var(--gap) * 1.5);
+
+  @media(max-width: 1279px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  @media(max-width: 767px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media(max-width: 567px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media(max-width: 319px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export default TokensComponent;

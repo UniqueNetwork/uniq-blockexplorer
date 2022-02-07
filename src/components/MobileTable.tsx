@@ -29,7 +29,7 @@ const MobileTable: FC<MobileTableProps> = ({
       >
         {columns?.map((column) => (
           <div key={`column-${column.key || ''}`}>
-            <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>
+            {typeof column?.title === 'object' ? <>{column.title}</> : <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>}
             {column.render && <>{column.render(item[column.dataIndex as keyof DefaultRecordType], item, index)}</>}
             {!column.render && <Text>{item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}</Text>}
           </div>

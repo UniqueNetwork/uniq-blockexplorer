@@ -2,11 +2,12 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 interface ArrowDownUpProps {
+  className?: string
   direction?: 'both' | 'up' | 'down'
   onClick?(): void
 }
 
-const ArrowDownUp: FC<ArrowDownUpProps> = ({ direction = 'both', onClick }) => {
+const ArrowDownUp: FC<ArrowDownUpProps> = ({ className, direction = 'both', onClick }) => {
   let children = <><path
     clipRule='evenodd'
     d='M0.646447 10.6464C0.841709 10.4512 1.15829 10.4512 1.35355 10.6464L3 12.2929L4.64645 10.6464C4.84171 10.4512 5.15829 10.4512 5.35355 10.6464C5.54882 10.8417 5.54882 11.1583 5.35355 11.3536L3.35355 13.3536C3.15829 13.5488 2.84171 13.5488 2.64645 13.3536L0.646447 11.3536C0.451184 11.1583 0.451184 10.8417 0.646447 10.6464Z'
@@ -66,6 +67,7 @@ const ArrowDownUp: FC<ArrowDownUpProps> = ({ direction = 'both', onClick }) => {
       viewBox='0 0 12 14'
       width='12'
       xmlns='http://www.w3.org/2000/svg'
+      className={className}
     >
       <g>
         <rect

@@ -22,6 +22,10 @@ a {
   }
 }
 
+.unique-tabs-labels {
+  flex-wrap: nowrap;
+}
+
 .unique-layout {
   &__content {
     padding: 0 !important;

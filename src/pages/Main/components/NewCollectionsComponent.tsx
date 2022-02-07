@@ -17,14 +17,17 @@ const NewCollectionsComponent: FC<NewCollectionsComponentProps> = ({ pageSize = 
   const { currentChain } = useApi();
   const navigate = useNavigate();
 
-  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ pageSize });
+  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ orderBy: { collection_id: 'desc' }, pageSize });
 
   const onClick = useCallback(() => {
     navigate(`/${currentChain.network}/collections`);
   }, [currentChain, navigate]);
 
   useEffect(() => {
+    if (searchString === undefined) return;
     void fetchMoreCollections({
+      limit: pageSize,
+      orderBy: { collection_id: 'desc' },
       searchString
     });
   }, [searchString, fetchMoreCollections]);
