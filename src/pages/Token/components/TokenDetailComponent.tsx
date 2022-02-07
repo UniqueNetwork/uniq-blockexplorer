@@ -55,7 +55,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
               </TagsWrapper>
             </div>)
             )}
-
           </div>
         </TokenAttributes>
         <CollectionInfoWrapper>

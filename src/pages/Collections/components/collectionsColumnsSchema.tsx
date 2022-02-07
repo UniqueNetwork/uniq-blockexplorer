@@ -58,15 +58,15 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
     width: 100
   },
   {
-    dataIndex: 'items',
-    key: 'items',
-    render: (tokens: { aggregate?: { count: number }}, item: unknown) => {
+    dataIndex: 'tokens_count',
+    key: 'tokens_count',
+    render: (items: number, item: unknown) => {
       return <Link
         to={`/${chainId}/collections/${(item as Collection).collection_id}`}
-      >{tokens?.aggregate?.count || 0}</Link>;
+      >{items || 0}</Link>;
     },
     title: <TableSortableColumnTitle
-      dataIndex={'items'}
+      dataIndex={'tokens_count'}
       onOrderChange={onOrderChange}
       orderBy={orderBy}
       title={'Items'}
