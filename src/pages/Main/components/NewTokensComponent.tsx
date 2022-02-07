@@ -34,14 +34,19 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
 
   const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
+    orderBy: { token_id: 'desc', collection_id: 'desc' },
     pageSize
   });
 
   useEffect(() => {
     void fetchMoreTokens({
+      filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
+      limit: pageSize,
+      orderBy: { token_id: 'desc', collection_id: 'desc' },
+      offset: 0,
       searchString
     });
-  }, [searchString, fetchMoreTokens]);
+  }, [searchString, collectionId, fetchMoreTokens]);
 
   return (
     <>
