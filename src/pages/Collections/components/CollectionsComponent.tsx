@@ -10,7 +10,7 @@ import { collections as gqlCollections, CollectionSorting } from '../../../api/g
 
 const CollectionsComponent = ({
   pageSize = 20,
-  orderBy: defaultOrderBy = { collection_id: 'desc' },
+  orderBy: defaultOrderBy = { date_of_creation: 'desc' },
   searchString
 }: CollectionsComponentProps) => {
   const deviceSize = useDeviceSize();

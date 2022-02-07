@@ -11,7 +11,7 @@ import { getTokensColumns } from './tokensColumnsSchema';
 
 const TokensComponent: FC<TokensComponentProps> = ({
   searchString,
-  orderBy: defaultOrderBy = { token_id: 'desc' },
+  orderBy: defaultOrderBy = { date_of_creation: 'desc' },
   pageSize = 20
 }) => {
   const deviceSize = useDeviceSize();
