@@ -9,6 +9,8 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import LoadingComponent from '../../../components/LoadingComponent';
 import config from '../../../config';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { Link } from 'react-router-dom';
+import { useApi } from '../../../hooks/useApi';
 
 const { IPFSGateway } = config;
 
@@ -19,9 +21,20 @@ interface TokenDetailComponentProps {
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
   const deviceSize = useDeviceSize();
+  const { currentChain } = useApi();
 
   if (!token) return null;
-  const { collection_cover: collectionCover, collection_description: description, collection_name: name, data, image_path: imagePath, owner, token_id: id, token_prefix: prefix } = token;
+  const {
+    collection_cover: collectionCover,
+    collection_description: description,
+    collection_id: collectionId,
+    collection_name: name,
+    data,
+    image_path: imagePath,
+    owner,
+    token_id: id,
+    token_prefix: prefix
+  } = token;
 
   if (loading) return <LoadingComponent />;
 
@@ -59,7 +72,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
         </TokenAttributes>
         <CollectionInfoWrapper>
-          <CollectionTitle>
+          <CollectionLink to={`/${currentChain.network}/collections/${collectionId}`}>
             <Avatar
               size={'small'}
               src={collectionCover ? `${IPFSGateway || ''}/${collectionCover}` : undefined}
@@ -70,7 +83,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
                 <Text color={'grey-500'}>{description || ''}</Text>
               </div>
             </div>
-          </CollectionTitle>
+          </CollectionLink>
         </CollectionInfoWrapper>
       </div>
     </Wrapper>
@@ -154,9 +167,12 @@ const CollectionInfoWrapper = styled.div`
   margin-bottom: calc(var(--gap) * 2);
 `;
 
-const CollectionTitle = styled.div`
+const CollectionLink = styled(Link)`
   display: flex;
   column-gap: var(--gap);
+  &:hover {
+    text-decoration: none;
+  }
   svg {
     min-width: 40px;
   }  
