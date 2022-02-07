@@ -7,18 +7,17 @@ import CollectionExtendedDataComponent from './components/CollectionExtendedData
 import { collections as gqlCollections, tokens as gqlTokens } from '../../api/graphQL/';
 import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
-import CollectionEventsComponent from './components/CollectionEventsComponent';
-import TokenEventsComponent from './components/TokenEventsComponent';
 import config from '../../config';
+import PagePaper from '../../components/PagePaper';
 
 const { IPFSGateway } = config;
 
 const detailTabs = ['Basic data', 'Extended'];
-const eventsTabs = ['Holders'/*, 'Collection events' */];
+// const eventsTabs = ['Holders'/*, 'Collection events' */];
 
 const CollectionPage: FC = () => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
-  const [activeEventsTabIndex, setActiveEventsTabIndex] = useState<number>(0);
+  // const [activeEventsTabIndex, setActiveEventsTabIndex] = useState<number>(0);
 
   const { collectionId } = useParams<{ collectionId: string }>();
 
@@ -26,8 +25,8 @@ const CollectionPage: FC = () => {
 
   const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: collectionId } }, pageSize: 8 });
 
-  return (
-    <div>
+  return (<>
+    <PagePaper>
       <CollectionTitle>
         <Avatar
           size={'large'}
@@ -52,27 +51,32 @@ const CollectionPage: FC = () => {
           key={'tokens'}
         />
       </Tabs>
-      <Tabs
-        activeIndex={activeEventsTabIndex}
-        labels={eventsTabs}
-        onClick={setActiveEventsTabIndex}
-      />
-      <Tabs
-        activeIndex={activeEventsTabIndex}
-      >
+    </PagePaper>
+    {activeDetailTabIndex === 0 && <PagePaper>
+      <HoldersWrapper>
+        <Heading size={'2'}>Holders</Heading>
         <HoldersComponent
           key={'holder'}
           tokens={tokens || []}
         />
-        <></>
-        {/* <TokenEventsComponent */}
-        {/*  key={'tokens-events'} */}
-        {/* /> */}
-        {/* <CollectionEventsComponent */}
-        {/*  key={'collection-events'} */}
-        {/* /> */}
-      </Tabs>
-    </div>
+      </HoldersWrapper>
+      {/* <Tabs */}
+      {/*  activeIndex={activeEventsTabIndex} */}
+      {/*  labels={eventsTabs} */}
+      {/*  onClick={setActiveEventsTabIndex} */}
+      {/* /> */}
+      {/* <Tabs */}
+      {/*  activeIndex={activeEventsTabIndex} */}
+      {/* > */}
+      {/* <TokenEventsComponent */}
+      {/*  key={'tokens-events'} */}
+      {/* /> */}
+      {/* <CollectionEventsComponent */}
+      {/*  key={'collection-events'} */}
+      {/* /> */}
+      {/* </Tabs> */}
+    </PagePaper>}
+  </>
   );
 };
 
@@ -84,6 +88,10 @@ const CollectionTitle = styled.div`
   h2 {
     margin-bottom: 0 !important;
   }
+`;
+
+const HoldersWrapper = styled.div`
+  
 `;
 
 export default CollectionPage;

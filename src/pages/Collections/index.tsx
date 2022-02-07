@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react';
 import CollectionsComponent from './components/CollectionsComponent';
 import SearchComponent from '../../components/SearchComponent';
+import PagePaper from '../../components/PagePaper';
 
 const CollectionsPage: FC = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
 
-  return (<>
+  return (<PagePaper>
     <SearchComponent
       onSearchChange={setSearchString}
       placeholder={'Extrinsic / collection / account'}
@@ -15,7 +16,7 @@ const CollectionsPage: FC = () => {
         searchString={searchString}
       />
     </div>
-  </>);
+  </PagePaper>);
 };
 
 export default CollectionsPage;

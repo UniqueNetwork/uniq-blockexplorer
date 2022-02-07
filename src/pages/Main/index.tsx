@@ -8,13 +8,14 @@ import LastBlocksComponent from './components/LastBlocksComponent';
 import NewTokensComponent from './components/NewTokensComponent';
 import NewCollectionsComponent from './components/NewCollectionsComponent';
 import SearchComponent from '../../components/SearchComponent';
+import PagePaper from '../../components/PagePaper';
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
   const { chainData } = useApi();
 
   return (
-    <>
+    <PagePaper>
       <SearchComponent
         onSearchChange={setSearchString}
         placeholder={'Extrinsic / collection / NFT / account'}
@@ -43,7 +44,7 @@ const MainPage = () => {
           searchString={searchString}
         />
       </MainBlockWrapper>
-    </>
+    </PagePaper>
   );
 };
 

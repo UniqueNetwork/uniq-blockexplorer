@@ -23,6 +23,15 @@ a {
 }
 
 .unique-layout {
+  &__content {
+    padding: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    display: flex;
+    flex-direction: column;
+    row-gap: calc(var(--gap) * 1.5);
+  }
+
   @media (min-width: 1920px) {
     main {
       width: 1920px;
