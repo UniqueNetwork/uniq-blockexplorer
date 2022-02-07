@@ -27,7 +27,7 @@ export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokens
   const getWhere = useCallback(
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
-        ...(filter ? { _or: filter } : {}),
+        ...(filter || {}),
         ...(searchString
           ? {
             _or: [

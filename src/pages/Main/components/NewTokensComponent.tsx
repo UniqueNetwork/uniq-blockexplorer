@@ -34,7 +34,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
 
   const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
-    orderBy: { token_id: 'desc', collection_id: 'desc' },
+    orderBy: { collection_id: 'desc', token_id: 'desc' },
     pageSize
   });
 
@@ -42,8 +42,8 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
     void fetchMoreTokens({
       filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
       limit: pageSize,
-      orderBy: { token_id: 'desc', collection_id: 'desc' },
       offset: 0,
+      orderBy: { collection_id: 'desc', token_id: 'desc' },
       searchString
     });
   }, [searchString, collectionId, fetchMoreTokens]);

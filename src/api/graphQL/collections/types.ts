@@ -7,19 +7,16 @@ export interface Collection {
   owner: string
   token_limit: number
   token_prefix: string
+  tokens_count: number
+  holders_count: number
+  type: string
+  mint_mode: string
+  owner_can_trasfer: string
+  owner_can_destroy: string
+  schema_version: string
+  actions_count: number
   // TODO: additional properties needed, but aren't in schema
-  tokens_aggregate?: {
-    aggregate: {
-      count: number
-    }
-  }
-  type?: string
   date_of_creation?: string
-  holders_count?: number
-  actions_count?: number
-  owner_can_trasfer?: string
-  owner_can_destroy?: string
-  schema_version?: string
 }
 
 export interface CollectionsVariables {
