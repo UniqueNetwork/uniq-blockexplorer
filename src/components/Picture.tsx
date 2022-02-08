@@ -8,7 +8,7 @@ interface PictureProps {
   alt: string
 }
 
-const Picture: FC<PictureProps> = ({ alt, className, src }) => {
+const Picture: FC<PictureProps> = ({ className, src }) => {
   const [imageSrc, setImageSrc] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
