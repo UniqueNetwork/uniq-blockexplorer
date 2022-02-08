@@ -14,6 +14,7 @@ export class GqlClient implements IGqlClient {
   }
 
   public changeEndpoint(gqlEndpoint: string) {
+    console.log('gqlEndpoint', gqlEndpoint);
     this.client.stop(); // terminate all active query processes
     this.client.clearStore().then(() => {
       // resets the entire store by clearing out the cache
