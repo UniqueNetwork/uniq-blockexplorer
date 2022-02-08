@@ -26,7 +26,7 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({ dataIndex, onO
     if (!orderBy[dataIndex]) orderValue = 'asc';
     if (orderBy[dataIndex] === 'asc') orderValue = 'desc';
 
-    onOrderChange({ ...orderBy, [dataIndex]: orderValue });
+    onOrderChange({ [dataIndex]: orderValue });
   }, [orderBy, dataIndex, onOrderChange]);
 
   return (

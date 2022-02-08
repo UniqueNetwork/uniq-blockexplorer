@@ -43,7 +43,6 @@ const AccountPage = () => {
           />
         </Tabs>
       </AssetsWrapper>
-      <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
       <LastTransfersComponent
         accountId={accountId}
         pageSize={10}

@@ -6,7 +6,6 @@ const Footer: FC = () => {
     <FooterWrapper>
       <div className={'app-footer__info'}>
         <div>Powered by <a href='https://unique.network/'>Unique Network</a> — the NFT chain built for Polkadot and Kusama.</div>
-        <div>Version 22.18.1560 </div>
       </div>
       <SocialLinks>
         <a href='https://t.me/Uniquechain'>

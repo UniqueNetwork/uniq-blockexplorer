@@ -8,6 +8,7 @@ import { BlockComponentProps } from '../types';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import Table from '../../../components/Table';
 import { useApi } from '../../../hooks/useApi';
+import { Heading } from '@unique-nft/ui-kit';
 
 const blockColumns = (chainId: string) => [
   {
@@ -60,8 +61,11 @@ const LastBlocksComponent = ({
     });
   }, [pageSize, searchString, currentPage, fetchMoreBlocks]);
 
+  if (/[^$,.\d]/.test(searchString || '') || blockCount === 0) return null;
+
   return (
     <>
+      <Heading size={'2'}>Latest blocks</Heading>
       <Table
         columns={blockColumns(currentChain.network)}
         data={blocksWithTimeDifference(blocks)}

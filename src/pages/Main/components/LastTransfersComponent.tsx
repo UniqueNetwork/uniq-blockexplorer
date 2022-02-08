@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Text } from '@unique-nft/ui-kit';
+import { Heading, Text } from '@unique-nft/ui-kit';
 
 import PaginationComponent from '../../../components/Pagination';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
@@ -83,8 +83,11 @@ const LastTransfersComponent = ({
     });
   }, [pageSize, searchString, currentPage, fetchMoreTransfers, accountId]);
 
+  if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
+
   return (
     <>
+      <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
       <Table
         columns={getTransferColumns(
           chainData?.properties.tokenSymbol || '',
