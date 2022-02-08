@@ -1,76 +1,103 @@
-import React, { FC } from 'react'
-import { useQuery } from '@apollo/client'
-import {
-  Data as AccountData,
-  Variables as AccountVariables,
-  accountQuery,
-} from '../../../api/graphQL/account'
-import Avatar from '../../../components/Avatar'
-import LoadingComponent from '../../../components/LoadingComponent'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { formatAmount, shortcutText } from '../../../utils/textUtils'
-import config from '../../../config'
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import { Text } from '@unique-nft/ui-kit';
+import { account as gqlAccount } from '../../../api/graphQL';
+import Avatar from '../../../components/Avatar';
+import LoadingComponent from '../../../components/LoadingComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { formatAmount, shortcutText } from '../../../utils/textUtils';
+import { useApi } from '../../../hooks/useApi';
 
 interface AccountProps {
   accountId: string
 }
 
-const AccountDetailComponent: FC<AccountProps> = (props) => {
-  const { accountId } = props
+const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
+  const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
+
+  const deviceSize = useDeviceSize();
+
+  const { chainData } = useApi();
+
+  if (isAccountFetching) return <LoadingComponent />;
 
   const {
-    loading: isAccountFetching,
-    error: fetchAccountError,
-    data: account,
-  } = useQuery<AccountData, AccountVariables>(accountQuery, {
-    variables: { accountId },
-    notifyOnNetworkStatusChange: true,
-  })
+    available_balance: availableBalance = 'unavailable',
+    free_balance: freeBalance = 'unavailable',
+    locked_balance: lockedBalance = 'unavailable',
+    timestamp
+  } = account || {};
 
-  const deviceSize = useDeviceSize()
-
-  if (isAccountFetching) return <LoadingComponent />
-
-  const {
-    timestamp,
-    free_balance: freeBalance,
-    locked_balance: lockedBalance,
-    available_balance: availableBalance,
-  } = account?.account_by_pk || {}
+  const { tokenSymbol = '' } = chainData?.properties || {};
 
   return (
-    <div className={'container-with-border'}>
-      <div className={'grid-container grid-container_account-container'}>
-        <div className={'grid-item_col1'}>
-          <Avatar size="large" />
-        </div>
-        <div
-          className={
-            'flexbox-container flexbox-container_column flexbox-container_without-gap grid-item_col11'
-          }
-        >
-          <div>Account name</div>
-          <h2>
-            {deviceSize === DeviceSize.sm || deviceSize === DeviceSize.md
-              ? shortcutText(accountId)
-              : accountId}
-          </h2>
-        </div>
-        <div className={'grid-item_col1 text_grey margin-top'}>Balance</div>
-        <div className={'grid-item_col11 flexbox-container flexbox-container_wrap margin-top'}>
-          <span>
-            {freeBalance ? formatAmount(Number(freeBalance)) : 'unavailable'} {config.TOKEN_ID} (total){' '}
-          </span>
-          <span className={'text_grey'}>
-            {lockedBalance ? formatAmount(Number(lockedBalance)) : 'unavailable'} {config.TOKEN_ID} (locked){' '}
-          </span>
-          <span className={'text_grey'}>
-            {availableBalance ? formatAmount(Number(availableBalance)) : 'unavailable'} {config.TOKEN_ID} (transferable){' '}
-          </span>
-        </div>
+    <AccountWrapper>
+      <div>
+        <Avatar
+          size='large'
+          value={accountId}
+        />
       </div>
-    </div>
-  )
-}
+      <div>
+        <Text size={'l'}>Account name</Text>
+        <h2>
+          {deviceSize <= DeviceSize.md
+            ? shortcutText(accountId)
+            : accountId}
+        </h2>
+      </div>
+      <Text color={'grey-500'}>
+          Balance
+      </Text>
+      <BalanceWrapper>
+        <Text>{`${formatAmount(freeBalance)} ${tokenSymbol} (total) `}</Text>
+        <Text color={'grey-500'}>{`${formatAmount(lockedBalance)} ${tokenSymbol} (locked) `}</Text>
+        <Text color={'grey-500'}>{`${formatAmount(availableBalance)} ${tokenSymbol} (transferable)`}</Text>
+      </BalanceWrapper>
+    </AccountWrapper>
+  );
+};
 
-export default AccountDetailComponent
+const AccountWrapper = styled.div`
+  display: grid;
+  grid-column-gap: var(--gap);
+  grid-template-columns: 85px 1fr;
+  grid-row-gap: calc(var(--gap) * 1.5);
+  padding-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed var(--border-color);
+
+  
+  @media (max-width: 767px) {
+    grid-row-gap: 0;
+    div:not(:first-child) {
+      grid-column: span 2;
+      margin-top: var(--gap);
+    }
+
+    *:nth-child(3) {
+      margin-top: calc(var(--gap) * 1.5);
+    }
+
+    *:not(:first-child) {
+      grid-column: span 2;
+    }
+
+    *:last-child {
+      flex-direction: column;
+      align-items: flex-start;
+
+      span:not(:first-child) {
+        margin-top: calc(var(--gap) / 4);
+      }
+    }
+  }
+`;
+
+const BalanceWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--gap);
+  align-items: center;
+`;
+
+export default AccountDetailComponent;

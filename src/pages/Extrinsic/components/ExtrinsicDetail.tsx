@@ -1,94 +1,244 @@
-import React, { FC } from 'react'
-import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import {
-  Data as extrinsicData,
-  extrinsicQuery,
-  Variables as ExtrinsicVariables,
-} from '../../../api/graphQL/extrinsic'
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
-import LoadingComponent from '../../../components/LoadingComponent'
-import { Heading } from '@unique-nft/ui-kit'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import { formatAmount, shortcutText } from '../../../utils/textUtils'
-import config from '../../../config'
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import { Link, useParams } from 'react-router-dom';
+import { Heading, Text } from '@unique-nft/ui-kit';
+
+import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import LoadingComponent from '../../../components/LoadingComponent';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { formatAmount, formatBlockNumber, shortcutText } from '../../../utils/textUtils';
+import ChainLogo from '../../../components/ChainLogo';
+import { useApi } from '../../../hooks/useApi';
+import Picture from '../../../components/Picture';
+import { timestampFormat } from '../../../utils/timestampUtils';
 
 const ExtrinsicDetail: FC = () => {
-  const { blockIndex } = useParams()
+  const { blockIndex } = useParams();
 
-  const { loading: isExtrinsicFetching, data: extrinsics } = useQuery<
-    extrinsicData,
-    ExtrinsicVariables
-  >(extrinsicQuery, {
-    variables: { block_index: blockIndex || '' },
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
-  })
+  const { chainData } = useApi();
 
-  const deviceSize = useDeviceSize()
+  const { extrinsic, isExtrinsicFetching } = gqlExtrinsic.useGraphQlExtrinsic(blockIndex);
 
-  if (!blockIndex) return null
+  const deviceSize = useDeviceSize();
 
-  if (isExtrinsicFetching) return <LoadingComponent />
+  if (!blockIndex) return null;
+
+  if (isExtrinsicFetching) return <LoadingComponent />;
 
   const {
-    block_number: blockNumber,
-    from_owner: fromOwner,
-    to_owner: toOwner,
-    timestamp,
     amount,
+    block_number: blockNumber,
     fee,
+    from_owner: fromOwner,
     hash,
-  } = extrinsics?.view_extrinsic[0] || {}
+    method,
+    section,
+    success,
+    timestamp,
+    to_owner: toOwner
+  } = extrinsic || {};
+
+  // TODO: need access to NFT by extrinsic, that is just mock:
+  const tokenMock = {
+    collection_id: 3245,
+    collection_name: 'Crypto Duckies',
+    prefix: 'Duckie',
+    token_id: 5498
+  };
 
   return (
-    <>
-      <Heading>{`Extrinsic ${blockIndex}`}</Heading>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Block</div>
-        <div className={'grid-item_col11'}>{blockNumber}</div>
-        <div className={'grid-item_col1 text_grey'}>Timestamp</div>
-        <div className={'grid-item_col11'}>
-          {timestamp && new Date(timestamp * 1000).toLocaleString()}
-        </div>
+    <ExtrinsicWrapper>
+      {/* <TokenWrapper> */}
+      {/*  <TokenPicture alt={`${tokenMock.prefix} #${tokenMock.token_id}`} /> */}
+      {/*  <TokenTitle> */}
+      {/*    <Text */}
+      {/*      color={'secondary-500'} */}
+      {/*      size={'l'} */}
+      {/*      weight={'medium'} */}
+      {/*    >{`${tokenMock.prefix} #${tokenMock.token_id}`}</Text> */}
+      {/*    <Link to={'/'}>{`${tokenMock.collection_name} [ID ${tokenMock.collection_id}]`}</Link> */}
+      {/*  </TokenTitle> */}
+      {/* </TokenWrapper> */}
+      <div>
+        <Heading>{`Extrinsic ${blockIndex}`}</Heading>
+        <ExtrinsicDataWrapper>
+          <Text
+            color={'grey-500'}
+          >
+            Block
+          </Text>
+          <Text>{formatBlockNumber(blockNumber)}</Text>
+          <Text
+            color={'grey-500'}
+          >
+            Timestamp
+          </Text>
+          <Text>
+            {timestamp ? timestampFormat(timestamp) : ''}
+          </Text>
+        </ExtrinsicDataWrapper>
+        <ExtrinsicDataWrapper>
+          <Text
+            color={'grey-500'}
+          >
+            From
+          </Text>
+          <div>
+            {fromOwner && (
+              <AccountLinkComponent
+                noShort={deviceSize >= DeviceSize.md}
+                size={'m'}
+                value={fromOwner}
+              />
+            )}
+          </div>
+          <Text
+            color={'grey-500'}
+          >
+            To
+          </Text>
+          <div>
+            {toOwner && (
+              <AccountLinkComponent
+                noShort={deviceSize >= DeviceSize.md}
+                size={'m'}
+                value={toOwner}
+              />
+            )}
+          </div>
+        </ExtrinsicDataWrapper>
+        <ExtrinsicDataWrapper>
+          <Text
+            color={'grey-500'}
+          >
+            Amount
+          </Text>
+          {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
+          <ChainLogoWrapper>
+            <ChainLogo isInline={true} />
+            <Text>{`${formatAmount(amount || 0)} ${chainData?.properties.tokenSymbol || ''}`}</Text>
+          </ChainLogoWrapper>
+          <Text
+            color={'grey-500'}
+          >
+            Fee
+          </Text>
+          <ChainLogoWrapper>
+            <ChainLogo isInline={true} />
+            <Text>{`${formatAmount(fee || 0)} ${chainData?.properties.tokenSymbol || ''}`}</Text>
+          </ChainLogoWrapper>
+        </ExtrinsicDataWrapper>
+        <ExtrinsicDataWrapper>
+          {hash && <><Text
+            color={'grey-500'}
+          >
+            Hash
+          </Text>
+          <Text>
+            {deviceSize >= DeviceSize.md ? hash : shortcutText(hash)}
+          </Text></>}
+          <Text
+            color={'grey-500'}
+          >
+            Extrinsic
+          </Text>
+          <Text>{blockIndex}</Text>
+          <Text
+            color={'grey-500'}
+          >
+            Method
+          </Text>
+          <Text>{method || ''}</Text>
+          <Text
+            color={'grey-500'}
+          >
+            Section
+          </Text>
+          <Text>{section || ''}</Text>
+          <Text
+            color={'grey-500'}
+          >
+            Result
+          </Text>
+          <Text>{success ? 'Success' : 'Error'}</Text>
+        </ExtrinsicDataWrapper>
       </div>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Sender</div>
-        <div className={'grid-item_col11'}>
-          {fromOwner && (
-            <AccountLinkComponent value={fromOwner} noShort={deviceSize !== DeviceSize.sm} />
-          )}
-        </div>
-        <div className={'grid-item_col1 text_grey'}>Destination</div>
-        <div className={'grid-item_col11'}>
-          {toOwner && (
-            <AccountLinkComponent value={toOwner} noShort={deviceSize !== DeviceSize.sm} />
-          )}
-        </div>
-      </div>
-      <div className={'grid-container container-with-border grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Amount</div>
-        {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
-        <div className={'grid-item_col11 flexbox-container'}>
-          <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {formatAmount(Number(amount))} {config.TOKEN_ID}
-        </div>
-        <div className={'grid-item_col1 text_grey'}>Fee</div>
-        <div className={'grid-item_col11 flexbox-container'}>
-          <img src={`/logos/${config.TOKEN_LOGO}`} height={22} width={22} />
-          {formatAmount(Number(fee))} {config.TOKEN_ID}
-        </div>
-      </div>
-      <div className={'grid-container grid-container_extrinsic-container'}>
-        <div className={'grid-item_col1 text_grey'}>Hash</div>
-        <div className={'grid-item_col11'}>
-          {hash && deviceSize !== DeviceSize.sm ? hash : shortcutText(hash!)}
-        </div>
-        <div className={'grid-item_col1 text_grey'}>Extrinsic</div>
-        <div className={'grid-item_col11'}>{blockIndex}</div>
-      </div>
-    </>
-  )
-}
+    </ExtrinsicWrapper>
+  );
+};
 
-export default ExtrinsicDetail
+const ExtrinsicWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  column-gap: calc(var(--gap) * 2);
+  div:last-child {
+    flex-grow: 1;
+  }
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    row-gap: calc(var(--gap) * 2);
+  }
+`;
+
+const TokenWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--gap);
+  width: 216px;
+`;
+
+const TokenPicture = styled(Picture)`
+  width: 216px;
+  height: 216px;
+`;
+
+const TokenTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: calc(var(--gap) / 4);
+  width: 216px;
+  span, a {
+    word-break: break-word;
+  }
+`;
+
+const ExtrinsicDataWrapper = styled.div`
+  display: grid;
+  grid-column-gap: var(--gap);
+  border-bottom: 1px dashed var(--border-color);
+  grid-template-columns: 85px 1fr;
+  grid-row-gap: var(--gap);
+  padding: calc(var(--gap) * 1.5) 0;
+  font-size: 16px;
+  line-height: 20px;
+  * {
+    vertical-align: middle;
+  }
+  &:nth-child(2) {
+    padding-top: 0;
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 767px) {
+    grid-row-gap: 0;
+    &>div, &>span {
+      grid-column: span 2;
+      margin-top: calc(var(--gap) / 2);
+      &:nth-child(even) {
+        margin-top: calc(var(--gap) / 4);
+      }
+    }
+    
+  }
+`;
+
+const ChainLogoWrapper = styled.div`
+  display: flex;
+  column-gap: calc(var(--gap) / 2);
+  align-items: center;
+`;
+
+export default ExtrinsicDetail;

@@ -1,81 +1,58 @@
-import React, { useCallback, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
-import AccountDetailComponent from './components/AccountDetailComponent'
-import LastTransfersComponent from '../Main/components/LastTransfersComponent'
-import {
-  Data as TransfersData,
-  getLastTransfersQuery,
-  Variables as TransferVariables,
-} from '../../api/graphQL/transfers'
-import useDeviceSize, { DeviceSize } from '../../hooks/useDeviceSize'
-import config from '../../config'
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { Heading, Tabs } from '@unique-nft/ui-kit';
 
-// const assetsTabs = ['Collections', 'Tokens']
+import AccountDetailComponent from './components/AccountDetailComponent';
+import LastTransfersComponent from '../Main/components/LastTransfersComponent';
+import CollectionsComponent from './components/CollectionsComponent';
+import TokensComponent from './components/TokensComponent';
+import { useApi } from '../../hooks/useApi';
+import PagePaper from '../../components/PagePaper';
+
+const assetsTabs = ['Collections', 'NFTs'];
 
 const AccountPage = () => {
-  const { accountId } = useParams()
+  const { accountId } = useParams();
+  const { chainData } = useApi();
 
-  const deviceSize = useDeviceSize()
+  const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
 
-  const pageSize = useMemo(() => (deviceSize === DeviceSize.sm ? 5 : 20), [deviceSize])
-
-  // const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0)
-
-  const {
-    fetchMore: fetchMoreTransfers,
-    loading: isTransfersFetching,
-    error: fetchTransfersError,
-    data: transfers,
-  } = useQuery<TransfersData, TransferVariables>(getLastTransfersQuery, {
-    variables: {
-      limit: pageSize,
-      offset: 0,
-      where: { _or: [{ from_owner: { _eq: accountId } }, { to_owner: { _eq: accountId } }] },
-    },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
-  })
-
-  const onTransfersPageChange = useCallback(
-    (limit: number, offset: number) => {
-      return fetchMoreTransfers({
-        variables: {
-          limit,
-          offset,
-        },
-      })
-    },
-    [fetchMoreTransfers]
-  )
-
-  if (!accountId) return null
+  if (!accountId) return null;
 
   return (
-    <div>
+    <PagePaper>
       <AccountDetailComponent accountId={accountId} />
-      {/*<h2 className={'margin-top'}>Assets</h2>*/}
-      {/*<Tabs*/}
-      {/*  activeIndex={activeAssetsTabIndex}*/}
-      {/*  labels={assetsTabs}*/}
-      {/*  onClick={setActiveAssetsTabIndex}*/}
-      {/*/>*/}
-      {/*<Tabs*/}
-      {/*  activeIndex={activeAssetsTabIndex}*/}
-      {/*  contents={[*/}
-      {/*    <CollectionsComponent accountId={accountId} />,*/}
-      {/*    <TokensComponent accountId={accountId} />]}*/}
-      {/*/>*/}
-      <h2 className={'margin-top margin-bottom'}>Last {config.TOKEN_ID} transfers</h2>
+      <AssetsWrapper>
+        <Heading size={'2'}>Assets</Heading>
+        <Tabs
+          activeIndex={activeAssetsTabIndex}
+          labels={assetsTabs}
+          onClick={setActiveAssetsTabIndex}
+        />
+        <Tabs
+          activeIndex={activeAssetsTabIndex}
+        >
+          <CollectionsComponent
+            accountId={accountId}
+            key={'collections'}
+          />
+          <TokensComponent
+            accountId={accountId}
+            key={'tokens'}
+          />
+        </Tabs>
+      </AssetsWrapper>
       <LastTransfersComponent
-        data={transfers}
-        onPageChange={onTransfersPageChange}
-        pageSize={pageSize}
-        loading={isTransfersFetching}
+        accountId={accountId}
+        pageSize={10}
       />
-    </div>
-  )
-}
+    </PagePaper>
+  );
+};
 
-export default AccountPage
+const AssetsWrapper = styled.div`
+  padding-top: calc(var(--gap) * 1.5);
+`;
+
+export default AccountPage;

@@ -1,10 +1,11 @@
-import React from 'react'
-import ExtrinsicDetail from './components/ExtrinsicDetail'
+import React from 'react';
+import ExtrinsicDetail from './components/ExtrinsicDetail';
+import PagePaper from '../../components/PagePaper';
 
 const ExtrinsicPage = () => {
-  return <div>
+  return (<PagePaper>
     <ExtrinsicDetail />
-  </div>
-}
+  </PagePaper>);
+};
 
-export default ExtrinsicPage
+export default ExtrinsicPage;

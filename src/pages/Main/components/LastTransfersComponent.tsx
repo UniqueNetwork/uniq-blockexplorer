@@ -1,132 +1,111 @@
-import React from 'react'
-import Table from 'rc-table'
-import { Link } from 'react-router-dom'
-import { Text } from '@unique-nft/ui-kit'
-import PaginationComponent from '../../../components/Pagination'
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
-import { Data as TransfersData, Transfer } from '../../../api/graphQL/transfers'
-import { BlockComponentProps } from '../types'
-import { timeDifference } from '../../../utils/timestampUtils'
-import LoadingComponent from '../../../components/LoadingComponent'
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize'
-import config from '../../../config'
-import { formatAmount } from '../../../utils/textUtils'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Heading, Text } from '@unique-nft/ui-kit';
 
-const transferColumns = [
+import PaginationComponent from '../../../components/Pagination';
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import { Transfer, transfers as gqlTransfers } from '../../../api/graphQL';
+import { LastTransfersComponentProps } from '../types';
+import { timeDifference } from '../../../utils/timestampUtils';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { useApi } from '../../../hooks/useApi';
+import Table from '../../../components/Table';
+
+const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   {
-    title: 'Extrinsic',
     dataIndex: 'block_index',
     key: 'block_index',
-    width: 100,
+    render: (value: string) => <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>,
+    title: 'Extrinsic',
 
-    render: (value: string) => <Link to={`/extrinsic/${value}`}>{value}</Link>,
+    width: 100
   },
-  { title: 'Age', dataIndex: 'time_difference', key: 'age', width: 100 },
+  { dataIndex: 'time_difference', key: 'age', title: 'Age', width: 100 },
   {
-    title: 'From',
     dataIndex: 'from_owner',
     key: 'from_owner',
-    width: 100,
     render: (value: string) => <AccountLinkComponent value={value} />,
+    title: 'From',
+    width: 100
   },
   {
-    title: 'To',
     dataIndex: 'to_owner',
     key: 'to_owner',
-    width: 100,
     render: (value: string) => <AccountLinkComponent value={value} />,
+    title: 'To',
+    width: 100
   },
   /* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */
   {
-    title: 'Amount',
     dataIndex: 'amount',
     key: 'amount',
-    width: 100,
-    render: (value: number | object) => (
-      <Text size={'s'}>{`${formatAmount(Number(value))} ${config.TOKEN_ID}`}</Text>
+    render: (value: number) => (
+      <Text size={'s'}>{`${(Number(value) && value) || 0} ${tokenSymbol}`}</Text>
     ),
-  },
-]
+    title: 'Amount',
+    width: 100
+  }
+];
 
 const transfersWithTimeDifference = (
   transfers: Transfer[] | undefined
 ): (Transfer & { time_difference: string })[] => {
-  if (!transfers) return []
+  if (!transfers || !Array.isArray(transfers)) return [];
+
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
-    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : '',
-  }))
-}
+    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : ''
+  }));
+};
 
 const LastTransfersComponent = ({
-  data,
-  pageSize,
-  loading,
-  onPageChange,
-}: BlockComponentProps<TransfersData>) => {
-  const deviceSize = useDeviceSize()
+  accountId,
+  pageSize = 5,
+  searchString
+}: LastTransfersComponentProps) => {
+  const deviceSize = useDeviceSize();
+
+  const { chainData, currentChain } = useApi();
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
+    gqlTransfers.useGraphQlLastTransfers({ accountId, pageSize });
+
+  useEffect(() => {
+    const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
+    const offset = (currentPage - 1) * pageSize;
+
+    void fetchMoreTransfers({
+      limit: pageSize,
+      offset,
+      searchString: prettifiedBlockSearchString
+    });
+  }, [pageSize, searchString, currentPage, fetchMoreTransfers, accountId]);
+
+  if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
 
   return (
-    <div>
-      {deviceSize !== DeviceSize.sm && (
-        <Table
-          columns={transferColumns}
-          data={
-            !loading && data?.view_extrinsic.length
-              ? transfersWithTimeDifference(data?.view_extrinsic)
-              : []
-          }
-          emptyText={() => (!loading ? 'No data' : <LoadingComponent />)}
-          rowKey={'block_index'}
-          tableLayout={'fixed'}
-        />
-      )}
-
-      {deviceSize === DeviceSize.sm && (
-        <div className={'table-sm'}>
-          {loading && <LoadingComponent />}
-          {!loading && data?.view_extrinsic.length === 0 && (
-            <Text color={'grey'} className={'text_grey'}>
-              No data
-            </Text>
-          )}
-          {!loading &&
-            transfersWithTimeDifference(data?.view_extrinsic).map((item) => (
-              <div key={`transfer-${item.block_index}`} className={'row'}>
-                <div>
-                  <Text className={'title'}>Extrinsic</Text>
-                  <Link to={`/extrinsic/${item.block_index}`}>
-                    <Text color={'primary-600'}>{item.block_index}</Text>
-                  </Link>
-                </div>
-                <div>
-                  <Text className={'title'}>Age</Text>
-                  <Text>{item.time_difference}</Text>
-                </div>
-                <div>
-                  <Text className={'title'}>From</Text>
-                  <AccountLinkComponent value={item.from_owner} />
-                </div>
-                <div>
-                  <Text className={'title'}>To</Text>
-                  <AccountLinkComponent value={item.to_owner} />
-                </div>
-                <div>
-                  <Text className={'title'}>Amount</Text>
-                  <Text>{`${formatAmount(Number(item.amount))} ${config.TOKEN_ID}`}</Text>
-                </div>
-              </div>
-            ))}
-        </div>
-      )}
+    <>
+      <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
+      <Table
+        columns={getTransferColumns(
+          chainData?.properties.tokenSymbol || '',
+          currentChain?.network
+        )}
+        data={transfersWithTimeDifference(transfers)}
+        loading={isTransfersFetching}
+        rowKey={'block_index'}
+      />
       <PaginationComponent
+        count={transfersCount}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
         pageSize={pageSize}
-        count={data?.view_extrinsic_aggregate.aggregate?.count || 0}
-        onPageChange={onPageChange}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
-    </div>
-  )
-}
-export { transferColumns }
-export default LastTransfersComponent
+    </>
+  );
+};
+
+export default LastTransfersComponent;

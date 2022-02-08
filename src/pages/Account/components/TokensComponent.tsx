@@ -1,118 +1,106 @@
-import React, { FC, Reducer, useCallback, useEffect, useReducer, useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { Checkbox, Icon, InputText, Button } from '@unique-nft/ui-kit'
-import {
-  Token,
-  tokensQuery,
-  Data as tokensData,
-  Variables as TokensVariables,
-} from '../../../api/graphQL/tokens'
-import Avatar from '../../../components/Avatar'
+import React, { FC, Reducer, useCallback, useEffect, useReducer, useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { Checkbox, Button } from '@unique-nft/ui-kit';
 
+import { Token, tokens as gqlTokens } from '../../../api/graphQL';
+import TokenCard from '../../../components/TokenCard';
+import SearchComponent from '../../../components/SearchComponent';
+import { useApi } from '../../../hooks/useApi';
 
 interface TokensComponentProps {
   accountId: string
+  pageSize?: number
 }
 
-const TokenCard: FC<Token> = (props) => (
-  <div className={'grid-item_col1 card margin-bottom flexbox-container_column'}>
-    <Avatar size={'small'} />
-    <div className={'flexbox-container flexbox-container_column flexbox-container_without-gap'}>
+type ActionType = 'All' | 'Minted' | 'Received'
 
-      <div>{props.token_id}</div>
-      <div>{props.collection.name}</div>
-      <div className={'text_grey'}>Transfers: 0</div>
-    </div>
-  </div>
-);
+const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 }) => {
+  const { currentChain } = useApi();
+  const navigate = useNavigate();
 
-type ActionType = 'All' | 'Minted' | 'Received';
+  const { fetchMoreTokens, tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
+    owner: { _eq: accountId }
+  },
+  pageSize });
 
-const TokensComponent: FC<TokensComponentProps> = (props) => {
-  const { accountId } = props;
+  const onClickSeeMore = useCallback(() => {
+    navigate(`/${currentChain.network}/tokens`);
+  }, [currentChain.network, navigate]);
 
-  const [filter, dispatchFilter] = useReducer<Reducer<Record<string, any> | undefined, {type: ActionType, value: string | boolean}>>((state, action) => {
-    if (action.type === 'All' && action.value) {
-      return undefined;
-    }
-    if (action.type === 'Minted') {
-      return { ...state, minted: action.value ? { _eq: accountId } : undefined };
-    }
-    if (action.type === 'Received') {
-      return { ...state, received: action.value ? { _eq: accountId } : undefined };
-    }
-    return state;
-  }, undefined);
-
-  const [searchString, setSearchString] = useState<string | undefined>();
-
-  const {
-    fetchMore,
-    data: collections,
-  } = useQuery<tokensData, TokensVariables>(tokensQuery, {
-    variables: {
-      limit: 6, offset: 0,
-    }});
-
-  const fetchMoreCollections = useCallback(() => {
-    const prettifiedBlockSearchString = searchString?.match(/[^$,.\d]/) ? -1 : searchString
-    fetchMore({
-      variables: {
-        where: {
-          ...(searchString &&
-          searchString.length > 0 ? {
-            name: { _eq: prettifiedBlockSearchString },
-          } : {}),
-          ...(filter ? {_or: filter} : {})
-        },
+  const onSearch = useCallback((searchString: string) => {
+    void fetchMoreTokens({
+      filter: {
+        owner: { _eq: accountId }
       },
-    })
-  }, [filter, searchString]);
+      searchString
+    });
+  }, [accountId, fetchMoreTokens]);
 
-  useEffect(() => {
-    fetchMoreCollections()
-  }, [filter])
+  return (<>
+    <ControlsWrapper>
+      <SearchComponent
+        onSearchChange={onSearch}
+        placeholder={'NFT / collection'}
+      />
+    </ControlsWrapper>
+    <ItemsCountWrapper>{tokensCount || 0} items</ItemsCountWrapper>
+    <TokensWrapper>
+      {tokens?.map &&
+          tokens.map((token: Token) => (
+            <TokenCard
+              {...token}
+              key={`token-${token.token_id}`}
+            />))}
+    </TokensWrapper>
+    <Button
+      iconRight={{
+        color: '#fff',
+        name: 'arrow-right',
+        size: 12
+      }}
+      onClick={onClickSeeMore}
+      role='primary'
+      title={'See all'}
+    />
+  </>);
+};
 
-  const onCheckBoxChange = useCallback(
-    (actionType: ActionType) => (value: boolean) => dispatchFilter({type: actionType, value}),
-    [dispatchFilter]
-  )
+const ControlsWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--gap);
+`;
 
-  const onSearchChange = useCallback((value: string | number | undefined) => setSearchString(value?.toString()), [setSearchString])
+const ItemsCountWrapper = styled.div`
+  margin: var(--gap) 0;
+`;
 
-  const onSearchClick = useCallback(() => {
-    fetchMoreCollections();
-  }, [fetchMoreCollections, searchString])
+const TokensWrapper = styled.div`
 
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: calc(var(--gap) * 1.5);
+  grid-row-gap: calc(var(--gap) * 1.5);
+  margin-bottom: calc(var(--gap) * 1.5);
 
-  return (
-    <>
-      <div className={'flexbox-container flexbox-container_space-between margin-top'}>
-        <div className={'flexbox-container flexbox-container_half-gap'} >
-          <InputText placeholder={'Collection name'}  onChange={onSearchChange} />
-          <Button title={'Search'} role="primary" onClick={onSearchClick} />
-        </div>
-        <div className={'flexbox-container'}>
-          <Checkbox label={'All'} size={'s'} checked={filter === undefined} onChange={onCheckBoxChange('All')}/>
-          <Checkbox label={'Minted'} size={'s'} checked={!!filter?.owner} onChange={onCheckBoxChange('Minted')}/>
-          <Checkbox label={'Received'} size={'s'} checked={!!filter?.admin} onChange={onCheckBoxChange('Received')}/>
-        </div>
-      </div>
-      <div className={'margin-top margin-bottom'}>{collections?.tokens_aggregate?.aggregate?.count || 0} items</div>
-      <div className={'grid-container'}>
-        {collections?.tokens.map((token) => <TokenCard {...token} />)}
-      </div>
-      <Button
-        title={'See all'}
-        iconRight={{
-          color: '#fff',
-          name: 'arrow-right',
-          size: 12
-        }}
-        role="primary"
-        onClick={() => {}}/>
-    </>
-  )
-}
+  @media(max-width: 1279px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  @media(max-width: 767px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-export default TokensComponent
+  @media(max-width: 567px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media(max-width: 319px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export default TokensComponent;

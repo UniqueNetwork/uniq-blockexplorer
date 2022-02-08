@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import { Icon } from '@unique-nft/ui-kit'
-import usePagination, { UsePaginationProps, DOTS } from '../hooks/usePagination'
-import useDeviceSize from '../hooks/useDeviceSize'
+import React, { useCallback, useState } from 'react';
+import { Icon } from '@unique-nft/ui-kit';
+import usePagination, { DOTS } from '../hooks/usePagination';
+import styled from 'styled-components';
 
 interface PaginationProps {
   count: number // total number of elements in DB
   pageSize?: number // how many elements we present per single page
-  onPageChange: (limit: number, offset: number) => void // fetch new page data
+  onPageChange: (page: number) => void // fetch new page data
   siblingCount?: number // how many pages to show, the rest will be "..."
   currentPage?: number
 }
@@ -17,78 +17,145 @@ const PageNumberComponent = (props: {
   currentPage: number
   onPageChanged: (newPage: number) => void
 }) => {
-  const { pageNumber, currentPage, onPageChanged } = props
+  const { currentPage, onPageChanged, pageNumber } = props;
+
+  const onPagePillClick = useCallback(
+    () => {
+      onPageChanged(pageNumber as number);
+    },
+    [onPageChanged, pageNumber]
+  );
+
   if (pageNumber === DOTS) {
-    return <li>...</li>
+    return <li>...</li>;
   }
 
   // Render our Page Pills
   return (
     // highlight if selected
     <li
-      key={pageNumber}
       className={pageNumber === currentPage ? 'active' : ''}
-      onClick={() => onPageChanged(pageNumber as number)}
+      key={pageNumber}
+      onClick={onPagePillClick}
     >
       {pageNumber}
     </li>
-  )
-}
+  );
+};
 
 const PaginationComponent = ({
-  currentPage: currentPageFromProps,
   count,
-  siblingCount = 2,
-  pageSize = 10,
+  currentPage = 1,
   onPageChange,
+  pageSize = 10,
+  siblingCount = 2
 }: PaginationProps) => {
-  const [currentPage, setCurrentPage] = useState(currentPageFromProps || 1)
   const paginationRange = usePagination({
-    total: count,
     currentPage,
-    siblingCount,
     pageSize,
-  })
-  let lastPage =
-    (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null
-  const onPageChanged = (newPage: number) => {
-    const offset = (newPage - 1) * pageSize
-    setCurrentPage(newPage)
-    onPageChange(pageSize, offset)
-  }
-  const onNext = () => {
-    if (currentPage === lastPage || count < pageSize) return
-    onPageChanged(currentPage + 1)
-  }
+    siblingCount,
+    total: count
+  });
+  const lastPage =
+    (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null;
 
-  const onPrevious = () => {
-    if (currentPage < 2 || count < pageSize) return
-    onPageChanged(currentPage - 1)
-  }
+  const onPageChanged = useCallback((newPage: number) => {
+    onPageChange(newPage);
+  }, [pageSize, onPageChange]);
 
+  const onNext = useCallback(() => {
+    if (currentPage === lastPage || count < pageSize) return;
+    onPageChanged(currentPage + 1);
+  }, [currentPage, lastPage, count, pageSize, onPageChanged]);
+
+  const onPrevious = useCallback(() => {
+    if (currentPage < 2 || count < pageSize) return;
+    onPageChanged(currentPage - 1);
+  }, [currentPage, count, pageSize, onPageChanged]);
 
   return (
-    <div className={'flexbox-container flexbox-container_space-between pagination-wrapper'}>
+    <PaginationWrapper>
       <div>{count} items</div>
-      {count > pageSize && <ul className={'pagination-container'}>
-        <li key={'prev'} onClick={onPrevious}>
-          <Icon name={'carret-right'} size={12} color={currentPage === 1 ? '#ABB6C1' : '#040B1D'} />
-        </li>
-        {paginationRange.map((pageNumber, index) => (
-          <PageNumberComponent
-            key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
-            pageNumber={pageNumber}
-            currentPage={currentPage}
-            onPageChanged={onPageChanged}
-          />
-        ))}
-        {/* TODO: disabled={currentPage === lastPage} */}
-        <li key={'next'} onClick={onNext}>
-          <Icon name={'carret-right'} size={12} color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'} />
-        </li>
-      </ul>}
-    </div>
-  )
-}
+      {count > pageSize && (
+        <PageNumbersWrapper>
+          <li
+            key={'prev'}
+            onClick={onPrevious}
+          >
+            <Icon
+              color={currentPage === 1 ? '#ABB6C1' : '#040B1D'}
+              name={'carret-right'}
+              size={12}
+            />
+          </li>
+          {paginationRange.map((pageNumber, index) => (
+            <PageNumberComponent
+              currentPage={currentPage}
+              key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
+              onPageChanged={onPageChanged}
+              pageNumber={pageNumber}
+            />
+          ))}
+          {/* TODO: disabled={currentPage === lastPage} */}
+          <li
+            key={'next'}
+            onClick={onNext}
+          >
+            <Icon
+              color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'}
+              name={'carret-right'}
+              size={12}
+            />
+          </li>
+        </PageNumbersWrapper>
+      )}
+    </PaginationWrapper>
+  );
+};
 
-export default PaginationComponent
+const PaginationWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start !important;
+    row-gap: calc(var(--gap) * 1.5);
+  }
+`;
+
+const PageNumbersWrapper = styled.ul`
+  list-style: none;
+  padding: 0;
+  display: flex;
+
+  li:last-child, li:first-child {
+    padding: 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  li:first-child {
+    transform: rotate(180deg);
+  }
+
+  li {
+    padding: 4px 6px;
+    min-width: 18px;
+    text-align: center;
+    cursor: pointer;
+
+    &.active {
+      border: 1px solid var(--primary-500);
+      color: var(--white-color);
+      background-color: var(--primary-500);
+      border-radius: 4px;
+      cursor: default;
+    }
+  }
+`;
+
+export default PaginationComponent;

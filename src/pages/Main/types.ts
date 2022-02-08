@@ -1,10 +1,10 @@
-import { ApolloQueryResult } from '@apollo/client'
-
-type BlockComponentProps<T> = {
-  data?: T
-  pageSize: number
-  loading: boolean
-  onPageChange: (limit: number, offset: number) => Promise<ApolloQueryResult<T>>
+export type BlockComponentProps = {
+  searchString?: string
+  pageSize?: number
 }
 
-export type { BlockComponentProps }
+export type LastTransfersComponentProps = {
+  searchString?: string
+  pageSize?: number
+  accountId?: string
+}
