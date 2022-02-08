@@ -78,7 +78,6 @@ export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokens
   );
 
   useEffect(() => {
-    console.log('client.link', client.link);
     fetchMore({})
       .catch((errMsg) => {
         throw new Error(errMsg);
