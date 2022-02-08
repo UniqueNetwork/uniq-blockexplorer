@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
-import { useCallback } from 'react';
+import { gql, useApolloClient, useQuery } from '@apollo/client';
+import { useCallback, useEffect } from 'react';
 import { FetchMoreTokensOptions, TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
@@ -25,6 +25,8 @@ const tokensQuery = gql`
 `;
 
 export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokensProps) => {
+  const client = useApolloClient();
+
   const getWhere = useCallback(
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
@@ -74,6 +76,13 @@ export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokens
     },
     [fetchMore, getWhere, pageSize]
   );
+
+  useEffect(() => {
+    fetchMore({})
+      .catch((errMsg) => {
+        throw new Error(errMsg);
+      });
+  }, [client.link, fetchMore]);
 
   return {
     fetchMoreTokens,
