@@ -87,6 +87,7 @@ const CollectionTitle = styled.div`
   margin-bottom: calc(var(--gap) * 2);
   h2 {
     margin-bottom: 0 !important;
+    word-break: break-word;
   }
 `;
 

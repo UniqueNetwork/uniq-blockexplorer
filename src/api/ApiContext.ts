@@ -16,6 +16,7 @@ export type ApiContextProps = {
   api?: INFTController
   chainData?: ChainData
   currentChain: Chain
+  isLoadingChainData: boolean
 }
 
 const ApiContext: Context<ApiContextProps> = createContext({} as unknown as ApiContextProps);

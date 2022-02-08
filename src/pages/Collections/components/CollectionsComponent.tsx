@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { CollectionsComponentProps } from '../types';
 import { useApi } from '../../../hooks/useApi';
@@ -7,6 +7,7 @@ import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
 import { getCollectionsColumns } from './collectionsColumnsSchema';
 import { collections as gqlCollections, CollectionSorting } from '../../../api/graphQL';
+import { useSearchParams } from 'react-router-dom';
 
 const CollectionsComponent = ({
   pageSize = 20,
@@ -16,20 +17,31 @@ const CollectionsComponent = ({
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
+  const [queryParams] = useSearchParams();
+
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const filter = useMemo(() => {
+    const accountId = queryParams.get('accountId');
+
+    if (accountId) return { owner: { _eq: accountId } };
+
+    return undefined;
+  }, [queryParams]);
 
   const {
     collections,
     collectionsCount,
     fetchMoreCollections,
     isCollectionsFetching
-  } = gqlCollections.useGraphQlCollections({ orderBy: defaultOrderBy, pageSize });
+  } = gqlCollections.useGraphQlCollections({ filter, orderBy: defaultOrderBy, pageSize });
 
   useEffect(() => {
     const offset = (currentPage - 1) * pageSize;
 
     void fetchMoreCollections({
+      filter,
       limit: pageSize,
       offset,
       orderBy,

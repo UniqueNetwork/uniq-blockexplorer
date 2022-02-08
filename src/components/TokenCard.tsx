@@ -73,6 +73,10 @@ const TokenPicture = styled(Picture)`
 
 const TokenTitle = styled.div`
   margin-top: calc(var(--gap) / 2);
+  
+  a {
+    word-break: break-word;
+  }
 `;
 
 const TokenProperties = styled.div`
