@@ -12,7 +12,7 @@ import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 interface TokensComponentProps {
   searchString?: string
   pageSize?: number
-  collectionId?: number
+  collectionId?: string
 }
 
 const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16 }) => {
