@@ -30,8 +30,8 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
-    navigate(`/${currentChain.network}/tokens`);
-  }, [currentChain, navigate]);
+    navigate(`/${currentChain.network}/tokens/${collectionId || ''}`);
+  }, [currentChain, navigate, collectionId]);
 
   const { isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
