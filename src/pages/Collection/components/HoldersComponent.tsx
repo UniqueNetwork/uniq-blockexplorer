@@ -1,56 +1,95 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
-import { Token } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import Table from '../../../components/Table';
+import { Holder, holders as gqlHolders, HolderSorting } from '../../../api/graphQL';
+import PaginationComponent from '../../../components/Pagination';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { DefaultRecordType } from 'rc-table/lib/interface';
+import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 
 interface HoldersComponentProps {
-  tokens: Token[]
-  loading?: boolean
+  collectionId?: string
+  pageSize?: number
+  defaultOrderBy?: HolderSorting
 }
 
-type Holder = {
-  accountId: string
-  tokens: number
-  transfers?: number
-  purchase?: number
-  sale?: number
-}
-
-const columns = [
+const getColumns = (orderBy: HolderSorting, onOrderChange: (orderBy: HolderSorting) => void) => ([
   {
-    dataIndex: 'accountId',
-    key: 'accountId',
+    dataIndex: 'owner',
+    key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100
   },
-  { dataIndex: 'tokens', key: 'tokens', title: 'Items', width: 100 }
-];
+  {
+    dataIndex: 'count',
+    key: 'count',
+    title: <TableSortableColumnTitle
+      dataIndex={'count'}
+      onOrderChange={onOrderChange}
+      orderBy={orderBy}
+      title={'Items'}
+    />,
+    width: 100
+  }
+]);
 
-const HoldersComponent: FC<HoldersComponentProps> = ({ loading, tokens }) => {
-  const holders: Holder[] = useMemo(() => {
-    return tokens.reduce<Holder[]>((acc, token) => {
-      const holderIndex = acc.findIndex((item) => item.accountId === token.owner);
+const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 10, defaultOrderBy = { count: 'desc' } }) => {
+  const [orderBy, setOrderBy] = useState<HolderSorting>(defaultOrderBy);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-      if (holderIndex > -1) {
-        acc[holderIndex].tokens++;
-      } else {
-        return [...acc, { accountId: token.owner, tokens: 1 }];
-      }
+  const deviceSize = useDeviceSize();
 
-      return acc;
-    }, []);
-  }, [tokens]);
+  const { fetchMoreHolders, holders, holdersCount, isHoldersFetching } = gqlHolders.useGraphQlHolders({
+    filter: { collection_id: { _eq: collectionId } },
+    orderBy: defaultOrderBy,
+    pageSize
+  });
+
+  const getRowKey = useMemo(
+    () => (item: DefaultRecordType) => `holder-${(item as Holder).collection_id}-${(item as Holder).owner}`,
+    []
+  );
+
+  const fetchHolders = useCallback((currentPage: number, orderBy: HolderSorting) => {
+    const offset = (currentPage - 1) * pageSize;
+
+    void fetchMoreHolders({
+      filter: { collection_id: { _eq: collectionId } },
+      limit: pageSize,
+      offset,
+      orderBy
+    });
+  }, [collectionId, pageSize]);
+
+  const onOrderChange = useCallback((_orderBy: HolderSorting) => {
+    setOrderBy(_orderBy);
+
+    fetchHolders(currentPage, _orderBy);
+  }, [currentPage]);
+
+  const onPageChange = useCallback((_currentPage: number) => {
+    setCurrentPage(_currentPage);
+
+    fetchHolders(_currentPage, orderBy);
+  }, [orderBy]);
 
   return (
     <HolderWrapper>
       <Table
-        columns={columns}
-        data={!loading ? holders : []}
-        loading={loading}
-        rowKey={'accountId'}
+        columns={getColumns(orderBy, onOrderChange)}
+        data={holders}
+        loading={isHoldersFetching}
+        rowKey={getRowKey}
+      />
+      <PaginationComponent
+        count={holdersCount || 0}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        pageSize={pageSize}
+        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
       />
     </HolderWrapper>
   );
