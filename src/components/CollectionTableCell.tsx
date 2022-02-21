@@ -48,6 +48,10 @@ const CollectionLink = styled(Link)`
 const CollectionTitle = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  span {
+    word-break: break-word;
+  }
   &:hover {
     text-decoration: none;
     .unique-text[class*=size-m] {

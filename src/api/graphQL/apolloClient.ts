@@ -36,6 +36,13 @@ export const getApolloClient = (clientEndpoint: string) =>
                 return incoming;
               }
             },
+            view_holders: dontCache(),
+            view_holders_aggregate: {
+              keyArgs: false,
+              merge(_, incoming: unknown[]) {
+                return incoming;
+              }
+            },
             view_last_block: dontCache(),
             view_last_block_aggregate: {
               keyArgs: false,

@@ -27,8 +27,8 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     });
 
   const onClickSeeMore = useCallback(() => {
-    navigate(`/${currentChain.network}/collections`);
-  }, [currentChain, navigate]);
+    navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
+  }, [currentChain.network, navigate, accountId]);
 
   const onSearch = useCallback((searchString: string) => {
     void fetchMoreCollections({
