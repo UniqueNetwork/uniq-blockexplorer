@@ -1,24 +1,88 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { Icon, Select } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-
+import styled from 'styled-components';
 import { Token, tokens as gqlTokens, TokenSorting } from '../../../api/graphQL';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import PaginationComponent from '../../../components/Pagination';
-import { useApi } from '../../../hooks/useApi';
-import { TokensComponentProps } from '../types';
+import SearchComponent from '../../../components/SearchComponent';
 import Table from '../../../components/Table';
+import { useApi } from '../../../hooks/useApi';
+import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { TokensComponentProps, TokensSelectOption } from '../types';
 import { getTokensColumns } from './tokensColumnsSchema';
+import TokensGrid from './TokensGrid';
 
 const TokensComponent: FC<TokensComponentProps> = ({
-  searchString,
   orderBy: defaultOrderBy = { date_of_creation: 'desc' },
   pageSize = 20
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
+  const options: TokensSelectOption[] = [
+    {
+      iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
+      id: '1',
+      sortDir: 'asc',
+      sortField: 'date_of_creation',
+      title: 'NFT Created'
+    },
+    {
+      iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
+      id: '2',
+      sortDir: 'desc',
+      sortField: 'date_of_creation',
+      title: 'NFT Created'
+    },
+    {
+      iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
+      id: '3',
+      sortDir: 'asc',
+      sortField: 'collection_id',
+      title: 'Collection id'
+    },
+    {
+      iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
+      id: '4',
+      sortDir: 'desc',
+      sortField: 'collection_id',
+      title: 'Collection id'
+    }
+  ];
+
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchString, setSearchString] = useState<string | undefined>();
+  const [select, setSelect] = useState<string | number>(options[0].id);
+  const [view, setView] = useState<'list' | 'grid'>('grid');
+
+  const selectFilter = useCallback(
+    (selected) => {
+      const option = options.find((item) => {
+        return item.id === selected;
+      });
+
+      if (option && option.sortField) {
+        setSelect(option.id);
+        setOrderBy({ [option.sortField]: option.sortDir });
+      }
+    },
+    [setSelect, setOrderBy]
+  );
+
+  const selectGrid = useCallback(
+    () => {
+      setView('grid');
+    },
+    [setView]
+  );
+
+  const selectList = useCallback(
+    () => {
+      setView('list');
+    },
+    [setView]
+  );
 
   const {
     fetchMoreTokens,
@@ -45,12 +109,53 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   return (
     <>
-      <Table
-        columns={getTokensColumns(currentChain.network, orderBy, setOrderBy)}
-        data={tokens || []}
-        loading={isTokensFetching}
-        rowKey={getRowKey}
-      />
+      <TopBar>
+        <SearchComponent
+          onSearchChange={setSearchString}
+          placeholder={'Extrinsic / collection / NFT / account'}
+        />
+        <Controls>
+          {view === 'grid' && (
+            <Select
+              onChange={selectFilter}
+              options={options}
+              value={select}
+            />
+          )}
+          <ViewButtons>
+            <ViewButton onClick={selectGrid}>
+              <Icon
+                file={view === 'grid' ? '/static/grid_active.svg' : '/static/grid.svg'}
+                size={32}
+              />
+            </ViewButton>
+            <ViewButton onClick={selectList}>
+              <Icon
+                file={view === 'list' ? '/static/list_active.svg' : '/static/list.svg'}
+                size={32}
+              />
+            </ViewButton>
+          </ViewButtons>
+        </Controls>
+      </TopBar>
+      {view === 'list'
+        ? (
+          <Table
+            columns={getTokensColumns(currentChain.network, orderBy, setOrderBy)}
+            data={tokens || []}
+            loading={isTokensFetching}
+            rowKey={getRowKey}
+          />
+        )
+        : (
+          <div>
+            <TokensGrid
+              chainNetwork={currentChain.network}
+              tokens={tokens || []}
+            />
+          </div>
+        )}
+
       <PaginationComponent
         count={tokensCount || 0}
         currentPage={currentPage}
@@ -61,5 +166,30 @@ const TokensComponent: FC<TokensComponentProps> = ({
     </>
   );
 };
+
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Controls = styled.div`
+  display: flex;
+`;
+
+const ViewButtons = styled.div`
+  display: flex;
+  margin-left: 28px;
+`;
+
+const ViewButton = styled.div`
+  display: flex;
+  cursor: pointer;
+  height: 32px;
+  margin-top: 4px;
+  margin-right: 4px;
+  &:last-child {
+    margin-right: 0;
+  }
+`;
 
 export default TokensComponent;
