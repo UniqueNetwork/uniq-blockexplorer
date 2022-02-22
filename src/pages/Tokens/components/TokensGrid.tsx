@@ -31,7 +31,7 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
         <Text
           color={'primary-600'}
           size='s'
-        >{`${token.token_prefix} [id${token.collection_id}]`}</Text>
+        >{`${token.token_prefix} [id ${token.collection_id}]`}</Text>
         <TokenDate
           color={'grey-500'}
           size='xs'
@@ -46,13 +46,13 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
 const TokenGallery = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 `;
 
 const TokenLink = styled(Link)`
   display: flex;
   flex-direction: column;
   margin-bottom: 32px;
+  margin-right: 32px;
   &:hover {
     text-decoration: none;
   }
