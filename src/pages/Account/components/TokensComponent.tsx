@@ -1,7 +1,7 @@
-import React, { FC, Reducer, useCallback, useEffect, useReducer, useState } from 'react';
+import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { Checkbox, Button } from '@unique-nft/ui-kit';
+import { /* Checkbox, */Button } from '@unique-nft/ui-kit';
 
 import { Token, tokens as gqlTokens } from '../../../api/graphQL';
 import TokenCard from '../../../components/TokenCard';
@@ -13,8 +13,6 @@ interface TokensComponentProps {
   pageSize?: number
 }
 
-type ActionType = 'All' | 'Minted' | 'Received'
-
 const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
@@ -25,8 +23,8 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
   pageSize });
 
   const onClickSeeMore = useCallback(() => {
-    navigate(`/${currentChain.network}/tokens`);
-  }, [currentChain.network, navigate]);
+    navigate(`/${currentChain.network}/tokens/?accountId=${accountId}`);
+  }, [currentChain.network, navigate, accountId]);
 
   const onSearch = useCallback((searchString: string) => {
     void fetchMoreTokens({

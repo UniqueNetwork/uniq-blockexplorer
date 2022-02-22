@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token } from '../../../api/graphQL/tokens/types';
 import Picture from '../../../components/Picture';
-import { timeDifference, timestampFormat } from '../../../utils/timestampUtils';
+import { timeDifference } from '../../../utils/timestampUtils';
 import { getImageURL } from '../../../utils/tokenImage';
 
 interface TokensGridProps {
@@ -21,7 +21,6 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
       >
         <TokenPicture
           alt={`${token.token_prefix} #${token.token_id}`}
-          size={380}
           src={getImageURL((token).image_path)}
         />
         <Text

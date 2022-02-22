@@ -2,6 +2,7 @@ import { Chain } from './api/chainApi/types';
 import { getChainList, getDefaultChain } from './utils/configParser';
 
 declare type Env = {
+  REACT_APP_NET_DEFAULT: string | undefined,
   REACT_APP_IPFS_GATEWAY: string | undefined,
 } & Record<string, string | undefined>
 

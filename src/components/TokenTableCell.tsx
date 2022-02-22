@@ -28,7 +28,6 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
       <TokenPicture
         alt={`${tokenPrefix} #${tokenId}`}
         src={imageUrl}
-        size={64}
       />
       <TokenTitle>
         <Text color={'secondary-500'}>{`${tokenPrefix} #${tokenId}`}</Text>

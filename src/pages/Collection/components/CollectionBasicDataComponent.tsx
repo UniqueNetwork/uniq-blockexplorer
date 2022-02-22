@@ -10,10 +10,11 @@ import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import { timestampFormat } from '../../../utils/timestampUtils';
 
 interface BasicDataComponentProps {
+  collectionId: string
   collection?: Collection
 }
 
-const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection }) => {
+const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection, collectionId }) => {
   const {
     collection_id: id,
     date_of_creation: createdOn,
@@ -73,7 +74,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
       </PropertiesWrapper>
       <div>
         <TokensComponent
-          collectionId={id}
+          collectionId={collectionId}
         />
       </div>
     </>
