@@ -8,7 +8,7 @@ export interface TokensComponentProps {
 
 export interface IconProps {
   size: number;
-  name?: string;
+  name: string;
   file?: string;
   color?: string;
 }
