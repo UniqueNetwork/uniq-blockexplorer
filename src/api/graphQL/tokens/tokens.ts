@@ -34,10 +34,12 @@ const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] =
 };
 
 const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
+  if (!searchString.includes(',')) return getSingleSearchQuery(searchString);
   const splitSearch = searchString.trim().split(',');
-  const searchQuery = splitSearch.map((searchPart: string) => ([
-    ...getSingleSearchQuery(searchPart.trim())
-  ])).reduce((acc: any[], query: any[]) => ([...acc, ...query]));
+  const searchQuery = splitSearch
+    .map((searchPart: string) => Number(searchPart.trim()))
+    .filter((id: number) => Number.isInteger(id))
+    .map((searchPart: number) => ({ collection_id: { _eq: searchPart } }));
 
   return searchQuery;
 };
