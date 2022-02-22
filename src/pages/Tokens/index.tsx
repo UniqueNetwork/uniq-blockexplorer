@@ -1,24 +1,14 @@
-import React, { FC, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { FC } from 'react';
 
 import TokensComponent from './components/TokensComponent';
-import SearchComponent from '../../components/SearchComponent';
 import PagePaper from '../../components/PagePaper';
 
 const TokensPage: FC = () => {
-  const [searchString, setSearchString] = useState<string | undefined>();
-
-  return (<PagePaper>
-    <SearchComponent
-      onSearchChange={setSearchString}
-      placeholder={'Extrinsic / collection / NFT / account'}
-    />
-    <div>
-      <TokensComponent
-        searchString={searchString}
-      />
-    </div>
-  </PagePaper>);
+  return (
+    <PagePaper>
+      <TokensComponent />
+    </PagePaper>
+  );
 };
 
 export default TokensPage;
