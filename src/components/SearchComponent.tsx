@@ -51,6 +51,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}
         placeholder={placeholder}
+        value={searchString}
       />
       <Button
         onClick={onSearch}
