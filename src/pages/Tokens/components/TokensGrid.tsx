@@ -13,10 +13,10 @@ interface TokensGridProps {
 }
 
 const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
-  return <TokenGallery>{tokens.map((token, index) => {
+  return <TokenGallery>{tokens.map((token) => {
     return (
       <TokenLink
-        key={index}
+        key={`token-${token.collection_id}-${token.token_id}`}
         to={`/${chainNetwork}/tokens/${token.collection_id}/${token.token_id}`}
       >
         <TokenPicture
