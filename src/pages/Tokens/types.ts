@@ -14,10 +14,10 @@ export interface IconProps {
 }
 
 export interface TokensSelectOption {
-  id: string | number;
-  title: string | number;
+  id: number;
+  title: string;
   iconLeft?: IconProps;
   iconRight?: IconProps;
   sortDir?: 'asc' | 'desc';
-  sortField?: 'date_of_creation' | 'collection_id';
+  sortField?: string;
 }

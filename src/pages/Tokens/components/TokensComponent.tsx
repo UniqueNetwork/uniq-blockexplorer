@@ -13,6 +13,42 @@ import { TokensComponentProps, TokensSelectOption } from '../types';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
 
+export enum ViewType {
+  Grid = 'Grid',
+  List = 'List'
+}
+
+const options: TokensSelectOption[] = [
+  {
+    iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
+    id: 1,
+    sortDir: 'asc',
+    sortField: 'date_of_creation',
+    title: 'NFT Created'
+  },
+  {
+    iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
+    id: 2,
+    sortDir: 'desc',
+    sortField: 'date_of_creation',
+    title: 'NFT Created'
+  },
+  {
+    iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
+    id: 3,
+    sortDir: 'asc',
+    sortField: 'collection_id',
+    title: 'Collection id'
+  },
+  {
+    iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
+    id: 4,
+    sortDir: 'desc',
+    sortField: 'collection_id',
+    title: 'Collection id'
+  }
+];
+
 const TokensComponent: FC<TokensComponentProps> = ({
   orderBy: defaultOrderBy = { date_of_creation: 'desc' },
   pageSize = 20
@@ -20,44 +56,14 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
-  const options: TokensSelectOption[] = [
-    {
-      iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
-      id: '1',
-      sortDir: 'asc',
-      sortField: 'date_of_creation',
-      title: 'NFT Created'
-    },
-    {
-      iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
-      id: '2',
-      sortDir: 'desc',
-      sortField: 'date_of_creation',
-      title: 'NFT Created'
-    },
-    {
-      iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
-      id: '3',
-      sortDir: 'asc',
-      sortField: 'collection_id',
-      title: 'Collection id'
-    },
-    {
-      iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
-      id: '4',
-      sortDir: 'desc',
-      sortField: 'collection_id',
-      title: 'Collection id'
-    }
-  ];
   const { collectionId } = useParams<'collectionId'>();
   const [queryParams] = useSearchParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchString, setSearchString] = useState<string | undefined>();
-  const [select, setSelect] = useState<string | number>(options[0].id);
-  const [view, setView] = useState<'list' | 'grid'>('grid');
+  const [searchString, setSearchString] = useState<string | undefined>('');
+  const [select, setSelect] = useState<number>(options[0].id);
+  const [view, setView] = useState<ViewType>(ViewType.List);
 
   const selectFilter = useCallback(
     (selected) => {
@@ -75,14 +81,14 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   const selectGrid = useCallback(
     () => {
-      setView('grid');
+      setView(ViewType.Grid);
     },
     [setView]
   );
 
   const selectList = useCallback(
     () => {
-      setView('list');
+      setView(ViewType.List);
     },
     [setView]
   );
@@ -130,7 +136,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
           placeholder={'Extrinsic / collection / NFT / account'}
         />
         <Controls>
-          {view === 'grid' && (
+          {view === ViewType.Grid && (
             <Select
               onChange={selectFilter}
               options={options}
@@ -138,22 +144,22 @@ const TokensComponent: FC<TokensComponentProps> = ({
             />
           )}
           <ViewButtons>
-            <ViewButton onClick={selectGrid}>
+            <ViewButton onClick={selectList}>
               <Icon
-                file={view === 'grid' ? '/static/grid_active.svg' : '/static/grid.svg'}
+                file={view === ViewType.List ? '/static/list_active.svg' : '/static/list.svg'}
                 size={32}
               />
             </ViewButton>
-            <ViewButton onClick={selectList}>
+            <ViewButton onClick={selectGrid}>
               <Icon
-                file={view === 'list' ? '/static/list_active.svg' : '/static/list.svg'}
+                file={view === ViewType.Grid ? '/static/grid_active.svg' : '/static/grid.svg'}
                 size={32}
               />
             </ViewButton>
           </ViewButtons>
         </Controls>
       </TopBar>
-      {view === 'list'
+      {view === ViewType.List
         ? (
           <Table
             columns={getTokensColumns(currentChain.network, orderBy, setOrderBy)}
