@@ -24,14 +24,14 @@ const options: TokensSelectOption[] = [
     id: 1,
     sortDir: 'asc',
     sortField: 'date_of_creation',
-    title: 'NFT Created'
+    title: 'NFT creation date'
   },
   {
     iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
     id: 2,
     sortDir: 'desc',
     sortField: 'date_of_creation',
-    title: 'NFT Created'
+    title: 'NFT creation date'
   },
   {
     iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
