@@ -12,7 +12,7 @@ import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 interface TokensComponentProps {
   searchString?: string
   pageSize?: number
-  collectionId?: number
+  collectionId?: string
 }
 
 const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16 }) => {
@@ -30,8 +30,8 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
-    navigate(`/${currentChain.network}/tokens`);
-  }, [currentChain, navigate]);
+    navigate(`/${currentChain.network}/tokens/${collectionId || ''}`);
+  }, [currentChain, navigate, collectionId]);
 
   const { isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,

@@ -23,8 +23,6 @@ const CollectionPage: FC = () => {
 
   const { collection } = gqlCollections.useGraphQlCollection(collectionId || '');
 
-  const { tokens } = gqlTokens.useGraphQlTokens({ filter: { collection_id: { _eq: collectionId } }, pageSize: 8 });
-
   return (<>
     <PagePaper>
       <CollectionTitle>
@@ -43,6 +41,7 @@ const CollectionPage: FC = () => {
         activeIndex={activeDetailTabIndex}
       >
         <CollectionBasicDataComponent
+          collectionId={collectionId || ''}
           collection={collection}
           key={'collections'}
         />
@@ -56,8 +55,8 @@ const CollectionPage: FC = () => {
       <HoldersWrapper>
         <Heading size={'2'}>Holders</Heading>
         <HoldersComponent
+          collectionId={collectionId}
           key={'holder'}
-          tokens={tokens || []}
         />
       </HoldersWrapper>
       {/* <Tabs */}
@@ -87,6 +86,7 @@ const CollectionTitle = styled.div`
   margin-bottom: calc(var(--gap) * 2);
   h2 {
     margin-bottom: 0 !important;
+    word-break: break-word;
   }
 `;
 

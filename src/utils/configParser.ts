@@ -18,7 +18,7 @@ const findNetworkParamByName = (
 
 export const getNetworkList = (config: Record<string, string | undefined>): string[] => {
   return Object.keys(config).reduce<string[]>((acc, key) => {
-    if (!key.includes('NET_')) return acc;
+    if (!key.includes('NET_') || key.includes('NET_DEFAULT')) return acc;
 
     const { network } = configKeyRegexp.exec(key)?.groups || {};
 
@@ -31,7 +31,7 @@ export const getNetworkList = (config: Record<string, string | undefined>): stri
 };
 
 export const getDefaultChain = (config: Record<string, string | undefined>) => {
-  return localStorage.getItem(defaultChainKey) || getNetworkList(config)[0];
+  return localStorage.getItem(defaultChainKey) || config.REACT_APP_NET_DEFAULT || getNetworkList(config)[0];
 };
 
 export const getNetworkParams = (

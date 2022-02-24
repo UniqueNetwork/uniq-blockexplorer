@@ -18,10 +18,14 @@ const { chains, defaultChain } = config;
 
 const ApiWrapper = ({ children, gqlClient = gql, rpcClient = rpc }: ChainProviderProps) => {
   const [chainData, setChainData] = useState<ChainData>();
+  const [isLoadingChainData, setIsLoadingChainData] = useState<boolean>(true);
   const { chainId } = useParams<'chainId'>();
 
   useEffect(() => {
-    rpcClient?.setOnChainReadyListener(setChainData);
+    rpcClient?.setOnChainReadyListener((_chainData) => {
+      setIsLoadingChainData(false);
+      setChainData(_chainData);
+    });
   }, [rpcClient]);
 
   // update endpoint if chainId is changed
@@ -33,13 +37,14 @@ const ApiWrapper = ({ children, gqlClient = gql, rpcClient = rpc }: ChainProvide
     if (chainId) {
       const currentChain = chainId ? chains[chainId] : defaultChain;
 
-      rpcClient.changeEndpoint(currentChain.rpcEndpoint);
+      setIsLoadingChainData(true);
       gqlClient.changeEndpoint(currentChain.gqlEndpoint);
+      rpcClient.changeEndpoint(currentChain.rpcEndpoint);
 
       // set current chain id into localStorage
       localStorage.setItem(defaultChainKey, chainId);
     }
-  }, [chainId, rpcClient, gqlClient]);
+  }, [chainId, rpcClient, gqlClient, setIsLoadingChainData]);
 
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
@@ -47,10 +52,11 @@ const ApiWrapper = ({ children, gqlClient = gql, rpcClient = rpc }: ChainProvide
       api: rpcClient?.controller,
       chainData,
       currentChain: chainId ? chains[chainId] : defaultChain,
+      isLoadingChainData,
       rawRpcApi: rpcClient.rawRpcApi,
       rpcClient
     }),
-    [rpcClient, chainId, chainData]
+    [rpcClient, chainId, chainData, isLoadingChainData]
   );
 
   return (

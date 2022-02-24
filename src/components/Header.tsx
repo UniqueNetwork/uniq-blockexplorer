@@ -7,9 +7,10 @@ import { useApi } from '../hooks/useApi';
 import config from '../config';
 import MobileMenu from './MobileMenu';
 import Menu from './Menu';
+import LoadingComponent from './LoadingComponent';
 
 const Header: FC = () => {
-  const { currentChain } = useApi();
+  const { currentChain, isLoadingChainData } = useApi();
 
   const navigate = useNavigate();
 
@@ -36,19 +37,21 @@ const Header: FC = () => {
           <Menu />
         </HeaderNav>
       </HeaderNavWrapper>
-
-      <ChainsSelect
-        onChange={onSelectChange}
-        options={Object.values(config.chains).map(({ name, network }) => ({
-          iconLeft: {
-            name: `chain-${network.toLowerCase()}`,
-            size: 16
-          },
-          id: network,
-          title: name
-        }))}
-        value={currentChain?.network}
-      />
+      <ChainsSelectWrapper>
+        {isLoadingChainData && <ChainsSelectLoader />}
+        <ChainsSelect
+          onChange={onSelectChange}
+          options={Object.values(config.chains).map(({ name, network }) => ({
+            iconLeft: {
+              name: `chain-${network.toLowerCase()}`,
+              size: 16
+            },
+            id: network,
+            title: name
+          }))}
+          value={currentChain?.network}
+        />
+      </ChainsSelectWrapper>
     </HeaderWrapper>
   );
 };
@@ -87,6 +90,16 @@ const HeaderNav = styled.nav`
   @media (max-width: 1024px) {
     display: none;
   }
+`;
+
+const ChainsSelectWrapper = styled.div`
+  display: flex;
+  column-gap: var(--gap);
+`;
+
+const ChainsSelectLoader = styled(LoadingComponent)`
+  width: 32px;
+  position: static;
 `;
 
 const ChainsSelect = styled(Select)`

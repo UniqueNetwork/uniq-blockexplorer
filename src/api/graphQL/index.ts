@@ -16,3 +16,5 @@ export * as tokens from './tokens/tokens';
 export * from './tokens/types';
 export * as transfers from './transfers/transfers';
 export * from './transfers/types';
+export * as holders from './holders/holders';
+export * from './holders/types';

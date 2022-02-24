@@ -57,6 +57,10 @@ ReactDOM.render(
                 index
               />
               <Route
+                element={<Tokens />}
+                path={':collectionId'}
+              />
+              <Route
                 element={<Token />}
                 path={':collectionId/:tokenId'}
               />
