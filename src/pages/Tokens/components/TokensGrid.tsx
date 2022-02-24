@@ -44,15 +44,16 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
 };
 
 const TokenGallery = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-gap: 80px;
+  justify-items: center;
+  align-items: stretch;
 `;
 
 const TokenLink = styled(Link)`
   display: flex;
   flex-direction: column;
-  margin-bottom: 32px;
-  margin-right: 32px;
   &:hover {
     text-decoration: none;
   }
