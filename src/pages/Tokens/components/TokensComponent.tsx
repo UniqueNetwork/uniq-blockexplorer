@@ -1,8 +1,8 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Icon, Select } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-import styled from 'styled-components';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { Token, tokens as gqlTokens, TokenSorting } from '../../../api/graphQL';
 import PaginationComponent from '../../../components/Pagination';
 import SearchComponent from '../../../components/SearchComponent';
@@ -63,7 +63,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchString, setSearchString] = useState<string | undefined>('');
   const [select, setSelect] = useState<number>(options[0].id);
-  const [view, setView] = useState<ViewType>(ViewType.List);
+  const [view, setView] = useState<ViewType>(ViewType.Grid);
 
   const selectFilter = useCallback(
     (selected) => {
@@ -191,10 +191,21 @@ const TokensComponent: FC<TokensComponentProps> = ({
 const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  .unique-select .select-wrapper > svg {
+    z-index: unset;
+  }
+  @media (max-width: 767px) {
+    margin-bottom: 24px;
+  }
 `;
 
 const Controls = styled.div`
   display: flex;
+  justify-content: space-between;
+  @media (max-width: 767px) {
+    width: 100%;
+  }
 `;
 
 const ViewButtons = styled.div`
