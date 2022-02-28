@@ -47,6 +47,7 @@ const TokenGallery = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   grid-gap: 80px;
+  margin-bottom: 60px;
   justify-items: center;
   align-items: stretch;
 `;
