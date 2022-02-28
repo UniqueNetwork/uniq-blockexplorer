@@ -29,7 +29,7 @@ const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] =
     { token_prefix: { _iregex: searchString } },
     ...(Number(searchString) ? [{ token_id: { _eq: searchString } }] : []),
     { collection_name: { _iregex: searchString } },
-    { collection_id: { _eq: searchString } }
+    ...(Number(searchString) ? [{ collection_id: { _eq: searchString } }] : [])
   ];
 };
 
