@@ -41,7 +41,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
               <Text color={'black'}>{tokensCount?.toString() || '0'}</Text>
             </div>
             <div>
-              <Text color={'grey-500'}>Prefix:</Text>
+              <Text color={'grey-500'}>Symbol:</Text>
               <Text color={'black'}>{prefix?.toString() || ''}</Text>
             </div>
             <div>

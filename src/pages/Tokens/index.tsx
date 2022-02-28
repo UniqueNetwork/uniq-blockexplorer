@@ -1,24 +1,25 @@
-import React, { FC, useState } from 'react';
-import { useParams } from 'react-router-dom';
-
-import TokensComponent from './components/TokensComponent';
-import SearchComponent from '../../components/SearchComponent';
+import React, { FC } from 'react';
 import PagePaper from '../../components/PagePaper';
+import TokensComponent from './components/TokensComponent';
+import styled from 'styled-components';
 
 const TokensPage: FC = () => {
-  const [searchString, setSearchString] = useState<string | undefined>();
-
-  return (<PagePaper>
-    <SearchComponent
-      onSearchChange={setSearchString}
-      placeholder={'Extrinsic / collection / NFT / account'}
-    />
-    <div>
-      <TokensComponent
-        searchString={searchString}
-      />
-    </div>
-  </PagePaper>);
+  return (
+    <>
+      <Title>
+        NFTs
+      </Title>
+      <PagePaper>
+        <TokensComponent />
+      </PagePaper>
+    </>
+  );
 };
+
+const Title = styled.h2`
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 48px;
+`;
 
 export default TokensPage;

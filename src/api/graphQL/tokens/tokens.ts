@@ -24,6 +24,26 @@ const tokensQuery = gql`
   }
 `;
 
+const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
+  return [
+    { token_prefix: { _iregex: searchString } },
+    ...(Number(searchString) ? [{ token_id: { _eq: searchString } }] : []),
+    { collection_name: { _iregex: searchString } },
+    ...(Number(searchString) ? [{ collection_id: { _eq: searchString } }] : [])
+  ];
+};
+
+const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
+  if (!searchString.includes(',')) return getSingleSearchQuery(searchString);
+  const splitSearch = searchString.trim().split(',');
+  const searchQuery = splitSearch
+    .map((searchPart: string) => Number(searchPart.trim()))
+    .filter((id: number) => Number.isInteger(id))
+    .map((searchPart: number) => ({ collection_id: { _eq: searchPart } }));
+
+  return searchQuery;
+};
+
 export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokensProps) => {
   const client = useApolloClient();
 
@@ -34,9 +54,7 @@ export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokens
         ...(searchString
           ? {
             _or: [
-              { collection_name: { _iregex: searchString } },
-              { token_prefix: { _iregex: searchString } },
-              ...(Number(searchString) ? [{ token_id: { _eq: searchString } }] : [])
+              ...getSearchQuery(searchString)
             ]
           }
           : {})
