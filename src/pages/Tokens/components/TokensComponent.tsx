@@ -63,7 +63,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchString, setSearchString] = useState<string | undefined>('');
   const [select, setSelect] = useState<number>(options[0].id);
-  const [view, setView] = useState<ViewType>(ViewType.List);
+  const [view, setView] = useState<ViewType>(ViewType.Grid);
 
   const selectFilter = useCallback(
     (selected) => {
