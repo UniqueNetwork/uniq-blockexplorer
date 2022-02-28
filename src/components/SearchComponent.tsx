@@ -1,8 +1,8 @@
-import React, { FC, useCallback, useState } from 'react';
-import styled from 'styled-components';
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { useApi } from '../hooks/useApi';
+import React, { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { useApi } from '../hooks/useApi';
 
 interface SearchComponentProps {
   placeholder?: string
@@ -65,8 +65,9 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
 const SearchWrapper = styled.div`
   display: flex;
   margin-bottom: calc(var(--gap) * 2);
-
+  width: 50%;
   @media (max-width: 767px) {
+    margin-bottom: 24px;
     width: 100%;
     button.unique-button {
       display: none;
@@ -76,7 +77,8 @@ const SearchWrapper = styled.div`
 
 const SearchInput = styled(InputText)`
   box-sizing: border-box;
-  width: 612px;
+  max-width: 612px;
+  width: 100%;
   margin-right: calc(var(--gap) / 2);
 
   @media (max-width: 767px) {
