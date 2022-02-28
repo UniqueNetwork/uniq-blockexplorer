@@ -2,7 +2,7 @@ export interface TokensVariables {
   limit: number
   offset: number
   where?: Record<string, unknown>
-  orderBy?: Record<string, 'asc' | 'desc'>
+  orderBy?: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>
 }
 
 export interface Token {
@@ -28,7 +28,7 @@ export interface TokensData {
 }
 
 export type TokenSorting = {
-  [P in keyof Token]?: 'asc' | 'desc'
+  [P in keyof Token]?: 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'
 }
 
 export type useGraphQlTokensProps = {
