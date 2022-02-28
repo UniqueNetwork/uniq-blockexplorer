@@ -130,12 +130,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   return (
     <>
-      <TopBar>
+      <TopBar type={view}>
         <SearchComponent
           onSearchChange={setSearchString}
-          placeholder={'Extrinsic / collection / NFT / account'}
+          placeholder={'NFT / collection'}
         />
-        <Controls>
+        <Controls type={view}>
           {view === ViewType.Grid && (
             <Select
               onChange={selectFilter}
@@ -191,7 +191,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: ${(props: {type: string}) => props.type === ViewType.List ? 'unset' : 'wrap'};
   .unique-select .select-wrapper > svg {
     z-index: unset;
   }
@@ -204,7 +204,7 @@ const Controls = styled.div`
   display: flex;
   justify-content: space-between;
   @media (max-width: 767px) {
-    width: 100%;
+    width: ${(props: {type: string}) => props.type === ViewType.List ? 'unset' : '100%'};
   }
 `;
 
