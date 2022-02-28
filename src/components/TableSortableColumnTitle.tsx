@@ -8,7 +8,7 @@ import { CollectionSorting } from '../api/graphQL';
 interface TableSortableColumnProps {
   dataIndex: string
   title: string;
-  orderBy: Record<string, 'asc' | 'desc'>
+  orderBy: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>
   onOrderChange(sorting: CollectionSorting): void
 }
 

@@ -22,14 +22,14 @@ const options: TokensSelectOption[] = [
   {
     iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
     id: 1,
-    sortDir: 'asc',
+    sortDir: 'asc_nulls_last',
     sortField: 'date_of_creation',
     title: 'NFT creation date'
   },
   {
     iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
     id: 2,
-    sortDir: 'desc',
+    sortDir: 'desc_nulls_last',
     sortField: 'date_of_creation',
     title: 'NFT creation date'
   },
@@ -50,7 +50,7 @@ const options: TokensSelectOption[] = [
 ];
 
 const TokensComponent: FC<TokensComponentProps> = ({
-  orderBy: defaultOrderBy = { date_of_creation: 'desc' },
+  orderBy: defaultOrderBy = { date_of_creation: 'desc_nulls_last' },
   pageSize = 20
 }) => {
   const deviceSize = useDeviceSize();

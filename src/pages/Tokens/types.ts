@@ -18,6 +18,6 @@ export interface TokensSelectOption {
   title: string;
   iconLeft?: IconProps;
   iconRight?: IconProps;
-  sortDir?: 'asc' | 'desc';
+  sortDir?: 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last';
   sortField?: string;
 }
