@@ -2,6 +2,7 @@ import { WsProvider } from '@polkadot/api';
 import { ApiPromise } from '@polkadot/api/promise';
 import { formatBalance } from '@polkadot/util';
 import { OverrideBundleType } from '@polkadot/types/types';
+import { unique } from '@unique-nft/types/definitions';
 import { IRpcClient, INFTController, IRpcClientOptions } from './types';
 import bundledTypesDefinitions from './unique/bundledTypesDefinitions';
 import rpcMethods from './unique/rpcMethods';
@@ -47,7 +48,13 @@ export class RpcClient implements IRpcClient {
 
     const typesBundle: OverrideBundleType = {
       spec: {
-        nft: bundledTypesDefinitions
+        nft: bundledTypesDefinitions,
+        opal: {
+          rpc: { unique: unique.rpc }
+        },
+        quartz: {
+          rpc: { unique: unique.rpc }
+        }
       }
     };
 

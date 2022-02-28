@@ -47,7 +47,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
             <Text
               color={'grey-500'}
               size={'s'}
-            >Prefix:</Text>
+            >Symbol:</Text>
             <Text size={'s'}>{tokenPrefix}</Text>
           </span>
           <span>

@@ -6,7 +6,7 @@ import { deserializeNft, ProtobufAttributeType } from '../utils/protobufUtils';
 import { hex2a } from '../utils/decoder';
 import config from '../../../config';
 import { DecoratedRpc } from '@polkadot/api/types';
-import { RpcInterface } from '@polkadot/rpc-core/types.jsonrpc';
+import { RpcInterface } from '@polkadot/rpc-core/types/jsonrpc';
 import { Codec } from '@polkadot/types/types';
 
 const { IPFSGateway } = config;
