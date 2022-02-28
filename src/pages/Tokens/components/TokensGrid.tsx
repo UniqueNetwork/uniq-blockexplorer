@@ -28,10 +28,9 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
           size='l'
           weight='medium'
         >{`${token.token_prefix} #${token.token_id}`}</Text>
-        <Text
-          color={'primary-600'}
-          size='s'
-        >{`${token.token_prefix} [id ${token.collection_id}]`}</Text>
+        <TokenCollectionLink
+          to={`/${chainNetwork}/collections/${token.collection_id}`}
+        >{`${token.token_prefix} [id ${token.collection_id}]`}</TokenCollectionLink>
         <TokenDate
           color={'grey-500'}
           size='xs'
@@ -62,6 +61,9 @@ const TokenLink = styled(Link)`
 
 const TokenDate = styled(Text)`
   margin-top: 8px;
+`;
+
+const TokenCollectionLink = styled(Link)`
 `;
 
 const TokenPicture = styled(Picture)`
