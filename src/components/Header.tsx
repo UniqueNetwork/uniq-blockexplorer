@@ -38,8 +38,7 @@ const Header: FC = () => {
         </HeaderNav>
       </HeaderNavWrapper>
       <ChainsSelectWrapper>
-        {/* {isLoadingChainData && <ChainsSelectLoader />} */}
-        <ChainsSelectLoader />
+        {isLoadingChainData && <ChainsSelectLoader />}
         <ChainsSelect
           onChange={onSelectChange}
           options={Object.values(config.chains).map(({ name, network }) => ({
