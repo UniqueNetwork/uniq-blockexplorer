@@ -49,6 +49,10 @@ const TokenGallery = styled.div`
   margin-bottom: 60px;
   justify-items: center;
   align-items: stretch;
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
+    grid-gap: 32px;
+  }
 `;
 
 const TokenLink = styled(Link)`
@@ -71,6 +75,10 @@ const TokenPicture = styled(Picture)`
   width: 380px;
   border-radius: var(--bradius);
   margin-bottom: 8px;
+  @media (max-width: 767px) {
+    height: 288px;
+    width: 288px;
+  }
 `;
 
 export default TokensGrid;
