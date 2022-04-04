@@ -4,8 +4,7 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token, tokens as gqlTokens, TokenSorting } from '../../../api/graphQL';
-import PaginationComponent from '../../../components/Pagination';
-import SearchComponent from '../../../components/SearchComponent';
+import { Pagination, Search } from '@app/components';
 import Table from '../../../components/Table';
 import { useApi } from '../../../hooks/useApi';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
@@ -128,10 +127,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
     []
   );
 
+  console.log('value', select, 'options', options);
+
   return (
     <>
       <TopBar type={view}>
-        <SearchComponent
+        <Search
           onSearchChange={setSearchString}
           placeholder={'NFT / collection'}
         />
@@ -177,7 +178,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
           </div>
         )}
 
-      <PaginationComponent
+      <Pagination
         count={tokensCount || 0}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
