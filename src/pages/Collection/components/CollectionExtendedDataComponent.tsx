@@ -59,13 +59,13 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
       {/*    <Text color={'grey-500'}>Token limit</Text> */}
       {/*    <Text>{collection?.token_limit.toString() || ''}</Text> */}
       {/*    <Text color={'grey-500'}>Account token ownership limit</Text> */}
-      {/*    <Text>{collection?.limits_accout_ownership?.toString() || '0'}</Text> */}
+      {/*    <Text>{collection?.limits_account_ownership?.toString() || '0'}</Text> */}
       {/*    <Text color={'grey-500'}>Sponsored mint size</Text> */}
       {/*    <Text>{'unlimited'}</Text> */}
       {/*    <Text color={'grey-500'}>Sponsor timeout</Text> */}
       {/*    <Text>{'unlimited'}</Text> */}
       {/*    <Text color={'grey-500'}>Owner can transfer</Text> */}
-      {/*    <Text>{collection?.owner_can_trasfer || 'false'}</Text> */}
+      {/*    <Text>{collection?.owner_can_transfer || 'false'}</Text> */}
       {/*    <Text color={'grey-500'}>Owner can destroy</Text> */}
       {/*    <Text>{collection?.owner_can_destroy || 'false'}</Text> */}
       {/*    <Text color={'grey-500'}>Variable metadata sponsoring rate limit</Text> */}
