@@ -6,3 +6,5 @@ const { defaultChain } = config;
 
 export const gqlClient = new GqlClient(defaultChain.gqlEndpoint);
 export const rpcClient = new RpcClient(defaultChain.rpcEndpoint);
+
+export * from './graphQL';

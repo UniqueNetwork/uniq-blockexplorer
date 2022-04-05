@@ -1,14 +1,14 @@
 import { Icon, Select } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import React, { FC, useCallback, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Token, tokens as gqlTokens, TokenSorting } from '../../../api/graphQL';
-import { Pagination, Search } from '@app/components';
-import Table from '../../../components/Table';
-import { useApi } from '../../../hooks/useApi';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { TokensComponentProps, TokensSelectOption } from '../types';
+import { Token, tokens as gqlTokens, TokenSorting } from '@app/api';
+import { Pagination, Search, Table } from '@app/components';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+
+import { TokensComponentProps } from '../types';
+import { DEFAULT_PAGE_SIZE, OPTIONS } from '../constants';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
 
@@ -17,56 +17,48 @@ export enum ViewType {
   List = 'List'
 }
 
-const options: TokensSelectOption[] = [
-  {
-    iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
-    id: 1,
-    sortDir: 'asc_nulls_last',
-    sortField: 'date_of_creation',
-    title: 'NFT creation date'
-  },
-  {
-    iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
-    id: 2,
-    sortDir: 'desc_nulls_last',
-    sortField: 'date_of_creation',
-    title: 'NFT creation date'
-  },
-  {
-    iconRight: { color: '#040B1D', name: 'arrow-up', size: 14 },
-    id: 3,
-    sortDir: 'asc',
-    sortField: 'collection_id',
-    title: 'Collection id'
-  },
-  {
-    iconRight: { color: '#040B1D', name: 'arrow-down', size: 14 },
-    id: 4,
-    sortDir: 'desc',
-    sortField: 'collection_id',
-    title: 'Collection id'
-  }
-];
+const filter = ({ accountId, collectionId }: { accountId?: string, collectionId?: string }) => {
+  let _filter = {};
+
+  if (accountId) _filter = { owner: { _eq: accountId } };
+
+  if (collectionId) _filter = { ..._filter, collection_id: { _eq: collectionId } };
+
+  return _filter;
+};
 
 const TokensComponent: FC<TokensComponentProps> = ({
   orderBy: defaultOrderBy = { date_of_creation: 'desc_nulls_last' },
-  pageSize = 20
+  pageSize = DEFAULT_PAGE_SIZE
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
-  const { collectionId } = useParams<'collectionId'>();
-  const [queryParams] = useSearchParams();
+  const { accountId, collectionId } = useParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchString, setSearchString] = useState<string | undefined>('');
-  const [select, setSelect] = useState<number>(options[0].id);
+  const [select, setSelect] = useState<number>();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
+  const {
+    isTokensFetching,
+    tokens,
+    tokensCount
+  } = gqlTokens.useGraphQlTokens({
+    filter: filter({ accountId, collectionId }),
+    offset: (currentPage - 1) * pageSize,
+    orderBy,
+    pageSize,
+    searchString
+  });
+
+  const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
+  const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
 
   const selectFilter = useCallback(
     (selected) => {
-      const option = options.find((item) => {
+      const option = OPTIONS.find((item) => {
         return item.id === selected;
       });
 
@@ -92,42 +84,16 @@ const TokensComponent: FC<TokensComponentProps> = ({
     [setView]
   );
 
-  const filter = useMemo(() => {
-    const accountId = queryParams.get('accountId');
-    let _filter = {};
+  const tokenColumns = useMemo(() => {
+    return getTokensColumns(currentChain.network, orderBy, setOrderBy);
+  }, [currentChain.network, orderBy]);
 
-    if (accountId) _filter = { owner: { _eq: accountId } };
-
-    if (collectionId) _filter = { ..._filter, collection_id: { _eq: collectionId } };
-
-    return _filter;
-  }, [collectionId, queryParams]);
-
-  const {
-    fetchMoreTokens,
-    isTokensFetching,
-    tokens,
-    tokensCount
-  } = gqlTokens.useGraphQlTokens({ filter, orderBy: defaultOrderBy, pageSize });
-
-  useEffect(() => {
-    const offset = (currentPage - 1) * pageSize;
-
-    void fetchMoreTokens({
-      filter,
-      limit: pageSize,
-      offset,
-      orderBy,
-      searchString
-    });
-  }, [pageSize, searchString, currentPage, orderBy, fetchMoreTokens, filter]);
+  const defaultOption = OPTIONS.find((option) => option.sortDir === defaultSortValue && option.sortField === defaultSortKey)?.id ?? '';
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) => `token-${(item as Token).collection_id}-${(item as Token).token_id}`,
     []
   );
-
-  console.log('value', select, 'options', options);
 
   return (
     <>
@@ -139,8 +105,9 @@ const TokensComponent: FC<TokensComponentProps> = ({
         <Controls type={view}>
           {view === ViewType.Grid && (
             <Select
+              defaultValue={defaultOption}
               onChange={selectFilter}
-              options={options}
+              options={OPTIONS}
               value={select}
             />
           )}
@@ -163,7 +130,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
       {view === ViewType.List
         ? (
           <Table
-            columns={getTokensColumns(currentChain.network, orderBy, setOrderBy)}
+            columns={tokenColumns}
             data={tokens || []}
             loading={isTokensFetching}
             rowKey={getRowKey}
