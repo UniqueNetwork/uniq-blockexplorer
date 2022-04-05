@@ -12,7 +12,7 @@ const collectionsQuery = gql`
       date_of_creation
       description
       holders_count
-      limits_accout_ownership
+      limits_account_ownership
       limits_sponsore_data_rate
       limits_sponsore_data_size
       mint_mode
@@ -20,9 +20,9 @@ const collectionsQuery = gql`
       offchain_schema
       owner
       owner_can_destroy
-      owner_can_trasfer
+      owner_can_transfer
       schema_version
-      sponsorship_confirmed
+      sponsorship
       token_limit
       token_prefix
       tokens_count
