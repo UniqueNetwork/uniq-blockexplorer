@@ -29,11 +29,11 @@ export interface Collection {
   holders_count: number
   type: string
   mint_mode: string
-  owner_can_trasfer: string
+  owner_can_transfer: string
   owner_can_destroy: string
   schema_version: string
   actions_count: number
-  limits_accout_ownership: number
+  limits_account_ownership: number
   limits_sponsore_data_rate: null
   limits_sponsore_data_size: null
   const_chain_schema: ConstChainSchema | null
