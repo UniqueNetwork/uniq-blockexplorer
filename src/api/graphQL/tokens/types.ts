@@ -32,10 +32,12 @@ export type TokenSorting = {
 }
 
 export type useGraphQlTokensProps = {
-  pageSize: number
-  filter?: Record<string, unknown>
-  orderBy?: TokenSorting,
-  collectionId?: string
+  pageSize: number;
+  filter?: Record<string, unknown>;
+  offset: number;
+  orderBy?: TokenSorting;
+  collectionId?: string;
+  searchString?: string;
 }
 
 export type FetchMoreTokensOptions = {
