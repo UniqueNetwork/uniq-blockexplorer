@@ -10,7 +10,7 @@ export enum DeviceSize {
   xxl // > 1920
 }
 
-const useDeviceSize = (): DeviceSize => {
+export const useDeviceSize = (): DeviceSize => {
   const [windowWidth, setWindowWidth] = useState<number | undefined>();
 
   useEffect(() => {

@@ -1,13 +1,11 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Button } from '@unique-nft/ui-kit';
 
-import { tokens as gqlTokens } from '../../../api/graphQL';
-import LoadingComponent from '../../../components/LoadingComponent';
-import { useApi } from '../../../hooks/useApi';
+import { tokens as gqlTokens } from '@app/api/graphQL';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
-import TokenCard from '../../../components/TokenCard';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { LoadingComponent, TokenCard } from '@app/components';
 
 interface NewTokensComponentProps {
   searchString?: string
@@ -32,21 +30,13 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
     navigate(`/${currentChain.network}/tokens`);
   }, [currentChain, navigate]);
 
-  const { fetchMoreTokens, isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({
+  const { isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
+    offset: 0,
     orderBy: { collection_id: 'desc', token_id: 'desc' },
-    pageSize
+    pageSize,
+    searchString
   });
-
-  useEffect(() => {
-    void fetchMoreTokens({
-      filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
-      limit: pageSize,
-      offset: 0,
-      orderBy: { collection_id: 'desc', token_id: 'desc' },
-      searchString
-    });
-  }, [searchString, collectionId, fetchMoreTokens, pageSize]);
 
   return (
     <>
