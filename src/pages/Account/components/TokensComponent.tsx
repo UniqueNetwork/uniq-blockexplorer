@@ -1,12 +1,11 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { /* Checkbox, */Button } from '@unique-nft/ui-kit';
+import { Button } from '@unique-nft/ui-kit';
 
-import { Token, tokens as gqlTokens } from '../../../api/graphQL';
-import TokenCard from '../../../components/TokenCard';
-import SearchComponent from '../../../components/SearchComponent';
-import { useApi } from '../../../hooks/useApi';
+import { Token, tokens as gqlTokens } from '@app/api';
+import { TokenCard, Search } from '@app/components';
+import { useApi } from '@app/hooks';
 
 interface TokensComponentProps {
   accountId: string
@@ -16,29 +15,23 @@ interface TokensComponentProps {
 const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
+  const [searchString, setSearchString] = useState<string>();
 
-  const { fetchMoreTokens, tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
+  const { tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
     owner: { _eq: accountId }
   },
-  pageSize });
+  offset: 0,
+  pageSize,
+  searchString });
 
   const onClickSeeMore = useCallback(() => {
     navigate(`/${currentChain.network}/tokens/?accountId=${accountId}`);
   }, [currentChain.network, navigate, accountId]);
 
-  const onSearch = useCallback((searchString: string) => {
-    void fetchMoreTokens({
-      filter: {
-        owner: { _eq: accountId }
-      },
-      searchString
-    });
-  }, [accountId, fetchMoreTokens]);
-
   return (<>
     <ControlsWrapper>
-      <SearchComponent
-        onSearchChange={onSearch}
+      <Search
+        onSearchChange={setSearchString}
         placeholder={'NFT / collection'}
       />
     </ControlsWrapper>
