@@ -4,13 +4,14 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token, tokens as gqlTokens, TokenSorting } from '@app/api';
-import { Pagination, Search, Table } from '@app/components';
+import { Pagination, Table } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 
 import { TokensComponentProps } from '../types';
 import { DEFAULT_PAGE_SIZE, OPTIONS } from '../constants';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
+import SearchComponent from '@app/components/SearchComponent';
 
 export enum ViewType {
   Grid = 'Grid',
@@ -97,20 +98,18 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   return (
     <>
-      <TopBar type={view}>
-        <Search
+      <TopBar>
+        <SearchComponent
           onSearchChange={setSearchString}
           placeholder={'NFT / collection'}
         />
-        <Controls type={view}>
-          {view === ViewType.Grid && (
-            <Select
-              defaultValue={defaultOption}
-              onChange={selectFilter}
-              options={OPTIONS}
-              value={select}
-            />
-          )}
+        <Controls>
+          <Select
+            defaultValue={defaultOption}
+            onChange={selectFilter}
+            options={OPTIONS}
+            value={select}
+          />
           <ViewButtons>
             <ViewButton onClick={selectList}>
               <Icon
@@ -159,7 +158,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-wrap: ${(props: {type: string}) => props.type === ViewType.List ? 'unset' : 'wrap'};
+  flex-wrap: wrap;
   .unique-select .select-wrapper > svg {
     z-index: unset;
   }
@@ -172,7 +171,7 @@ const Controls = styled.div`
   display: flex;
   justify-content: space-between;
   @media (max-width: 767px) {
-    width: ${(props: {type: string}) => props.type === ViewType.List ? 'unset' : '100%'};
+    width: 100%;
   }
 `;
 
