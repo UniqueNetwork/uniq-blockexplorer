@@ -1,3 +1,7 @@
+## Version 0.2.1
+
+- Update static meta description
+
 ## Version 0.2.0
 
 - Removed fetchMore from loading collections, updated graphQl request params
