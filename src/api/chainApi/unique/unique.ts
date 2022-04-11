@@ -126,7 +126,7 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
   }
 
   public async getTokenImage(collection: NFTCollection, tokenId: number): Promise<string> {
-    if (collection.schemaVersion === 'ImageURL') {
+    if (collection.schemaVersion === 'ImageURL' || collection.schemaVersion === 'TokenURI') {
       return this.getTokenImageUrl(hex2a(collection.offchainSchema), tokenId);
     } else {
       return await this.fetchTokenImage(collection, tokenId);
