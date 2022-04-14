@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
+import { Collection } from '@app/api';
+import { useApi, useChainFormattedOwner } from '@app/hooks';
+import { shortcutText } from '@app/utils';
 
 import Avatar from './Avatar';
-import { Collection } from '../api/graphQL';
 import config from '../config';
-import { useApi } from '../hooks/useApi';
-import { shortcutText } from '../utils/textUtils';
 
 const { IPFSGateway } = config;
 
@@ -22,6 +22,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
   tokens_count: tokensCount
 }) => {
   const { currentChain } = useApi();
+  const chainOwner = useChainFormattedOwner(owner);
 
   return (
     <CollectionCardLink
@@ -63,7 +64,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
             color={'grey-500'}
             size={'s'}
           >Owner: </Text>
-          <Text size={'s'}>{shortcutText(owner)}</Text>
+          <Text size={'s'}>{shortcutText(chainOwner ?? owner)}</Text>
         </div>
       </CollectionInfo>
     </CollectionCardLink>

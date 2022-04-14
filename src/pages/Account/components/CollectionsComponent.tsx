@@ -7,6 +7,7 @@ import { Collection, collections as gqlCollection } from '../../../api/graphQL';
 import CollectionCard from '../../../components/CollectionCard';
 import { useApi } from '../../../hooks/useApi';
 import SearchComponent from '../../../components/SearchComponent';
+import { normalizeSubstrate } from '@app/utils';
 
 interface CollectionsComponentProps {
   accountId: string
@@ -21,7 +22,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { collections, collectionsCount, fetchMoreCollections } =
     gqlCollection.useGraphQlCollections({
       filter: {
-        owner: { _eq: accountId }
+        owner: { _eq: normalizeSubstrate(accountId) }
       },
       pageSize
     });
@@ -33,7 +34,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const onSearch = useCallback((searchString: string) => {
     void fetchMoreCollections({
       filter: {
-        owner: { _eq: accountId }
+        owner: { _eq: normalizeSubstrate(accountId) }
       },
       searchString
     });

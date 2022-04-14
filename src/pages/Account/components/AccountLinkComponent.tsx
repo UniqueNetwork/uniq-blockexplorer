@@ -1,8 +1,8 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, memo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
-import { shortcutText } from '../../../utils/textUtils';
-import { useApi } from '../../../hooks/useApi';
+import { shortcutText } from '@app/utils';
+import { useApi, useChainFormattedOwner } from '@app/hooks';
 
 interface AccountLinkProps {
   value: string
@@ -14,8 +14,10 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
   const { accountId } = useParams();
 
   const { currentChain } = useApi();
+  const chainOwner = useChainFormattedOwner(value);
+  const address = chainOwner ?? value;
 
-  const shortcut = useMemo(() => (noShort ? value : shortcutText(value)), [value, noShort]);
+  const shortcut = noShort ? address : shortcutText(address);
 
   if (value === accountId) return <>{shortcut}</>;
 
@@ -31,4 +33,4 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
   );
 };
 
-export default AccountLinkComponent;
+export default memo(AccountLinkComponent);

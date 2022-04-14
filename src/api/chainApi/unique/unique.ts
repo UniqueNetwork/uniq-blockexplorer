@@ -1,13 +1,15 @@
 import { ApiPromise } from '@polkadot/api';
+import { DecoratedRpc } from '@polkadot/api/types';
+import { RpcInterface } from '@polkadot/rpc-core/types/jsonrpc';
+import { Codec } from '@polkadot/types/types';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
+
 import { INFTController } from '../types';
 import { AttributesDecoded, MetadataType, NFTCollection, NFTToken } from './types';
 import { normalizeAccountId } from '../utils/normalizeAccountId';
 import { deserializeNft, ProtobufAttributeType } from '../utils/protobufUtils';
 import { hex2a } from '../utils/decoder';
 import config from '../../../config';
-import { DecoratedRpc } from '@polkadot/api/types';
-import { RpcInterface } from '@polkadot/rpc-core/types/jsonrpc';
-import { Codec } from '@polkadot/types/types';
 
 const { IPFSGateway } = config;
 
@@ -191,6 +193,16 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
     }
 
     return [];
+  }
+
+  public chainAddressFormat(address: string): string {
+    const info = (this.api.registry.getChainProperties())?.toHuman() as { ss58Format: string } | undefined;
+
+    if (info?.ss58Format) {
+      return encodeAddress(decodeAddress(address), parseInt(info?.ss58Format));
+    }
+
+    return address;
   }
 }
 
