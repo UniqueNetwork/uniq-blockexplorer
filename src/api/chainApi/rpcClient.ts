@@ -40,8 +40,9 @@ export class RpcClient implements IRpcClient {
   private setApi() {
     if (this.rawRpcApi) {
       this.setIsApiConnected(false);
+
       this.rawRpcApi.disconnect()
-        .catch((errMsg) => {
+        .catch((errMsg: string) => {
           throw new Error(errMsg);
         });
     }

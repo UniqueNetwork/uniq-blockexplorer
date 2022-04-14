@@ -6,6 +6,7 @@ import { Button } from '@unique-nft/ui-kit';
 import { Token, tokens as gqlTokens } from '@app/api';
 import { TokenCard, Search } from '@app/components';
 import { useApi } from '@app/hooks';
+import { normalizeSubstrate } from '@app/utils';
 
 interface TokensComponentProps {
   accountId: string
@@ -18,7 +19,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
   const [searchString, setSearchString] = useState<string>();
 
   const { tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
-    owner: { _eq: accountId }
+    owner: { _eq: normalizeSubstrate(accountId) }
   },
   offset: 0,
   pageSize,

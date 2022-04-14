@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { normalizeSubstrate } from '@app/utils';
+import { useApi } from '@app/hooks';
 
 import { CollectionsComponentProps } from '../types';
-import { useApi } from '../../../hooks/useApi';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
@@ -25,7 +26,7 @@ const CollectionsComponent = ({
   const filter = useMemo(() => {
     const accountId = queryParams.get('accountId');
 
-    if (accountId) return { owner: { _eq: accountId } };
+    if (accountId) return { owner: { _eq: normalizeSubstrate(accountId) } };
 
     return undefined;
   }, [queryParams]);

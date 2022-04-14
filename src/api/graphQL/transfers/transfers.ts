@@ -2,6 +2,7 @@ import { gql, useApolloClient, useQuery } from '@apollo/client';
 import { useCallback, useEffect } from 'react';
 import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
 import { FetchMoreBlocksOptions } from '../blocks/types';
+import { normalizeSubstrate } from '@app/utils';
 
 const getLastTransfersQuery = gql`
   query getLastTransfers($limit: Int, $offset: Int, $where: view_extrinsic_bool_exp = {}) {
@@ -33,7 +34,7 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
         amount: { _neq: '0' },
         ...(accountId
           ? {
-            _or: [{ from_owner: { _eq: accountId } }, { to_owner: { _eq: accountId } }]
+            _or: [{ from_owner: { _eq: normalizeSubstrate(accountId) } }, { to_owner: { _eq: normalizeSubstrate(accountId) } }]
           }
           : {}),
         ...(searchString
