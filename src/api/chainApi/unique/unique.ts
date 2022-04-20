@@ -196,10 +196,14 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
   }
 
   public chainAddressFormat(address: string): string {
-    const info = (this.api.registry.getChainProperties())?.toHuman() as { ss58Format: string } | undefined;
+    try {
+      const info = (this.api.registry.getChainProperties())?.toHuman() as { ss58Format: string } | undefined;
 
-    if (info?.ss58Format) {
-      return encodeAddress(decodeAddress(address), parseInt(info?.ss58Format));
+      if (info?.ss58Format) {
+        return encodeAddress(decodeAddress(address), parseInt(info?.ss58Format));
+      }
+    } catch (e) {
+      console.log('chainAddressFormat error', e);
     }
 
     return address;
