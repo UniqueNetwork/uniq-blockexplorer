@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
-import { account as gqlAccount } from '../../../api/graphQL';
-import Avatar from '../../../components/Avatar';
-import LoadingComponent from '../../../components/LoadingComponent';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { account as gqlAccount } from '@app/api/graphQL';
+import { Avatar, LoadingComponent } from '@app/components';
 import { formatAmount, shortcutText } from '../../../utils/textUtils';
-import { useApi } from '../../../hooks/useApi';
+import { useApi, useChainFormattedOwner, useDeviceSize, DeviceSize } from '@app/hooks';
 
 interface AccountProps {
   accountId: string
@@ -14,6 +12,7 @@ interface AccountProps {
 
 const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
+  const chainOwner = useChainFormattedOwner(accountId) ?? accountId;
 
   const deviceSize = useDeviceSize();
 
@@ -42,8 +41,8 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
         <Text size={'l'}>Account name</Text>
         <h2>
           {deviceSize <= DeviceSize.md
-            ? shortcutText(accountId)
-            : accountId}
+            ? shortcutText(chainOwner)
+            : chainOwner}
         </h2>
       </div>
       <Text color={'grey-500'}>
