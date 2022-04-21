@@ -17,7 +17,7 @@ export interface IRpcClientOptions {
 }
 
 export interface INFTController<Collection = unknown, Token = unknown> {
-  chainAddressFormat(address: string): string;
+  chainAddressFormat(address: string): string | undefined;
   getCollection(collectionId: number): Promise<Collection | null>
   getToken(collectionId: number, tokenId: number): Promise<Token | null>
   getTokensOfCollection(collectionId: number, ownerId: number): Promise<Codec | Token[]>

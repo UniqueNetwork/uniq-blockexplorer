@@ -41,8 +41,7 @@ const TokenCard: FC<TokenCardProps> = ({
             color={'grey-500'}
             size={'xs'}
           >
-            Owner:
-          </Text>
+            Owner: </Text>
           <Text
             color={'grey-500'}
             size={'xs'}
