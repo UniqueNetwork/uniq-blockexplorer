@@ -2,7 +2,6 @@ import { ApiPromise } from '@polkadot/api';
 import { DecoratedRpc } from '@polkadot/api/types';
 import { RpcInterface } from '@polkadot/rpc-core/types/jsonrpc';
 import { Codec } from '@polkadot/types/types';
-import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
 import { INFTController } from '../types';
 import { AttributesDecoded, MetadataType, NFTCollection, NFTToken } from './types';
@@ -193,20 +192,6 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
     }
 
     return [];
-  }
-
-  public chainAddressFormat(address: string): string | undefined {
-    try {
-      const info = (this.api.registry.getChainProperties())?.toHuman() as { ss58Format: string } | undefined;
-
-      if (info?.ss58Format) {
-        return encodeAddress(decodeAddress(address), parseInt(info?.ss58Format));
-      }
-    } catch (e) {
-      console.log('chainAddressFormat error', e);
-    }
-
-    return '';
   }
 }
 

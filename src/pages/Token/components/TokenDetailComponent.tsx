@@ -19,7 +19,7 @@ interface TokenDetailComponentProps {
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
   const deviceSize = useDeviceSize();
-  const { api, currentChain } = useApi();
+  const { chainAddressFormat, currentChain } = useApi();
 
   if (!token) {
     return null;
@@ -42,7 +42,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   if (loading) return <LoadingComponent />;
 
-  const tokenOwner = api?.chainAddressFormat(owner) ?? owner;
+  const tokenOwner = chainAddressFormat(owner) ?? owner;
 
   return (
     <Wrapper>

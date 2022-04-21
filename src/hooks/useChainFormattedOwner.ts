@@ -1,7 +1,7 @@
 import { useApi } from '@app/hooks/useApi';
 
 export const useChainFormattedOwner = (owner: string): string | undefined => {
-  const { api } = useApi();
+  const { chainAddressFormat } = useApi();
 
-  return api?.chainAddressFormat(owner);
+  return chainAddressFormat(owner);
 };
