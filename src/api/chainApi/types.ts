@@ -9,15 +9,16 @@ export interface IRpcClient {
   chainData?: ChainData;
   rawRpcApi?: ApiPromise; // allow access to the raw API for exceptions in the future
   setOnChainReadyListener(callback: (chainData: ChainData) => void): void;
+  setOnChainSetProperties(callback: (chainProperties: ChainProperties) => void): void;
   changeEndpoint(endpoint: string, options?: IRpcClientOptions): void;
 }
 
 export interface IRpcClientOptions {
   onChainReady?: (chainData: ChainData) => void
+  onPropertiesReady?: (data: { ss58Format: string }) => void;
 }
 
 export interface INFTController<Collection = unknown, Token = unknown> {
-  chainAddressFormat(address: string): string | undefined;
   getCollection(collectionId: number): Promise<Collection | null>
   getToken(collectionId: number, tokenId: number): Promise<Token | null>
   getTokensOfCollection(collectionId: number, ownerId: number): Promise<Codec | Token[]>
@@ -29,3 +30,5 @@ export type Chain = {
   gqlEndpoint: string
   rpcEndpoint: string
 }
+
+export type ChainProperties = { ss58Format: string };

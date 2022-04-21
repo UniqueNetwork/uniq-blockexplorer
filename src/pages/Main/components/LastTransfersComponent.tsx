@@ -50,7 +50,7 @@ const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
 
 const transfersWithTimeDifference = (
   transfers: Transfer[] | undefined,
-  api: INFTController | undefined
+  chainAddressFormat: (address: string) => string | undefined
 ): (Transfer & { time_difference: string })[] => {
   if (!transfers || !Array.isArray(transfers)) {
     return [];
@@ -58,9 +58,9 @@ const transfersWithTimeDifference = (
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
-    from_owner: api?.chainAddressFormat(transfer.from_owner) ?? transfer.from_owner,
+    from_owner: chainAddressFormat(transfer.from_owner) ?? transfer.from_owner,
     time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : '',
-    to_owner: api?.chainAddressFormat(transfer.to_owner) ?? transfer.to_owner
+    to_owner: chainAddressFormat(transfer.to_owner) ?? transfer.to_owner
   }));
 };
 
@@ -71,7 +71,7 @@ const LastTransfersComponent = ({
 }: LastTransfersComponentProps) => {
   const deviceSize = useDeviceSize();
 
-  const { api, chainData, currentChain } = useApi();
+  const { chainAddressFormat, chainData, currentChain } = useApi();
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -99,7 +99,7 @@ const LastTransfersComponent = ({
           chainData?.properties.tokenSymbol || '',
           currentChain?.network
         )}
-        data={transfersWithTimeDifference(transfers, api)}
+        data={transfersWithTimeDifference(transfers, chainAddressFormat)}
         loading={isTransfersFetching}
         rowKey={'block_index'}
       />
