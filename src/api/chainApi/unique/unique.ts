@@ -206,7 +206,7 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
       console.log('chainAddressFormat error', e);
     }
 
-    return undefined;
+    return '';
   }
 }
 
