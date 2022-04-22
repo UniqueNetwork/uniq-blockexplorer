@@ -69,8 +69,6 @@ export class RpcClient implements IRpcClient {
       typesBundle
     });
 
-    let chainProperties: ChainProperties;
-
     _api.on('connected', () => this.setIsApiConnected(true));
     _api.on('disconnected', () => this.setIsApiConnected(false));
     _api.on('error', (error: Error) => this.setApiError(error.message));
@@ -82,8 +80,6 @@ export class RpcClient implements IRpcClient {
       if (this.options.onChainReady && this.chainData) this.options.onChainReady(this.chainData);
 
       const info = (_api.registry.getChainProperties())?.toHuman() as { ss58Format: string } | undefined;
-
-      console.log('info', info);
 
       if (info?.ss58Format && this.options.onPropertiesReady) {
         this.options.onPropertiesReady(info);
