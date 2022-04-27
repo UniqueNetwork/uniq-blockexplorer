@@ -85,6 +85,7 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
     const apolloLink = (client.link as HttpLink)?.options?.uri as string;
 
     if (clientRef.current && clientRef.current !== apolloLink) {
+      console.log('chain changed, need to update tokens');
       void refetch();
     }
 
