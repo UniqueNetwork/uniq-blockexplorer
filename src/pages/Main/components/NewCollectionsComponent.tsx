@@ -24,13 +24,16 @@ const NewCollectionsComponent: FC<NewCollectionsComponentProps> = ({ pageSize = 
   }, [currentChain, navigate]);
 
   useEffect(() => {
-    if (searchString === undefined) return;
+    if (searchString === undefined) {
+      return;
+    }
+
     void fetchMoreCollections({
       limit: pageSize,
       orderBy: { collection_id: 'desc' },
       searchString
     });
-  }, [searchString, fetchMoreCollections]);
+  }, [searchString, fetchMoreCollections, pageSize]);
 
   return (
     <>
