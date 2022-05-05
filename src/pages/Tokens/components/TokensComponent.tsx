@@ -4,14 +4,13 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token, tokens as gqlTokens, TokenSorting } from '@app/api';
-import { Pagination, Table } from '@app/components';
+import { Pagination, Search, Table } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 
 import { TokensComponentProps } from '../types';
 import { DEFAULT_PAGE_SIZE, OPTIONS } from '../constants';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
-import SearchComponent from '@app/components/SearchComponent';
 
 export enum ViewType {
   Grid = 'Grid',
@@ -99,7 +98,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   return (
     <>
       <TopBar>
-        <SearchComponent
+        <Search
           onSearchChange={setSearchString}
           placeholder={'NFT / collection'}
         />

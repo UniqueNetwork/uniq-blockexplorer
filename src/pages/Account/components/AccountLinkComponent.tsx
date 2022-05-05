@@ -33,4 +33,4 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
   );
 };
 
-export default memo(AccountLinkComponent);
+export default AccountLinkComponent;
