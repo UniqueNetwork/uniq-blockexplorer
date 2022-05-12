@@ -5,6 +5,7 @@ export interface AccountVariables {
 export interface AccountData {
   account_by_pk: {
     account_id: string
+    account_id_normalized: string
     available_balance: string
     balances: string
     block_height: number

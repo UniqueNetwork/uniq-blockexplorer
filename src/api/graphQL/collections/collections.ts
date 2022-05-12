@@ -19,6 +19,7 @@ const collectionsQuery = gql`
       name
       offchain_schema
       owner
+      owner_normalized
       owner_can_destroy
       owner_can_transfer
       schema_version

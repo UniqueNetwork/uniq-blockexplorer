@@ -4,7 +4,6 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Pagination, Table } from '@app/components';
 import { Transfer, transfers as gqlTransfers } from '@app/api/graphQL';
-import { INFTController } from '@app/api/chainApi/types';
 import { timeDifference } from '@app/utils';
 import useDeviceSize, { DeviceSize } from '@app/hooks/useDeviceSize';
 import { useApi } from '@app/hooks';
@@ -23,15 +22,15 @@ const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   },
   { dataIndex: 'time_difference', key: 'age', title: 'Age', width: 100 },
   {
-    dataIndex: 'from_owner',
-    key: 'from_owner',
+    dataIndex: 'from_owner_normalized',
+    key: 'from_owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'From',
     width: 100
   },
   {
-    dataIndex: 'to_owner',
-    key: 'to_owner',
+    dataIndex: 'to_owner_normalized',
+    key: 'to_owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'To',
     width: 100
@@ -58,9 +57,9 @@ const transfersWithTimeDifference = (
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
-    from_owner: chainAddressFormat(transfer.from_owner) ?? transfer.from_owner,
+    from_owner_normalized: chainAddressFormat(transfer.from_owner_normalized) ?? transfer.from_owner_normalized,
     time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : '',
-    to_owner: chainAddressFormat(transfer.to_owner) ?? transfer.to_owner
+    to_owner_normalized: chainAddressFormat(transfer.to_owner_normalized) ?? transfer.to_owner_normalized
   }));
 };
 

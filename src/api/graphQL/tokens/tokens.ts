@@ -12,6 +12,7 @@ const tokensQuery = gql`
       data
       date_of_creation
       owner
+      owner_normalized
       image_path
       token_id
       token_prefix

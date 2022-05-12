@@ -23,6 +23,7 @@ export interface Collection {
   name: string
   offchain_schema: string
   owner: string
+  owner_normalized: string
   token_limit: number
   token_prefix: string
   tokens_count: number

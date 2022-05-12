@@ -1,9 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
-import { Collection } from '../../../api/graphQL';
-// import Avatar from '../../../components/Avatar';
-// import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import { Collection } from '@app/api';
 
 interface ExtendedDataComponentProps {
   collection?: Collection
@@ -24,26 +22,6 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
           </TagsWrapper>
         </AttributesWrapper>
       </WrapperWithBorder>
-      {/* <WrapperWithBorder> */}
-      {/*  <Heading size={'4'}>Admins</Heading> */}
-      {/*  <AccountsWrapper> */}
-      {/*    <div> */}
-      {/*      <Avatar size={'small'} /> */}
-      {/*      <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} /> */}
-      {/*    </div> */}
-      {/*  </AccountsWrapper> */}
-      {/* <Heading size={'4'}>Sponsors</Heading> */}
-      {/* <AccountsWrapper> */}
-      {/*  <div> */}
-      {/*    <Avatar size={'small'} /> */}
-      {/*    <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} /> */}
-      {/*  </div> */}
-      {/*  <div> */}
-      {/*    <Avatar size={'small'} /> */}
-      {/*    <AccountLinkComponent value={'yGHkvgGth212LzAokvhCMLvs5a9vTpRjKkqjCHfRqwxHn3Lum'} /> */}
-      {/*  </div> */}
-      {/* </AccountsWrapper> */}
-      {/* </WrapperWithBorder> */}
       <WrapperWithBorder>
         <Heading size={'4'}>Data schema</Heading>
         <DataBlockWrapper>
@@ -53,32 +31,11 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
           <Text>{collection?.offchain_schema || ''}</Text>
         </DataBlockWrapper>
       </WrapperWithBorder>
-      {/* <WrapperWithBorder> */}
-      {/*  <Heading size={'4'}>Advanced data</Heading> */}
-      {/*  <DataBlockWrapper> */}
-      {/*    <Text color={'grey-500'}>Token limit</Text> */}
-      {/*    <Text>{collection?.token_limit.toString() || ''}</Text> */}
-      {/*    <Text color={'grey-500'}>Account token ownership limit</Text> */}
-      {/*    <Text>{collection?.limits_account_ownership?.toString() || '0'}</Text> */}
-      {/*    <Text color={'grey-500'}>Sponsored mint size</Text> */}
-      {/*    <Text>{'unlimited'}</Text> */}
-      {/*    <Text color={'grey-500'}>Sponsor timeout</Text> */}
-      {/*    <Text>{'unlimited'}</Text> */}
-      {/*    <Text color={'grey-500'}>Owner can transfer</Text> */}
-      {/*    <Text>{collection?.owner_can_transfer || 'false'}</Text> */}
-      {/*    <Text color={'grey-500'}>Owner can destroy</Text> */}
-      {/*    <Text>{collection?.owner_can_destroy || 'false'}</Text> */}
-      {/*    <Text color={'grey-500'}>Variable metadata sponsoring rate limit</Text> */}
-      {/*    <Text>{'never sponsored'}</Text> */}
-      {/*  </DataBlockWrapper> */}
-      {/* </WrapperWithBorder> */}
     </>
   );
 };
 
-const AttributesWrapper = styled.div`
-  //margin-bottom: calc(var(--gap) * 1.5);
-`;
+const AttributesWrapper = styled.div``;
 
 const TagsWrapper = styled.div`
   margin: calc(var(--gap) / 2) 0;
@@ -91,17 +48,6 @@ const Tag = styled.div`
   padding: 1px calc(var(--gap) / 2);
   background-color: var(--blue-gray);
 `;
-
-// const AccountsWrapper = styled.div`
-//   display: flex;
-//   column-gap: calc(var(--gap) / 1.5);
-//   margin-bottom: calc(var(--gap) * 1.5);
-//   div {
-//     display: flex;
-//     align-items: center;
-//     column-gap: calc(var(--gap) / 2);
-//   }
-// `;
 
 const WrapperWithBorder = styled.div`
   padding: calc(var(--gap) * 1.5) 0;

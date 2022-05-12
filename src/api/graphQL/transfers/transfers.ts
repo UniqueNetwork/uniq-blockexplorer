@@ -12,10 +12,12 @@ const getLastTransfersQuery = gql`
       amount
       fee
       from_owner
+      from_owner_normalized
       hash
       success
       timestamp
       to_owner
+      to_owner_normalized
     }
     view_extrinsic_aggregate(where: $where) {
       aggregate {

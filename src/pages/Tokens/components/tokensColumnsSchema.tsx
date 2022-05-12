@@ -1,13 +1,13 @@
 import React from 'react';
 
+import { getImageURL, timestampTableFormat } from '@app/utils';
+
 import { Token, TokenSorting } from '../../../api/graphQL';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 import CollectionTableCell from '../../../components/CollectionTableCell';
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import config from '../../../config';
-import { getImageURL } from '../../../utils/tokenImage';
-import { timestampTableFormat } from '../../../utils/timestampUtils';
 
 const { IPFSGateway } = config;
 
@@ -60,8 +60,8 @@ export const getTokensColumns = (chainId: string, orderBy: TokenSorting, onOrder
     width: 100
   },
   {
-    dataIndex: 'owner',
-    key: 'owner',
+    dataIndex: 'owner_normalized',
+    key: 'owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100

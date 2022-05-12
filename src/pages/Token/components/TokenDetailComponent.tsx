@@ -19,7 +19,7 @@ interface TokenDetailComponentProps {
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
   const deviceSize = useDeviceSize();
-  const { chainAddressFormat, currentChain } = useApi();
+  const { currentChain } = useApi();
 
   if (!token) {
     return null;
@@ -33,7 +33,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     data,
     date_of_creation: createdOn,
     image_path: imagePath,
-    owner,
+    owner_normalized: ownerNormalized,
     token_id: id,
     token_prefix: prefix
   } = token;
@@ -41,8 +41,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   const imageUrl = getImageURL(imagePath);
 
   if (loading) return <LoadingComponent />;
-
-  const tokenOwner = chainAddressFormat(owner) ?? owner;
 
   return (
     <Wrapper>
@@ -60,7 +58,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
             <Avatar size={'x-small'} />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
-              value={tokenOwner}
+              value={ownerNormalized}
             />
           </OwnerWrapper>
         </TokenInfo>
@@ -187,16 +185,6 @@ const CollectionLink = styled(Link)`
     min-width: 40px;
   }  
 `;
-
-// const CollectionProperties = styled.div`
-//   display: flex;
-//   column-gap: var(--gap);
-//   div {
-//     span:first-child {
-//       margin-right: calc(var(--gap) / 2);
-//     }
-//   }
-// `;
 
 const OwnerWrapper = styled.div`
   display: flex;

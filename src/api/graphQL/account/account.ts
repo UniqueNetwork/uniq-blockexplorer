@@ -5,6 +5,7 @@ const accountQuery = gql`
   query getAccount($accountId: String!) {
     account_by_pk(account_id: $accountId) {
       account_id
+      account_id_normalized
       available_balance
       balances
       block_height

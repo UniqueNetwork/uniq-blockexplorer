@@ -4,7 +4,7 @@ import { Text } from '@unique-nft/ui-kit';
 import { account as gqlAccount } from '@app/api/graphQL';
 import { Avatar, LoadingComponent } from '@app/components';
 import { formatAmount, shortcutText } from '../../../utils/textUtils';
-import { useApi, useChainFormattedOwner, useDeviceSize, DeviceSize } from '@app/hooks';
+import { useApi, useDeviceSize, DeviceSize } from '@app/hooks';
 
 interface AccountProps {
   accountId: string
@@ -12,7 +12,6 @@ interface AccountProps {
 
 const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
-  const chainOwner = useChainFormattedOwner(accountId) ?? accountId;
 
   const deviceSize = useDeviceSize();
 
@@ -21,10 +20,10 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   if (isAccountFetching) return <LoadingComponent />;
 
   const {
+    account_id_normalized: accountNormalized,
     available_balance: availableBalance = 'unavailable',
     free_balance: freeBalance = 'unavailable',
-    locked_balance: lockedBalance = 'unavailable',
-    timestamp
+    locked_balance: lockedBalance = 'unavailable'
   } = account || {};
 
   const { tokenSymbol = '' } = chainData?.properties || {};
@@ -41,8 +40,8 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
         <Text size={'l'}>Account name</Text>
         <h2>
           {deviceSize <= DeviceSize.md
-            ? shortcutText(chainOwner)
-            : chainOwner}
+            ? shortcutText(accountNormalized ?? '')
+            : accountNormalized}
         </h2>
       </div>
       <Text color={'grey-500'}>
