@@ -2,6 +2,10 @@ import BN from 'bn.js';
 
 export type SchemaVersionTypes = 'Custom' | 'ImageURL' | 'TokenURI' | 'Unique';
 
+export interface NftCollectionProperties {
+  coverImageURL: string;
+}
+
 export interface NFTCollection {
   id: number
   access?: 'Normal' | 'WhiteList'
@@ -35,8 +39,8 @@ export interface NFTCollection {
     ownerCanTransfer: boolean
     ownerCanDestroy: boolean
   }
-  variableOnChainSchema: string
   constOnChainSchema: string
+  properties: NftCollectionProperties;
 }
 
 export type AttributesDecoded = {
@@ -47,7 +51,6 @@ export interface NFTToken {
   id: number
   owner?: { Substrate: string }
   constData?: string
-  variableData?: string
   attributes: AttributesDecoded
   imageUrl: string
 }

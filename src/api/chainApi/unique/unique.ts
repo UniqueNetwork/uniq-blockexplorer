@@ -76,18 +76,15 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
 
   private getOnChainSchema(collection: NFTCollection): {
     attributesConst: string
-    attributesVar: string
   } {
     if (collection) {
       return {
-        attributesConst: hex2a(collection.constOnChainSchema),
-        attributesVar: hex2a(collection.variableOnChainSchema)
+        attributesConst: hex2a(collection.constOnChainSchema)
       };
     }
 
     return {
-      attributesConst: '',
-      attributesVar: ''
+      attributesConst: ''
     };
   }
 
@@ -103,9 +100,8 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
       const collectionInfo = collection.toJSON();
       let coverImageUrl = '';
 
-      if (collectionInfo?.variableOnChainSchema && hex2a(collectionInfo?.variableOnChainSchema)) {
-        const collectionSchema = this.getOnChainSchema(collectionInfo);
-        const image = (JSON.parse(collectionSchema?.attributesVar) as { collectionCover?: string })?.collectionCover;
+      if (collectionInfo?.properties) {
+        const image = hex2a(collectionInfo?.properties.coverImageURL) ?? '';
 
         coverImageUrl = `${IPFSGateway || ''}/${image || ''}`;
       } else {
@@ -146,7 +142,6 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
         return null;
       }
 
-      const variableData = (await (this.api.rpc as UniqueDecoratedRpc).unique.variableMetadata(collection.id, tokenId)).toJSON();
       const constData: string = (await (this.api.rpc as UniqueDecoratedRpc).unique.constMetadata(collection.id, tokenId)).toJSON();
       const crossAccount = normalizeAccountId(
         (await (this.api.rpc as UniqueDecoratedRpc).unique.tokenOwner(collection.id, tokenId)).toJSON()
@@ -162,14 +157,12 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
 
       return {
         attributes: {
-          ...this.decodeStruct({ attr: onChainSchema.attributesConst, data: constData }),
-          ...this.decodeStruct({ attr: onChainSchema.attributesVar, data: variableData })
+          ...this.decodeStruct({ attr: onChainSchema.attributesConst, data: constData })
         },
         constData,
         id: tokenId,
         imageUrl,
-        owner: crossAccount,
-        variableData
+        owner: crossAccount
       };
     } catch (e) {
       // tslint:disable-next-line:no-console
