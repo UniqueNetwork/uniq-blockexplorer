@@ -32,7 +32,7 @@ const Footer: FC = () => {
             src='/logos/github.svg'
           />
         </a>
-        <a href='https://app.subsocial.network/@UniqueNetwork_NFT'>
+        <a href='https://app.subsocial.network/@uniquenetwork-nft'>
           <img
             alt='subsocial'
             src='/logos/subsocial.svg'
