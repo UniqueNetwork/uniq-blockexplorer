@@ -14,13 +14,13 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
     <>
       <WrapperWithBorder>
         <Heading size={'4'}>NFTs attributes</Heading>
-        <AttributesWrapper>
+        <div>
           <TagsWrapper>
             {Object.keys(fields || {}).filter((key) => key !== 'ipfsJson').map((key) => (
               <Tag key={key}>{key}</Tag>
             ))}
           </TagsWrapper>
-        </AttributesWrapper>
+        </div>
       </WrapperWithBorder>
       <WrapperWithBorder>
         <Heading size={'4'}>Data schema</Heading>
@@ -34,8 +34,6 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
     </>
   );
 };
-
-const AttributesWrapper = styled.div``;
 
 const TagsWrapper = styled.div`
   margin: calc(var(--gap) / 2) 0;
