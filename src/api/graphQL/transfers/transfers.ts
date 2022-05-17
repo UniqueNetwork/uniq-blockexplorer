@@ -1,8 +1,7 @@
 import { gql, useApolloClient, useQuery } from '@apollo/client';
 import { useCallback, useEffect } from 'react';
 import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
-import { FetchMoreBlocksOptions } from '../blocks/types';
-import { normalizeSubstrate } from '@app/utils';
+import { FetchMoreBlocksOptions } from '@app/api';
 
 const getLastTransfersQuery = gql`
   query getLastTransfers($limit: Int, $offset: Int, $where: view_extrinsic_bool_exp = {}) {
@@ -12,10 +11,12 @@ const getLastTransfersQuery = gql`
       amount
       fee
       from_owner
+      from_owner_normalized
       hash
       success
       timestamp
       to_owner
+      to_owner_normalized
     }
     view_extrinsic_aggregate(where: $where) {
       aggregate {
@@ -34,7 +35,12 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
         amount: { _neq: '0' },
         ...(accountId
           ? {
-            _or: [{ from_owner: { _eq: normalizeSubstrate(accountId) } }, { to_owner: { _eq: normalizeSubstrate(accountId) } }]
+            _or: [
+              { from_owner: { _eq: accountId } },
+              { from_owner_normalized: { _eq: accountId } },
+              { to_owner: { _eq: accountId } },
+              { to_owner_normalized: { _eq: accountId } }
+            ]
           }
           : {}),
         ...(searchString
@@ -42,7 +48,9 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
             _or: {
               block_index: { _eq: searchString },
               from_owner: { _eq: searchString },
-              to_owner: { _eq: searchString }
+              from_owner_normalized: { _eq: searchString },
+              to_owner: { _eq: searchString },
+              to_owner_normalized: { _eq: searchString }
             }
           }
           : {})

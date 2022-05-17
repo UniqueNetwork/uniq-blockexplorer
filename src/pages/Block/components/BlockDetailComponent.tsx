@@ -66,7 +66,7 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
         </div>
 
         <Text color={'grey-500'}>Extrinsic root</Text>
-        <div className={'grid-item_col10'}>
+        <div className='grid-item_col10'>
           <div
             className={'block__text-wrap'}
             title={extrinsicsRoot}

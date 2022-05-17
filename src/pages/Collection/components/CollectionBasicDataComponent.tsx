@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
-import { Collection } from '../../../api/graphQL';
+import { Collection } from '@app/api';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import TokensComponent from './TokensComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { timestampFormat } from '../../../utils/timestampUtils';
+import { timestampFormat } from '@app/utils';
 
 interface BasicDataComponentProps {
   collectionId: string
@@ -20,7 +20,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
     date_of_creation: createdOn,
     description,
     holders_count: holders,
-    owner,
+    owner_normalized: ownerNormalized,
     token_prefix: prefix,
     tokens_count: tokensCount
   } = collection || {};
@@ -67,7 +67,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
             />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
-              value={owner || ''}
+              value={ownerNormalized || ''}
             />
           </OwnerAccountWrapper>
         </CreatedAccountWrapper>

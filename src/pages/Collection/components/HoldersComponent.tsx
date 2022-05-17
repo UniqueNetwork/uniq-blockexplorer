@@ -17,8 +17,8 @@ interface HoldersComponentProps {
 
 const getColumns = (orderBy: HolderSorting, onOrderChange: (orderBy: HolderSorting) => void) => ([
   {
-    dataIndex: 'owner',
-    key: 'owner',
+    dataIndex: 'owner_normalized',
+    key: 'owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100
@@ -49,7 +49,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
   });
 
   const getRowKey = useMemo(
-    () => (item: DefaultRecordType) => `holder-${(item as Holder).collection_id}-${(item as Holder).owner}`,
+    () => (item: DefaultRecordType) => `holder-${(item as Holder).collection_id}-${(item as Holder).owner_normalized}`,
     []
   );
 

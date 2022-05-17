@@ -17,7 +17,9 @@ export interface Extrinsic {
   success: boolean
   timestamp: number
   from_owner: string
+  from_owner_normalized: string
   to_owner: string
+  to_owner_normalized: string
 }
 
 export interface ExtrinsicData {

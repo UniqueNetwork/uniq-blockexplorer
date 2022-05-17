@@ -42,8 +42,8 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
     width: 100
   },
   {
-    dataIndex: 'owner',
-    key: 'owner',
+    dataIndex: 'owner_normalized',
+    key: 'owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100

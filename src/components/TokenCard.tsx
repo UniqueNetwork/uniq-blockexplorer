@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
-import { useApi, useChainFormattedOwner } from '@app/hooks';
+import { useApi } from '@app/hooks';
 import { getImageURL, shortcutText } from '@app/utils';
 import { Token } from '@app/api';
 
@@ -14,12 +14,11 @@ const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
   image_path: imagePath,
-  owner,
+  owner_normalized: ownerNormalized,
   token_id: tokenId,
   token_prefix: prefix
 }) => {
   const { currentChain } = useApi();
-  const chainOwner = useChainFormattedOwner(owner);
 
   const imageUrl = getImageURL(imagePath);
 
@@ -38,14 +37,14 @@ const TokenCard: FC<TokenCardProps> = ({
         </div>
         <TokenProperties>
           <Text
-            color={'grey-500'}
-            size={'xs'}
+            color='grey-500'
+            size='xs'
           >
             Owner: </Text>
           <Text
-            color={'grey-500'}
-            size={'xs'}
-          >{shortcutText(chainOwner ?? owner)}</Text>
+            color='grey-500'
+            size='xs'
+          >{shortcutText(ownerNormalized)}</Text>
         </TokenProperties>
       </TokenTitle>
     </TokenCardLink>

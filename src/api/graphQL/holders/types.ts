@@ -8,6 +8,7 @@ export interface HoldersVariables {
 export interface Holder {
   collection_id: number
   owner: string
+  owner_normalized: string
   count: number
 }
 
