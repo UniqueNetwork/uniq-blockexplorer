@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { normalizeSubstrate } from '@app/utils';
 import { useApi } from '@app/hooks';
 
 import { CollectionsComponentProps } from '../types';
@@ -26,7 +25,14 @@ const CollectionsComponent = ({
   const filter = useMemo(() => {
     const accountId = queryParams.get('accountId');
 
-    if (accountId) return { owner: { _eq: normalizeSubstrate(accountId) } };
+    if (accountId) {
+      return {
+        _or: [
+          { owner: { _eq: accountId } },
+          { owner_normalized: { _eq: accountId } }
+        ]
+      };
+    }
 
     return undefined;
   }, [queryParams]);
@@ -48,7 +54,7 @@ const CollectionsComponent = ({
       orderBy,
       searchString
     });
-  }, [pageSize, currentPage, orderBy, searchString, fetchMoreCollections]);
+  }, [pageSize, currentPage, orderBy, searchString, fetchMoreCollections, filter]);
 
   return (
     <>

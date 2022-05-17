@@ -47,19 +47,16 @@ const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   }
 ];
 
-const transfersWithTimeDifference = (
-  transfers: Transfer[] | undefined,
-  chainAddressFormat: (address: string) => string | undefined
-): (Transfer & { time_difference: string })[] => {
+const transfersWithTimeDifference = (transfers: Transfer[] | undefined): (Transfer & { time_difference: string })[] => {
   if (!transfers || !Array.isArray(transfers)) {
     return [];
   }
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
-    from_owner_normalized: chainAddressFormat(transfer.from_owner_normalized) ?? transfer.from_owner_normalized,
+    from_owner_normalized: transfer.from_owner_normalized,
     time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : '',
-    to_owner_normalized: chainAddressFormat(transfer.to_owner_normalized) ?? transfer.to_owner_normalized
+    to_owner_normalized: transfer.to_owner_normalized
   }));
 };
 
@@ -70,7 +67,7 @@ const LastTransfersComponent = ({
 }: LastTransfersComponentProps) => {
   const deviceSize = useDeviceSize();
 
-  const { chainAddressFormat, chainData, currentChain } = useApi();
+  const { chainData, currentChain } = useApi();
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -98,7 +95,7 @@ const LastTransfersComponent = ({
           chainData?.properties.tokenSymbol || '',
           currentChain?.network
         )}
-        data={transfersWithTimeDifference(transfers, chainAddressFormat)}
+        data={transfersWithTimeDifference(transfers)}
         loading={isTransfersFetching}
         rowKey={'block_index'}
       />

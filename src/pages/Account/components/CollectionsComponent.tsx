@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
+import { useApi } from '@app/hooks';
+
 import { Collection, collections as gqlCollection } from '../../../api/graphQL';
 import CollectionCard from '../../../components/CollectionCard';
-import { useApi } from '../../../hooks/useApi';
 import SearchComponent from '../../../components/SearchComponent';
-import { normalizeSubstrate } from '@app/utils';
 
 interface CollectionsComponentProps {
   accountId: string
@@ -22,7 +22,10 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { collections, collectionsCount, fetchMoreCollections } =
     gqlCollection.useGraphQlCollections({
       filter: {
-        owner: { _eq: normalizeSubstrate(accountId) }
+        _or: [
+          { owner: { _eq: accountId } },
+          { owner_normalized: { _eq: accountId } }
+        ]
       },
       pageSize
     });
@@ -34,7 +37,10 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const onSearch = useCallback((searchString: string) => {
     void fetchMoreCollections({
       filter: {
-        owner: { _eq: normalizeSubstrate(accountId) }
+        _or: [
+          { owner: { _eq: accountId } },
+          { owner_normalized: { _eq: accountId } }
+        ]
       },
       searchString
     });

@@ -55,7 +55,9 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
         ...(searchString
           ? {
             _or: [
-              ...getSearchQuery(searchString)
+              ...getSearchQuery(searchString),
+              { owner: { _eq: searchString } },
+              { owner_normalized: { _eq: searchString } }
             ]
           }
           : {})
