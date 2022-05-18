@@ -13,21 +13,19 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ colle
   return (
     <>
       <WrapperWithBorder>
-        <Heading size={'4'}>NFTs attributes</Heading>
-        <div>
-          <TagsWrapper>
-            {Object.keys(fields || {}).filter((key) => key !== 'ipfsJson').map((key) => (
-              <Tag key={key}>{key}</Tag>
-            ))}
-          </TagsWrapper>
-        </div>
+        <Heading size='4'>NFTs attributes</Heading>
+        <TagsWrapper>
+          {Object.keys(fields || {}).filter((key) => key !== 'ipfsJson').map((key) => (
+            <Tag key={key}>{key}</Tag>
+          ))}
+        </TagsWrapper>
       </WrapperWithBorder>
       <WrapperWithBorder>
-        <Heading size={'4'}>Data schema</Heading>
+        <Heading size='4'>Data schema</Heading>
         <DataBlockWrapper>
-          <Text color={'grey-500'}>Schema version</Text>
+          <Text color='grey-500'>Schema version</Text>
           <Text>{collection?.schema_version || ''}</Text>
-          <Text color={'grey-500'}>Offchain schema   </Text>
+          <Text color='grey-500'>Offchain schema   </Text>
           <Text>{collection?.offchain_schema || ''}</Text>
         </DataBlockWrapper>
       </WrapperWithBorder>
