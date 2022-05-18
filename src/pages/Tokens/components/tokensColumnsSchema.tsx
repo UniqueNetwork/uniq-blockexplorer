@@ -60,8 +60,8 @@ export const getTokensColumns = (chainId: string, orderBy: TokenSorting, onOrder
     width: 100
   },
   {
-    dataIndex: 'owner_normalized',
-    key: 'owner_normalized',
+    dataIndex: 'owner',
+    key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100

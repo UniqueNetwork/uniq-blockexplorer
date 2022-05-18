@@ -22,15 +22,15 @@ const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   },
   { dataIndex: 'time_difference', key: 'age', title: 'Age', width: 100 },
   {
-    dataIndex: 'from_owner_normalized',
-    key: 'from_owner_normalized',
+    dataIndex: 'from_owner',
+    key: 'from_owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'From',
     width: 100
   },
   {
-    dataIndex: 'to_owner_normalized',
-    key: 'to_owner_normalized',
+    dataIndex: 'to_owner',
+    key: 'to_owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'To',
     width: 100
@@ -54,9 +54,7 @@ const transfersWithTimeDifference = (transfers: Transfer[] | undefined): (Transf
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
-    from_owner_normalized: transfer.from_owner_normalized,
-    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : '',
-    to_owner_normalized: transfer.to_owner_normalized
+    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : ''
   }));
 };
 

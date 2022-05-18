@@ -33,7 +33,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     data,
     date_of_creation: createdOn,
     image_path: imagePath,
-    owner_normalized: ownerNormalized,
+    owner,
     token_id: id,
     token_prefix: prefix
   } = token;
@@ -58,7 +58,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
             <Avatar size={'x-small'} />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
-              value={ownerNormalized}
+              value={owner}
             />
           </OwnerWrapper>
         </TokenInfo>

@@ -29,13 +29,13 @@ const ExtrinsicDetail: FC = () => {
     amount,
     block_number: blockNumber,
     fee,
-    from_owner_normalized: fromOwnerNormalized,
+    from_owner: fromOwner,
     hash,
     method,
     section,
     success,
     timestamp,
-    to_owner_normalized: toOwnerNormalized
+    to_owner: toOwner
   } = extrinsic || {};
 
   return (
@@ -65,11 +65,11 @@ const ExtrinsicDetail: FC = () => {
             From
           </Text>
           <div>
-            {fromOwnerNormalized && (
+            {fromOwner && (
               <AccountLinkComponent
                 noShort={deviceSize >= DeviceSize.md}
                 size={'m'}
-                value={fromOwnerNormalized}
+                value={fromOwner}
               />
             )}
           </div>
@@ -79,11 +79,11 @@ const ExtrinsicDetail: FC = () => {
             To
           </Text>
           <div>
-            {toOwnerNormalized && (
+            {toOwner && (
               <AccountLinkComponent
                 noShort={deviceSize >= DeviceSize.md}
                 size={'m'}
-                value={toOwnerNormalized}
+                value={toOwner}
               />
             )}
           </div>

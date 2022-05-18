@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { timestampTableFormat } from '@app/utils';
 
 import { Collection, CollectionSorting } from '../../../api/graphQL';
 import CollectionTableCell from '../../../components/CollectionTableCell';
@@ -7,7 +8,6 @@ import TableSortableColumnTitle from '../../../components/TableSortableColumnTit
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 import config from '../../../config';
-import { timestampTableFormat } from '../../../utils/timestampUtils';
 
 const { IPFSGateway } = config;
 
@@ -42,8 +42,8 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
     width: 100
   },
   {
-    dataIndex: 'owner_normalized',
-    key: 'owner_normalized',
+    dataIndex: 'owner',
+    key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100
@@ -75,15 +75,4 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
     />,
     width: 100
   }
-  // {
-  //   dataIndex: 'transfers',
-  //   key: 'transfers',
-  //   title: <TableSortableColumnTitle
-  //     dataIndex={'transfers'}
-  //     onOrderChange={onOrderChange}
-  //     orderBy={orderBy}
-  //     title={'Transfers'}
-  //   />,
-  //   width: 100
-  // }
 ];
