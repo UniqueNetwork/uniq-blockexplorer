@@ -17,8 +17,8 @@ interface HoldersComponentProps {
 
 const getColumns = (orderBy: HolderSorting, onOrderChange: (orderBy: HolderSorting) => void) => ([
   {
-    dataIndex: 'owner_normalized',
-    key: 'owner_normalized',
+    dataIndex: 'owner',
+    key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100
@@ -49,7 +49,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
   });
 
   const getRowKey = useMemo(
-    () => (item: DefaultRecordType) => `holder-${(item as Holder).collection_id}-${(item as Holder).owner_normalized}`,
+    () => (item: DefaultRecordType) => `holder-${(item as Holder).collection_id}-${(item as Holder).owner}`,
     []
   );
 
@@ -62,19 +62,19 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
       offset,
       orderBy
     });
-  }, [collectionId, pageSize]);
+  }, [collectionId, fetchMoreHolders, pageSize]);
 
   const onOrderChange = useCallback((_orderBy: HolderSorting) => {
     setOrderBy(_orderBy);
 
     fetchHolders(currentPage, _orderBy);
-  }, [currentPage]);
+  }, [currentPage, fetchHolders]);
 
   const onPageChange = useCallback((_currentPage: number) => {
     setCurrentPage(_currentPage);
 
     fetchHolders(_currentPage, orderBy);
-  }, [orderBy]);
+  }, [fetchHolders, orderBy]);
 
   return (
     <HolderWrapper>

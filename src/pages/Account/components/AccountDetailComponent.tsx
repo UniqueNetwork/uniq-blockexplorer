@@ -20,7 +20,6 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   if (isAccountFetching) return <LoadingComponent />;
 
   const {
-    account_id_normalized: accountNormalized,
     available_balance: availableBalance = 'unavailable',
     free_balance: freeBalance = 'unavailable',
     locked_balance: lockedBalance = 'unavailable'
@@ -40,8 +39,8 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
         <Text size={'l'}>Account name</Text>
         <h2>
           {deviceSize <= DeviceSize.md
-            ? shortcutText(accountNormalized ?? '')
-            : accountNormalized}
+            ? shortcutText(accountId)
+            : accountId}
         </h2>
       </div>
       <Text color={'grey-500'}>

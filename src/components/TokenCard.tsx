@@ -14,7 +14,7 @@ const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
   image_path: imagePath,
-  owner_normalized: ownerNormalized,
+  owner,
   token_id: tokenId,
   token_prefix: prefix
 }) => {
@@ -44,7 +44,7 @@ const TokenCard: FC<TokenCardProps> = ({
           <Text
             color='grey-500'
             size='xs'
-          >{shortcutText(ownerNormalized)}</Text>
+          >{shortcutText(owner)}</Text>
         </TokenProperties>
       </TokenTitle>
     </TokenCardLink>

@@ -20,7 +20,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
     date_of_creation: createdOn,
     description,
     holders_count: holders,
-    owner_normalized: ownerNormalized,
+    owner,
     token_prefix: prefix,
     tokens_count: tokensCount
   } = collection || {};
@@ -67,7 +67,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
             />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
-              value={ownerNormalized || ''}
+              value={owner || ''}
             />
           </OwnerAccountWrapper>
         </CreatedAccountWrapper>
