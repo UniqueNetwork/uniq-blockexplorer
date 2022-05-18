@@ -17,8 +17,8 @@ interface HoldersComponentProps {
 
 const getColumns = (orderBy: HolderSorting, onOrderChange: (orderBy: HolderSorting) => void) => ([
   {
-    dataIndex: 'owner_normalized',
-    key: 'owner_normalized',
+    dataIndex: 'owner',
+    key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
     width: 100

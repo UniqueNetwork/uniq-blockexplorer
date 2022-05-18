@@ -20,7 +20,14 @@ export enum ViewType {
 const filter = ({ accountId, collectionId }: { accountId?: string, collectionId?: string }) => {
   let _filter = {};
 
-  if (accountId) _filter = { owner: { _eq: accountId } };
+  if (accountId) {
+    _filter = {
+      _or: [
+        { owner: { _eq: accountId } },
+        { owner_normalized: { _eq: accountId } }
+      ]
+    };
+  }
 
   if (collectionId) _filter = { ..._filter, collection_id: { _eq: collectionId } };
 

@@ -17,7 +17,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
   collection_cover: cover,
   collection_id: collectionId,
   name,
-  owner_normalized: ownerNormalized,
+  owner,
   token_prefix: tokenPrefix,
   tokens_count: tokensCount
 }) => {
@@ -63,7 +63,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
             color={'grey-500'}
             size={'s'}
           >Owner: </Text>
-          <Text size={'s'}>{shortcutText(ownerNormalized)}</Text>
+          <Text size={'s'}>{shortcutText(owner)}</Text>
         </div>
       </CollectionInfo>
     </CollectionCardLink>

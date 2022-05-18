@@ -19,7 +19,10 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
   const [searchString, setSearchString] = useState<string>();
 
   const { tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
-    owner: { _eq: normalizeSubstrate(accountId) }
+    _or: [
+      { owner: { _eq: accountId } },
+      { owner_normalized: { _eq: accountId } }
+    ]
   },
   offset: 0,
   pageSize,
