@@ -20,27 +20,30 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   if (isAccountFetching) return <LoadingComponent />;
 
   const {
+    account_id: accountChain,
+    account_id_normalized: accountNormalized,
     available_balance: availableBalance = 'unavailable',
     free_balance: freeBalance = 'unavailable',
     locked_balance: lockedBalance = 'unavailable'
   } = account || {};
 
   const { tokenSymbol = '' } = chainData?.properties || {};
+  const accountAddress = accountChain || accountNormalized || accountId;
 
   return (
     <AccountWrapper>
       <div>
         <Avatar
           size='large'
-          value={accountId}
+          value={accountAddress}
         />
       </div>
       <div>
         <Text size={'l'}>Account name</Text>
         <h2>
           {deviceSize <= DeviceSize.md
-            ? shortcutText(accountId)
-            : accountId}
+            ? shortcutText(accountAddress)
+            : accountAddress}
         </h2>
       </div>
       <Text color={'grey-500'}>
