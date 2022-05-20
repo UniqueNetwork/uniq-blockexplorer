@@ -99,11 +99,10 @@ class UniqueNFTController implements INFTController<NFTCollection, NFTToken> {
 
       const collectionInfo = collection.toJSON();
       let coverImageUrl = '';
+      const coverImg = collectionInfo?.properties?.find((prop) => prop.coverImageURL)?.coverImageURL ?? '';
 
-      if (collectionInfo?.properties) {
-        const image = hex2a(collectionInfo?.properties.coverImageURL) ?? '';
-
-        coverImageUrl = `${IPFSGateway || ''}/${image || ''}`;
+      if (coverImg) {
+        coverImageUrl = `${IPFSGateway || ''}/${coverImg}`;
       } else {
         if (collectionInfo.offchainSchema) {
           coverImageUrl = await this.getTokenImage(collectionInfo, 1);

@@ -2,7 +2,7 @@ import BN from 'bn.js';
 
 export type SchemaVersionTypes = 'Custom' | 'ImageURL' | 'TokenURI' | 'Unique';
 
-export interface NftCollectionProperties {
+export interface NftCollectionProperty {
   coverImageURL: string;
 }
 
@@ -40,7 +40,7 @@ export interface NFTCollection {
     ownerCanDestroy: boolean
   }
   constOnChainSchema: string
-  properties: NftCollectionProperties;
+  properties: [NftCollectionProperty];
 }
 
 export type AttributesDecoded = {
