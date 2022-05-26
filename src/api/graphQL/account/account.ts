@@ -9,7 +9,6 @@ const accountQuery = gql`
       balances
       block_height
       free_balance
-      is_staking
       locked_balance
       nonce
       timestamp
