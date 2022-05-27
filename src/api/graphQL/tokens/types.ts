@@ -20,11 +20,9 @@ export interface Token {
 }
 
 export interface TokensData {
-  view_tokens: Token[]
-  view_tokens_aggregate: {
-    aggregate: {
-      count: number
-    }
+  tokens: {
+    data: Token[];
+    count: number;
   }
 }
 

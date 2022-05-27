@@ -3,24 +3,22 @@ import { useCallback, useEffect, useRef } from 'react';
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
-  query getTokens($limit: Int, $offset: Int, $where: view_tokens_bool_exp = {}, $orderBy: [view_tokens_order_by!] = {}) {
-    view_tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
-      collection_cover
-      collection_description
-      collection_id
-      collection_name
-      data
-      date_of_creation
-      owner
-      owner_normalized
-      image_path
-      token_id
-      token_prefix
-    }
-    view_tokens_aggregate(where: $where) {
-      aggregate {
-        count
+  query getTokens($limit: Int, $offset: Int, $where: TokenWhereParams = {}, $orderBy: TokenOrderByParams = {}) {
+    tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+      data {
+        collection_cover
+        collection_description
+        collection_id
+        collection_name
+        data
+        date_of_creation
+        owner
+        owner_normalized
+        image_path
+        token_id
+        token_prefix
       }
+      count
     }
   }
 `;
@@ -98,8 +96,8 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
   return {
     fetchTokensError,
     isTokensFetching,
-    tokens: data?.view_tokens,
-    tokensCount: data?.view_tokens_aggregate.aggregate.count || 0
+    tokens: data?.tokens?.data,
+    tokensCount: data?.tokens?.count || 0
   };
 };
 
@@ -123,7 +121,7 @@ export const useGraphQlToken = (collectionId: string, tokenId: string) => {
   return {
     fetchTokensError,
     isTokensFetching,
-    token: data?.view_tokens[0] || undefined
+    token: data?.tokens?.data[0] || undefined
   };
 };
 
