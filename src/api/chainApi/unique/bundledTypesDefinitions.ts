@@ -100,7 +100,7 @@ const bundledTypesDefinitions: OverrideBundleDefinition = {
           VariableData: 'Vec<u8>'
         },
         SchemaVersion: {
-          _enum: ['ImageURL', 'Unique']
+          _enum: ['Custom', 'ImageURL', 'TokenURI', 'Unique']
         },
         SponsorshipState: {
           _enum: {

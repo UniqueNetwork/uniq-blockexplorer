@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button, Heading, Text } from '@unique-nft/ui-kit';
 
-import { tokens as gqlTokens } from '../../../api/graphQL';
-import LoadingComponent from '../../../components/LoadingComponent';
-import { useApi } from '../../../hooks/useApi';
-import TokenCard from '../../../components/TokenCard';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { tokens as gqlTokens } from '@app/api';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { LoadingComponent, TokenCard } from '@app/components';
 
 interface TokensComponentProps {
   searchString?: string
@@ -21,6 +19,12 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
 
   const deviceSize = useDeviceSize();
 
+  const { isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({
+    filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
+    offset: 0,
+    pageSize
+  });
+
   const tokensLimit = useMemo(() => {
     if (deviceSize === DeviceSize.xs || deviceSize === DeviceSize.xxs) return 10;
     if (deviceSize === DeviceSize.sm) return 12;
@@ -32,11 +36,6 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
   const onClick = useCallback(() => {
     navigate(`/${currentChain.network}/tokens/${collectionId || ''}`);
   }, [currentChain, navigate, collectionId]);
-
-  const { isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({
-    filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
-    pageSize
-  });
 
   return (
     <>

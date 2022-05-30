@@ -1,6 +1,6 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect } from 'react';
-import { FetchMoreTokensOptions, TokensData, TokensVariables, useGraphQlTokensProps } from './types';
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
+import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
   query getTokens($limit: Int, $offset: Int, $where: view_tokens_bool_exp = {}, $orderBy: [view_tokens_order_by!] = {}) {
@@ -36,17 +36,14 @@ const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] =
 const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
   if (!searchString.includes(',')) return getSingleSearchQuery(searchString);
   const splitSearch = searchString.trim().split(',');
-  const searchQuery = splitSearch
+
+  return splitSearch
     .map((searchPart: string) => Number(searchPart.trim()))
     .filter((id: number) => Number.isInteger(id))
     .map((searchPart: number) => ({ collection_id: { _eq: searchPart } }));
-
-  return searchQuery;
 };
 
-export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokensProps) => {
-  const client = useApolloClient();
-
+export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
   const getWhere = useCallback(
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
@@ -66,7 +63,6 @@ export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokens
   const {
     data,
     error: fetchTokensError,
-    fetchMore,
     loading: isTokensFetching
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
@@ -75,35 +71,14 @@ export const useGraphQlTokens = ({ filter, orderBy, pageSize }: useGraphQlTokens
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
-      offset: 0,
+      offset,
       orderBy,
-      where: getWhere(filter)
+      where: getWhere(filter, searchString)
     }
   });
 
-  const fetchMoreTokens = useCallback(
-    ({ limit = pageSize, offset, searchString, orderBy, filter }: FetchMoreTokensOptions) => {
-      return fetchMore({
-        variables: {
-          limit,
-          offset,
-          orderBy,
-          where: getWhere(filter, searchString)
-        }
-      });
-    },
-    [fetchMore, getWhere, pageSize]
-  );
-
-  useEffect(() => {
-    fetchMore({})
-      .catch((errMsg) => {
-        throw new Error(errMsg);
-      });
-  }, [client.link, fetchMore]);
-
   return {
-    fetchMoreTokens,
+    // fetchMoreTokens,
     fetchTokensError,
     isTokensFetching,
     tokens: data?.view_tokens,
