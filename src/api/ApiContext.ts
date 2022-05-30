@@ -1,6 +1,6 @@
 import { ApiPromise } from '@polkadot/api';
 import { Context, Consumer, Provider, createContext } from 'react';
-import { Chain, ChainProperties, INFTController, IRpcClient } from './chainApi/types';
+import { Chain, INFTController, IRpcClient } from './chainApi/types';
 
 export type ChainData = {
   properties: {
@@ -14,9 +14,7 @@ export type ApiContextProps = {
   rpcClient: IRpcClient;
   rawRpcApi?: ApiPromise;
   api?: INFTController;
-  chainAddressFormat: (address: string) => string | undefined;
   chainData?: ChainData
-  chainProperties?: ChainProperties;
   currentChain: Chain;
   isLoadingChainData: boolean;
 }

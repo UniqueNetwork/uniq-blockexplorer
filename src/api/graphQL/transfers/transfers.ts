@@ -1,7 +1,8 @@
 import { gql, useApolloClient, useQuery } from '@apollo/client';
 import { useCallback, useEffect } from 'react';
-import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
 import { FetchMoreBlocksOptions } from '@app/api';
+
+import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
 
 const getLastTransfersQuery = gql`
   query getLastTransfers($limit: Int, $offset: Int, $where: view_extrinsic_bool_exp = {}) {

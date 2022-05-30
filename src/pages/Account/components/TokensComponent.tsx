@@ -6,7 +6,6 @@ import { Button } from '@unique-nft/ui-kit';
 import { Token, tokens as gqlTokens } from '@app/api';
 import { TokenCard, Search } from '@app/components';
 import { useApi } from '@app/hooks';
-import { normalizeSubstrate } from '@app/utils';
 
 interface TokensComponentProps {
   accountId: string
