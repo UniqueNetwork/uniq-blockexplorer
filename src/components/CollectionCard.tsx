@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
+import { Collection } from '@app/api';
+import { useApi } from '@app/hooks';
+import { shortcutText } from '@app/utils';
 
 import Avatar from './Avatar';
-import { Collection } from '../api/graphQL';
 import config from '../config';
-import { useApi } from '../hooks/useApi';
-import { shortcutText } from '../utils/textUtils';
 
 const { IPFSGateway } = config;
 

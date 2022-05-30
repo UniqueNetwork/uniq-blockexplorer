@@ -3,12 +3,13 @@ import { ApiPromise } from '@polkadot/api';
 import { Codec } from '@polkadot/types/types';
 
 export interface IRpcClient {
-  isApiConnected: boolean
-  controller?: INFTController
-  chainData?: ChainData
-  rawRpcApi?: ApiPromise // allow access to the raw API for exceptions in the future
-  setOnChainReadyListener(callback: (chainData: ChainData) => void): void
-  changeEndpoint(endpoint: string, options?: IRpcClientOptions): void
+  isApiConnected: boolean;
+  isApiInitialized: boolean;
+  controller?: INFTController;
+  chainData?: ChainData;
+  rawRpcApi?: ApiPromise; // allow access to the raw API for exceptions in the future
+  setOnChainReadyListener(callback: (chainData: ChainData) => void): void;
+  changeEndpoint(endpoint: string, options?: IRpcClientOptions): void;
 }
 
 export interface IRpcClientOptions {

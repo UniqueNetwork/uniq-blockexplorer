@@ -62,19 +62,19 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
       offset,
       orderBy
     });
-  }, [collectionId, pageSize]);
+  }, [collectionId, fetchMoreHolders, pageSize]);
 
   const onOrderChange = useCallback((_orderBy: HolderSorting) => {
     setOrderBy(_orderBy);
 
     fetchHolders(currentPage, _orderBy);
-  }, [currentPage]);
+  }, [currentPage, fetchHolders]);
 
   const onPageChange = useCallback((_currentPage: number) => {
     setCurrentPage(_currentPage);
 
     fetchHolders(_currentPage, orderBy);
-  }, [orderBy]);
+  }, [fetchHolders, orderBy]);
 
   return (
     <HolderWrapper>

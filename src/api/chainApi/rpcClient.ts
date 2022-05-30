@@ -40,8 +40,9 @@ export class RpcClient implements IRpcClient {
   private setApi() {
     if (this.rawRpcApi) {
       this.setIsApiConnected(false);
+
       this.rawRpcApi.disconnect()
-        .catch((errMsg) => {
+        .catch((errMsg: string) => {
           throw new Error(errMsg);
         });
     }
@@ -75,6 +76,7 @@ export class RpcClient implements IRpcClient {
     _api.on('ready', async () => {
       this.setIsApiConnected(true);
       await this.getChainData();
+
       if (this.options.onChainReady && this.chainData) this.options.onChainReady(this.chainData);
     });
 

@@ -16,7 +16,9 @@ const extrinsicQuery = gql`
       success
       timestamp
       from_owner
+      from_owner_normalized
       to_owner
+      to_owner_normalized
       method
       section
       success

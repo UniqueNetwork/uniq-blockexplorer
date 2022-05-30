@@ -7,6 +7,7 @@ const holdersQuery = gql`
     view_holders(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       collection_id
       owner
+      owner_normalized
       count
     }
     view_holders_aggregate(where: $where) {

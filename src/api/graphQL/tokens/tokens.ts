@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
-import { useCallback } from 'react';
+import { gql, HttpLink, useApolloClient, useQuery } from '@apollo/client';
+import { useCallback, useEffect, useRef } from 'react';
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
@@ -12,6 +12,7 @@ const tokensQuery = gql`
       data
       date_of_creation
       owner
+      owner_normalized
       image_path
       token_id
       token_prefix
@@ -44,6 +45,9 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
+  const client = useApolloClient();
+  const clientRef = useRef<string>();
+
   const getWhere = useCallback(
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
@@ -51,7 +55,9 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
         ...(searchString
           ? {
             _or: [
-              ...getSearchQuery(searchString)
+              ...getSearchQuery(searchString),
+              { owner: { _eq: searchString } },
+              { owner_normalized: { _eq: searchString } }
             ]
           }
           : {})
@@ -63,7 +69,8 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
   const {
     data,
     error: fetchTokensError,
-    loading: isTokensFetching
+    loading: isTokensFetching,
+    refetch
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -77,8 +84,18 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
     }
   });
 
+  useEffect(() => {
+    const apolloLink = (client.link as HttpLink)?.options?.uri as string;
+
+    if (clientRef.current && clientRef.current !== apolloLink) {
+      console.log('chain changed, need to update tokens');
+      void refetch();
+    }
+
+    clientRef.current = apolloLink;
+  }, [client, client.link, refetch]);
+
   return {
-    // fetchMoreTokens,
     fetchTokensError,
     isTokensFetching,
     tokens: data?.view_tokens,

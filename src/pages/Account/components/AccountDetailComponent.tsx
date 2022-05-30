@@ -1,12 +1,10 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
-import { account as gqlAccount } from '../../../api/graphQL';
-import Avatar from '../../../components/Avatar';
-import LoadingComponent from '../../../components/LoadingComponent';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { account as gqlAccount } from '@app/api/graphQL';
+import { Avatar, LoadingComponent } from '@app/components';
 import { formatAmount, shortcutText } from '../../../utils/textUtils';
-import { useApi } from '../../../hooks/useApi';
+import { useApi, useDeviceSize, DeviceSize } from '@app/hooks';
 
 interface AccountProps {
   accountId: string
@@ -22,28 +20,30 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   if (isAccountFetching) return <LoadingComponent />;
 
   const {
+    account_id: accountChain,
+    account_id_normalized: accountNormalized,
     available_balance: availableBalance = 'unavailable',
     free_balance: freeBalance = 'unavailable',
-    locked_balance: lockedBalance = 'unavailable',
-    timestamp
+    locked_balance: lockedBalance = 'unavailable'
   } = account || {};
 
   const { tokenSymbol = '' } = chainData?.properties || {};
+  const accountAddress = accountChain || accountNormalized || accountId;
 
   return (
     <AccountWrapper>
       <div>
         <Avatar
           size='large'
-          value={accountId}
+          value={accountAddress}
         />
       </div>
       <div>
         <Text size={'l'}>Account name</Text>
         <h2>
           {deviceSize <= DeviceSize.md
-            ? shortcutText(accountId)
-            : accountId}
+            ? shortcutText(accountAddress)
+            : accountAddress}
         </h2>
       </div>
       <Text color={'grey-500'}>

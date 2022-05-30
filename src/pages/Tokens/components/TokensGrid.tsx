@@ -2,10 +2,10 @@ import { Text } from '@unique-nft/ui-kit';
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Token } from '../../../api/graphQL/tokens/types';
+import { Token } from '@app/api';
+import { getImageURL, timeDifference } from '@app/utils';
+
 import Picture from '../../../components/Picture';
-import { timeDifference } from '../../../utils/timestampUtils';
-import { getImageURL } from '../../../utils/tokenImage';
 
 interface TokensGridProps {
   chainNetwork: string;
@@ -49,6 +49,11 @@ const TokenGallery = styled.div`
   margin-bottom: 60px;
   justify-items: center;
   align-items: stretch;
+ 
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
+    grid-gap: 32px;
+  }
 `;
 
 const TokenLink = styled(Link)`
@@ -71,6 +76,11 @@ const TokenPicture = styled(Picture)`
   width: 380px;
   border-radius: var(--bradius);
   margin-bottom: 8px;
+  
+  @media (max-width: 767px) {
+    height: 288px;
+    width: 288px;
+  }
 `;
 
 export default TokensGrid;

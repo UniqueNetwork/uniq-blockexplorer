@@ -1,17 +1,15 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import LoadingComponent from '../../../components/LoadingComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { formatAmount, formatBlockNumber, shortcutText } from '../../../utils/textUtils';
+import { formatAmount, formatBlockNumber, shortcutText, timestampFormat } from '@app/utils';
 import ChainLogo from '../../../components/ChainLogo';
-import { useApi } from '../../../hooks/useApi';
-import Picture from '../../../components/Picture';
-import { timestampFormat } from '../../../utils/timestampUtils';
+import { useApi } from '@app/hooks';
 
 const ExtrinsicDetail: FC = () => {
   const { blockIndex } = useParams();
@@ -39,27 +37,8 @@ const ExtrinsicDetail: FC = () => {
     to_owner: toOwner
   } = extrinsic || {};
 
-  // TODO: need access to NFT by extrinsic, that is just mock:
-  const tokenMock = {
-    collection_id: 3245,
-    collection_name: 'Crypto Duckies',
-    prefix: 'Duckie',
-    token_id: 5498
-  };
-
   return (
     <ExtrinsicWrapper>
-      {/* <TokenWrapper> */}
-      {/*  <TokenPicture alt={`${tokenMock.prefix} #${tokenMock.token_id}`} /> */}
-      {/*  <TokenTitle> */}
-      {/*    <Text */}
-      {/*      color={'secondary-500'} */}
-      {/*      size={'l'} */}
-      {/*      weight={'medium'} */}
-      {/*    >{`${tokenMock.prefix} #${tokenMock.token_id}`}</Text> */}
-      {/*    <Link to={'/'}>{`${tokenMock.collection_name} [ID ${tokenMock.collection_id}]`}</Link> */}
-      {/*  </TokenTitle> */}
-      {/* </TokenWrapper> */}
       <div>
         <Heading>{`Extrinsic ${blockIndex}`}</Heading>
         <ExtrinsicDataWrapper>
@@ -179,28 +158,6 @@ const ExtrinsicWrapper = styled.div`
   @media (max-width: 767px) {
     flex-direction: column;
     row-gap: calc(var(--gap) * 2);
-  }
-`;
-
-const TokenWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--gap);
-  width: 216px;
-`;
-
-const TokenPicture = styled(Picture)`
-  width: 216px;
-  height: 216px;
-`;
-
-const TokenTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: calc(var(--gap) / 4);
-  width: 216px;
-  span, a {
-    word-break: break-word;
   }
 `;
 

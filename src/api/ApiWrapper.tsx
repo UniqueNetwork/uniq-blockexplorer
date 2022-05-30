@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
+import { defaultChainKey } from '@app/utils';
+
 import { IGqlClient } from './graphQL/gqlClient';
 import { IRpcClient } from './chainApi/types';
 import { ApiContextProps, ApiProvider, ChainData } from './ApiContext';
 import config from '../config';
-import { defaultChainKey } from '../utils/configParser';
+
 import { gqlClient as gql, rpcClient as rpc } from '.';
 
 interface ChainProviderProps {
@@ -20,6 +22,20 @@ const ApiWrapper = ({ children, gqlClient = gql, rpcClient = rpc }: ChainProvide
   const [chainData, setChainData] = useState<ChainData>();
   const [isLoadingChainData, setIsLoadingChainData] = useState<boolean>(true);
   const { chainId } = useParams<'chainId'>();
+  const localChainId = useRef<string>();
+
+  // get context value for ApiContext
+  const value = useMemo<ApiContextProps>(
+    () => ({
+      api: rpcClient?.controller,
+      chainData,
+      currentChain: chainId ? chains[chainId] : defaultChain,
+      isLoadingChainData,
+      rawRpcApi: rpcClient.rawRpcApi,
+      rpcClient
+    }),
+    [rpcClient, chainData, chainId, isLoadingChainData]
+  );
 
   useEffect(() => {
     rpcClient?.setOnChainReadyListener((_chainData) => {
@@ -34,8 +50,8 @@ const ApiWrapper = ({ children, gqlClient = gql, rpcClient = rpc }: ChainProvide
       throw new Error('Networks is not configured');
     }
 
-    if (chainId) {
-      const currentChain = chainId ? chains[chainId] : defaultChain;
+    if (localChainId.current && chainId && localChainId.current !== chainId) {
+      const currentChain = chains[chainId] ?? defaultChain;
 
       setIsLoadingChainData(true);
       gqlClient.changeEndpoint(currentChain.gqlEndpoint);
@@ -46,18 +62,9 @@ const ApiWrapper = ({ children, gqlClient = gql, rpcClient = rpc }: ChainProvide
     }
   }, [chainId, rpcClient, gqlClient, setIsLoadingChainData]);
 
-  // get context value for ApiContext
-  const value = useMemo<ApiContextProps>(
-    () => ({
-      api: rpcClient?.controller,
-      chainData,
-      currentChain: chainId ? chains[chainId] : defaultChain,
-      isLoadingChainData,
-      rawRpcApi: rpcClient.rawRpcApi,
-      rpcClient
-    }),
-    [rpcClient, chainId, chainData, isLoadingChainData]
-  );
+  useEffect(() => {
+    localChainId.current = chainId;
+  }, [chainId]);
 
   return (
     <ApiProvider value={value}>

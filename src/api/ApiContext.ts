@@ -4,19 +4,19 @@ import { Chain, INFTController, IRpcClient } from './chainApi/types';
 
 export type ChainData = {
   properties: {
-    tokenSymbol: string
+    tokenSymbol: string;
   }
-  systemChain: string
-  systemName: string
+  systemChain: string;
+  systemName: string;
 }
 
 export type ApiContextProps = {
-  rpcClient: IRpcClient
-  rawRpcApi?: ApiPromise
-  api?: INFTController
+  rpcClient: IRpcClient;
+  rawRpcApi?: ApiPromise;
+  api?: INFTController;
   chainData?: ChainData
-  currentChain: Chain
-  isLoadingChainData: boolean
+  currentChain: Chain;
+  isLoadingChainData: boolean;
 }
 
 const ApiContext: Context<ApiContextProps> = createContext({} as unknown as ApiContextProps);

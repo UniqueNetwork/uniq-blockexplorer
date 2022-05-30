@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
-import PaginationComponent from '../../../components/Pagination';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import { Transfer, transfers as gqlTransfers } from '../../../api/graphQL';
+import { Pagination, Table } from '@app/components';
+import { Transfer, transfers as gqlTransfers } from '@app/api/graphQL';
+import { timeDifference } from '@app/utils';
+import useDeviceSize, { DeviceSize } from '@app/hooks/useDeviceSize';
+import { useApi } from '@app/hooks';
+
 import { LastTransfersComponentProps } from '../types';
-import { timeDifference } from '../../../utils/timestampUtils';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { useApi } from '../../../hooks/useApi';
-import Table from '../../../components/Table';
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   {
@@ -47,10 +47,10 @@ const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   }
 ];
 
-const transfersWithTimeDifference = (
-  transfers: Transfer[] | undefined
-): (Transfer & { time_difference: string })[] => {
-  if (!transfers || !Array.isArray(transfers)) return [];
+const transfersWithTimeDifference = (transfers: Transfer[] | undefined): (Transfer & { time_difference: string })[] => {
+  if (!transfers || !Array.isArray(transfers)) {
+    return [];
+  }
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
@@ -97,7 +97,7 @@ const LastTransfersComponent = ({
         loading={isTransfersFetching}
         rowKey={'block_index'}
       />
-      <PaginationComponent
+      <Pagination
         count={transfersCount}
         currentPage={currentPage}
         onPageChange={setCurrentPage}

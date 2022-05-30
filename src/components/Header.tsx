@@ -2,8 +2,8 @@ import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
+import { useApi } from '@app/hooks';
 
-import { useApi } from '../hooks/useApi';
 import config from '../config';
 import MobileMenu from './MobileMenu';
 import Menu from './Menu';
@@ -28,7 +28,7 @@ const Header: FC = () => {
       <HeaderNavWrapper>
         <MobileMenu />
         <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
-          <img
+          <Logo
             alt='Logo'
             src='/logos/unique.svg'
           />
@@ -68,6 +68,9 @@ const HeaderNavWrapper = styled.div`
   display: flex;
   column-gap: calc(var(--gap) * 2.5);
   align-items: center;
+  @media (max-width: 767px) {
+    column-gap: calc(var(--gap));
+  }
 `;
 
 const HeaderNav = styled.nav`
@@ -92,6 +95,12 @@ const HeaderNav = styled.nav`
   }
 `;
 
+const Logo = styled.img`
+  @media (max-width: 568px) {
+    width: 105px;
+  }
+`;
+
 const ChainsSelectWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
@@ -99,7 +108,7 @@ const ChainsSelectWrapper = styled.div`
 
 const ChainsSelectLoader = styled(LoadingComponent)`
   width: 32px;
-  position: static;
+  position: relative;
 `;
 
 const ChainsSelect = styled(Select)`

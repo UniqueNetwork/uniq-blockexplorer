@@ -2,12 +2,11 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
+import { useApi } from '@app/hooks';
+import { getImageURL, shortcutText } from '@app/utils';
+import { Token } from '@app/api';
 
-import { Token } from '../api/graphQL';
 import Picture from './Picture';
-import { useApi } from '../hooks/useApi';
-import { shortcutText } from '../utils/textUtils';
-import { getImageURL } from '../utils/tokenImage';
 
 type TokenCardProps = Token;
 
@@ -38,14 +37,13 @@ const TokenCard: FC<TokenCardProps> = ({
         </div>
         <TokenProperties>
           <Text
-            color={'grey-500'}
-            size={'xs'}
+            color='grey-500'
+            size='xs'
           >
-            Owner:
-          </Text>
+            Owner: </Text>
           <Text
-            color={'grey-500'}
-            size={'xs'}
+            color='grey-500'
+            size='xs'
           >{shortcutText(owner)}</Text>
         </TokenProperties>
       </TokenTitle>

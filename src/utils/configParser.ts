@@ -30,6 +30,7 @@ export const getNetworkList = (config: Record<string, string | undefined>): stri
   }, []);
 };
 
+// todo - fix me, we should get chain from url first
 export const getDefaultChain = (config: Record<string, string | undefined>) => {
   return localStorage.getItem(defaultChainKey) || config.REACT_APP_NET_DEFAULT || getNetworkList(config)[0];
 };

@@ -1,18 +1,14 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Heading, Text } from '@unique-nft/ui-kit';
-
-import { Token } from '../../../api/graphQL';
-import Picture from '../../../components/Picture';
-import Avatar from '../../../components/Avatar';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import LoadingComponent from '../../../components/LoadingComponent';
-import config from '../../../config';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import { Link } from 'react-router-dom';
-import { useApi } from '../../../hooks/useApi';
-import { getImageURL } from '../../../utils/tokenImage';
-import { timestampFormat } from '../../../utils/timestampUtils';
+import { Heading, Text } from '@unique-nft/ui-kit';
+import { Token } from '@app/api';
+import { Avatar, LoadingComponent, Picture } from '@app/components';
+import config from '@app/config';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { getImageURL, timestampFormat } from '@app/utils';
+
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 const { IPFSGateway } = config;
 
@@ -25,7 +21,10 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
-  if (!token) return null;
+  if (!token) {
+    return null;
+  }
+
   const {
     collection_cover: collectionCover,
     collection_description: description,
@@ -186,16 +185,6 @@ const CollectionLink = styled(Link)`
     min-width: 40px;
   }  
 `;
-
-// const CollectionProperties = styled.div`
-//   display: flex;
-//   column-gap: var(--gap);
-//   div {
-//     span:first-child {
-//       margin-right: calc(var(--gap) / 2);
-//     }
-//   }
-// `;
 
 const OwnerWrapper = styled.div`
   display: flex;

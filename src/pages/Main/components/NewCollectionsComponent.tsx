@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '@unique-nft/ui-kit';
 
-import { useApi } from '../../../hooks/useApi';
+import { useApi } from '@app/hooks';
+
 import { collections as gqlCollections } from '../../../api/graphQL';
 import LoadingComponent from '../../../components/LoadingComponent';
 import CollectionCard from '../../../components/CollectionCard';
@@ -24,13 +25,16 @@ const NewCollectionsComponent: FC<NewCollectionsComponentProps> = ({ pageSize = 
   }, [currentChain, navigate]);
 
   useEffect(() => {
-    if (searchString === undefined) return;
+    if (searchString === undefined) {
+      return;
+    }
+
     void fetchMoreCollections({
       limit: pageSize,
       orderBy: { collection_id: 'desc' },
       searchString
     });
-  }, [searchString, fetchMoreCollections]);
+  }, [searchString, fetchMoreCollections, pageSize]);
 
   return (
     <>

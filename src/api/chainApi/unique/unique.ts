@@ -1,13 +1,14 @@
 import { ApiPromise } from '@polkadot/api';
+import { DecoratedRpc } from '@polkadot/api/types';
+import { RpcInterface } from '@polkadot/rpc-core/types/jsonrpc';
+import { Codec } from '@polkadot/types/types';
+
 import { INFTController } from '../types';
 import { AttributesDecoded, MetadataType, NFTCollection, NFTToken } from './types';
 import { normalizeAccountId } from '../utils/normalizeAccountId';
 import { deserializeNft, ProtobufAttributeType } from '../utils/protobufUtils';
 import { hex2a } from '../utils/decoder';
 import config from '../../../config';
-import { DecoratedRpc } from '@polkadot/api/types';
-import { RpcInterface } from '@polkadot/rpc-core/types/jsonrpc';
-import { Codec } from '@polkadot/types/types';
 
 const { IPFSGateway } = config;
 
