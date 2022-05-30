@@ -1,3 +1,12 @@
+## Version 1.2.9
+
+- Addresses normalization moved to backend.
+- Search by normalized and chain format of addresses
+
+## Version 1.2.8
+
+-
+
 ## Version 1.2.6
 
 Release with tokens request optimization

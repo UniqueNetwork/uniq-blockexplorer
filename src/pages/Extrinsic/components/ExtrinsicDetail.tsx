@@ -7,10 +7,9 @@ import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import LoadingComponent from '../../../components/LoadingComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { formatAmount, formatBlockNumber, shortcutText } from '../../../utils/textUtils';
+import { formatAmount, formatBlockNumber, shortcutText, timestampFormat } from '@app/utils';
 import ChainLogo from '../../../components/ChainLogo';
 import { useApi } from '@app/hooks';
-import { timestampFormat } from '@app/utils';
 
 const ExtrinsicDetail: FC = () => {
   const { blockIndex } = useParams();

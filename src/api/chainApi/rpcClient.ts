@@ -3,7 +3,7 @@ import { ApiPromise } from '@polkadot/api/promise';
 import { formatBalance } from '@polkadot/util';
 import { OverrideBundleType } from '@polkadot/types/types';
 import { unique } from '@unique-nft/types/definitions';
-import { IRpcClient, INFTController, IRpcClientOptions, ChainProperties } from './types';
+import { IRpcClient, INFTController, IRpcClientOptions } from './types';
 import bundledTypesDefinitions from './unique/bundledTypesDefinitions';
 import rpcMethods from './unique/rpcMethods';
 import UniqueNFTController from './unique/unique';
@@ -78,12 +78,6 @@ export class RpcClient implements IRpcClient {
       await this.getChainData();
 
       if (this.options.onChainReady && this.chainData) this.options.onChainReady(this.chainData);
-
-      const info = (_api.registry.getChainProperties())?.toHuman() as { ss58Format: string } | undefined;
-
-      if (info?.ss58Format && this.options.onPropertiesReady) {
-        this.options.onPropertiesReady(info);
-      }
     });
 
     this.rawRpcApi = _api;
@@ -112,10 +106,6 @@ export class RpcClient implements IRpcClient {
 
   public setOnChainReadyListener(callback: (chainData: ChainData) => void) {
     this.options.onChainReady = callback;
-  }
-
-  public setOnChainSetProperties(callback: (chainProperties: ChainProperties) => void) {
-    this.options.onPropertiesReady = callback;
   }
 
   public changeEndpoint(rpcEndpoint: string) {
