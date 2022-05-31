@@ -101,7 +101,7 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
   };
 };
 
-export const useGraphQlToken = (collectionId: string, tokenId: string) => {
+export const useGraphQlToken = (collectionId: number, tokenId: number) => {
   const {
     data,
     error: fetchTokensError,

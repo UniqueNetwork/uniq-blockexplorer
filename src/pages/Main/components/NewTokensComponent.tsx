@@ -31,7 +31,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
   }, [currentChain, navigate]);
 
   const { isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({
-    filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
+    filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
     offset: 0,
     orderBy: { collection_id: 'desc', token_id: 'desc' },
     pageSize,

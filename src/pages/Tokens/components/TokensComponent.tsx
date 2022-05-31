@@ -29,7 +29,7 @@ const filter = ({ accountId, collectionId }: { accountId?: string, collectionId?
     };
   }
 
-  if (collectionId) _filter = { ..._filter, collection_id: { _eq: collectionId } };
+  if (collectionId) _filter = { ..._filter, collection_id: { _eq: Number(collectionId) } };
 
   return _filter;
 };
