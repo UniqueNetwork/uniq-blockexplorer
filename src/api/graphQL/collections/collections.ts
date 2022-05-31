@@ -123,7 +123,7 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
   };
 };
 
-export const useGraphQlCollection = (collectionId: string) => {
+export const useGraphQlCollection = (collectionId: number) => {
   const {
     data,
     error: fetchCollectionsError,

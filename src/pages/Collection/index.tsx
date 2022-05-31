@@ -21,7 +21,7 @@ const CollectionPage: FC = () => {
 
   const { collectionId } = useParams<{ collectionId: string }>();
 
-  const { collection } = gqlCollections.useGraphQlCollection(collectionId || '');
+  const { collection } = gqlCollections.useGraphQlCollection(Number(collectionId));
 
   return (<>
     <PagePaper>

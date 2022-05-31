@@ -13,11 +13,9 @@ export interface Holder {
 }
 
 export interface HoldersData {
-  view_holders: Holder[]
-  view_holders_aggregate: {
-    aggregate: {
-      count: number
-    }
+  holders: {
+    data: Holder[];
+    count: number;
   }
 }
 
