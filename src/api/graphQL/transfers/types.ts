@@ -20,11 +20,9 @@ export interface Transfer {
 }
 
 export interface TransfersData {
-  view_extrinsic: Transfer[]
-  view_extrinsic_aggregate: {
-    aggregate: {
-      count: number
-    }
+  extrinsics: {
+    data: Transfer[];
+    count: number;
   }
 }
 

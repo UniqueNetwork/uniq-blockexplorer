@@ -4,24 +4,27 @@ import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from 
 import { FetchMoreBlocksOptions } from '@app/api';
 
 const getLastTransfersQuery = gql`
-  query getLastTransfers($limit: Int, $offset: Int, $where: view_extrinsic_bool_exp = {}) {
-    view_extrinsic(limit: $limit, offset: $offset, order_by: { timestamp: desc }, where: $where) {
-      block_number
-      block_index
-      amount
-      fee
-      from_owner
-      from_owner_normalized
-      hash
-      success
-      timestamp
-      to_owner
-      to_owner_normalized
-    }
-    view_extrinsic_aggregate(where: $where) {
-      aggregate {
-        count
+  query getLastTransfers($limit: Int, $offset: Int, $where: ExtrinsicWhereParams = {}) {
+    extrinsics(
+      limit: $limit
+      offset: $offset
+      order_by: {timestamp: desc}
+      where: $where
+    ) {
+      data {
+        block_number
+        block_index
+        amount
+        fee
+        from_owner
+        from_owner_normalized
+        hash
+        success
+        timestamp
+        to_owner
+        to_owner_normalized    
       }
+      count
     }
   }
 `;
@@ -32,7 +35,8 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
   const getWhere = useCallback(
     (searchString?: string) => ({
       _and: {
-        amount: { _neq: '0' },
+        amount: { _neq: 0 },
+        method: { _in: ['transfer', 'transferAll', 'transferKeepAlive', 'vestedTransfer'] },
         ...(accountId
           ? {
             _or: [
@@ -100,8 +104,8 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
     fetchMoreTransfers,
     fetchTransfersError,
     isTransfersFetching,
-    transfers: data?.view_extrinsic,
-    transfersCount: data?.view_extrinsic_aggregate.aggregate.count || 0
+    transfers: data?.extrinsics?.data,
+    transfersCount: data?.extrinsics?.count || 0
   };
 };
 
