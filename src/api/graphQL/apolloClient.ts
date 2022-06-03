@@ -22,24 +22,12 @@ export const getApolloClient = (clientEndpoint: string) =>
       typePolicies: {
         Query: {
           fields: {
+            block: dontCache(),
             collections: dontCache(),
+            extrinsic: dontCache(),
             holders: dontCache(),
             tokens: dontCache(),
-            view_extrinsic: dontCache(),
-            view_extrinsic_aggregate: {
-              keyArgs: false,
-              merge(_, incoming: unknown[]) {
-                return incoming;
-              }
-            },
-            view_last_block: dontCache(),
-            view_last_block_aggregate: {
-              keyArgs: false,
-              merge(_, incoming: unknown[]) {
-                return incoming;
-              }
-            },
-            view_last_transfers: dontCache()
+            transfers: dontCache()
           }
         }
       }

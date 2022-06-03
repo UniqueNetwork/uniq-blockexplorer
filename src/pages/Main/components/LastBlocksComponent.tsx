@@ -20,8 +20,8 @@ const blockColumns = (chainId: string) => [
   },
   // Age is calculated from timestamp aftter query execution
   { dataIndex: 'time_difference', key: 'time_difference', title: 'Age', width: 100 },
-  { dataIndex: 'extrinsic_count', key: 'extrinsic_count', title: 'Extrinsic', width: 100 },
-  { dataIndex: 'event_count', key: 'event_count', title: 'Event', width: 100 }
+  { dataIndex: 'total_extrinsics', key: 'total_extrinsics', title: 'Extrinsic', width: 100 },
+  { dataIndex: 'total_events', key: 'total_events', title: 'Event', width: 100 }
 ];
 
 const blocksWithTimeDifference = (
