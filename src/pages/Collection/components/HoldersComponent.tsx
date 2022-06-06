@@ -43,7 +43,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
   const deviceSize = useDeviceSize();
 
   const { fetchMoreHolders, holders, holdersCount, isHoldersFetching } = gqlHolders.useGraphQlHolders({
-    filter: { collection_id: { _eq: collectionId } },
+    filter: { collection_id: { _eq: Number(collectionId) } },
     orderBy: defaultOrderBy,
     pageSize
   });

@@ -49,11 +49,9 @@ export interface CollectionsVariables {
 }
 
 export interface CollectionsData {
-  view_collections: Collection[]
-  view_collections_aggregate: {
-    aggregate: {
-      count: number
-    }
+  collections: {
+    data: Collection[];
+    count: number;
   }
 }
 

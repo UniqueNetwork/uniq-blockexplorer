@@ -9,7 +9,7 @@ import PagePaper from '../../components/PagePaper';
 const TokenPage: FC = () => {
   const { collectionId, tokenId } = useParams<{ collectionId: string, tokenId: string }>();
 
-  const { isTokensFetching, token } = tokens.useGraphQlToken(collectionId || '', tokenId || '');
+  const { isTokensFetching, token } = tokens.useGraphQlToken(Number(collectionId), Number(tokenId));
 
   return (
     <PagePaper>

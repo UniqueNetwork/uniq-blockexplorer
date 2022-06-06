@@ -3,19 +3,17 @@ import { useCallback, useEffect } from 'react';
 import { FetchMoreHoldersOptions, HoldersData, HoldersVariables, useGraphQlHoldersProps } from './types';
 
 const holdersQuery = gql`
-  query getHolders($limit: Int, $offset: Int, $where: view_holders_bool_exp = {}, $orderBy: [view_holders_order_by!] = {}) {
-    view_holders(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+query getHolders($limit: Int, $offset: Int, $where: HolderWhereParams = {}, $orderBy: HolderOrderByParams = {}) {
+  holders(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+    data {
       collection_id
       owner
       owner_normalized
       count
     }
-    view_holders_aggregate(where: $where) {
-      aggregate {
-        count
-      }
-    }
+    count
   }
+}
 `;
 
 export const useGraphQlHolders = ({ filter, orderBy, pageSize }: useGraphQlHoldersProps) => {
@@ -72,8 +70,8 @@ export const useGraphQlHolders = ({ filter, orderBy, pageSize }: useGraphQlHolde
   return {
     fetchHoldersError,
     fetchMoreHolders,
-    holders: data?.view_holders,
-    holdersCount: data?.view_holders_aggregate.aggregate.count || 0,
+    holders: data?.holders?.data,
+    holdersCount: data?.holders?.count || 0,
     isHoldersFetching
   };
 };
