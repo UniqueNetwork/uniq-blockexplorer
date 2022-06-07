@@ -15,5 +15,8 @@ export interface AccountDTM {
 }
 
 export interface AccountData {
-  account: AccountDTM[];
+  accounts: {
+    data: AccountDTM[];
+    count: number;
+  }
 }
