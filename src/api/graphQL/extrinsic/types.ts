@@ -23,10 +23,8 @@ export interface Extrinsic {
 }
 
 export interface ExtrinsicData {
-  view_extrinsic: Extrinsic[]
-  view_extrinsic_aggregate: {
-    aggregate: {
-      count: number
-    }
+  extrinsics: {
+    data: Extrinsic[];
+    count: number;
   }
 }
