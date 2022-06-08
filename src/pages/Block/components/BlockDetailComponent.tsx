@@ -12,7 +12,7 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
     loading: isBLockFetching
   } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
     notifyOnNetworkStatusChange: true,
-    variables: { block_number: blockNumber || '' }
+    variables: { block_number: Number(blockNumber) }
   });
 
   if (isBLockFetching) return <LoadingComponent />;
@@ -25,7 +25,7 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
     state_root: stateRoot,
     timestamp,
     total_events: totalEvents
-  } = blockDetails?.block[0] || {};
+  } = blockDetails?.block.data[0] || {};
 
   return (
     <BlockDetailWrapper>
