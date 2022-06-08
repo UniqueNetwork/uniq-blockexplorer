@@ -107,12 +107,12 @@ const ExtrinsicsListComponent = (props: { blockNumber: string | undefined }) => 
     <>
       <Table
         columns={blockColumns}
-        data={eventsList?.view_extrinsic}
+        data={eventsList?.extrinsics.data}
         loading={loading}
         rowKey={'block_index'}
       />
       <PaginationComponent
-        count={eventsList?.view_extrinsic_aggregate?.aggregate?.count || 0}
+        count={eventsList?.extrinsics?.count || 0}
         currentPage={currentPage}
         onPageChange={onPageChange}
         pageSize={pageSize}
