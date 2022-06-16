@@ -25,10 +25,10 @@ const tokensQuery = gql`
 
 const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return [
-    { token_prefix: { _iregex: searchString } },
-    ...(Number(searchString) ? [{ token_id: { _eq: searchString } }] : []),
-    { collection_name: { _iregex: searchString } },
-    ...(Number(searchString) ? [{ collection_id: { _eq: searchString } }] : [])
+    { token_prefix: { _ilike: searchString } },
+    ...(Number(searchString) ? [{ token_id: { _eq: Number(searchString) } }] : []),
+    { collection_name: { _ilike: searchString } },
+    ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
   ];
 };
 
@@ -39,7 +39,7 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return splitSearch
     .map((searchPart: string) => Number(searchPart.trim()))
     .filter((id: number) => Number.isInteger(id))
-    .map((searchPart: number) => ({ collection_id: { _eq: searchPart } }));
+    .map((searchPart: number) => ({ collection_id: { _eq: Number(searchPart) } }));
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {

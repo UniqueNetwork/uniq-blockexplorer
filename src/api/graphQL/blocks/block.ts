@@ -55,7 +55,7 @@ export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
               searchString.length > 0 && {
               _or: [
                 {
-                  block_number: { _eq: searchString }
+                  block_number: { _eq: Number(searchString) }
                 }
               ]
             }) ||
