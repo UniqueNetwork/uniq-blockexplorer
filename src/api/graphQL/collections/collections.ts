@@ -50,11 +50,11 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
         ...(searchString
           ? {
             _or: [
-              { name: { _ilike: searchString } },
-              { description: { _ilike: searchString } },
+              { name: { _ilike: `%${searchString}%` } },
+              { description: { _ilike: `%${searchString}%` } },
               { owner: { _eq: searchString } },
               { owner_normalized: { _eq: searchString } },
-              { token_prefix: { _ilike: searchString } },
+              { token_prefix: { _ilike: `%${searchString}%` } },
               ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
             ]
           }
