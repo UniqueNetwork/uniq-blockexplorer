@@ -24,7 +24,7 @@ export const getApolloClient = (clientEndpoint: string) =>
           fields: {
             block: dontCache(),
             collections: dontCache(),
-            extrinsic: dontCache(),
+            extrinsics: dontCache(),
             holders: dontCache(),
             tokens: dontCache(),
             transfers: dontCache()
