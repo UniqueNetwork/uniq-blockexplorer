@@ -1,4 +1,4 @@
-import { Chain } from '../api/chainApi/types';
+import { Chain } from '@app/api/ApiContext';
 
 const configKeyRegexp = /NET_(?<network>[A-Z]+)_NAME$/gm;
 
