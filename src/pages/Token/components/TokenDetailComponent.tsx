@@ -4,13 +4,11 @@ import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
 import { Avatar, LoadingComponent, Picture } from '@app/components';
-import config from '@app/config';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { getImageURL, timestampFormat } from '@app/utils';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-
-const { IPFSGateway } = config;
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 interface TokenDetailComponentProps {
   token?: Token
@@ -26,7 +24,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   }
 
   const {
-    collection_cover: collectionCover,
     collection_description: description,
     collection_id: collectionId,
     collection_name: name,
@@ -78,7 +75,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           <CollectionLink to={`/${currentChain.network}/collections/${collectionId}`}>
             <Avatar
               size={'small'}
-              src={collectionCover ? `${IPFSGateway || ''}/${collectionCover}` : undefined}
+              src={getCoverURLFromCollection(token)}
             />
             <div>
               <Heading size={'4'}>{name}</Heading>
