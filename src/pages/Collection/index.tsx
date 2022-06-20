@@ -7,20 +7,14 @@ import CollectionExtendedDataComponent from './components/CollectionExtendedData
 import { collections as gqlCollections, tokens as gqlTokens } from '../../api/graphQL/';
 import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
-import config from '../../config';
 import PagePaper from '../../components/PagePaper';
-
-const { IPFSGateway } = config;
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 const detailTabs = ['Basic data', 'Extended'];
-// const eventsTabs = ['Holders'/*, 'Collection events' */];
 
 const CollectionPage: FC = () => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
-  // const [activeEventsTabIndex, setActiveEventsTabIndex] = useState<number>(0);
-
   const { collectionId } = useParams<{ collectionId: string }>();
-
   const { collection } = gqlCollections.useGraphQlCollection(Number(collectionId));
 
   return (<>
@@ -28,7 +22,7 @@ const CollectionPage: FC = () => {
       <CollectionTitle>
         <Avatar
           size={'large'}
-          src={collection?.collection_cover ? `${IPFSGateway || ''}/${collection?.collection_cover}` : undefined}
+          src={getCoverURLFromCollection(collection)}
         />
         <Heading size={'2'}>{collection?.name || ''}</Heading>
       </CollectionTitle>
