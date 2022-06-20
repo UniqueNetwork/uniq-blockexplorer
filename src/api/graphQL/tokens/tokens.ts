@@ -25,9 +25,9 @@ const tokensQuery = gql`
 
 const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return [
-    { token_prefix: { _ilike: searchString } },
+    { token_prefix: { _ilike: `%${searchString}%` } },
     ...(Number(searchString) ? [{ token_id: { _eq: Number(searchString) } }] : []),
-    { collection_name: { _ilike: searchString } },
+    { collection_name: { _ilike: `%${searchString}%` } },
     ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
   ];
 };
