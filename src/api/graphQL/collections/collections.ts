@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { CollectionsData, CollectionsVariables, FetchMoreCollectionsOptions, useGraphQlCollectionsProps } from './types';
 
 const collectionsQuery = gql`
-  query getCollections($limit: Int, $offset: Int, $where: CollectionWhereParams = {}, $orderBy: CollectionOrderByParams = {}) {
+  query getCollections($limit: Int, $offset: Int, $where: CollectionWhereParamsWithRelation = {}, $orderBy: CollectionOrderByParams = {}) {
     collections(
       where: $where
       limit: $limit
