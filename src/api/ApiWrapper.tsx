@@ -18,7 +18,7 @@ const { chains, defaultChain } = config;
 
 const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
   const [chainData, setChainData] = useState<ChainData>();
-  const [isLoadingChainData, setIsLoadingChainData] = useState<boolean>(true);
+  const [isLoadingChainData, setIsLoadingChainData] = useState<boolean>(false);
   const { chainId } = useParams<'chainId'>();
   const localChainId = useRef<string>();
 
