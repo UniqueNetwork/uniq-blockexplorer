@@ -7,14 +7,12 @@ import { useApi } from '@app/hooks';
 import { shortcutText } from '@app/utils';
 
 import Avatar from './Avatar';
-import config from '../config';
-
-const { IPFSGateway } = config;
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 type CollectionCardProps = Collection
 
 const CollectionCard: FC<CollectionCardProps> = ({
-  collection_cover: cover,
+  collection_cover,
   collection_id: collectionId,
   name,
   owner,
@@ -30,7 +28,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
       <CollectionCover>
         <Avatar
           size={'middle'}
-          src={cover ? `${IPFSGateway || ''}/${cover}` : undefined}
+          src={getCoverURLFromCollection({ collection_cover } as Collection)}
         />
       </CollectionCover>
       <CollectionInfo>
