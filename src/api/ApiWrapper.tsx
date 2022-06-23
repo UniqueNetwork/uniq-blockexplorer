@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { defaultChainKey } from '@app/utils';
 
 import { IGqlClient } from './graphQL/gqlClient';
-import { ApiContextProps, ApiProvider, ChainData } from './ApiContext';
+import { ApiContextProps, ApiProvider } from './ApiContext';
 import config from '../config';
 
 import { gqlClient as gql } from '.';
@@ -17,19 +17,15 @@ interface ChainProviderProps {
 const { chains, defaultChain } = config;
 
 const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
-  const [chainData, setChainData] = useState<ChainData>();
-  const [isLoadingChainData, setIsLoadingChainData] = useState<boolean>(false);
   const { chainId } = useParams<'chainId'>();
   const localChainId = useRef<string>();
 
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
     () => ({
-      chainData,
       currentChain: chainId ? chains[chainId] : defaultChain,
-      isLoadingChainData
     }),
-    [chainData, chainId, isLoadingChainData]
+    [chainId]
   );
 
   // update endpoint if chainId is changed
@@ -38,20 +34,16 @@ const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
       throw new Error('Networks is not configured');
     }
 
-    if (localChainId.current && chainId && localChainId.current !== chainId) {
+    if (chainId && localChainId.current !== chainId) {
       const currentChain = chains[chainId] ?? defaultChain;
-
-      setIsLoadingChainData(true);
       gqlClient.changeEndpoint(currentChain.gqlEndpoint);
 
       // set current chain id into localStorage
       localStorage.setItem(defaultChainKey, chainId);
-    }
-  }, [chainId, gqlClient, setIsLoadingChainData]);
 
-  useEffect(() => {
-    localChainId.current = chainId;
-  }, [chainId]);
+      localChainId.current = chainId;
+    }
+  }, [chainId, gqlClient]);
 
   return (
     <ApiProvider value={value}>
