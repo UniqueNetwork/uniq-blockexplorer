@@ -34,15 +34,20 @@ export const getNetworkList = (config: Record<string, string | undefined>): stri
 export const getDefaultChain = (config: Record<string, string | undefined>) => {
   const storedChain = localStorage.getItem(defaultChainKey);
   const networkList = getNetworkList(config);
+
   // make sure that we are trying to use an config-existing chain, otherwise go with default one
   if (storedChain) {
-    const isExist = !!networkList.find(network => network === storedChain);
+    const isExist = !!networkList.find((network) => network === storedChain);
+
     if (isExist) {
       return storedChain;
     }
   }
+
   const newChain = config.REACT_APP_NET_DEFAULT || getNetworkList(config)[0];
+
   localStorage.setItem(defaultChainKey, newChain);
+
   return newChain;
 };
 

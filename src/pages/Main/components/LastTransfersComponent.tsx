@@ -87,10 +87,10 @@ const LastTransfersComponent = ({
 
   return (
     <>
-      <Heading size={'2'}>{`Last transfers`}</Heading>
+      <Heading size={'2'}>{'Last transfers'}</Heading>
       <Table
         columns={getTransferColumns(
-        '',
+          '',
           currentChain?.network
         )}
         data={transfersWithTimeDifference(transfers)}

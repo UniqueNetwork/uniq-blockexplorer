@@ -23,7 +23,7 @@ const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
     () => ({
-      currentChain: chainId ? chains[chainId] : defaultChain,
+      currentChain: chainId ? chains[chainId] : defaultChain
     }),
     [chainId]
   );
@@ -36,6 +36,7 @@ const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
 
     if (chainId && localChainId.current !== chainId) {
       const currentChain = chains[chainId] ?? defaultChain;
+
       gqlClient.changeEndpoint(currentChain.gqlEndpoint);
 
       // set current chain id into localStorage
