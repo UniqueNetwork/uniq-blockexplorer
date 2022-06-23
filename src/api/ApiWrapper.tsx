@@ -1,24 +1,21 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { defaultChainKey } from '@app/utils';
 
-import { IGqlClient } from './graphQL/gqlClient';
 import { ApiContextProps, ApiProvider } from './ApiContext';
 import config from '../config';
 
-import { gqlClient as gql } from '.';
+import { getApolloClient } from '@app/api/graphQL/apolloClient';
 
 interface ChainProviderProps {
   children: React.ReactNode
-  gqlClient?: IGqlClient
 }
 
 const { chains, defaultChain } = config;
 
-const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
+const ApiWrapper = ({ children }: ChainProviderProps) => {
   const { chainId } = useParams<'chainId'>();
-  const localChainId = useRef<string>();
 
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
@@ -28,27 +25,19 @@ const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
     [chainId]
   );
 
-  // update endpoint if chainId is changed
+  const client = useMemo(() => {
+    const currentChain = chainId ? chains[chainId] : defaultChain;
+
+    return getApolloClient(currentChain.gqlEndpoint);
+  }, [chainId]);
+
   useEffect(() => {
-    if (Object.values(chains).length === 0) {
-      throw new Error('Networks is not configured');
-    }
-
-    if (chainId && localChainId.current !== chainId) {
-      const currentChain = chains[chainId] ?? defaultChain;
-
-      gqlClient.changeEndpoint(currentChain.gqlEndpoint);
-
-      // set current chain id into localStorage
-      localStorage.setItem(defaultChainKey, chainId);
-
-      localChainId.current = chainId;
-    }
-  }, [chainId, gqlClient]);
+    localStorage.setItem(defaultChainKey, chainId || defaultChain.network);
+  }, [chainId]);
 
   return (
     <ApiProvider value={value}>
-      <ApolloProvider client={gqlClient.client}>{children}</ApolloProvider>
+      <ApolloProvider client={client}>{children}</ApolloProvider>
     </ApiProvider>
   );
 };

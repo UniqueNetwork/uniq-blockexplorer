@@ -15,6 +15,6 @@ export class GqlClient implements IGqlClient {
 
   public changeEndpoint(gqlEndpoint: string) {
     this.client.setLink(new HttpLink({ uri: gqlEndpoint }));
-    this.client.refetchQueries({ include: 'all' });
+    void this.client.refetchQueries({ include: 'all' });
   }
 }
