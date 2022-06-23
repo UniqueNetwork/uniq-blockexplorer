@@ -14,8 +14,6 @@ import { useApi } from '@app/hooks';
 const ExtrinsicDetail: FC = () => {
   const { blockIndex } = useParams();
 
-  const { chainData } = useApi();
-
   const { extrinsic, isExtrinsicFetching } = gqlExtrinsic.useGraphQlExtrinsic(blockIndex);
 
   const deviceSize = useDeviceSize();
@@ -96,7 +94,7 @@ const ExtrinsicDetail: FC = () => {
           {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
           <ChainLogoWrapper>
             <ChainLogo isInline={true} />
-            <Text>{`${formatAmount(amount || 0)} ${chainData?.properties.tokenSymbol || ''}`}</Text>
+            <Text>{`${formatAmount(amount || 0)}`}</Text>
           </ChainLogoWrapper>
           <Text
             color={'grey-500'}
@@ -105,7 +103,7 @@ const ExtrinsicDetail: FC = () => {
           </Text>
           <ChainLogoWrapper>
             <ChainLogo isInline={true} />
-            <Text>{`${formatAmount(fee || 0)} ${chainData?.properties.tokenSymbol || ''}`}</Text>
+            <Text>{`${formatAmount(fee || 0)}`}</Text>
           </ChainLogoWrapper>
         </ExtrinsicDataWrapper>
         <ExtrinsicDataWrapper>

@@ -10,7 +10,7 @@ import Menu from './Menu';
 import LoadingComponent from './LoadingComponent';
 
 const Header: FC = () => {
-  const { currentChain, isLoadingChainData } = useApi();
+  const { currentChain } = useApi();
 
   const navigate = useNavigate();
 
@@ -38,7 +38,6 @@ const Header: FC = () => {
         </HeaderNav>
       </HeaderNavWrapper>
       <ChainsSelectWrapper>
-        {isLoadingChainData && <ChainsSelectLoader />}
         <ChainsSelect
           onChange={onSelectChange}
           options={Object.values(config.chains).map(({ name, network }) => ({

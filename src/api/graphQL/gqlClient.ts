@@ -14,12 +14,7 @@ export class GqlClient implements IGqlClient {
   }
 
   public changeEndpoint(gqlEndpoint: string) {
-    this.client.stop(); // terminate all active query processes
-    this.client.clearStore().then(() => {
-      // resets the entire store by clearing out the cache
-      this.client.setLink(new HttpLink({ uri: gqlEndpoint }));
-    }).catch((errMsg) => {
-      throw new Error(errMsg);
-    });
+    this.client.setLink(new HttpLink({ uri: gqlEndpoint }));
+    this.client.refetchQueries({ include: 'all' });
   }
 }
