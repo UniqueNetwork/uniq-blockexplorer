@@ -82,17 +82,6 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
     }
   });
 
-  useEffect(() => {
-    const apolloLink = (client.link as HttpLink)?.options?.uri as string;
-
-    if (clientRef.current && clientRef.current !== apolloLink) {
-      console.log('chain changed, need to update tokens');
-      void refetch();
-    }
-
-    clientRef.current = apolloLink;
-  }, [client, client.link, refetch]);
-
   return {
     fetchTokensError,
     isTokensFetching,

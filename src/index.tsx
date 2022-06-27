@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TagManager from 'react-gtm-module';
 import App from './App';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { Account, Block, Collections, Collection, Extrinsic, Main, Tokens, Token } from './pages';
 import config from './config';
 
@@ -11,6 +11,8 @@ if (config.GTMExists) {
     gtmId: 'GTM-MBJRM6M'
   });
 }
+
+const { defaultChain } = config;
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,7 +23,7 @@ ReactDOM.render(
           path={'/'}
         >
           <Route
-            element={<Main />}
+            element={<Navigate to={`/${defaultChain.network}/`} />}
             index
           />
           <Route path={':chainId/'}>

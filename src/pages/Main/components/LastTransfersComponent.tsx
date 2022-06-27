@@ -65,7 +65,7 @@ const LastTransfersComponent = ({
 }: LastTransfersComponentProps) => {
   const deviceSize = useDeviceSize();
 
-  const { chainData, currentChain } = useApi();
+  const { currentChain } = useApi();
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -87,10 +87,10 @@ const LastTransfersComponent = ({
 
   return (
     <>
-      <Heading size={'2'}>{`Last ${chainData?.properties.tokenSymbol || ''} transfers`}</Heading>
+      <Heading size={'2'}>{'Last transfers'}</Heading>
       <Table
         columns={getTransferColumns(
-          chainData?.properties.tokenSymbol || '',
+          '',
           currentChain?.network
         )}
         data={transfersWithTimeDifference(transfers)}

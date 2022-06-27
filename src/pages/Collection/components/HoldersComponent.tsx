@@ -57,7 +57,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
     const offset = (currentPage - 1) * pageSize;
 
     void fetchMoreHolders({
-      filter: { collection_id: { _eq: collectionId } },
+      filter: { collection_id: { _eq: Number(collectionId) } },
       limit: pageSize,
       offset,
       orderBy

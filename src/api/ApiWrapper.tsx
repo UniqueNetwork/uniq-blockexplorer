@@ -1,61 +1,43 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { defaultChainKey } from '@app/utils';
 
-import { IGqlClient } from './graphQL/gqlClient';
-import { ApiContextProps, ApiProvider, ChainData } from './ApiContext';
+import { ApiContextProps, ApiProvider } from './ApiContext';
 import config from '../config';
 
-import { gqlClient as gql } from '.';
+import { getApolloClient } from '@app/api/graphQL/apolloClient';
 
 interface ChainProviderProps {
   children: React.ReactNode
-  gqlClient?: IGqlClient
 }
 
 const { chains, defaultChain } = config;
 
-const ApiWrapper = ({ children, gqlClient = gql }: ChainProviderProps) => {
-  const [chainData, setChainData] = useState<ChainData>();
-  const [isLoadingChainData, setIsLoadingChainData] = useState<boolean>(false);
+const ApiWrapper = ({ children }: ChainProviderProps) => {
   const { chainId } = useParams<'chainId'>();
-  const localChainId = useRef<string>();
 
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
     () => ({
-      chainData,
-      currentChain: chainId ? chains[chainId] : defaultChain,
-      isLoadingChainData
+      currentChain: chainId ? chains[chainId] : defaultChain
     }),
-    [chainData, chainId, isLoadingChainData]
+    [chainId]
   );
 
-  // update endpoint if chainId is changed
-  useEffect(() => {
-    if (Object.values(chains).length === 0) {
-      throw new Error('Networks is not configured');
-    }
+  const client = useMemo(() => {
+    const currentChain = chainId ? chains[chainId] : defaultChain;
 
-    if (localChainId.current && chainId && localChainId.current !== chainId) {
-      const currentChain = chains[chainId] ?? defaultChain;
-
-      setIsLoadingChainData(true);
-      gqlClient.changeEndpoint(currentChain.gqlEndpoint);
-
-      // set current chain id into localStorage
-      localStorage.setItem(defaultChainKey, chainId);
-    }
-  }, [chainId, gqlClient, setIsLoadingChainData]);
+    return getApolloClient(currentChain.gqlEndpoint);
+  }, [chainId]);
 
   useEffect(() => {
-    localChainId.current = chainId;
+    localStorage.setItem(defaultChainKey, chainId || defaultChain.network);
   }, [chainId]);
 
   return (
     <ApiProvider value={value}>
-      <ApolloProvider client={gqlClient.client}>{children}</ApolloProvider>
+      <ApolloProvider client={client}>{children}</ApolloProvider>
     </ApiProvider>
   );
 };

@@ -15,8 +15,6 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
 
   const deviceSize = useDeviceSize();
 
-  const { chainData } = useApi();
-
   if (isAccountFetching) return <LoadingComponent />;
 
   const {
@@ -27,7 +25,7 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
     locked_balance: lockedBalance = 'unavailable'
   } = account || {};
 
-  const { tokenSymbol = '' } = chainData?.properties || {};
+  const { tokenSymbol = '' } = {};
   const accountAddress = accountChain || accountNormalized || accountId;
 
   return (
