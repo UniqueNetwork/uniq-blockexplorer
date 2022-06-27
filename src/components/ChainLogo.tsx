@@ -16,15 +16,15 @@ function sanitize(value?: string): string {
 }
 
 function ChainLogo({ logo, onClick }: Props): React.ReactElement<Props> {
-  const { chainData } = useApi();
+  const { currentChain } = useApi();
 
   const img = useMemo((): string => {
     const found = logo
       ? namedLogos[logo]
-      : chainLogos[sanitize(chainData?.systemChain)] || nodeLogos[sanitize(chainData?.systemName)];
+      : chainLogos[sanitize(currentChain.name)] || nodeLogos[sanitize(currentChain.name)];
 
     return (found || emptyLogos.empty) as string;
-  }, [logo, chainData?.systemChain, chainData?.systemName]);
+  }, [logo, currentChain.name]);
 
   return (
     <ChainLogoImg

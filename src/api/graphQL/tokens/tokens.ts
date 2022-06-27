@@ -1,35 +1,34 @@
-import { gql, useQuery } from '@apollo/client';
-import { useCallback } from 'react';
+import { gql, HttpLink, useApolloClient, useQuery } from '@apollo/client';
+import { useCallback, useEffect, useRef } from 'react';
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
-  query getTokens($limit: Int, $offset: Int, $where: view_tokens_bool_exp = {}, $orderBy: [view_tokens_order_by!] = {}) {
-    view_tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
-      collection_cover
-      collection_description
-      collection_id
-      collection_name
-      data
-      date_of_creation
-      owner
-      image_path
-      token_id
-      token_prefix
-    }
-    view_tokens_aggregate(where: $where) {
-      aggregate {
-        count
+  query getTokens($limit: Int, $offset: Int, $where: TokenWhereParams = {}, $orderBy: TokenOrderByParams = {}) {
+    tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+      data {
+        collection_cover
+        collection_description
+        collection_id
+        collection_name
+        data
+        date_of_creation
+        owner
+        owner_normalized
+        image_path
+        token_id
+        token_prefix
       }
+      count
     }
   }
 `;
 
 const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return [
-    { token_prefix: { _iregex: searchString } },
-    ...(Number(searchString) ? [{ token_id: { _eq: searchString } }] : []),
-    { collection_name: { _iregex: searchString } },
-    ...(Number(searchString) ? [{ collection_id: { _eq: searchString } }] : [])
+    { token_prefix: { _ilike: `%${searchString}%` } },
+    ...(Number(searchString) ? [{ token_id: { _eq: Number(searchString) } }] : []),
+    { collection_name: { _ilike: `%${searchString}%` } },
+    ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
   ];
 };
 
@@ -40,10 +39,13 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return splitSearch
     .map((searchPart: string) => Number(searchPart.trim()))
     .filter((id: number) => Number.isInteger(id))
-    .map((searchPart: number) => ({ collection_id: { _eq: searchPart } }));
+    .map((searchPart: number) => ({ collection_id: { _eq: Number(searchPart) } }));
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
+  const client = useApolloClient();
+  const clientRef = useRef<string>();
+
   const getWhere = useCallback(
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
@@ -51,7 +53,9 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
         ...(searchString
           ? {
             _or: [
-              ...getSearchQuery(searchString)
+              ...getSearchQuery(searchString),
+              { owner: { _eq: searchString } },
+              { owner_normalized: { _eq: searchString } }
             ]
           }
           : {})
@@ -63,7 +67,8 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
   const {
     data,
     error: fetchTokensError,
-    loading: isTokensFetching
+    loading: isTokensFetching,
+    refetch
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -78,15 +83,14 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
   });
 
   return {
-    // fetchMoreTokens,
     fetchTokensError,
     isTokensFetching,
-    tokens: data?.view_tokens,
-    tokensCount: data?.view_tokens_aggregate.aggregate.count || 0
+    tokens: data?.tokens?.data,
+    tokensCount: data?.tokens?.count || 0
   };
 };
 
-export const useGraphQlToken = (collectionId: string, tokenId: string) => {
+export const useGraphQlToken = (collectionId: number, tokenId: number) => {
   const {
     data,
     error: fetchTokensError,
@@ -106,7 +110,7 @@ export const useGraphQlToken = (collectionId: string, tokenId: string) => {
   return {
     fetchTokensError,
     isTokensFetching,
-    token: data?.view_tokens[0] || undefined
+    token: data?.tokens?.data[0] || undefined
   };
 };
 

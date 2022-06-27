@@ -2,19 +2,17 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
+import { Collection } from '@app/api';
+import { useApi } from '@app/hooks';
+import { shortcutText } from '@app/utils';
 
 import Avatar from './Avatar';
-import { Collection } from '../api/graphQL';
-import config from '../config';
-import { useApi } from '../hooks/useApi';
-import { shortcutText } from '../utils/textUtils';
-
-const { IPFSGateway } = config;
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 type CollectionCardProps = Collection
 
 const CollectionCard: FC<CollectionCardProps> = ({
-  collection_cover: cover,
+  collection_cover,
   collection_id: collectionId,
   name,
   owner,
@@ -30,7 +28,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
       <CollectionCover>
         <Avatar
           size={'middle'}
-          src={cover ? `${IPFSGateway || ''}/${cover}` : undefined}
+          src={getCoverURLFromCollection({ collection_cover } as Collection)}
         />
       </CollectionCover>
       <CollectionInfo>

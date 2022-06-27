@@ -17,14 +17,14 @@ export interface Extrinsic {
   success: boolean
   timestamp: number
   from_owner: string
+  from_owner_normalized: string
   to_owner: string
+  to_owner_normalized: string
 }
 
 export interface ExtrinsicData {
-  view_extrinsic: Extrinsic[]
-  view_extrinsic_aggregate: {
-    aggregate: {
-      count: number
-    }
+  extrinsics: {
+    data: Extrinsic[];
+    count: number;
   }
 }

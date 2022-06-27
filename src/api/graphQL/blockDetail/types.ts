@@ -1,5 +1,5 @@
 export interface BlockDetailVariables {
-  block_number: string
+  block_number: number;
 }
 
 export interface Block {
@@ -13,5 +13,7 @@ export interface Block {
 }
 
 export interface BlockDetailData {
-  block: Block[]
+  block: {
+    data: Block[];
+  }
 }

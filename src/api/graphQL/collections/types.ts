@@ -23,6 +23,7 @@ export interface Collection {
   name: string
   offchain_schema: string
   owner: string
+  owner_normalized: string
   token_limit: number
   token_prefix: string
   tokens_count: number
@@ -48,11 +49,9 @@ export interface CollectionsVariables {
 }
 
 export interface CollectionsData {
-  view_collections: Collection[]
-  view_collections_aggregate: {
-    aggregate: {
-      count: number
-    }
+  collections: {
+    data: Collection[];
+    count: number;
   }
 }
 

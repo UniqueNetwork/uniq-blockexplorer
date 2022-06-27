@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useApi } from '@app/hooks';
 
 import { CollectionsComponentProps } from '../types';
-import { useApi } from '../../../hooks/useApi';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
@@ -25,7 +25,14 @@ const CollectionsComponent = ({
   const filter = useMemo(() => {
     const accountId = queryParams.get('accountId');
 
-    if (accountId) return { owner: { _eq: accountId } };
+    if (accountId) {
+      return {
+        _or: [
+          { owner: { _eq: accountId } },
+          { owner_normalized: { _eq: accountId } }
+        ]
+      };
+    }
 
     return undefined;
   }, [queryParams]);
@@ -47,7 +54,7 @@ const CollectionsComponent = ({
       orderBy,
       searchString
     });
-  }, [pageSize, currentPage, orderBy, searchString, fetchMoreCollections]);
+  }, [pageSize, currentPage, orderBy, searchString, fetchMoreCollections, filter]);
 
   return (
     <>

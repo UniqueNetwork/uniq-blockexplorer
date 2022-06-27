@@ -1,15 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { timestampTableFormat } from '@app/utils';
 
 import { Collection, CollectionSorting } from '../../../api/graphQL';
 import CollectionTableCell from '../../../components/CollectionTableCell';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
-import config from '../../../config';
-import { timestampTableFormat } from '../../../utils/timestampUtils';
-
-const { IPFSGateway } = config;
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 export const getCollectionsColumns = (chainId: string, orderBy: CollectionSorting, onOrderChange: (orderBy: CollectionSorting) => void) => [
   {
@@ -19,7 +17,7 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
       chainId={chainId}
       collectionId={value}
       collectionName={(item as Collection).name}
-      coverImageUrl={(item as Collection).collection_cover ? `${IPFSGateway || ''}/${(item as Collection).collection_cover}` : undefined}
+      coverImageUrl={getCoverURLFromCollection(item as Collection)}
     />,
     title: <TableSortableColumnTitle
       dataIndex={'collection_id'}
@@ -75,15 +73,4 @@ export const getCollectionsColumns = (chainId: string, orderBy: CollectionSortin
     />,
     width: 100
   }
-  // {
-  //   dataIndex: 'transfers',
-  //   key: 'transfers',
-  //   title: <TableSortableColumnTitle
-  //     dataIndex={'transfers'}
-  //     onOrderChange={onOrderChange}
-  //     orderBy={orderBy}
-  //     title={'Transfers'}
-  //   />,
-  //   width: 100
-  // }
 ];

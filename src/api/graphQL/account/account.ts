@@ -3,21 +3,25 @@ import { AccountData, AccountVariables } from './types';
 
 const accountQuery = gql`
   query getAccount($accountId: String!) {
-    account_by_pk(account_id: $accountId) {
-      account_id
-      available_balance
-      balances
-      block_height
-      free_balance
-      locked_balance
-      nonce
-      timestamp
+    accounts(
+      where: {_or: [{account_id: {_eq: $accountId}}, {account_id_normalized: {_eq: $accountId}}]}
+    ) {
+      data {
+        account_id
+        account_id_normalized
+        available_balance
+        balances
+        block_height
+        free_balance
+        locked_balance
+        nonce
+    }
     }
   }
 `;
 
 export const useGraphQlAccount = (accountId: string) => {
-  const { data: account, loading: isAccountFetching } = useQuery<AccountData, AccountVariables>(
+  const { data, loading: isAccountFetching } = useQuery<AccountData, AccountVariables>(
     accountQuery,
     {
       notifyOnNetworkStatusChange: true,
@@ -25,7 +29,7 @@ export const useGraphQlAccount = (accountId: string) => {
     }
   );
 
-  return { account: account?.account_by_pk, isAccountFetching };
+  return { account: data?.accounts.data?.[0], isAccountFetching };
 };
 
 export { accountQuery };

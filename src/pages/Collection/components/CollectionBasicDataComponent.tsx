@@ -2,12 +2,13 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
-import { Collection } from '../../../api/graphQL';
+import { Collection } from '@app/api';
+import { timestampFormat } from '@app/utils';
+
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import TokensComponent from './TokensComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { timestampFormat } from '../../../utils/timestampUtils';
 
 interface BasicDataComponentProps {
   collectionId: string

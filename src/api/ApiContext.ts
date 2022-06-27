@@ -1,22 +1,15 @@
 import { ApiPromise } from '@polkadot/api';
 import { Context, Consumer, Provider, createContext } from 'react';
-import { Chain, INFTController, IRpcClient } from './chainApi/types';
 
-export type ChainData = {
-  properties: {
-    tokenSymbol: string
-  }
-  systemChain: string
-  systemName: string
+export type Chain = {
+  network: string;
+  name: string;
+  gqlEndpoint: string;
+  rpcEndpoint: string;
 }
 
 export type ApiContextProps = {
-  rpcClient: IRpcClient
-  rawRpcApi?: ApiPromise
-  api?: INFTController
-  chainData?: ChainData
-  currentChain: Chain
-  isLoadingChainData: boolean
+  currentChain: Chain;
 }
 
 const ApiContext: Context<ApiContextProps> = createContext({} as unknown as ApiContextProps);

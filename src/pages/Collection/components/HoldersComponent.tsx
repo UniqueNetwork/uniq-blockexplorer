@@ -43,7 +43,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
   const deviceSize = useDeviceSize();
 
   const { fetchMoreHolders, holders, holdersCount, isHoldersFetching } = gqlHolders.useGraphQlHolders({
-    filter: { collection_id: { _eq: collectionId } },
+    filter: { collection_id: { _eq: Number(collectionId) } },
     orderBy: defaultOrderBy,
     pageSize
   });
@@ -57,24 +57,24 @@ const HoldersComponent: FC<HoldersComponentProps> = ({ collectionId, pageSize = 
     const offset = (currentPage - 1) * pageSize;
 
     void fetchMoreHolders({
-      filter: { collection_id: { _eq: collectionId } },
+      filter: { collection_id: { _eq: Number(collectionId) } },
       limit: pageSize,
       offset,
       orderBy
     });
-  }, [collectionId, pageSize]);
+  }, [collectionId, fetchMoreHolders, pageSize]);
 
   const onOrderChange = useCallback((_orderBy: HolderSorting) => {
     setOrderBy(_orderBy);
 
     fetchHolders(currentPage, _orderBy);
-  }, [currentPage]);
+  }, [currentPage, fetchHolders]);
 
   const onPageChange = useCallback((_currentPage: number) => {
     setCurrentPage(_currentPage);
 
     fetchHolders(_currentPage, orderBy);
-  }, [orderBy]);
+  }, [fetchHolders, orderBy]);
 
   return (
     <HolderWrapper>

@@ -1,8 +1,8 @@
 export interface LastBlock {
   timestamp: number
   block_number: number
-  event_count: number
-  extrinsic_count: number
+  total_events: number
+  total_extrinsics: number
 }
 
 export interface LastBlocksVariables {
@@ -13,11 +13,9 @@ export interface LastBlocksVariables {
 }
 
 export interface LastBlocksData {
-  view_last_block: LastBlock[]
-  view_last_block_aggregate: {
-    aggregate: {
-      count: number // total number of blocks, used for pagination
-    }
+  block: {
+    data: LastBlock[];
+    count: number;
   }
 }
 

@@ -12,7 +12,7 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
     loading: isBLockFetching
   } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
     notifyOnNetworkStatusChange: true,
-    variables: { block_number: blockNumber || '' }
+    variables: { block_number: Number(blockNumber) }
   });
 
   if (isBLockFetching) return <LoadingComponent />;
@@ -25,60 +25,60 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
     state_root: stateRoot,
     timestamp,
     total_events: totalEvents
-  } = blockDetails?.block[0] || {};
+  } = blockDetails?.block.data[0] || {};
 
   return (
     <BlockDetailWrapper>
       <Heading>{`Block ${blockNumber || ''}`}</Heading>
-      <div className={'block-container'}>
-        <Text color={'grey-500'}>Timestamp</Text>
-        <div className={'grid-item_col10'}>
+      <div className='block-container'>
+        <Text color='grey-500'>Timestamp</Text>
+        <div className='grid-item_col10'>
           {timestamp && new Date(timestamp * 1000).toLocaleString()}
         </div>
       </div>
 
-      <div className={'block-container'}>
-        <Text color={'grey-500'}>Total events</Text>
-        <div className={'grid-item_col10'}>{totalEvents}</div>
-        <Text color={'grey-500'}>Spec version</Text>
-        <div className={'grid-item_col10'}>{specVersion}</div>
+      <div className='block-container'>
+        <Text color='grey-500'>Total events</Text>
+        <div className='grid-item_col10'>{totalEvents}</div>
+        <Text color='grey-500'>Spec version</Text>
+        <div className='grid-item_col10'>{specVersion}</div>
       </div>
 
-      <div className={'block-container'}>
-        <Text color={'grey-500'}>Block hash</Text>
-        <div className={'grid-item_col10'}>
+      <div className='block-container'>
+        <Text color='grey-500'>Block hash</Text>
+        <div className='grid-item_col10'>
           <div
-            className={'block__text-wrap'}
+            className='block__text-wrap'
             title={blockHash}
           >
             {blockHash}
           </div>
         </div>
 
-        <Text color={'grey-500'}>Parent hash</Text>
-        <div className={'grid-item_col10'}>
+        <Text color='grey-500'>Parent hash</Text>
+        <div className='grid-item_col10'>
           <div
-            className={'block__text-wrap'}
+            className='block__text-wrap'
             title={parentHash}
           >
             {parentHash}
           </div>
         </div>
 
-        <Text color={'grey-500'}>Extrinsic root</Text>
-        <div className={'grid-item_col10'}>
+        <Text color='grey-500'>Extrinsic root</Text>
+        <div className='grid-item_col10'>
           <div
-            className={'block__text-wrap'}
+            className='block__text-wrap'
             title={extrinsicsRoot}
           >
             {extrinsicsRoot}
           </div>
         </div>
 
-        <Text color={'grey-500'}>State root</Text>
-        <div className={'grid-item_col10'}>
+        <Text color='grey-500'>State root</Text>
+        <div className='grid-item_col10'>
           <div
-            className={'block__text-wrap'}
+            className='block__text-wrap'
             title={stateRoot}
           >
             {stateRoot}

@@ -1,4 +1,4 @@
-import { Chain } from './api/chainApi/types';
+import { Chain } from './api/ApiContext';
 import { getChainList, getDefaultChain } from './utils/configParser';
 
 declare type Env = {

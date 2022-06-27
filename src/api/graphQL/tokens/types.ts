@@ -13,17 +13,16 @@ export interface Token {
   date_of_creation: number
   token_prefix: string
   owner: string
+  owner_normalized: string;
   image_path: string
   collection_cover: string
   collection_description: string
 }
 
 export interface TokensData {
-  view_tokens: Token[]
-  view_tokens_aggregate: {
-    aggregate: {
-      count: number
-    }
+  tokens: {
+    data: Token[];
+    count: number;
   }
 }
 

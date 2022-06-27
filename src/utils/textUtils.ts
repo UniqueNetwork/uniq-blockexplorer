@@ -8,6 +8,7 @@ export const shortcutText = (text: string) => {
 
 export const formatAmount = (amount: number | string) => {
   if (!amount) return '0';
+
   const parts = amount.toString().split('.');
 
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');

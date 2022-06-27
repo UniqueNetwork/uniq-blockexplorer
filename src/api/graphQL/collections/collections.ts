@@ -3,9 +3,15 @@ import { useCallback, useEffect } from 'react';
 import { CollectionsData, CollectionsVariables, FetchMoreCollectionsOptions, useGraphQlCollectionsProps } from './types';
 
 const collectionsQuery = gql`
-  query getCollections($limit: Int, $offset: Int, $where: view_collections_bool_exp = {}, $orderBy: [view_collections_order_by!] = {}) {
-    view_collections(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
-      actions_count
+  query getCollections($limit: Int, $offset: Int, $where: CollectionWhereParamsWithRelation = {}, $orderBy: CollectionOrderByParams = {}) {
+    collections(
+      where: $where
+      limit: $limit
+      offset: $offset
+      order_by: $orderBy
+    ) {
+      data {
+        actions_count
       collection_cover
       collection_id
       const_chain_schema
@@ -19,6 +25,7 @@ const collectionsQuery = gql`
       name
       offchain_schema
       owner
+      owner_normalized
       owner_can_destroy
       owner_can_transfer
       schema_version
@@ -27,11 +34,8 @@ const collectionsQuery = gql`
       token_prefix
       tokens_count
       type
-    }
-    view_collections_aggregate(where: $where) {
-      aggregate {
-        count
       }
+      count
     }
   }
 `;
@@ -46,10 +50,12 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
         ...(searchString
           ? {
             _or: [
-              { name: { _iregex: searchString } },
-              { description: { _iregex: searchString } },
-              { token_prefix: { _ilike: searchString } },
-              ...(Number(searchString) ? [{ collection_id: { _eq: searchString } }] : [])
+              { name: { _ilike: `%${searchString}%` } },
+              { description: { _ilike: `%${searchString}%` } },
+              { owner: { _eq: searchString } },
+              { owner_normalized: { _eq: searchString } },
+              { token_prefix: { _ilike: `%${searchString}%` } },
+              ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
             ]
           }
           : {})
@@ -108,8 +114,8 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
   }, [client.link, fetchMore]);
 
   return {
-    collections: data?.view_collections || [],
-    collectionsCount: data?.view_collections_aggregate.aggregate.count || 0,
+    collections: data?.collections?.data || [],
+    collectionsCount: data?.collections?.count || 0,
     fetchCollectionsError,
     fetchMoreCollections,
     fetchOrderedCollections,
@@ -117,7 +123,7 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
   };
 };
 
-export const useGraphQlCollection = (collectionId: string) => {
+export const useGraphQlCollection = (collectionId: number) => {
   const {
     data,
     error: fetchCollectionsError,
@@ -135,7 +141,7 @@ export const useGraphQlCollection = (collectionId: string) => {
   });
 
   return {
-    collection: data?.view_collections[0] || undefined,
+    collection: data?.collections.data[0] || undefined,
     fetchCollectionsError,
     isCollectionFetching
   };

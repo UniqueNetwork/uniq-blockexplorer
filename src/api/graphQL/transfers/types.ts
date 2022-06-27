@@ -11,18 +11,18 @@ export interface Transfer {
   amount: string
   fee: number
   from_owner: string
+  from_owner_normalized: string
   hash: string
   success: boolean
   timestamp: number | null
   to_owner: string
+  to_owner_normalized: string
 }
 
 export interface TransfersData {
-  view_extrinsic: Transfer[]
-  view_extrinsic_aggregate: {
-    aggregate: {
-      count: number
-    }
+  extrinsics: {
+    data: Transfer[];
+    count: number;
   }
 }
 

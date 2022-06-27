@@ -20,7 +20,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
   const deviceSize = useDeviceSize();
 
   const { isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({
-    filter: collectionId ? { collection_id: { _eq: collectionId } } : undefined,
+    filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
     offset: 0,
     pageSize
   });

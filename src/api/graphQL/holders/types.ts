@@ -8,15 +8,14 @@ export interface HoldersVariables {
 export interface Holder {
   collection_id: number
   owner: string
+  owner_normalized: string
   count: number
 }
 
 export interface HoldersData {
-  view_holders: Holder[]
-  view_holders_aggregate: {
-    aggregate: {
-      count: number
-    }
+  holders: {
+    data: Holder[];
+    count: number;
   }
 }
 

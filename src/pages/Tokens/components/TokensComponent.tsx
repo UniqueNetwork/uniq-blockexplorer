@@ -20,9 +20,16 @@ export enum ViewType {
 const filter = ({ accountId, collectionId }: { accountId?: string, collectionId?: string }) => {
   let _filter = {};
 
-  if (accountId) _filter = { owner: { _eq: accountId } };
+  if (accountId) {
+    _filter = {
+      _or: [
+        { owner: { _eq: accountId } },
+        { owner_normalized: { _eq: accountId } }
+      ]
+    };
+  }
 
-  if (collectionId) _filter = { ..._filter, collection_id: { _eq: collectionId } };
+  if (collectionId) _filter = { ..._filter, collection_id: { _eq: Number(collectionId) } };
 
   return _filter;
 };
@@ -97,20 +104,18 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   return (
     <>
-      <TopBar type={view}>
+      <TopBar>
         <Search
           onSearchChange={setSearchString}
           placeholder={'NFT / collection'}
         />
-        <Controls type={view}>
-          {view === ViewType.Grid && (
-            <Select
-              defaultValue={defaultOption}
-              onChange={selectFilter}
-              options={OPTIONS}
-              value={select}
-            />
-          )}
+        <Controls>
+          <Select
+            defaultValue={defaultOption}
+            onChange={selectFilter}
+            options={OPTIONS}
+            value={select}
+          />
           <ViewButtons>
             <ViewButton onClick={selectList}>
               <Icon
@@ -159,7 +164,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-wrap: ${(props: {type: string}) => props.type === ViewType.List ? 'unset' : 'wrap'};
+  flex-wrap: wrap;
   .unique-select .select-wrapper > svg {
     z-index: unset;
   }
@@ -172,7 +177,7 @@ const Controls = styled.div`
   display: flex;
   justify-content: space-between;
   @media (max-width: 767px) {
-    width: ${(props: {type: string}) => props.type === ViewType.List ? 'unset' : '100%'};
+    width: 100%;
   }
 `;
 
