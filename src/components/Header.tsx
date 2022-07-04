@@ -18,9 +18,7 @@ const Header: FC = () => {
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
       if (option) {
-        const network = (option.title as string).split(' ')[0].toUpperCase();
-
-        navigate(`${network}/`);
+        navigate(`${option.id as string}/`);
       }
     },
     [navigate]
