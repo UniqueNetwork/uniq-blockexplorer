@@ -26,7 +26,7 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
         <Text
           color={'secondary-500'}
           size='l'
-          weight='medium'
+          weight='regular'
         >{`${token.token_prefix} #${token.token_id}`}</Text>
         <TokenCollectionLink
           to={`/${chainNetwork}/collections/${token.collection_id}`}
