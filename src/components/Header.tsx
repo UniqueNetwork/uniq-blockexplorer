@@ -19,6 +19,7 @@ const Header: FC = () => {
     (option: SelectOptionProps) => {
       if (option) {
         navigate(`${option.id as string}/`);
+        location.reload();
       }
     },
     [navigate]
