@@ -97,8 +97,6 @@ export const useGraphQlToken = (collectionId: number, tokenId: number) => {
     loading: isTokensFetching
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
-    // Used for first execution
-    nextFetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: 1,

@@ -13,7 +13,11 @@ const Picture: FC<PictureProps> = ({ className, src }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!src) return;
+    if (!src) {
+      setImageSrc(undefined);
+
+      return;
+    }
 
     const image = new Image();
 
