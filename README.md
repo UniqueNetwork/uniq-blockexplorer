@@ -6,7 +6,7 @@ To display data when developing a project locally, the following variables must 
 
 REACT_APP_NET_DEFAULT=QUARTZ
 REACT_APP_IPFS_GATEWAY=https://ipfs.uniquenetwork.dev/ipfs
-REACT_APP_NET_UNIQUE_API = https://api-unique.uniquescan.io/v1/graphql
+REACT_APP_NET_UNIQUE_API = https://scan-api.dev.uniquenetwork.dev/v1/graphql
 REACT_APP_NET_UNIQUE_NAME = Unique Network
 REACT_APP_NET_UNIQUE_RPC = wss://ws.unique.network
 REACT_APP_NET_QUARTZ_NAME=QUARTZ by UNIQUE
