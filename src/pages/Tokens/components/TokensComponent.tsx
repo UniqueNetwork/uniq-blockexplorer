@@ -1,4 +1,5 @@
 import { Icon, Select } from '@unique-nft/ui-kit';
+import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -46,7 +47,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchString, setSearchString] = useState<string | undefined>('');
-  const [select, setSelect] = useState<number>();
+  const [selectOption, setSelectOption] = useState<SelectOptionProps>();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const {
     isTokensFetching,
@@ -66,15 +67,15 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const selectFilter = useCallback(
     (selected) => {
       const option = OPTIONS.find((item) => {
-        return item.id === selected;
+        return item.id === selected.id;
       });
 
       if (option && option.sortField) {
-        setSelect(option.id);
+        setSelectOption(option);
         setOrderBy({ [option.sortField]: option.sortDir });
       }
     },
-    [setSelect, setOrderBy]
+    [setSelectOption, setOrderBy]
   );
 
   const selectGrid = useCallback(
@@ -114,7 +115,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
             defaultValue={defaultOption}
             onChange={selectFilter}
             options={OPTIONS}
-            value={select}
+            value={selectOption?.id as string}
           />
           <ViewButtons>
             <ViewButton onClick={selectList}>

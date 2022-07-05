@@ -2,6 +2,7 @@ import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
+import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { useApi } from '@app/hooks';
 
 import config from '../config';
@@ -15,9 +16,10 @@ const Header: FC = () => {
   const navigate = useNavigate();
 
   const onSelectChange = useCallback(
-    (value?: string) => {
-      if (value) {
-        navigate(`${value}/`);
+    (option: SelectOptionProps) => {
+      if (option) {
+        navigate(`${option.id as string}/`);
+        location.reload();
       }
     },
     [navigate]
