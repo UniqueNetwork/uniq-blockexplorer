@@ -1,5 +1,6 @@
+import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { Button, InputText } from '@unique-nft/ui-kit';
-import React, { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useApi } from '../hooks/useApi';
@@ -18,7 +19,17 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
   const navigate = useNavigate();
 
   const onSearch = useCallback(() => {
-    if (/^\w{48}\w*$/.test(searchString || '')) {
+    // ethers address
+    if ((/0x[0-9A-Fa-f]{40}/g).test(searchString as string)) {
+      const account = getMirrorFromEthersToSubstrate(searchString as string, 'quartz');
+
+      navigate(`/${currentChain.network}/account/${account || ''}`);
+
+      return;
+    }
+
+    // substrate address
+    if ((/^\w{48}\w*$/.test(searchString || ''))) {
       navigate(`/${currentChain.network}/account/${searchString || ''}`);
 
       return;
