@@ -10,13 +10,15 @@ import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi } from '@app/hooks';
+import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 
 const assetsTabs = ['Collections', 'NFTs'];
 
 const AccountPage = () => {
   const { accountId } = useParams();
+  // assume that we got the substrate address
   let substrateAddress = accountId;
-  let accountForTokens = accountId;
+  let accountForTokensSearch = accountId;
 
   const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
   const { currentChain } = useApi();
@@ -26,7 +28,7 @@ const AccountPage = () => {
     const substrateMirror = getMirrorFromEthersToSubstrate(accountId as string, currentChain.network);
 
     substrateAddress = substrateMirror;
-    accountForTokens = accountId?.toLowerCase();
+    accountForTokensSearch = accountId?.toLowerCase();
   }
 
   if (!accountId) return null;
@@ -45,11 +47,11 @@ const AccountPage = () => {
           activeIndex={activeAssetsTabIndex}
         >
           <CollectionsComponent
-            accountId={substrateAddress as string}
+            accountId={normalizeSubstrate(substrateAddress as string)}
             key={'collections'}
           />
           <TokensComponent
-            accountId={accountForTokens as string}
+            accountId={accountForTokensSearch as string}
             key={'tokens'}
           />
         </Tabs>
