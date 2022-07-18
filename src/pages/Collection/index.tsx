@@ -18,6 +18,7 @@ const CollectionPage: FC = () => {
   const { collectionId } = useParams<{ collectionId: string }>();
   const { collection } = gqlCollections.useGraphQlCollection(Number(collectionId));
 
+  // user analytics
   useEffect(() => {
     if (activeDetailTabIndex === 1) {
       amplitude.getInstance().logEvent('CLICK_TAB_EXTENDED_IN_COLLECTION_PAGE');
