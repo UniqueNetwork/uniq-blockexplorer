@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import amplitude from 'amplitude-js';
 
 import { useApi } from '../hooks/useApi';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 const Menu: FC = () => {
   const { currentChain } = useApi();
@@ -23,7 +23,7 @@ const Menu: FC = () => {
 
     const currentPage = getCurrentPage();
 
-    amplitude.getInstance().logEvent(`CLICK_${bullit}_MENU_BUTTON_FROM_${currentPage}_PAGE`);
+    logUserEvents(`CLICK_${bullit}_MENU_BUTTON_FROM_${currentPage}_PAGE`);
   };
 
   return (

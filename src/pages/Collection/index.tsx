@@ -9,8 +9,8 @@ import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
 import PagePaper from '../../components/PagePaper';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import amplitude from 'amplitude-js';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 const detailTabs = ['Basic data', 'Extended'];
 
@@ -22,7 +22,7 @@ const CollectionPage: FC = () => {
   // user analytics
   useEffect(() => {
     if (activeDetailTabIndex === 1) {
-      amplitude.getInstance().logEvent(UserEvents.Click.TAB_EXTENDED_ON_COLLECTION_PAGE);
+      logUserEvents(UserEvents.Click.TAB_EXTENDED_ON_COLLECTION_PAGE);
     }
   }, [activeDetailTabIndex]);
 

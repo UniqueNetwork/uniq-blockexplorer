@@ -6,11 +6,11 @@ import { Token } from '@app/api';
 import { Avatar, LoadingComponent, Picture } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { getImageURL, timestampFormat } from '@app/utils';
-import amplitude from 'amplitude-js';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface TokenDetailComponentProps {
   token?: Token
@@ -22,7 +22,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   const { currentChain } = useApi();
   // user analytics
   const onCollectionClick = useCallback(() => {
-    amplitude.getInstance().logEvent(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
+    logUserEvents(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
   }, []);
 
   if (!token) {

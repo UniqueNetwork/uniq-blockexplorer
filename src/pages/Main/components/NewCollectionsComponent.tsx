@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '@unique-nft/ui-kit';
 import { useApi } from '@app/hooks';
-import amplitude from 'amplitude-js';
 
 import { collections as gqlCollections } from '../../../api/graphQL';
 import LoadingComponent from '../../../components/LoadingComponent';
 import CollectionCard from '../../../components/CollectionCard';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface NewCollectionsComponentProps {
   searchString?: string
@@ -22,7 +22,7 @@ const NewCollectionsComponent: FC<NewCollectionsComponentProps> = ({ pageSize = 
   const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ orderBy: { collection_id: 'desc' }, pageSize });
 
   const onClick = useCallback(() => {
-    amplitude.getInstance().logEvent(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
+    logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
     navigate(`/${currentChain.network}/collections`);
   }, [currentChain, navigate]);
 

@@ -5,10 +5,10 @@ import { Text } from '@unique-nft/ui-kit';
 import { useApi } from '@app/hooks';
 import { getImageURL, shortcutText } from '@app/utils';
 import { Token } from '@app/api';
-import amplitude from 'amplitude-js';
 
 import Picture from './Picture';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 type TokenCardProps = Token;
 
@@ -26,7 +26,7 @@ const TokenCard: FC<TokenCardProps> = ({
     const path = window.location.pathname;
 
     if (path.includes('collections')) {
-      amplitude.getInstance().logEvent(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
+      logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
   }, []);
 

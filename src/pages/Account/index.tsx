@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Heading, Tabs } from '@unique-nft/ui-kit';
-import amplitude from 'amplitude-js';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
@@ -13,6 +12,7 @@ import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 const assetsTabs = ['Collections', 'NFTs'];
 
@@ -36,7 +36,7 @@ const AccountPage = () => {
   // user analytics
   useEffect(() => {
     if (activeAssetsTabIndex === 1) {
-      amplitude.getInstance().logEvent(UserEvents.Click.ON_NFTS_TAB_FROM_ACCOUNT_PAGE);
+      logUserEvents(UserEvents.Click.ON_NFTS_TAB_FROM_ACCOUNT_PAGE);
     }
   }, [activeAssetsTabIndex]);
 

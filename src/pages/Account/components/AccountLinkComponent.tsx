@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 import { shortcutText } from '@app/utils';
 import { useApi } from '@app/hooks';
-import amplitude from 'amplitude-js';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface AccountLinkProps {
   value: string
@@ -27,14 +27,14 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
 
     if (path.includes('collections')) {
       if (found === null) {
-        amplitude.getInstance().logEvent(UserEvents.Click.ON_COLLECTIONS_OWNER_ACCOUNT_ON_COLLECTIONS_PAGE);
+        logUserEvents(UserEvents.Click.ON_COLLECTIONS_OWNER_ACCOUNT_ON_COLLECTIONS_PAGE);
       } else {
-        amplitude.getInstance().logEvent(UserEvents.Click.ON_COLLECTIONS_OWNER_ACCOUNT_ON_COLLECTION_PAGE);
+        logUserEvents(UserEvents.Click.ON_COLLECTIONS_OWNER_ACCOUNT_ON_COLLECTION_PAGE);
       }
     }
 
     if (path.includes('tokens')) {
-      amplitude.getInstance().logEvent(UserEvents.Click.ON_COLLECTIONS_OWNER_ACCOUNT_ON_TOKEN_PAGE);
+      logUserEvents(UserEvents.Click.ON_COLLECTIONS_OWNER_ACCOUNT_ON_TOKEN_PAGE);
     }
   }, []);
 

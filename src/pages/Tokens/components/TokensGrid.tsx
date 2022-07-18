@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token } from '@app/api';
 import { getImageURL, timeDifference } from '@app/utils';
-import amplitude from 'amplitude-js';
 
 import Picture from '../../../components/Picture';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface TokensGridProps {
   chainNetwork: string;
@@ -19,7 +19,7 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
   const onTokenClick = useCallback(() => {
     const path = window.location.pathname;
 
-    if (path.includes('tokens')) { amplitude.getInstance().logEvent(UserEvents.Click.OPEN_NFT_CARD_FROM_NFTS_PAGE); }
+    if (path.includes('tokens')) { logUserEvents(UserEvents.Click.OPEN_NFT_CARD_FROM_NFTS_PAGE); }
   }, []);
 
   return <TokenGallery>{tokens.map((token) => {
