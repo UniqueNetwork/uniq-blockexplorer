@@ -6,6 +6,7 @@ import { Button, Heading, Text } from '@unique-nft/ui-kit';
 import { tokens as gqlTokens } from '@app/api';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { LoadingComponent, TokenCard } from '@app/components';
+import amplitude from 'amplitude-js';
 
 interface TokensComponentProps {
   searchString?: string
@@ -33,7 +34,8 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
     return 10;
   }, [deviceSize]);
 
-  const onClick = useCallback(() => {
+  const onButtonClick = useCallback(() => {
+    amplitude.getInstance().logEvent('CLICK_SEE_ALL_NFT_IN_COLLECTION_BUTTON');
     navigate(`/${currentChain.network}/tokens/${collectionId || ''}`);
   }, [currentChain, navigate, collectionId]);
 
@@ -58,7 +60,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
           name: 'arrow-right',
           size: 10
         }}
-        onClick={onClick}
+        onClick={onButtonClick}
         role={'primary'}
         title={'See all'}
       />}

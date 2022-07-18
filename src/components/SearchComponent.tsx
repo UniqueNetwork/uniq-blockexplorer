@@ -4,6 +4,7 @@ import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useApi } from '../hooks/useApi';
+import amplitude from 'amplitude-js';
 
 interface SearchComponentProps {
   placeholder?: string
@@ -19,6 +20,19 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
   const navigate = useNavigate();
 
   const onSearch = useCallback(() => {
+    // user analytics
+    const path = window.location.pathname;
+
+    if (path.includes('tokens')) {
+      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_NFT_PAGE');
+    } else if (path.includes('collections')) {
+      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_COLLECTION_PAGE');
+    } else if (path.includes('account')) {
+      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_ACCOUNT_PAGE');
+    } else {
+      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_MAIN_PAGE');
+    }
+
     // ethers address
     if ((/0x[0-9A-Fa-f]{40}/g).test(searchString as string)) {
       const account = getMirrorFromEthersToSubstrate(searchString as string, 'quartz');

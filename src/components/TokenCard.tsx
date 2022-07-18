@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 import { useApi } from '@app/hooks';
 import { getImageURL, shortcutText } from '@app/utils';
 import { Token } from '@app/api';
+import amplitude from 'amplitude-js';
 
 import Picture from './Picture';
 
@@ -19,11 +20,20 @@ const TokenCard: FC<TokenCardProps> = ({
   token_prefix: prefix
 }) => {
   const { currentChain } = useApi();
+  // user analytics
+  const onNFTCardClick = useCallback(() => {
+    const path = window.location.pathname;
+
+    if (path.includes('collections')) {
+      amplitude.getInstance().logEvent('CLICK_ON_NFT_CARD_ON_COLLECTION_PAGE');
+    }
+  }, []);
 
   const imageUrl = getImageURL(imagePath);
 
   return (
     <TokenCardLink
+      onClick={onNFTCardClick}
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
     >
       <TokenPicture

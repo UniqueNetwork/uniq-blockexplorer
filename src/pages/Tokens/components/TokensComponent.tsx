@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Token, tokens as gqlTokens, TokenSorting } from '@app/api';
 import { Pagination, Search, Table } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import amplitude from 'amplitude-js';
 
 import { TokensComponentProps } from '../types';
 import { DEFAULT_PAGE_SIZE, OPTIONS } from '../constants';
@@ -80,6 +81,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   const selectGrid = useCallback(
     () => {
+      amplitude.getInstance().logEvent('CLICK_ON_GRID_VIEW_NFTS');
       setView(ViewType.Grid);
     },
     [setView]
@@ -87,6 +89,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   const selectList = useCallback(
     () => {
+      amplitude.getInstance().logEvent('CLICK_ON_LIST_VIEW_NFTS');
       setView(ViewType.List);
     },
     [setView]

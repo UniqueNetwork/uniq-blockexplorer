@@ -1,9 +1,10 @@
 import { Text } from '@unique-nft/ui-kit';
-import React, { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token } from '@app/api';
 import { getImageURL, timeDifference } from '@app/utils';
+import amplitude from 'amplitude-js';
 
 import Picture from '../../../components/Picture';
 
@@ -13,10 +14,16 @@ interface TokensGridProps {
 }
 
 const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
+  // user analytics
+  const onTokenClick = useCallback(() => {
+    amplitude.getInstance().logEvent('CLICK_OPEN_NFT_CARD');
+  }, []);
+
   return <TokenGallery>{tokens.map((token) => {
     return (
       <TokenLink
         key={`token-${token.collection_id}-${token.token_id}`}
+        onClick={onTokenClick}
         to={`/${chainNetwork}/tokens/${token.collection_id}/${token.token_id}`}
       >
         <TokenPicture

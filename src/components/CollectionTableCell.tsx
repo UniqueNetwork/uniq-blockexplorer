@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import Avatar from './Avatar';
 import { Collection } from '../api/graphQL';
 import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import amplitude from 'amplitude-js';
 
 interface CollectionTableCellProps {
   chainId: string
@@ -18,8 +19,17 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
   collectionName,
   coverImageUrl
 }) => {
+  const onCollectionClick = useCallback(() => {
+    const path = window.location.pathname;
+
+    if (path.includes('collections')) {
+      amplitude.getInstance().logEvent('CLICK_ON_COLLECTION_IN_TABLE_ON_COLLECTIONS_PAGE');
+    }
+  }, []);
+
   return (
     <CollectionLink
+      onClick={onCollectionClick}
       to={`/${chainId}/collections/${collectionId}`}
     >
       <Avatar
@@ -28,7 +38,10 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
       />
       <CollectionTitle>
         <Text color={'secondary-500'}>{collectionName}</Text>
-        <Text size={'xs'} color={'grey-500'}>{`ID ${collectionId}`}</Text>
+        <Text
+          color={'grey-500'}
+          size={'xs'}
+        >{`ID ${collectionId}`}</Text>
       </CollectionTitle>
     </CollectionLink>
   );

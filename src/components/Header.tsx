@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { useApi } from '@app/hooks';
+import amplitude from 'amplitude-js';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
@@ -18,6 +19,17 @@ const Header: FC = () => {
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
       if (option) {
+        // user analytics
+        const path = window.location.pathname;
+
+        if (path.includes('tokens')) {
+          amplitude.getInstance().logEvent('CLICK_CHOOSE_A_NETWORK_BUTTON_FROM_NFTS_PAGE');
+        } else if (path.includes('collections')) {
+          amplitude.getInstance().logEvent('CLICK_CHOOSE_A_NETWORK_BUTTON_FROM_COLLECTIONC_PAGE');
+        } else {
+          amplitude.getInstance().logEvent('CLICK_CHOOSE_A_NETWORK_BUTTON_FROM_MAIN_PAGE');
+        }
+
         navigate(`${option.id as string}/`);
         location.reload();
       }
