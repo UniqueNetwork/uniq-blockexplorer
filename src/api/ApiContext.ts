@@ -1,8 +1,10 @@
 import { ApiPromise } from '@polkadot/api';
 import { Context, Consumer, Provider, createContext } from 'react';
 
+export type TChainNetwork = 'QUARTZ' | 'UNIQUE' | 'KUSAMA' | 'POLKADOT' | 'OPAL';
+
 export type Chain = {
-  network: string;
+  network: TChainNetwork;
   name: string;
   gqlEndpoint: string;
   rpcEndpoint: string;

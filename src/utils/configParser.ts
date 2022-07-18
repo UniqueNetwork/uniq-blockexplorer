@@ -1,4 +1,4 @@
-import { Chain } from '@app/api/ApiContext';
+import { Chain, TChainNetwork } from '@app/api/ApiContext';
 
 const configKeyRegexp = /NET_(?<network>[A-Z]+)_NAME$/gm;
 
@@ -16,14 +16,14 @@ const findNetworkParamByName = (
   return '';
 };
 
-export const getNetworkList = (config: Record<string, string | undefined>): string[] => {
-  return Object.keys(config).reduce<string[]>((acc, key) => {
+export const getNetworkList = (config: Record<string, string | undefined>): TChainNetwork[] => {
+  return Object.keys(config).reduce<TChainNetwork[]>((acc, key) => {
     if (!key.includes('NET_') || key.includes('NET_DEFAULT')) return acc;
 
     const { network } = configKeyRegexp.exec(key)?.groups || {};
 
     if (network) {
-      acc.push(network);
+      acc.push(network as TChainNetwork);
     }
 
     return acc;
@@ -53,7 +53,7 @@ export const getDefaultChain = (config: Record<string, string | undefined>) => {
 
 export const getNetworkParams = (
   config: Record<string, string | undefined>,
-  network: string
+  network: TChainNetwork
 ): Chain => {
   const chain: Chain = {
     gqlEndpoint: findNetworkParamByName(config, network, 'API'),
