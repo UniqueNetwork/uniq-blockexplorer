@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
@@ -9,6 +9,8 @@ import { getImageURL, timestampFormat } from '@app/utils';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface TokenDetailComponentProps {
   token?: Token
@@ -18,6 +20,10 @@ interface TokenDetailComponentProps {
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
+  // user analytics
+  const onCollectionClick = useCallback(() => {
+    logUserEvents(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
+  }, []);
 
   if (!token) {
     return null;
@@ -72,7 +78,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
         </TokenAttributes>
         <CollectionInfoWrapper>
-          <CollectionLink to={`/${currentChain.network}/collections/${collectionId}`}>
+          <CollectionLink onClick={onCollectionClick} to={`/${currentChain.network}/collections/${collectionId}`}>
             <Avatar
               size={'small'}
               src={getCoverURLFromCollection(token)}

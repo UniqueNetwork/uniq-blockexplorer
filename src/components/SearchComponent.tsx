@@ -3,6 +3,8 @@ import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useApi } from '../hooks/useApi';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface SearchComponentProps {
   placeholder?: string
@@ -18,6 +20,19 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
   const navigate = useNavigate();
 
   const onSearch = useCallback(() => {
+    // user analytics
+    const path = window.location.pathname;
+
+    if (path.includes('tokens')) {
+      logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_NFTS_PAGE);
+    } else if (path.includes('collections')) {
+      logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_COLLECTIONS_PAGE);
+    } else if (path.includes('account')) {
+      logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_ACCOUNT_PAGE);
+    } else {
+      logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_MAIN_PAGE);
+    }
+
     // ethers address or substrate address
     if ((/0x[0-9A-Fa-f]{40}/g).test(searchString as string) || (/^\w{48}\w*$/.test(searchString || ''))) {
       navigate(`/${currentChain.network}/account/${searchString || ''}`);
