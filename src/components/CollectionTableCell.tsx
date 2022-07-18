@@ -5,6 +5,7 @@ import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import amplitude from 'amplitude-js';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 interface CollectionTableCellProps {
   chainId: string
@@ -23,7 +24,7 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
     const path = window.location.pathname;
 
     if (path.includes('collections')) {
-      amplitude.getInstance().logEvent('CLICK_ON_COLLECTION_IN_TABLE_ON_COLLECTIONS_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.ON_COLLECTION_IN_TABLE_ON_COLLECTIONS_PAGE);
     }
   }, []);
 

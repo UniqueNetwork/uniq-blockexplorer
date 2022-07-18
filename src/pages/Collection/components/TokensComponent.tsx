@@ -7,6 +7,7 @@ import { tokens as gqlTokens } from '@app/api';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { LoadingComponent, TokenCard } from '@app/components';
 import amplitude from 'amplitude-js';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 interface TokensComponentProps {
   searchString?: string
@@ -35,7 +36,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
   }, [deviceSize]);
 
   const onButtonClick = useCallback(() => {
-    amplitude.getInstance().logEvent('CLICK_SEE_ALL_NFT_IN_COLLECTION_BUTTON');
+    amplitude.getInstance().logEvent(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_COLLECTION_PAGE);
     navigate(`/${currentChain.network}/tokens/${collectionId || ''}`);
   }, [currentChain, navigate, collectionId]);
 

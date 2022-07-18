@@ -13,6 +13,7 @@ import { TokensComponentProps } from '../types';
 import { DEFAULT_PAGE_SIZE, OPTIONS } from '../constants';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 export enum ViewType {
   Grid = 'Grid',
@@ -81,7 +82,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   const selectGrid = useCallback(
     () => {
-      amplitude.getInstance().logEvent('CLICK_ON_GRID_VIEW_NFTS');
+      amplitude.getInstance().logEvent(UserEvents.Click.ON_GRID_VIEW_NFTS);
       setView(ViewType.Grid);
     },
     [setView]
@@ -89,7 +90,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   const selectList = useCallback(
     () => {
-      amplitude.getInstance().logEvent('CLICK_ON_LIST_VIEW_NFTS');
+      amplitude.getInstance().logEvent(UserEvents.Click.ON_LIST_VIEW_NFTS);
       setView(ViewType.List);
     },
     [setView]

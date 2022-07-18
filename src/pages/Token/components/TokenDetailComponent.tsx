@@ -10,6 +10,7 @@ import amplitude from 'amplitude-js';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 interface TokenDetailComponentProps {
   token?: Token
@@ -21,7 +22,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   const { currentChain } = useApi();
   // user analytics
   const onCollectionClick = useCallback(() => {
-    amplitude.getInstance().logEvent('CLICK_COLLECTION_FROM_NFT_CARD');
+    amplitude.getInstance().logEvent(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
   }, []);
 
   if (!token) {

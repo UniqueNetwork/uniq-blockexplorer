@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useApi } from '../hooks/useApi';
 import amplitude from 'amplitude-js';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 interface SearchComponentProps {
   placeholder?: string
@@ -23,13 +24,13 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
     const path = window.location.pathname;
 
     if (path.includes('tokens')) {
-      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_NFT_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.SEARCH_BUTTON_ON_NFTS_PAGE);
     } else if (path.includes('collections')) {
-      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_COLLECTION_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.SEARCH_BUTTON_ON_COLLECTIONS_PAGE);
     } else if (path.includes('account')) {
-      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_ACCOUNT_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.SEARCH_BUTTON_ON_ACCOUNT_PAGE);
     } else {
-      amplitude.getInstance().logEvent('CLICK_SEARCH_BUTTON_ON_MAIN_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.SEARCH_BUTTON_ON_MAIN_PAGE);
     }
 
     // ethers address or substrate address

@@ -10,6 +10,7 @@ import HoldersComponent from './components/HoldersComponent';
 import PagePaper from '../../components/PagePaper';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import amplitude from 'amplitude-js';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 const detailTabs = ['Basic data', 'Extended'];
 
@@ -21,7 +22,7 @@ const CollectionPage: FC = () => {
   // user analytics
   useEffect(() => {
     if (activeDetailTabIndex === 1) {
-      amplitude.getInstance().logEvent('CLICK_TAB_EXTENDED_IN_COLLECTION_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.TAB_EXTENDED_ON_COLLECTION_PAGE);
     }
   }, [activeDetailTabIndex]);
 

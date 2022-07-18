@@ -10,6 +10,7 @@ import config from '../config';
 import MobileMenu from './MobileMenu';
 import Menu from './Menu';
 import LoadingComponent from './LoadingComponent';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
@@ -23,11 +24,11 @@ const Header: FC = () => {
         const path = window.location.pathname;
 
         if (path.includes('tokens')) {
-          amplitude.getInstance().logEvent('CLICK_CHOOSE_A_NETWORK_BUTTON_FROM_NFTS_PAGE');
+          amplitude.getInstance().logEvent(UserEvents.Click.CHOOSE_A_NETWORK_BUTTON_FROM_NFTS_PAGE);
         } else if (path.includes('collections')) {
-          amplitude.getInstance().logEvent('CLICK_CHOOSE_A_NETWORK_BUTTON_FROM_COLLECTIONC_PAGE');
+          amplitude.getInstance().logEvent(UserEvents.Click.CHOOSE_A_NETWORK_BUTTON_FROM_COLLECTIONS_PAGE);
         } else {
-          amplitude.getInstance().logEvent('CLICK_CHOOSE_A_NETWORK_BUTTON_FROM_MAIN_PAGE');
+          amplitude.getInstance().logEvent(UserEvents.Click.CHOOSE_A_NETWORK_BUTTON_FROM_MAIN_PAGE);
         }
 
         navigate(`${option.id as string}/`);

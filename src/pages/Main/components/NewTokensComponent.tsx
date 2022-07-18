@@ -7,6 +7,7 @@ import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { LoadingComponent, TokenCard } from '@app/components';
 import amplitude from 'amplitude-js';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 interface NewTokensComponentProps {
   searchString?: string
@@ -28,7 +29,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
-    amplitude.getInstance().logEvent('CLICK_SEE_ALL_NFTS_BUTTON_ON_MAIN_PAGE');
+    amplitude.getInstance().logEvent(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_MAIN_PAGE);
     navigate(`/${currentChain.network}/tokens`);
   }, [currentChain, navigate]);
 

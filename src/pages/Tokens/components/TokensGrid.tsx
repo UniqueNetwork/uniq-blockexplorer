@@ -7,6 +7,7 @@ import { getImageURL, timeDifference } from '@app/utils';
 import amplitude from 'amplitude-js';
 
 import Picture from '../../../components/Picture';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 interface TokensGridProps {
   chainNetwork: string;
@@ -16,7 +17,9 @@ interface TokensGridProps {
 const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
   // user analytics
   const onTokenClick = useCallback(() => {
-    amplitude.getInstance().logEvent('CLICK_OPEN_NFT_CARD');
+    const path = window.location.pathname;
+
+    if (path.includes('tokens')) { amplitude.getInstance().logEvent(UserEvents.Click.OPEN_NFT_CARD_FROM_NFTS_PAGE); }
   }, []);
 
   return <TokenGallery>{tokens.map((token) => {

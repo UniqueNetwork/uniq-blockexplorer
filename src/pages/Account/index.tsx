@@ -12,6 +12,7 @@ import LastTransfersComponent from '../Main/components/LastTransfersComponent';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
+import { UserEvents } from '@app/analytics/user_analytics';
 
 const assetsTabs = ['Collections', 'NFTs'];
 
@@ -35,7 +36,7 @@ const AccountPage = () => {
   // user analytics
   useEffect(() => {
     if (activeAssetsTabIndex === 1) {
-      amplitude.getInstance().logEvent('CLICK_ON_NFTS_TAB_FROM_ACCOUNT_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.ON_NFTS_TAB_FROM_ACCOUNT_PAGE);
     }
   }, [activeAssetsTabIndex]);
 

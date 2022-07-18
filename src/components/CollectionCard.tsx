@@ -9,6 +9,7 @@ import amplitude from 'amplitude-js';
 
 import Avatar from './Avatar';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { UserEvents } from '../analytics/user_analytics';
 
 type CollectionCardProps = Collection
 
@@ -26,7 +27,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
     const path = window.location.pathname;
 
     if (path.includes('account')) {
-      amplitude.getInstance().logEvent('CLICK_ON_COLLECTIONS_CARD_FROM_ACCOUNT_PAGE');
+      amplitude.getInstance().logEvent(UserEvents.Click.ON_COLLECTIONS_CARD_FROM_ACCOUNT_PAGE);
     }
   }, []);
 
