@@ -54,7 +54,7 @@ const transfersWithTimeDifference = (transfers: Transfer[] | undefined, timestam
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
-    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : ''
+    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp, timestamp) : ''
   }));
 };
 
