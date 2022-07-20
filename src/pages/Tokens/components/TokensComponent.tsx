@@ -51,6 +51,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const {
     isTokensFetching,
+    timestamp,
     tokens,
     tokensCount
   } = gqlTokens.useGraphQlTokens({
@@ -146,6 +147,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
           <div>
             <TokensGrid
               chainNetwork={currentChain.network}
+              timestamp={timestamp}
               tokens={tokens || []}
             />
           </div>

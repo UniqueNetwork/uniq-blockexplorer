@@ -25,6 +25,7 @@ const extrinsicQuery = gql`
         success
       }
       count
+      timestamp
     }
   }
 `;

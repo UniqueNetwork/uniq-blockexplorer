@@ -9,10 +9,11 @@ import Picture from '../../../components/Picture';
 
 interface TokensGridProps {
   chainNetwork: string;
+  timestamp: number | undefined;
   tokens: Token[];
 }
 
-const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
+const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => {
   return <TokenGallery>{tokens.map((token) => {
     return (
       <TokenLink
@@ -35,7 +36,7 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, tokens }) => {
           color={'grey-500'}
           size='xs'
         >
-          {`${timeDifference(token.date_of_creation)}`}
+          {`${timeDifference(token.date_of_creation, timestamp)}`}
         </TokenDate>
       </TokenLink>
     );

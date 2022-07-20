@@ -17,6 +17,7 @@ const getLatestBlocksQuery = gql`
         timestamp
       }
       count
+      timestamp
     }
   }
 `;
@@ -71,7 +72,8 @@ export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
     blocks: data?.block?.data,
     fetchBlocksError,
     fetchMoreBlocks,
-    isBlocksFetching
+    isBlocksFetching,
+    timestamp: data?.block?.timestamp
   };
 };
 
