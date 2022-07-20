@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
@@ -8,6 +8,8 @@ import { shortcutText } from '@app/utils';
 
 import Avatar from './Avatar';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { UserEvents } from '../analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 type CollectionCardProps = Collection
 
@@ -21,8 +23,17 @@ const CollectionCard: FC<CollectionCardProps> = ({
 }) => {
   const { currentChain } = useApi();
 
+  const onCollectionsCardClick = useCallback(() => {
+    const path = window.location.pathname;
+
+    if (path.includes('account')) {
+      logUserEvents(UserEvents.Click.ON_COLLECTIONS_CARD_FROM_ACCOUNT_PAGE);
+    }
+  }, []);
+
   return (
     <CollectionCardLink
+      onClick={onCollectionsCardClick}
       to={`/${currentChain.network}/collections/${collectionId}`}
     >
       <CollectionCover>

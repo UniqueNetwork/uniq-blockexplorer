@@ -1,11 +1,13 @@
 import { Text } from '@unique-nft/ui-kit';
-import React, { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token } from '@app/api';
 import { getImageURL, timeDifference } from '@app/utils';
 
 import Picture from '../../../components/Picture';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface TokensGridProps {
   chainNetwork: string;
@@ -14,10 +16,18 @@ interface TokensGridProps {
 }
 
 const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => {
+  // user analytics
+  const onTokenClick = useCallback(() => {
+    const path = window.location.pathname;
+
+    if (path.includes('tokens')) { logUserEvents(UserEvents.Click.OPEN_NFT_CARD_FROM_NFTS_PAGE); }
+  }, []);
+
   return <TokenGallery>{tokens.map((token) => {
     return (
       <TokenLink
         key={`token-${token.collection_id}-${token.token_id}`}
+        onClick={onTokenClick}
         to={`/${chainNetwork}/tokens/${token.collection_id}/${token.token_id}`}
       >
         <TokenPicture

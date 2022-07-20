@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Heading, Tabs } from '@unique-nft/ui-kit';
+import { getMirrorFromEthersToSubstrate } from '@app/utils';
+import { useApi } from '@app/hooks';
+import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 
 import AccountDetailComponent from './components/AccountDetailComponent';
 import LastTransfersComponent from '../Main/components/LastTransfersComponent';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
-import { getMirrorFromEthersToSubstrate } from '@app/utils';
-import { useApi } from '@app/hooks';
-import { normalizeSubstrate } from '@app/utils/normalizeAccount';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 const assetsTabs = ['Collections', 'NFTs'];
 
@@ -30,6 +32,13 @@ const AccountPage = () => {
     substrateAddress = substrateMirror;
     accountForTokensSearch = accountId?.toLowerCase();
   }
+
+  // user analytics
+  useEffect(() => {
+    if (activeAssetsTabIndex === 1) {
+      logUserEvents(UserEvents.Click.ON_NFTS_TAB_FROM_ACCOUNT_PAGE);
+    }
+  }, [activeAssetsTabIndex]);
 
   if (!accountId) return null;
 

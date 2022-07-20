@@ -1,5 +1,5 @@
 import { Heading, Tabs } from '@unique-nft/ui-kit';
-import React, { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Avatar from '../../components/Avatar';
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
@@ -9,6 +9,8 @@ import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
 import PagePaper from '../../components/PagePaper';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 const detailTabs = ['Basic data', 'Extended'];
 
@@ -16,6 +18,13 @@ const CollectionPage: FC = () => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
   const { collectionId } = useParams<{ collectionId: string }>();
   const { collection } = gqlCollections.useGraphQlCollection(Number(collectionId));
+
+  // user analytics
+  useEffect(() => {
+    if (activeDetailTabIndex === 1) {
+      logUserEvents(UserEvents.Click.TAB_EXTENDED_ON_COLLECTION_PAGE);
+    }
+  }, [activeDetailTabIndex]);
 
   return (<>
     <PagePaper>
@@ -35,8 +44,8 @@ const CollectionPage: FC = () => {
         activeIndex={activeDetailTabIndex}
       >
         <CollectionBasicDataComponent
-          collectionId={collectionId || ''}
           collection={collection}
+          collectionId={collectionId || ''}
           key={'collections'}
         />
         <CollectionExtendedDataComponent

@@ -6,6 +6,8 @@ import { tokens as gqlTokens } from '@app/api/graphQL';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { LoadingComponent, TokenCard } from '@app/components';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface NewTokensComponentProps {
   searchString?: string
@@ -27,6 +29,7 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
+    logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_MAIN_PAGE);
     navigate(`/${currentChain.network}/tokens`);
   }, [currentChain, navigate]);
 
