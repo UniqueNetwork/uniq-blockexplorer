@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { timeDifference } from '@app/utils';
+import { useApi } from '@app/hooks';
+
 import { LastBlock, lastBlocks } from '../../../api/graphQL';
 import PaginationComponent from '../../../components/Pagination';
-import { timeDifference } from '../../../utils/timestampUtils';
 import { BlockComponentProps } from '../types';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import Table from '../../../components/Table';
-import { useApi } from '../../../hooks/useApi';
+
 import { Heading } from '@unique-nft/ui-kit';
 
 const blockColumns = (chainId: string) => [
@@ -25,13 +27,14 @@ const blockColumns = (chainId: string) => [
 ];
 
 const blocksWithTimeDifference = (
-  blocks: LastBlock[] | undefined
+  blocks: LastBlock[] | undefined,
+  timestamp: number | undefined
 ): (LastBlock & { time_difference: string })[] => {
   if (!blocks || !Array.isArray(blocks)) return [];
 
   return blocks.map((block: LastBlock) => ({
     ...block,
-    time_difference: timeDifference(block.timestamp)
+    time_difference: timeDifference(block.timestamp, timestamp)
   }));
 };
 
@@ -45,7 +48,7 @@ const LastBlocksComponent = ({
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching } = lastBlocks.useGraphQlBlocks({
+  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching, timestamp } = lastBlocks.useGraphQlBlocks({
     pageSize
   });
 
@@ -68,7 +71,7 @@ const LastBlocksComponent = ({
       <Heading size={'2'}>Latest blocks</Heading>
       <Table
         columns={blockColumns(currentChain.network)}
-        data={blocksWithTimeDifference(blocks)}
+        data={blocksWithTimeDifference(blocks, timestamp)}
         loading={isBlocksFetching}
         rowKey={'block_number'}
       />

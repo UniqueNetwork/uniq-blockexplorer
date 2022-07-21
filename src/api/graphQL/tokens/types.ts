@@ -23,6 +23,7 @@ export interface TokensData {
   tokens: {
     data: Token[];
     count: number;
+    timestamp: number;
   }
 }
 
