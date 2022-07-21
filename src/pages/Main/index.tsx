@@ -5,19 +5,21 @@ import { Heading } from '@unique-nft/ui-kit';
 import LastBlocksComponent from './components/LastBlocksComponent';
 import NewTokensComponent from './components/NewTokensComponent';
 import NewCollectionsComponent from './components/NewCollectionsComponent';
-import SearchComponent from '../../components/SearchComponent';
 
 import { LastBlocks, LastTransfers } from './components';
+import PagePaper from '../../components/PagePaper';
+import { SearchHeader } from './components/SearchHeader';
+import { TokenInformation } from './components/TokenInformation';
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
 
   return (
     <>
-      <SearchComponent
-        onSearchChange={setSearchString}
-        placeholder={'Extrinsic / collection / NFT / account'}
+      <SearchHeader
+        setSearchString={setSearchString}
       />
+      <TokenInformation />
       <MainBlockWrapper>
         <LastBlocksComponent
           searchString={searchString}

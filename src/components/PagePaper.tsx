@@ -11,9 +11,9 @@ export const PagePaper: FC = ({ children }) => {
 
 export const PagePaperWrapper = styled.div`
   background: #ffffff;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 8%);
-  border-radius: 4px;
-  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 24px;
   flex: 1;
 
   @media (max-width: 1024px) {
