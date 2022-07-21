@@ -67,8 +67,6 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
     [accountId]
   );
 
-  console.log('getWhere', JSON.stringify(getWhere()));
-
   const {
     data,
     error: fetchTransfersError,
