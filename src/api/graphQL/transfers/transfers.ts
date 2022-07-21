@@ -3,13 +3,15 @@ import { useCallback, useEffect } from 'react';
 import { FetchMoreBlocksOptions } from '@app/api';
 
 import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
+// { timestamp: desc }
+// { amount: desc }
 
 const getLastTransfersQuery = gql`
-  query getLastTransfers($limit: Int, $offset: Int, $where: ExtrinsicWhereParams = {}) {
+  query getLastTransfers($limit: Int, $offset: Int,  $orderBy: ExtrinsicOrderByParams = {}, $where: ExtrinsicWhereParams = {}) {
     extrinsics(
       limit: $limit
       offset: $offset
-      order_by: {timestamp: desc}
+      order_by: $orderBy
       where: $where
     ) {
       data {

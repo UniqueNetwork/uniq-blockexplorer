@@ -124,7 +124,6 @@ module.exports = {
         when: "always",
       },
     ],
-    "react/jsx-no-bind": 1,
     "react/jsx-sort-props": [
       1,
       {
