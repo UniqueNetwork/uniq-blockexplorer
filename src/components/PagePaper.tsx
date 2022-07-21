@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-const PagePaper: FC = ({ children }) => {
+export const PagePaper: FC = ({ children }) => {
   return (
     <PagePaperWrapper>
       {children}

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Header4 = styled.div`
-  font-family: 'Raleway';
+  font-family: var(--prop-font-family-heading);
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
