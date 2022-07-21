@@ -1,4 +1,3 @@
-import { ApiPromise } from '@polkadot/api';
 import { Context, Consumer, Provider, createContext } from 'react';
 
 export type TChainNetwork = 'QUARTZ' | 'UNIQUE' | 'KUSAMA' | 'POLKADOT' | 'OPAL';
