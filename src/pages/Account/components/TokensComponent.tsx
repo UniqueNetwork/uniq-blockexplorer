@@ -6,6 +6,8 @@ import { Button } from '@unique-nft/ui-kit';
 import { Token, tokens as gqlTokens } from '@app/api';
 import { TokenCard, Search } from '@app/components';
 import { useApi } from '@app/hooks';
+import { normalizeSubstrate } from '@app/utils/normalizeAccount';
+import { getMirrorFromEthersToSubstrate } from '@app/utils';
 
 interface TokensComponentProps {
   accountId: string
@@ -16,11 +18,20 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState<string>();
+  // assume that we got the substrate address
+  let substrateAddress = accountId;
+
+  // if we get an ether address
+  if ((/0x[0-9A-Fa-f]{40}/g).test(accountId)) {
+    const substrateMirror = getMirrorFromEthersToSubstrate(accountId, currentChain.network);
+
+    substrateAddress = substrateMirror;
+  }
 
   const { tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
     _or: [
       { owner: { _eq: accountId } },
-      { owner_normalized: { _eq: accountId } }
+      { owner_normalized: { _eq: normalizeSubstrate(substrateAddress) } }
     ]
   },
   offset: 0,
@@ -44,7 +55,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
           tokens.map((token: Token) => (
             <TokenCard
               {...token}
-              key={`token-${token.token_id}`}
+              key={`token-${token.collection_id}-${token.token_id}`}
             />))}
     </TokensWrapper>
     <Button

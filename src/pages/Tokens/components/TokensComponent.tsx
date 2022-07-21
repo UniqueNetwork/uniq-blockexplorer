@@ -1,4 +1,5 @@
 import { Icon, Select } from '@unique-nft/ui-kit';
+import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -11,6 +12,8 @@ import { TokensComponentProps } from '../types';
 import { DEFAULT_PAGE_SIZE, OPTIONS } from '../constants';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 export enum ViewType {
   Grid = 'Grid',
@@ -46,7 +49,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchString, setSearchString] = useState<string | undefined>('');
-  const [select, setSelect] = useState<number>();
+  const [selectOption, setSelectOption] = useState<SelectOptionProps>();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const {
     isTokensFetching,
@@ -66,19 +69,20 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const selectFilter = useCallback(
     (selected) => {
       const option = OPTIONS.find((item) => {
-        return item.id === selected;
+        return item.id === selected.id;
       });
 
       if (option && option.sortField) {
-        setSelect(option.id);
+        setSelectOption(option);
         setOrderBy({ [option.sortField]: option.sortDir });
       }
     },
-    [setSelect, setOrderBy]
+    [setSelectOption, setOrderBy]
   );
 
   const selectGrid = useCallback(
     () => {
+      logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
       setView(ViewType.Grid);
     },
     [setView]
@@ -86,6 +90,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   const selectList = useCallback(
     () => {
+      logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
       setView(ViewType.List);
     },
     [setView]
@@ -114,7 +119,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
             defaultValue={defaultOption}
             onChange={selectFilter}
             options={OPTIONS}
-            value={select}
+            value={selectOption?.id as string}
           />
           <ViewButtons>
             <ViewButton onClick={selectList}>

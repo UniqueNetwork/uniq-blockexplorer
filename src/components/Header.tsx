@@ -2,12 +2,15 @@ import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
+import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { useApi } from '@app/hooks';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
 import Menu from './Menu';
 import LoadingComponent from './LoadingComponent';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
@@ -15,9 +18,21 @@ const Header: FC = () => {
   const navigate = useNavigate();
 
   const onSelectChange = useCallback(
-    (value?: string) => {
-      if (value) {
-        navigate(`${value}/`);
+    (option: SelectOptionProps) => {
+      if (option) {
+        // user analytics
+        const path = window.location.pathname;
+
+        if (path.includes('tokens')) {
+          logUserEvents(UserEvents.Click.CHOOSE_A_NETWORK_BUTTON_FROM_NFTS_PAGE);
+        } else if (path.includes('collections')) {
+          logUserEvents(UserEvents.Click.CHOOSE_A_NETWORK_BUTTON_FROM_COLLECTIONS_PAGE);
+        } else {
+          logUserEvents(UserEvents.Click.CHOOSE_A_NETWORK_BUTTON_FROM_MAIN_PAGE);
+        }
+
+        navigate(`${option.id as string}/`);
+        location.reload();
       }
     },
     [navigate]

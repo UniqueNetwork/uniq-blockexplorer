@@ -1,4 +1,5 @@
 import { TokenSorting } from '../../api/graphQL';
+import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 
 export interface TokensComponentProps {
   orderBy?: TokenSorting
@@ -13,11 +14,9 @@ export interface IconProps {
   color?: string;
 }
 
-export interface TokensSelectOption {
-  id: number;
+export interface TokensSelectOption extends SelectOptionProps {
+  id: string;
   title: string;
-  iconLeft?: IconProps;
-  iconRight?: IconProps;
   sortDir?: 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last';
   sortField?: string;
 }
