@@ -47,14 +47,14 @@ const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   }
 ];
 
-const transfersWithTimeDifference = (transfers: Transfer[] | undefined): (Transfer & { time_difference: string })[] => {
+const transfersWithTimeDifference = (transfers: Transfer[] | undefined, timestamp: number | undefined): (Transfer & { time_difference: string })[] => {
   if (!transfers || !Array.isArray(transfers)) {
     return [];
   }
 
   return transfers.map((transfer: Transfer) => ({
     ...transfer,
-    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : ''
+    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp, timestamp) : ''
   }));
 };
 
@@ -69,7 +69,7 @@ const LastTransfersComponent = ({
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
+  const { fetchMoreTransfers, isTransfersFetching, timestamp, transfers, transfersCount } =
     gqlTransfers.useGraphQlLastTransfers({ accountId, pageSize });
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const LastTransfersComponent = ({
           '',
           currentChain?.network
         )}
-        data={transfersWithTimeDifference(transfers)}
+        data={transfersWithTimeDifference(transfers, timestamp)}
         loading={isTransfersFetching}
         rowKey={'block_index'}
       />

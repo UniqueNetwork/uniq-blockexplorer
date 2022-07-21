@@ -28,6 +28,7 @@ const getLastTransfersQuery = gql`
         to_owner_normalized    
       }
       count
+      timestamp
     }
   }
 `;
@@ -109,6 +110,7 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
     fetchMoreTransfers,
     fetchTransfersError,
     isTransfersFetching,
+    timestamp: data?.extrinsics?.timestamp,
     transfers: data?.extrinsics?.data,
     transfersCount: data?.extrinsics?.count || 0
   };

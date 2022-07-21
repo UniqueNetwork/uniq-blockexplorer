@@ -16,6 +16,7 @@ export interface LastBlocksData {
   block: {
     data: LastBlock[];
     count: number;
+    timestamp: number;
   }
 }
 
