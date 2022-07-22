@@ -45,7 +45,7 @@ const Header: FC = () => {
         <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
           <Logo
             alt='Logo'
-            src='/logos/unique.svg'
+            src='logos/logo-product.svg'
           />
         </Link>
         <HeaderNav>

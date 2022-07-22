@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Text } from '@unique-nft/ui-kit';
 
 import { useApi } from '../hooks/useApi';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -29,13 +30,37 @@ const Menu: FC = () => {
   return (
     <>
       <NavLink
-        onClick={ onMenuClick('COLLECTIONS')}
-        to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}
-      >Collections</NavLink>
-      <NavLink
         onClick={ onMenuClick('NFTS')}
         to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}
-      >NFTs</NavLink>
+      >
+        <Text
+          size='l'
+          weight='regular'
+        >NFTs</Text></NavLink>
+      <NavLink
+        onClick={ onMenuClick('COLLECTIONS')}
+        to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}
+      >
+        <Text
+          size='l'
+          weight='regular'
+        >Collections</Text></NavLink>
+      <NavLink
+        onClick={ onMenuClick('ACCOUNTS')}
+        to={`/${currentChain ? currentChain?.network + '/' : ''}accounts`}
+      >
+        <Text
+          size='l'
+          weight='regular'
+        >Blockchain</Text></NavLink>
+      <NavLink
+        onClick={ onMenuClick('ACCOUNTS')}
+        to={`/${currentChain ? currentChain?.network + '/' : ''}accounts`}
+      >
+        <Text
+          size='l'
+          weight='regular'
+        >Accounts</Text></NavLink>
     </>
   );
 };
