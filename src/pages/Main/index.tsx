@@ -7,7 +7,6 @@ import NewTokensComponent from './components/NewTokensComponent';
 import NewCollectionsComponent from './components/NewCollectionsComponent';
 
 import { LastBlocks, LastTransfers } from './components';
-import PagePaper from '../../components/PagePaper';
 import { SearchHeader } from './components/SearchHeader';
 import { TokenInformation } from './components/TokenInformation';
 
