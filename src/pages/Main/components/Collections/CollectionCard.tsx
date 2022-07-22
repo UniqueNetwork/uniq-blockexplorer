@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { VFC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
@@ -11,16 +11,18 @@ import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
-type CollectionCardProps = Collection
+import { BlurredCover } from './BlurredCover';
 
-const CollectionCard: FC<CollectionCardProps> = ({
-                                                   collection_cover,
-                                                   collection_id: collectionId,
-                                                   name,
-                                                   owner,
-                                                   token_prefix: tokenPrefix,
-                                                   tokens_count: tokensCount
-                                                 }) => {
+type CollectionCardProps = Collection;
+
+const CollectionCard: VFC<CollectionCardProps> = ({
+  collection_cover,
+  collection_id: collectionId,
+  name,
+  owner,
+  token_prefix: tokenPrefix,
+  tokens_count: tokensCount
+}) => {
   const { currentChain } = useApi();
 
   const onCollectionsCardClick = useCallback(() => {
@@ -37,42 +39,42 @@ const CollectionCard: FC<CollectionCardProps> = ({
       to={`/${currentChain.network}/collections/${collectionId}`}
     >
       <CollectionCover>
-        {/* <Avatar
-          size={'middle'}
-          src={getCoverURLFromCollection({ collection_cover } as Collection)}
-        /> */}
+        <BlurredCover
+          coverSrc={getCoverURLFromCollection({ collection_cover } as Collection)}
+          name={name}
+        />
       </CollectionCover>
       <CollectionInfo>
-        <Heading size={'4'}>{name}</Heading>
+        <Heading size='4'>{name}</Heading>
         <CollectionProperties>
           <span>
             <Text
-              color={'grey-500'}
-              size={'s'}
+              color='grey-500'
+              size='s'
             >ID:</Text>
-            <Text size={'s'}>{collectionId.toString()}</Text>
+            <Text size='s'>{collectionId.toString()}</Text>
           </span>
           <span>
             <Text
-              color={'grey-500'}
-              size={'s'}
+              color='grey-500'
+              size='s'
             >Symbol:</Text>
             <Text size={'s'}>{tokenPrefix}</Text>
           </span>
           <span>
             <Text
-              color={'grey-500'}
-              size={'s'}
+              color='grey-500'
+              size='s'
             >Items:</Text>
-            <Text size={'s'}>{tokensCount?.toString() || '0'}</Text>
+            <Text size='s'>{tokensCount?.toString() || '0'}</Text>
           </span>
         </CollectionProperties>
         <div>
           <Text
-            color={'grey-500'}
-            size={'s'}
+            color='grey-500'
+            size='s'
           >Owner: </Text>
-          <Text size={'s'}>{shortcutText(owner)}</Text>
+          <Text size='s'>{shortcutText(owner)}</Text>
         </div>
       </CollectionInfo>
     </CollectionCardLink>

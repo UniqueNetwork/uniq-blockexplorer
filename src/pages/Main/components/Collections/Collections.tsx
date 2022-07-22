@@ -45,7 +45,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
 
   return (
     <Wrapper>
-      <CollectionsWrapper>
+      <CollectionsList>
         {isCollectionsFetching && <LoadingComponent />}
         {collections.map((collection) => (
           <CollectionCard
@@ -53,7 +53,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
             {...collection}
           />
         ))}
-      </CollectionsWrapper>
+      </CollectionsList>
       <Button
         iconRight={{
           color: 'white',
@@ -69,4 +69,6 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
 };
 
 const Wrapper = styled(PagePaperWrapper)``;
-const CollectionsWrapper = styled.div``;
+const CollectionsList = styled.div`
+  
+`;
