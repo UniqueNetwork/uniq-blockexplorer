@@ -35,7 +35,7 @@ export const getTokensColumns = (chainId: string, orderBy: TokenSorting, onOrder
       chainId={chainId}
       collectionId={value}
       collectionName={(item as Token).collection_name}
-      coverImageUrl={getCoverURLFromCollection(item as Token)}
+      coverImageUrl={getCoverURLFromCollection((item as Token).collection_cover)}
     />,
     title: <TableSortableColumnTitle
       dataIndex={'collection_id'}

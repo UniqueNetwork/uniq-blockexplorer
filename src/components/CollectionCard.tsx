@@ -39,7 +39,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
       <CollectionCover>
         <Avatar
           size={'middle'}
-          src={getCoverURLFromCollection({ collection_cover } as Collection)}
+          src={getCoverURLFromCollection(collection_cover)}
         />
       </CollectionCover>
       <CollectionInfo>

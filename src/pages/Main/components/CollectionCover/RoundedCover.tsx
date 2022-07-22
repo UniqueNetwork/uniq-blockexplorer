@@ -1,16 +1,16 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
 
-interface BlurredCoverProps {
+interface RoundedCoverProps {
   coverSrc: string | undefined;
-  name: string;
+  name?: string;
 }
 
-export const BlurredCover: VFC<BlurredCoverProps> = ({ coverSrc, name }) => {
+export const RoundedCover: VFC<RoundedCoverProps> = ({ coverSrc, name }) => {
   return (
     <Wrapper>
       <img
-        alt={`collection ${name} cover`}
+        alt={`collection ${name ?? ''} cover`}
         src={coverSrc}
       />
     </Wrapper>

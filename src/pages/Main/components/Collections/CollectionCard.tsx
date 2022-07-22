@@ -1,21 +1,23 @@
 import React, { VFC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Text, Heading } from '@unique-nft/ui-kit';
+import { Text, Heading, Icon } from '@unique-nft/ui-kit';
+
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
 import { shortcutText } from '@app/utils';
-
-// import Avatar from './Avatar';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
-import { BlurredCover } from './BlurredCover';
+// TODO - move fingerPrint and clock icon to the UI kit - fix bug with colors
+import fingerPrint from '@app/images/icons/fingerPrint.svg';
+import clock from '@app/images/icons/clock.svg';
+
+import { CollectionCover } from '../CollectionCover';
 
 type CollectionCardProps = Collection;
 
-const CollectionCard: VFC<CollectionCardProps> = ({
+export const CollectionCard: VFC<CollectionCardProps> = ({
   collection_cover,
   collection_id: collectionId,
   name,
@@ -38,44 +40,34 @@ const CollectionCard: VFC<CollectionCardProps> = ({
       onClick={onCollectionsCardClick}
       to={`/${currentChain.network}/collections/${collectionId}`}
     >
-      <CollectionCover>
-        <BlurredCover
-          coverSrc={getCoverURLFromCollection({ collection_cover } as Collection)}
-          name={name}
-        />
-      </CollectionCover>
+      <CollectionCover
+        coverSrc={collection_cover}
+      />
       <CollectionInfo>
         <Heading size='4'>{name}</Heading>
         <CollectionProperties>
           <span>
-            <Text
-              color='grey-500'
-              size='s'
-            >ID:</Text>
+            <img
+              alt='collection id'
+              src={fingerPrint}
+            />
             <Text size='s'>{collectionId.toString()}</Text>
           </span>
           <span>
-            <Text
-              color='grey-500'
-              size='s'
-            >Symbol:</Text>
+            <Icon
+              name='empty-image'
+              size={13}
+            />
             <Text size={'s'}>{tokenPrefix}</Text>
           </span>
           <span>
-            <Text
-              color='grey-500'
-              size='s'
-            >Items:</Text>
+            <img
+              alt='created'
+              src={clock}
+            />
             <Text size='s'>{tokensCount?.toString() || '0'}</Text>
           </span>
         </CollectionProperties>
-        <div>
-          <Text
-            color='grey-500'
-            size='s'
-          >Owner: </Text>
-          <Text size='s'>{shortcutText(owner)}</Text>
-        </div>
       </CollectionInfo>
     </CollectionCardLink>
   );
@@ -83,21 +75,28 @@ const CollectionCard: VFC<CollectionCardProps> = ({
 
 const CollectionCardLink = styled(Link)`
   background: var(--white-color);
-  border: 1px solid #DFE0E2;
-  border-radius: var(--bradius);
+  border: 1px solid var(--card-border-color);
+  border-radius: var(--gap);
   box-sizing: border-box;
-  padding: calc(var(--gap) * 1.5) calc(var(--gap) * 1.5);
+  padding: calc(var(--gap) * 1.5);
   display: flex;
+  align-items: center;
+  flex-direction: column;
   column-gap: var(--gap);
-  align-items: flex-start;
+  height: 220px;
+
   &:hover {
     text-decoration: none;
   }
-  
-  h4 {
+
+  .unique-font-heading.size-4 {
     overflow: hidden;
     word-break: break-word;
-    max-height: 3rem;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    text-align: center;
+    
     &:hover {
       color: var(--primary-500);
     }
@@ -107,10 +106,6 @@ const CollectionCardLink = styled(Link)`
     border: none;
     padding: 0;
   }
-`;
-
-const CollectionCover = styled.div`
-  min-width: 64px;
 `;
 
 const CollectionInfo = styled.div`
@@ -124,10 +119,13 @@ const CollectionProperties = styled.div`
   display: flex;
   column-gap: var(--gap);
   margin-bottom: calc(var(--gap) / 4);
+  
   span {
     display: flex;
     column-gap: calc(var(--gap) / 4);
   }
+  
+  img {
+    width: 13px;
+  }
 `;
-
-export default CollectionCard;

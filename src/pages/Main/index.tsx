@@ -2,13 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Heading } from '@unique-nft/ui-kit';
 
-import LastBlocksComponent from './components/LastBlocksComponent';
 import NewTokensComponent from './components/NewTokensComponent';
-import NewCollectionsComponent from './components/NewCollectionsComponent';
 
-import { LastBlocks, LastTransfers } from './components';
-import { SearchHeader } from './components/SearchHeader';
-import { TokenInformation } from './components/TokenInformation';
+import { Collections, LastBlocks, LastTransfers, SearchHeader, TokenInformation } from './components';
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
@@ -19,11 +15,6 @@ const MainPage = () => {
         setSearchString={setSearchString}
       />
       <TokenInformation />
-      <MainBlockWrapper>
-        <LastBlocksComponent
-          searchString={searchString}
-        />
-      </MainBlockWrapper>
       <MainBlockWrapper>
         <Heading size={'2'}>New NFTs</Heading>
         <NewTokensComponent
@@ -39,8 +30,7 @@ const MainPage = () => {
         />
       </Main2BlocksWrapper>
       <MainBlockWrapper>
-        <Heading size={'2'}>New collections</Heading>
-        <NewCollectionsComponent
+        <Collections
           searchString={searchString}
         />
       </MainBlockWrapper>
