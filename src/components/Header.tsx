@@ -7,7 +7,7 @@ import { useApi } from '@app/hooks';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
-import Menu from './Menu';
+import { Menu } from './Menu';
 import LoadingComponent from './LoadingComponent';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';

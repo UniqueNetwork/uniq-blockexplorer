@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 
 import MobileMenuIcon from './MobileMenuIcon';
-import Menu from './Menu';
+import { Menu } from './Menu';
 
 const MobileMenu: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

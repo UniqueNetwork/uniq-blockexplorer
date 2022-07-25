@@ -3,8 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { Dropdown, Icon, Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
-import { useApi } from '../hooks/useApi';
+import { useApi } from '../../hooks/useApi';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { options } from './config';
 
 const Menu: FC = () => {
   const { currentChain } = useApi();
@@ -28,11 +29,6 @@ const Menu: FC = () => {
     logUserEvents(`CLICK_${bullit}_MENU_BUTTON_FROM_${currentPage}_PAGE`);
   };
 
-  const options = [
-    { id: 'id1', title: 'Blocks' },
-    { id: 'id2', title: 'Transfers' }
-  ];
-
   return (
     <>
       <NavLink
@@ -40,16 +36,16 @@ const Menu: FC = () => {
         to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}
       >
         <Text
-          color={'additional-dark'}
-          size={'l'}
+          color='additional-dark'
+          size='l'
         >NFTs</Text></NavLink>
       <NavLink
         onClick={ onMenuClick('COLLECTIONS')}
         to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}
       >
         <Text
-          color={'additional-dark'}
-          size={'l'}
+          color='additional-dark'
+          size='l'
         >Collections</Text></NavLink>
       {/* Open comment after creating blockchain and accounts pages */}
       {/* <DropdownStyled
@@ -60,8 +56,8 @@ const Menu: FC = () => {
                 to={`/${currentChain ? currentChain?.network + '/' : ''}blockchain/${(option.title as string).toLowerCase()}`}
               >
                 <Text
-                  color={'additional-dark'}
-                  size={'l'}
+                  color='additional-dark'
+                  size='l'
                 >{option.title as string}</Text></NavLink>
             </div>
           </div>;
@@ -84,8 +80,8 @@ const Menu: FC = () => {
         to={`/${currentChain ? currentChain?.network + '/' : ''}accounts`}
       >
         <Text
-          color={'additional-dark'}
-          size={'l'}
+          color='additional-dark'
+          size='l'
         >Accounts</Text></NavLink> */}
     </>
   );
