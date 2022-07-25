@@ -11,6 +11,7 @@ interface CollectionCoverProps {
   collectionName?: string;
 }
 
+// TODO also use tokens[0].token_image https://cryptousetech.atlassian.net/browse/SCAN-303
 export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, coverSrc }) => {
   const imgSrc = useImageLoader(getCoverURLFromCollection(coverSrc));
 
