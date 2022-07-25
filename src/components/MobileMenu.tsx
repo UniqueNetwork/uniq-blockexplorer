@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 
 import MobileMenuIcon from './MobileMenuIcon';
-import Menu from './Menu';
+import { Menu } from './Menu';
 
 const MobileMenu: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,8 +37,9 @@ const MobileMenu: FC = () => {
 const MobileMenuWrapper = styled.div`
   display: none;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 991px) {
     display: block;
+    margin-left: 16px;
   }
 `;
 
@@ -57,15 +58,21 @@ const MobileMenuNav = styled.nav`
   a {
     font-size: 16px;
     line-height: 24px;
-    color: var(--primary-500);
+    color: var(--dark);
     font-weight: 500;
+    &:hover {
+      text-decoration: none;
+    }
   }
   .active {
-    color: var(--dark);
+    color: var(--primary-500);
     cursor: default;
-    text-decoration: underline;
+    text-decoration: none;
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
+    }
+    span{
+      color: var(--primary-500);
     }
   }
 `;
