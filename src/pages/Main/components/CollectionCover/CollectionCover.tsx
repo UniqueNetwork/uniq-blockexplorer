@@ -4,6 +4,7 @@ import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import { BlurredCover } from './BlurredCover';
 import { RoundedCover } from './RoundedCover';
+import { useImageLoader } from '@app/hooks';
 
 interface CollectionCoverProps {
   coverSrc?: string;
@@ -11,14 +12,17 @@ interface CollectionCoverProps {
 }
 
 export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, coverSrc }) => {
+  const imgSrc = useImageLoader(getCoverURLFromCollection(coverSrc));
+
   return (
     <Wrapper>
-      <BlurredCover
-        coverSrc={getCoverURLFromCollection(coverSrc)}
-        name={collectionName}
-      />
+      <BlurredWrapper>
+        <BlurredContent
+          coverSrc={imgSrc}
+        />
+      </BlurredWrapper>
       <RoundedCover
-        coverSrc={getCoverURLFromCollection(coverSrc)}
+        coverSrc={imgSrc}
         name={collectionName}
       />
     </Wrapper>
@@ -26,5 +30,17 @@ export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, cov
 };
 
 const Wrapper = styled.div`
-  min-width: 64px;
+  height: 87px;
+  position: relative;
+  width: 100%;
+`;
+
+const BlurredContent = styled(BlurredCover)`
+  
+`;
+
+const BlurredWrapper = styled.div`
+  overflow: hidden;
+  border-top-left-radius: var(--gap);
+  border-top-right-radius: var(--gap);
 `;

@@ -5,7 +5,6 @@ import { Text, Heading, Icon } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
-import { shortcutText } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
@@ -21,7 +20,6 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
   collection_cover,
   collection_id: collectionId,
   name,
-  owner,
   token_prefix: tokenPrefix,
   tokens_count: tokensCount
 }) => {
@@ -78,7 +76,6 @@ const CollectionCardLink = styled(Link)`
   border: 1px solid var(--card-border-color);
   border-radius: var(--gap);
   box-sizing: border-box;
-  padding: calc(var(--gap) * 1.5);
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -111,8 +108,10 @@ const CollectionCardLink = styled(Link)`
 const CollectionInfo = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   row-gap: 0;
+  padding: calc(var(--gap) * 1.5);
+  padding-top: 48px;
 `;
 
 const CollectionProperties = styled.div`
@@ -123,6 +122,8 @@ const CollectionProperties = styled.div`
   span {
     display: flex;
     column-gap: calc(var(--gap) / 4);
+    align-items: center;
+    justify-content: center;
   }
   
   img {
