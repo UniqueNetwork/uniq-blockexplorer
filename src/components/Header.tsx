@@ -39,34 +39,36 @@ const Header: FC = () => {
   );
 
   return (
-    <HeaderWrapper>
-      <HeaderNavWrapper>
-        <MobileMenu />
-        <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
-          <Logo
-            alt='Logo'
-            src='logos/logo-product.svg'
+    <>
+      <HeaderWrapper>
+        <HeaderNavWrapper>
+          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
+            <Logo
+              alt='Logo'
+              src='/logos/logo_product.svg'
+            />
+          </Link>
+          <HeaderNav>
+            <Menu />
+          </HeaderNav>
+        </HeaderNavWrapper>
+        <ChainsSelectWrapper>
+          <ChainsSelect
+            onChange={onSelectChange}
+            options={Object.values(config.chains).map(({ name, network }) => ({
+              iconLeft: {
+                name: `chain-${network.toLowerCase()}`,
+                size: 16
+              },
+              id: network,
+              title: name
+            }))}
+            value={currentChain?.network}
           />
-        </Link>
-        <HeaderNav>
-          <Menu />
-        </HeaderNav>
-      </HeaderNavWrapper>
-      <ChainsSelectWrapper>
-        <ChainsSelect
-          onChange={onSelectChange}
-          options={Object.values(config.chains).map(({ name, network }) => ({
-            iconLeft: {
-              name: `chain-${network.toLowerCase()}`,
-              size: 16
-            },
-            id: network,
-            title: name
-          }))}
-          value={currentChain?.network}
-        />
-      </ChainsSelectWrapper>
-    </HeaderWrapper>
+        </ChainsSelectWrapper>
+      </HeaderWrapper>
+      <MobileMenu />
+    </>
   );
 };
 
@@ -93,18 +95,25 @@ const HeaderNav = styled.nav`
   column-gap: calc(var(--gap) * 1.5);
   align-items: center;
   a {
-    color: var(--primary-500);
-    font-weight: 500;
-  }
-  .active {
     color: var(--dark);
-    cursor: default;
-    text-decoration: underline;
+    font-weight: 500;
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
+      color: var(--primary-500);
     }
   }
-  @media (max-width: 1024px) {
+  .active {
+    color: var(--primary-500);
+    cursor: default;
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
+    span{
+      color: var(--primary-500);
+    }
+  }
+  @media (max-width: 991px) {
     display: none;
   }
 `;
@@ -141,7 +150,7 @@ const ChainsSelect = styled(Select)`
     }
   }
   
-  @media (max-width: 568px) {
+  @media (max-width: 450px) {
     width: auto;
     position: static;
     
