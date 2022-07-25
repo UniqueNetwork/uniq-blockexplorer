@@ -32,5 +32,17 @@ const Wrapper = styled.div`
     width: 88px;
     height: 88px;
     position: absolute;
+
+    @media (max-width: 767px) {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    width: 64px;
+    height: 64px;
+    top: calc(100% - 32px);
+    left: calc(50% - 32px);
   }
 `;

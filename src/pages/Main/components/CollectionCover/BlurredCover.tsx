@@ -14,6 +14,6 @@ export const BlurredCover = styled.div<BlurredCoverProps>`
     -moz-filter: blur(calc(var(--gap) * 2));
     -o-filter: blur(calc(var(--gap) * 2));
     -ms-filter: blur(calc(var(--gap) * 2));
-  height: 87px;
+  height: 88px;
   width: 100%;
 `;

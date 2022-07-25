@@ -44,8 +44,6 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     });
   }, [searchString, fetchMoreCollections]);
 
-  console.log('collections', collections);
-
   return (
     <Wrapper>
       <HeaderWithDropdown
@@ -86,16 +84,23 @@ const CollectionsList = styled.div`
   position: relative;
   margin-bottom: calc(var(--gap) * 1.5);
 
-  @media (max-width: 1919px) {
+  @media (min-width: 1200px) and (max-width: 1679px) {
+    
+  }
+
+  @media (min-width: 576px) and (max-width: 1199px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 1279px) {
-    grid-template-columns: 1fr;
+  @media (min-width: 768px) and (max-width: 991px) {
+  
   }
 
-  @media (max-width: 767px) {
-    border: none;
-    padding: 0;
+  @media (min-width: 576px) and (max-width: 767px) {
+    
+  }
+
+  @media (max-width: 575px) {
+    grid-template-columns: 1fr;
   }
 `;

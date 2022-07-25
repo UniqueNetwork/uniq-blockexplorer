@@ -31,13 +31,20 @@ export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, cov
 };
 
 const Wrapper = styled.div`
-  height: 87px;
+  height: 88px;
   position: relative;
   width: 100%;
+
+  @media (max-width: 767px) {
+    height: 64px;
+  }
 `;
 
 const BlurredContent = styled(BlurredCover)`
-  
+  @media (max-width: 767px) {
+    height: 64px;
+    width: 100%;
+  }
 `;
 
 const BlurredWrapper = styled.div`

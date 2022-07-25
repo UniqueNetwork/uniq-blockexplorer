@@ -49,21 +49,36 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
               alt='collection id'
               src={fingerPrint}
             />
-            <Text size='s'>{collectionId.toString()}</Text>
+            <Text
+              size='s'
+              weight='light'
+            >
+              {collectionId.toString()}
+            </Text>
           </span>
           <span>
             <Icon
               name='empty-image'
               size={13}
             />
-            <Text size={'s'}>{tokenPrefix}</Text>
+            <Text
+              size='s'
+              weight='light'
+            >
+              {tokenPrefix}
+            </Text>
           </span>
           <span>
             <img
               alt='created'
               src={clock}
             />
-            <Text size='s'>{tokensCount?.toString() || '0'}</Text>
+            <Text
+              size='s'
+              weight='light'
+            >
+              {tokensCount?.toString() || '0'}
+            </Text>
           </span>
         </CollectionProperties>
       </CollectionInfo>
@@ -98,10 +113,25 @@ const CollectionCardLink = styled(Link)`
       color: var(--primary-500);
     }
   }
-  
-  @media (max-width: 767px) {
-    border: none;
-    padding: 0;
+
+  @media (min-width: 1200px) and (max-width: 1679px) {
+    height: 246px;
+  }
+
+  @media (min-width: 992px) and (max-width: 1199px) {
+    height: 220px;
+  }
+
+  @media (min-width: 768px) and (max-width: 991px) {
+    height: 246px;
+  }
+
+  @media (min-width: 576px) and (max-width: 767px) {
+    height: 190px;
+  }
+
+  @media (max-width: 575px) {
+    height: 190px;
   }
 `;
 
@@ -112,6 +142,11 @@ const CollectionInfo = styled.div`
   row-gap: 0;
   padding: calc(var(--gap) * 1.5);
   padding-top: 48px;
+
+  @media (max-width: 767px) {
+    padding: var(--gap);
+    padding-top: 32px;
+  }
 `;
 
 const CollectionProperties = styled.div`
@@ -128,5 +163,41 @@ const CollectionProperties = styled.div`
   
   img {
     width: 13px;
+  }
+
+  @media (min-width: 1200px) and (max-width: 1679px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    span {
+      &:last-child {
+        grid-column-start: 1;
+        grid-column-end: 3;
+      }
+    }
+  }
+
+  @media (min-width: 992px) and (max-width: 1199px) {
+    display: flex;
+  }
+
+  @media (max-width: 991px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    span {
+      &:last-child {
+        grid-column-start: 1;
+        grid-column-end: 3;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 575px) {
+
   }
 `;
