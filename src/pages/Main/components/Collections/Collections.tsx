@@ -26,11 +26,13 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(collectionsOptions[0]);
 
   const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ orderBy: { collection_id: 'desc' }, pageSize });
+  const linkText = 'See all';
+  const linkUrl = `/${currentChain.network}/collections`;
 
   const onClick = useCallback(() => {
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
-    navigate(`/${currentChain.network}/collections`);
-  }, [currentChain, navigate]);
+    navigate(linkUrl);
+  }, [linkUrl, navigate]);
 
   useEffect(() => {
     if (searchString === undefined) {
@@ -47,6 +49,8 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   return (
     <Wrapper>
       <HeaderWithDropdown
+        linkText={linkText}
+        linkUrl={linkUrl}
         options={collectionsOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
@@ -69,13 +73,26 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
         }}
         onClick={onClick}
         role='primary'
-        title='See all'
+        title={linkText}
       />
     </Wrapper>
   );
 };
 
-const Wrapper = styled(PagePaperWrapper)``;
+const Wrapper = styled(PagePaperWrapper)`
+  @media (min-width: 758px) and (max-width: 1199px) {
+    button.unique-button {
+      display: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    button.unique-button {
+      width: 100%;
+    }
+  }
+`;
+
 const CollectionsList = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -84,20 +101,8 @@ const CollectionsList = styled.div`
   position: relative;
   margin-bottom: calc(var(--gap) * 1.5);
 
-  @media (min-width: 1200px) and (max-width: 1679px) {
-    
-  }
-
   @media (min-width: 576px) and (max-width: 1199px) {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 768px) and (max-width: 991px) {
-  
-  }
-
-  @media (min-width: 576px) and (max-width: 767px) {
-    
   }
 
   @media (max-width: 575px) {
