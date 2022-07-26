@@ -71,6 +71,7 @@
     "styled-components": "^5.3.3",
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
+    "url-loader": "^4.1.1",
     "web-vitals": "^1.0.1",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",

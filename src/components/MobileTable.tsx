@@ -29,7 +29,7 @@ const MobileTable: FC<MobileTableProps> = ({
       >
         {columns?.map((column) => (
           <div key={`column-${column.key || ''}`}>
-            {typeof column?.title === 'object' ? <>{column.title}</> : <Text color={'grey-500'}>{`${column?.title || ''}`}</Text>}
+            {typeof column?.title === 'object' ? <>{column.title}</> : <Text color='grey-500'>{`${column?.title || ''}`}</Text>}
             {column.render && <>{column.render(item[column.dataIndex as keyof DefaultRecordType], item, index)}</>}
             {!column.render && <Text>{item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}</Text>}
           </div>
@@ -53,10 +53,23 @@ const MobileTableRow = styled.div`
   border-bottom: 1px dashed var(--border-color);
   grid-row-gap: var(--gap);
   padding: var(--gap) 0;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+  
   div {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    grid-column-gap: calc(var(--gap) / 4);
+
+    &:nth-child(2) {
+      justify-content: flex-end;
+
+      .unique-text.color-grey-500 {
+        display: none;
+      }
+    }
   }
   
   @media(max-width: 320px) {

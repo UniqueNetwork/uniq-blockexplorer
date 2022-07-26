@@ -3,7 +3,6 @@ import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface
 import RCTable from 'rc-table';
 import styled from 'styled-components';
 
-import useDeviceSize, { DeviceSize } from '../hooks/useDeviceSize';
 import LoadingComponent from './LoadingComponent';
 import MobileTable from './MobileTable';
 
@@ -15,45 +14,44 @@ interface TableProps<RecordType = DefaultRecordType> {
 }
 
 const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
-  const deviceSize = useDeviceSize();
-
   return (
     <TableWrapper>
-      {deviceSize > DeviceSize.sm && (<>
-        <RCTable
-          columns={columns}
-          data={data || []}
-          emptyText={'No data'}
-          rowKey={rowKey}
-        />
-        {loading && <TableLoading />}
-      </>)}
-      {deviceSize <= DeviceSize.sm && (
-        <MobileTable
-          columns={columns}
-          data={!loading ? data : []}
-          loading={loading}
-          rowKey={rowKey}
-        />
-      )}
+      <RCTable
+        columns={columns}
+        data={data || []}
+        emptyText={'No data'}
+        rowKey={rowKey}
+      />
+      <MobileTable
+        columns={columns}
+        data={!loading ? data : []}
+        loading={loading}
+        rowKey={rowKey}
+      />
+      {loading && <TableLoading />}
     </TableWrapper>
   );
 };
 
 const TableWrapper = styled.div`
   position: relative;
+  
   .rc-table {
     margin-bottom: calc(var(--gap) * 1.5);
+    
     table {
       width: 100%;
       border-spacing: 0px;
       table-layout: fixed !important;
     }
+    
     &-thead {
+      
       tr {
         background-color: var(--blue-gray);
 
       }
+      
       th {
         padding: calc(var(--gap) / 2) var(--gap);
         text-align: left;
@@ -63,6 +61,7 @@ const TableWrapper = styled.div`
 
       }
     }
+    
     &-tbody {
       td {
         padding: calc(var(--gap) / 2) var(--gap);
@@ -70,8 +69,11 @@ const TableWrapper = styled.div`
         font-size: 16px;
         border-bottom: 1px dashed #D2D3D6;
         color: var(--grey-600);
+        overflow: hidden;
+        word-break: break-word;
       }
     }
+    
     &-placeholder {
       td {
         text-align: center;

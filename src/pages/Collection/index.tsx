@@ -31,7 +31,7 @@ const CollectionPage: FC = () => {
       <CollectionTitle>
         <Avatar
           size={'large'}
-          src={getCoverURLFromCollection(collection)}
+          src={getCoverURLFromCollection(collection?.collection_cover)}
         />
         <Heading size={'2'}>{collection?.name || ''}</Heading>
       </CollectionTitle>

@@ -81,7 +81,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           <CollectionLink onClick={onCollectionClick} to={`/${currentChain.network}/collections/${collectionId}`}>
             <Avatar
               size={'small'}
-              src={getCoverURLFromCollection(token)}
+              src={getCoverURLFromCollection(token.collection_cover)}
             />
             <div>
               <Heading size={'4'}>{name}</Heading>
