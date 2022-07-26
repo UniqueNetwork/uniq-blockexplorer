@@ -27,7 +27,6 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(lastTransferOptions[0]);
-  const linkText = 'See all';
   const linkUrl = `/${currentChain.network}/last-transfers`;
 
   const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
@@ -52,8 +51,6 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   return (
     <Wrapper>
       <HeaderWithDropdown
-        linkText={linkText}
-        linkUrl={linkUrl}
         options={lastTransferOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}

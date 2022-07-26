@@ -45,8 +45,6 @@ export const LastBlocks = ({
   return (
     <Wrapper>
       <HeaderWithDropdown
-        linkText={linkText}
-        linkUrl={linkUrl}
         title='Last blocks'
       />
       <Table

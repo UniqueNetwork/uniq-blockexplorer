@@ -26,7 +26,6 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(collectionsOptions[0]);
 
   const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ orderBy: { collection_id: 'desc' }, pageSize });
-  const linkText = 'See all';
   const linkUrl = `/${currentChain.network}/collections`;
 
   const onClick = useCallback(() => {
@@ -49,8 +48,6 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   return (
     <Wrapper>
       <HeaderWithDropdown
-        linkText={linkText}
-        linkUrl={linkUrl}
         options={collectionsOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
@@ -73,19 +70,13 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
         }}
         onClick={onClick}
         role='primary'
-        title={linkText}
+        title='See all'
       />
     </Wrapper>
   );
 };
 
 const Wrapper = styled(PagePaperWrapper)`
-  @media (min-width: 758px) and (max-width: 1199px) {
-    button.unique-button {
-      display: none;
-    }
-  }
-
   @media (max-width: 767px) {
     button.unique-button {
       width: 100%;

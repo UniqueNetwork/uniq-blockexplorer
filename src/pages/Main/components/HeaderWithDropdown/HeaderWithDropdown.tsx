@@ -1,58 +1,38 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import { Header } from '@app/styles/styled-components';
-import { Dropdown, Icon, SelectOptionProps, Text } from '@unique-nft/ui-kit';
+import { Dropdown, Icon, SelectOptionProps } from '@unique-nft/ui-kit';
 
 interface HeaderWithDropdownProps {
-  linkText?: string;
-  linkUrl?: string;
   options?: SelectOptionProps[];
   selectedSort?: SelectOptionProps;
   setSelectedSort?: (option: SelectOptionProps) => void;
   title: string;
 }
 
-export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({ linkText, linkUrl, options, selectedSort, setSelectedSort, title }) => {
-  const canDisplayLink = !!(linkText && linkUrl);
-
-  return (
-    <Wrapper>
-      <Header size='2'>
-        {title}
-      </Header>
-      { selectedSort && (
-        <Dropdown
-          onChange={setSelectedSort}
-          options={options}
-          value={selectedSort.id as string}
-        >
-          <SelectedOption>
-            {selectedSort.title}
-            <Icon
-              name='triangle'
-              size={12}
-            />
-          </SelectedOption>
-        </Dropdown>
-      )}
-      { canDisplayLink && (
-        <Link
-          className='header-dropdown-link'
-          to={linkUrl}
-        >
-          <Text
-            color='primary-600'
-            size='m'
-          >
-            {linkText}
-          </Text>
-        </Link>
-      )}
-    </Wrapper>
-  );
-};
+export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({ options, selectedSort, setSelectedSort, title }) => (
+  <Wrapper>
+    <Header size='2'>
+      {title}
+    </Header>
+    { selectedSort && (
+      <Dropdown
+        onChange={setSelectedSort}
+        options={options}
+        value={selectedSort.id as string}
+      >
+        <SelectedOption>
+          {selectedSort.title}
+          <Icon
+            name='triangle'
+            size={12}
+          />
+        </SelectedOption>
+      </Dropdown>
+    )}
+  </Wrapper>
+);
 
 const Wrapper = styled.div`
   display: flex;
@@ -95,10 +75,6 @@ const Wrapper = styled.div`
         }
       }
     }
-  }
-  
-  .header-dropdown-link {
-    display: none;
   }
 
   @media (min-width: 758px) and (max-width: 1199px) {

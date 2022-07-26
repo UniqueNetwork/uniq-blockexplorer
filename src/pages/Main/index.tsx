@@ -15,12 +15,12 @@ const MainPage = () => {
         setSearchString={setSearchString}
       />
       <TokenInformation />
-      <MainBlockWrapper>
+      <div>
         <Heading size={'2'}>New NFTs</Heading>
         <NewTokensComponent
           searchString={searchString}
         />
-      </MainBlockWrapper>
+      </div>
       <Main2BlocksWrapper>
         <LastTransfers
           searchString={searchString}
@@ -29,18 +29,14 @@ const MainPage = () => {
           searchString={searchString}
         />
       </Main2BlocksWrapper>
-      <MainBlockWrapper>
+      <div>
         <Collections
           searchString={searchString}
         />
-      </MainBlockWrapper>
+      </div>
     </>
   );
 };
-
-const MainBlockWrapper = styled.div`
-  padding-top: calc(var(--gap) * 2);
-`;
 
 const Main2BlocksWrapper = styled.div`
   display: grid;
