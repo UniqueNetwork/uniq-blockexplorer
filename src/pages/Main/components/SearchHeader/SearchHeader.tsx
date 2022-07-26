@@ -30,15 +30,17 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-
-  @media (max-width: 767px) {
-    align-items: flex-start;
-  }
 `;
 
 const H = styled(Header1)`
   display: flex;
   margin-bottom: calc(var(--gap) * 2);
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
 `;
 
 const NetworkName = styled.span<{ networkColor: string }>`
