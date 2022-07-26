@@ -38,41 +38,41 @@ const CollectionCard: FC<CollectionCardProps> = ({
     >
       <CollectionCover>
         <Avatar
-          size={'middle'}
+          size='middle'
           src={getCoverURLFromCollection(collection_cover)}
         />
       </CollectionCover>
       <CollectionInfo>
-        <Heading size={'4'}>{name}</Heading>
+        <Heading size='4'>{name}</Heading>
         <CollectionProperties>
           <span>
             <Text
-              color={'grey-500'}
-              size={'s'}
+              color='grey-500'
+              size='s'
             >ID:</Text>
-            <Text size={'s'}>{collectionId.toString()}</Text>
+            <Text size='s'>{collectionId.toString()}</Text>
           </span>
           <span>
             <Text
-              color={'grey-500'}
-              size={'s'}
+              color='grey-500'
+              size='s'
             >Symbol:</Text>
-            <Text size={'s'}>{tokenPrefix}</Text>
+            <Text size='s'>{tokenPrefix}</Text>
           </span>
           <span>
             <Text
-              color={'grey-500'}
-              size={'s'}
+              color='grey-500'
+              size='s'
             >Items:</Text>
-            <Text size={'s'}>{tokensCount?.toString() || '0'}</Text>
+            <Text size='s'>{tokensCount?.toString() || '0'}</Text>
           </span>
         </CollectionProperties>
         <div>
           <Text
-            color={'grey-500'}
-            size={'s'}
+            color='grey-500'
+            size='s'
           >Owner: </Text>
-          <Text size={'s'}>{shortcutText(owner)}</Text>
+          <Text size='s'>{shortcutText(owner)}</Text>
         </div>
       </CollectionInfo>
     </CollectionCardLink>
@@ -96,6 +96,7 @@ const CollectionCardLink = styled(Link)`
     overflow: hidden;
     word-break: break-word;
     max-height: 3rem;
+    
     &:hover {
       color: var(--primary-500);
     }

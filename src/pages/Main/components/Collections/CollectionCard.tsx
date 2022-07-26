@@ -88,7 +88,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
 
 const CollectionCardLink = styled(Link)`
   background: var(--white-color);
-  border: 1px solid var(--card-border-color);
+  border: 1px solid var(--grey-200);
   border-radius: var(--gap);
   box-sizing: border-box;
   display: flex;
@@ -195,9 +195,5 @@ const CollectionProperties = styled.div`
 
   @media (max-width: 767px) {
     margin-bottom: 0;
-  }
-
-  @media (max-width: 575px) {
-
   }
 `;

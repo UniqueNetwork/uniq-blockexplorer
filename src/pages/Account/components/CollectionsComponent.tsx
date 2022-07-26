@@ -96,11 +96,7 @@ const CollectionsWrapper = styled.div`
   position: relative;
   margin-bottom: calc(var(--gap) * 1.5);
 
-  @media (max-width: 1919px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 1279px) {
+  @media (max-width: 1199px) {
     grid-template-columns: 1fr;
   }
 
