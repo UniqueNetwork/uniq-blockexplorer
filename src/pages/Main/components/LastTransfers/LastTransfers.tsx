@@ -27,12 +27,14 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(lastTransferOptions[0]);
+  const linkText = 'See all';
+  const linkUrl = `/${currentChain.network}/last-transfers`;
 
   const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
     gqlTransfers.useGraphQlLastTransfers({ accountId, pageSize });
 
   const onClickSeeMore = () => {
-    navigate(`/${currentChain.network}/last-transfers`);
+    navigate(linkUrl);
   };
 
   useEffect(() => {
@@ -50,6 +52,8 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   return (
     <Wrapper>
       <HeaderWithDropdown
+        linkText={linkText}
+        linkUrl={linkUrl}
         options={lastTransferOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
@@ -72,10 +76,16 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
         }}
         onClick={onClickSeeMore}
         role='primary'
-        title={'See all'}
+        title='See all'
       />
     </Wrapper>
   );
 };
 
-const Wrapper = styled(PagePaperWrapper)``;
+const Wrapper = styled(PagePaperWrapper)`
+  @media (max-width: 767px) {
+    button.unique-button {
+      width: 100%;
+    }
+  }
+`;

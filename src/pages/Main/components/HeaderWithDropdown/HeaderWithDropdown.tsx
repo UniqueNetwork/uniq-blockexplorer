@@ -8,9 +8,9 @@ import { Dropdown, Icon, SelectOptionProps, Text } from '@unique-nft/ui-kit';
 interface HeaderWithDropdownProps {
   linkText?: string;
   linkUrl?: string;
-  options: SelectOptionProps[];
-  selectedSort: SelectOptionProps;
-  setSelectedSort: (option: SelectOptionProps) => void;
+  options?: SelectOptionProps[];
+  selectedSort?: SelectOptionProps;
+  setSelectedSort?: (option: SelectOptionProps) => void;
   title: string;
 }
 
@@ -22,19 +22,21 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({ linkText, lin
       <Header size='2'>
         {title}
       </Header>
-      <Dropdown
-        onChange={setSelectedSort}
-        options={options}
-        value={selectedSort.id as string}
-      >
-        <SelectedOption>
-          {selectedSort.title}
-          <Icon
-            name='triangle'
-            size={12}
-          />
-        </SelectedOption>
-      </Dropdown>
+      { selectedSort && (
+        <Dropdown
+          onChange={setSelectedSort}
+          options={options}
+          value={selectedSort.id as string}
+        >
+          <SelectedOption>
+            {selectedSort.title}
+            <Icon
+              name='triangle'
+              size={12}
+            />
+          </SelectedOption>
+        </Dropdown>
+      )}
       { canDisplayLink && (
         <Link
           className='header-dropdown-link'

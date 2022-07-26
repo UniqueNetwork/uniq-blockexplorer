@@ -46,6 +46,12 @@ const Main2BlocksWrapper = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-column-gap: var(--gap);
+
+  @media (max-width: 1679px) {
+    display: flex;
+    flex-direction: column;
+    grid-row-gap: var(--gap);
+  }
 `;
 
 export default MainPage;
