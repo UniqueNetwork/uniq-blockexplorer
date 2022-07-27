@@ -33,13 +33,16 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
     navigate(`/${currentChain.network}/tokens`);
   }, [currentChain, navigate]);
 
-  const { isTokensFetching, tokens } = gqlTokens.useGraphQlTokens({
+  const { isTokensFetching, timestamp, tokens } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
     offset: 0,
     orderBy: { collection_id: 'desc', token_id: 'desc' },
     pageSize,
     searchString
   });
+
+  console.log('tokens', tokens);
+  console.log('timestamp', timestamp);
 
   return (
     <>
@@ -85,7 +88,7 @@ const TokensWrapper = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
   
-  @media(max-width: 567px) {
+  @media(max-width: 575px) {
     grid-template-columns: 1fr;
   }
 `;

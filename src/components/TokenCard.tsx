@@ -15,6 +15,7 @@ type TokenCardProps = Token;
 const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
+  date_of_creation: dateOfCreation,
   image_path: imagePath,
   owner,
   token_id: tokenId,
@@ -32,12 +33,18 @@ const TokenCard: FC<TokenCardProps> = ({
 
   const imageUrl = getImageURL(imagePath);
 
+  const img = new Image();
+
+  img.src = imageUrl;
+  const isVerticalPict = img.width <= img.height;
+
   return (
     <TokenCardLink
       onClick={onNFTCardClick}
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
     >
       <TokenPicture
+        // $isVerticalPict={isVerticalPict}
         alt={tokenId.toString()}
         src={imageUrl}
       />
@@ -63,6 +70,8 @@ const TokenCard: FC<TokenCardProps> = ({
 };
 
 const TokenCardLink = styled(Link)`
+  border: 1px solid var(--blue-grey-200);
+  border-radius: calc(var(--bradius) * 2);
   transition: 50ms;
   &:hover {
     transform: translate(0, -5px);
@@ -70,19 +79,26 @@ const TokenCardLink = styled(Link)`
   }
 `;
 
-const TokenPicture = styled(Picture)`
-  width: auto;
-  height: auto;
+const TokenPicture = styled(Picture).attrs(() => ({}))`
   overflow: hidden;
-  border-radius: 8px;
-  svg, img {
+  border-radius: 8px 8px 0 0;
+  svg {
     width: 100%
+  }
+  & image {
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%); */
+    width: ${(isVerticalPict) => isVerticalPict ? 'auto' : '100%'};
+    height: ${(isVerticalPict) => isVerticalPict ? '100%' : 'auto'};
+    /* transform: ${(isVerticalPict) => isVerticalPict ? 'translate(-50%)' : 'translateY(-50%)'}; */
   }
 `;
 
 const TokenTitle = styled.div`
-  margin-top: calc(var(--gap) / 2);
-  
+  margin: var(--gap);
   a {
     word-break: break-word;
   }
