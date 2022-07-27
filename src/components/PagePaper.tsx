@@ -15,13 +15,6 @@ export const PagePaperWrapper = styled.div`
   border-radius: 16px;
   padding: 24px;
   flex: 1;
-
-  @media (max-width: 1024px) {
-    background: #ffffff;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-  }
 `;
 
 export default PagePaper;

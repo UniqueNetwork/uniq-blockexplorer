@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Heading } from '@unique-nft/ui-kit';
 
-import LastBlocksComponent from './components/LastBlocksComponent';
 import NewTokensComponent from './components/NewTokensComponent';
-import NewCollectionsComponent from './components/NewCollectionsComponent';
 
-import { LastBlocks, LastTransfers } from './components';
-import PagePaper from '../../components/PagePaper';
-import { SearchHeader } from './components/SearchHeader';
-import { TokenInformation } from './components/TokenInformation';
+import { Collections, LastBlocks, LastTransfers, SearchHeader, TokenInformation } from './components';
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
@@ -20,17 +15,12 @@ const MainPage = () => {
         setSearchString={setSearchString}
       />
       <TokenInformation />
-      <MainBlockWrapper>
-        <LastBlocksComponent
-          searchString={searchString}
-        />
-      </MainBlockWrapper>
-      <MainBlockWrapper>
+      <div>
         <Heading size={'2'}>New NFTs</Heading>
         <NewTokensComponent
           searchString={searchString}
         />
-      </MainBlockWrapper>
+      </div>
       <Main2BlocksWrapper>
         <LastTransfers
           searchString={searchString}
@@ -39,24 +29,25 @@ const MainPage = () => {
           searchString={searchString}
         />
       </Main2BlocksWrapper>
-      <MainBlockWrapper>
-        <Heading size={'2'}>New collections</Heading>
-        <NewCollectionsComponent
+      <div>
+        <Collections
           searchString={searchString}
         />
-      </MainBlockWrapper>
+      </div>
     </>
   );
 };
-
-const MainBlockWrapper = styled.div`
-  padding-top: calc(var(--gap) * 2);
-`;
 
 const Main2BlocksWrapper = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-column-gap: var(--gap);
+
+  @media (max-width: 1679px) {
+    display: flex;
+    flex-direction: column;
+    grid-row-gap: var(--gap);
+  }
 `;
 
 export default MainPage;
