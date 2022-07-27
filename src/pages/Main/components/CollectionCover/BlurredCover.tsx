@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
 interface BlurredCoverProps {
-  coverSrc: string;
+  color?: string;
+  coverSrc?: string;
 }
 
 export const BlurredCover = styled.div<BlurredCoverProps>`
   background-image: url(${(props) => props.coverSrc});
+  background-color: ${(props) => props.color};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

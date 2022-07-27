@@ -63,6 +63,8 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   background-repeat: no-repeat;
   background-position-x: calc(100% - calc(var(--gap) * 1.5));
   -ms-background-position-x: calc(100% - calc(var(--gap) * 1.5));
+  background-position-y: calc(50% - var(--gap));
+  -ms-background-position-y: calc(50% - var(--gap));
   
   display: grid;
   grid-template-columns: 1fr 1.5fr;

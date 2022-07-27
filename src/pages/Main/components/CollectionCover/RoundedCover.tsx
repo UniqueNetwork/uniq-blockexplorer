@@ -2,22 +2,26 @@ import { VFC } from 'react';
 import styled from 'styled-components';
 
 interface RoundedCoverProps {
+  color: string;
   coverSrc: string | undefined;
   name?: string;
 }
 
-export const RoundedCover: VFC<RoundedCoverProps> = ({ coverSrc, name }) => {
+export const RoundedCover: VFC<RoundedCoverProps> = ({ color, coverSrc, name }) => {
   return (
-    <Wrapper>
-      <img
-        alt={`collection ${name ?? ''} cover`}
-        src={coverSrc}
-      />
+    <Wrapper color={color}>
+      { coverSrc && (
+        <img
+          alt={`collection ${name ?? ''} cover`}
+          src={coverSrc}
+        />
+      )}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ color: string }>`
+  background-color: ${(props) => props.color};
   border: 2px solid #FFFFFF;
   box-sizing: border-box;
   border-radius: 48px;
