@@ -19,6 +19,7 @@ const tokensQuery = gql`
         token_prefix
       }
       count
+      timestamp
     }
   }
 `;
@@ -43,9 +44,6 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
-  const client = useApolloClient();
-  const clientRef = useRef<string>();
-
   const getWhere = useCallback(
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
@@ -67,8 +65,7 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
   const {
     data,
     error: fetchTokensError,
-    loading: isTokensFetching,
-    refetch
+    loading: isTokensFetching
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -85,6 +82,7 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
   return {
     fetchTokensError,
     isTokensFetching,
+    timestamp: data?.tokens?.timestamp,
     tokens: data?.tokens?.data,
     tokensCount: data?.tokens?.count || 0
   };

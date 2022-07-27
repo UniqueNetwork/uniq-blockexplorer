@@ -1,9 +1,18 @@
 // Calculate how much time passed (ex. 10seconds, 5 hours, 3 days, 25weeks)
 const timeDifference = (when: number, sinceWhen: number | null = null) => {
-  const first = sinceWhen || new Date().getTime() / 1000;
-  const second = when;
+  const currentDate = new Date();
+  const currentUtcDate = new Date(
+    currentDate.getUTCFullYear(),
+    currentDate.getUTCMonth(),
+    currentDate.getUTCDate(),
+    currentDate.getUTCHours(),
+    currentDate.getUTCMinutes(),
+    currentDate.getUTCSeconds()
+  );
+  const currentUtcTime = sinceWhen || currentUtcDate.getTime() / 1000;
+
   // https://stackoverflow.com/questions/16767301/calculate-difference-between-2-timestamps-using-javascript
-  let difference = (first - second) * 1000;
+  let difference = (currentUtcTime - when) * 1000;
 
   const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
 
@@ -17,9 +26,8 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
 
   difference -= minutesDifference * 1000 * 60;
 
-  const secondsDifference = Math.floor(difference / 1000);
   // just an example, later on oculd be extended to calculate time difference (trying to avoid any external libs for this matter)
-  let amount = secondsDifference;
+  let amount = Math.floor(difference / 1000);
   let timeType = 'second';
 
   if (minutesDifference >= 1) {

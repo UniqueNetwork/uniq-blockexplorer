@@ -23,6 +23,7 @@ export interface TransfersData {
   extrinsics: {
     data: Transfer[];
     count: number;
+    timestamp: number;
   }
 }
 
