@@ -27,13 +27,15 @@ a {
 }
 
 .unique-layout {
+  background: var(--color-blue-grey-100);
+
   &__content {
     padding: 0 !important;
     background-color: transparent !important;
     box-shadow: none !important;
     display: flex;
     flex-direction: column;
-    row-gap: calc(var(--gap) * 1.5);
+    row-gap: var(--gap);
   }
 
   @media (min-width: 1920px) {
@@ -46,6 +48,8 @@ a {
   }
 
   @media (max-width: 1024px) {
+    background: var(--color-blue-grey-100) !important;
+
     header {
       top: 0;
       position: sticky !important;
