@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { RemoveThis } from '@app/images/icons/svgs';
 
 export const useImageLoader = (imageSrc: string | undefined) => {
-  const [imgSrc, setImgSrc] = useState<string>(RemoveThis);
+  const [imgSrc, setImgSrc] = useState<string>();
 
   const checkImageBeforeLoad = useCallback(
     (url: string) => {
