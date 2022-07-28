@@ -10,16 +10,6 @@ export enum DeviceSize {
   xxl // > 1920
 }
 
-export enum DeviceSizeBootstrap {
-  xsm, // < 479
-  ssm, // 575 - 480
-  sm, // 767 - 576
-  md, // 991 - 768
-  lg, // 1199 - 992
-  xl, // 1679 - 1200
-  xxl // > 1680
-}
-
 export const useDeviceSize = (): DeviceSize => {
   const [windowWidth, setWindowWidth] = useState<number | undefined>();
 
