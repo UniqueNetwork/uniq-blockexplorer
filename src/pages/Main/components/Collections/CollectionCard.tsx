@@ -13,17 +13,23 @@ import fingerPrint from '@app/images/icons/fingerPrint.svg';
 import clock from '@app/images/icons/clock.svg';
 
 import { CollectionCover } from '../CollectionCover';
+import { timeDifference } from '@app/utils';
 
-type CollectionCardProps = Collection;
+interface CollectionCardProps extends Collection {
+  timestamp: number;
+}
 
 export const CollectionCard: VFC<CollectionCardProps> = ({
   collection_cover,
   collection_id: collectionId,
+  date_of_creation,
   name,
+  timestamp,
   token_prefix: tokenPrefix,
   tokens_count: tokensCount
 }) => {
   const { currentChain } = useApi();
+  const createdTimeDiff = timeDifference(timestamp, date_of_creation);
 
   const onCollectionsCardClick = useCallback(() => {
     const path = window.location.pathname;
@@ -77,7 +83,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
               size='s'
               weight='light'
             >
-              {tokensCount?.toString() || '0'}
+              {createdTimeDiff}
             </Text>
           </span>
         </CollectionProperties>

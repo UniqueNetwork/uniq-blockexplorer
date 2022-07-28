@@ -7,6 +7,7 @@ import LoadingComponent from './LoadingComponent';
 import MobileTable from './MobileTable';
 
 interface TableProps<RecordType = DefaultRecordType> {
+  hideMobile?: boolean;
   columns?: ColumnType<RecordType>[]
   data?: RecordType[]
   loading?: boolean

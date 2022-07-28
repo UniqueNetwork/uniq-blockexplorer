@@ -19,6 +19,10 @@ export interface Transfer {
   to_owner_normalized: string
 }
 
+export interface TransferWithTimeDif extends Transfer {
+  time_difference: string;
+}
+
 export interface TransfersData {
   extrinsics: {
     data: Transfer[];

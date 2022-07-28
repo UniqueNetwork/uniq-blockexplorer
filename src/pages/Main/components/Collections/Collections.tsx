@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState, VFC } from 'react';
+import React, { useCallback, useEffect, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
 import { useApi } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { PagePaperWrapper } from '@app/components';
-import { collections as gqlCollections } from '@app/api/graphQL';
+import { collections as gqlCollections, CollectionSorting } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
@@ -25,7 +25,9 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(collectionsOptions[0]);
 
-  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ orderBy: { collection_id: 'desc' }, pageSize });
+  const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'asc' } : { actions_count: 'asc' }, [selectedSort.id]);
+
+  const { collections, fetchMoreCollections, isCollectionsFetching, timestamp } = gqlCollections.useGraphQlCollections({ orderBy, pageSize });
   const linkUrl = `/${currentChain.network}/collections`;
 
   const onClick = useCallback(() => {
@@ -40,10 +42,12 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
 
     void fetchMoreCollections({
       limit: pageSize,
-      orderBy: { collection_id: 'desc' },
+      orderBy,
       searchString
     });
-  }, [searchString, fetchMoreCollections]);
+  }, [searchString, fetchMoreCollections, orderBy]);
+
+  console.log('collection', collections, 'selectedSort', selectedSort);
 
   return (
     <Wrapper>
@@ -58,6 +62,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
         {collections.map((collection) => (
           <CollectionCard
             key={`collection-${collection.collection_id}`}
+            timestamp={timestamp}
             {...collection}
           />
         ))}

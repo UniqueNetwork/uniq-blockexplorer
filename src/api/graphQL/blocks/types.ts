@@ -5,6 +5,10 @@ export interface LastBlock {
   total_extrinsics: number
 }
 
+export interface LastBlockWithTimeDif extends LastBlock {
+  time_difference: string;
+}
+
 export interface LastBlocksVariables {
   limit: number
   offset: number

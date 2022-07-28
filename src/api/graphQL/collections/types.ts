@@ -52,6 +52,7 @@ export interface CollectionsData {
   collections: {
     data: Collection[];
     count: number;
+    timestamp: number;
   }
 }
 

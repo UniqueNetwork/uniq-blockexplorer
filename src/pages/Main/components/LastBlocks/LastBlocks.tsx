@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import { lastBlocks } from '@app/api/graphQL';
 import { PagePaperWrapper, Table } from '@app/components';
 import { useApi } from '@app/hooks/useApi';
+import { Desktop, Mobile } from '@app/styles/styled-components';
 
 import { BlockComponentProps } from '../../types';
 
 import { getLastBlocksColumns } from './getLastBlocksColumns';
 import { blocksWithTimeDifference } from './blocksWithTimeDifference';
 import { HeaderWithDropdown } from '@app/pages/Main/components/HeaderWithDropdown';
+import { LastBlocksCardsList } from './LastBlocksCardsList';
 
 export const LastBlocks = ({
   pageSize = 5,
@@ -22,7 +24,7 @@ export const LastBlocks = ({
   const linkText = 'See all';
   const linkUrl = `/${currentChain.network}/last-blocks`;
 
-  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching } = lastBlocks.useGraphQlBlocks({
+  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching, timestamp } = lastBlocks.useGraphQlBlocks({
     pageSize
   });
 
@@ -47,12 +49,21 @@ export const LastBlocks = ({
       <HeaderWithDropdown
         title='Last blocks'
       />
-      <Table
-        columns={getLastBlocksColumns(currentChain.network)}
-        data={blocksWithTimeDifference(blocks)}
-        loading={isBlocksFetching}
-        rowKey={'block_number'}
-      />
+      <Desktop>
+        <Table
+          columns={getLastBlocksColumns(currentChain.network)}
+          data={blocksWithTimeDifference(blocks, timestamp)}
+          loading={isBlocksFetching}
+          rowKey={'block_number'}
+        />
+      </Desktop>
+      <Mobile>
+        <LastBlocksCardsList
+          columns={getLastBlocksColumns(currentChain.network)}
+          data={!isBlocksFetching ? blocksWithTimeDifference(blocks, timestamp) : []}
+          loading={isBlocksFetching}
+        />
+      </Mobile>
       <Button
         iconRight={{
           color: '#fff',
@@ -61,7 +72,7 @@ export const LastBlocks = ({
         }}
         onClick={onClickSeeMore}
         role='primary'
-        title='See all'
+        title={linkText}
       />
     </Wrapper>
   );
