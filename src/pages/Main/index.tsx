@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Heading } from '@unique-nft/ui-kit';
 
-import NewTokensComponent from './components/NewTokensComponent';
-
-import { Collections, LastBlocks, LastTransfers, SearchHeader, TokenInformation } from './components';
+import { Collections, LastBlocks, LastTransfers, SearchHeader, TokenInformation, Tokens } from './components';
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
@@ -16,8 +13,7 @@ const MainPage = () => {
       />
       <TokenInformation />
       <div>
-        <Heading size={'2'}>New NFTs</Heading>
-        <NewTokensComponent
+        <Tokens
           searchString={searchString}
         />
       </div>

@@ -5,9 +5,10 @@ import { Button, Heading, Text } from '@unique-nft/ui-kit';
 
 import { tokens as gqlTokens } from '@app/api';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { LoadingComponent, TokenCard } from '@app/components';
+import { LoadingComponent } from '@app/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import TokenCard from '@app/pages/Main/components/TokensBlock/TokenCard';
 
 interface TokensComponentProps {
   searchString?: string

@@ -1,23 +1,29 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { Button } from '@unique-nft/ui-kit';
-
-import { tokens as gqlTokens } from '@app/api/graphQL';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
-import { LoadingComponent, TokenCard } from '@app/components';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
+import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
-interface NewTokensComponentProps {
+import { PagePaperWrapper } from '@app/components';
+import { logUserEvents } from '@app/utils/logUserEvents';
+import { UserEvents } from '@app/analytics/user_analytics';
+import LoadingComponent from '@app/components/LoadingComponent';
+import { tokens as gqlTokens } from '@app/api/graphQL';
+
+import { HeaderWithDropdown } from '../HeaderWithDropdown';
+import { tokensOptions } from './tokensOptions';
+import TokenCard from './TokenCard';
+
+interface TokensProps {
   searchString?: string
   pageSize?: number
   collectionId?: number
 }
 
-const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSize = 6, searchString }) => {
+export const Tokens: VFC<TokensProps> = ({ collectionId, pageSize = 6, searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
+  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(tokensOptions[0]);
 
   const deviceSize = useDeviceSize();
 
@@ -41,17 +47,21 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
     searchString
   });
 
-  console.log('tokens', tokens);
-  console.log('timestamp', timestamp);
-
   return (
-    <>
+    <Wrapper>
+      <HeaderWithDropdown
+        options={tokensOptions}
+        selectedSort={selectedSort}
+        setSelectedSort={setSelectedSort}
+        title='Tokens'
+      />
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
         {tokens?.slice(0, tokensLimit).map((token) => (
           <TokenCard
             key={`token-${token.collection_id}-${token.token_id}`}
             {...token}
+            timeNow={timestamp}
           />
         ))}
       </TokensWrapper>
@@ -65,9 +75,17 @@ const NewTokensComponent: FC<NewTokensComponentProps> = ({ collectionId, pageSiz
         role={'primary'}
         title={'See all'}
       />
-    </>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled(PagePaperWrapper)`
+  @media (max-width: 767px) {
+    button.unique-button {
+      width: 100%;
+    }
+  }
+`;
 
 const TokensWrapper = styled.div`
   display: grid;
@@ -88,9 +106,7 @@ const TokensWrapper = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
   
-  @media(max-width: 575px) {
+  @media(max-width: 480px) {
     grid-template-columns: 1fr;
   }
 `;
-
-export default NewTokensComponent;
