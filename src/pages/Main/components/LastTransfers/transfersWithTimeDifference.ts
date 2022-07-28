@@ -1,7 +1,7 @@
-import { Transfer } from '@app/api';
+import { Transfer, TransferWithTimeDif } from '@app/api';
 import { timeDifference } from '@app/utils';
 
-export const transfersWithTimeDifference = (transfers: Transfer[] | undefined): (Transfer & { time_difference: string })[] => {
+export const transfersWithTimeDifference = (transfers: Transfer[] | undefined): (TransferWithTimeDif)[] => {
   if (!transfers || !Array.isArray(transfers)) {
     return [];
   }

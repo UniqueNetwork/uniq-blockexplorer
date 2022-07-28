@@ -9,8 +9,25 @@ export const getLastBlocksColumns = (chainId: string) => [
     title: 'Block',
     width: 100
   },
-  // Age is calculated from timestamp aftter query execution
-  { dataIndex: 'time_difference', key: 'time_difference', title: 'Age', width: 100 },
-  { dataIndex: 'total_extrinsics', key: 'total_extrinsics', title: 'Extrinsic', width: 100 },
-  { dataIndex: 'total_events', key: 'total_events', title: 'Event', width: 100 }
+  // Age is calculated from timestamp after query execution
+  {
+    dataIndex: 'time_difference',
+    key: 'time_difference',
+    title: 'Age',
+    width: 100
+  },
+  {
+    dataIndex: 'total_extrinsics',
+    key: 'total_extrinsics',
+    render: (value: string) => <Link to={`/${chainId}/extrinsic/${value}`}>{value}</Link>,
+    title: 'Extrinsic',
+    width: 100
+  },
+  {
+    dataIndex: 'total_events',
+    key: 'total_events',
+    render: (value: string) => <Link to={`/${chainId}/event/${value}`}>{value}</Link>,
+    title: 'Event',
+    width: 100
+  }
 ];

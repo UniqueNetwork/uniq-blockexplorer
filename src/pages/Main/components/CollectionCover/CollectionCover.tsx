@@ -15,17 +15,18 @@ interface CollectionCoverProps {
 export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, coverSrc }) => {
   const imgSrc = useImageLoader(getCoverURLFromCollection(coverSrc));
   const color = useRandomColor();
+  const collectionCoverColor = coverSrc ? 'transparent' : color;
 
   return (
     <Wrapper>
       <BlurredWrapper>
         <BlurredContent
-          color={color}
+          color={collectionCoverColor}
           coverSrc={imgSrc}
         />
       </BlurredWrapper>
       <RoundedCover
-        color={color}
+        color={collectionCoverColor}
         coverSrc={imgSrc}
         name={collectionName}
       />
