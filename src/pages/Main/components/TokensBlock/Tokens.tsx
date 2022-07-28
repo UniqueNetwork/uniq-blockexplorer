@@ -16,11 +16,10 @@ import TokenCard from './TokenCard';
 
 interface TokensProps {
   searchString?: string
-  pageSize?: number
   collectionId?: number
 }
 
-export const Tokens: VFC<TokensProps> = ({ collectionId, pageSize = 12, searchString }) => {
+export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(tokensOptions[0]);
@@ -43,7 +42,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, pageSize = 12, searchSt
     filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
     offset: 0,
     orderBy: { collection_id: 'desc', token_id: 'desc' },
-    pageSize,
+    pageSize: tokensLimit,
     searchString
   });
 
