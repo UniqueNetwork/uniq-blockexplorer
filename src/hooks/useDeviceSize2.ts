@@ -1,17 +1,8 @@
+// Here are the dimensions according to the grid SCAN.2.0
 import { useEffect, useMemo, useState } from 'react';
 
-export enum DeviceSize {
-  xxs, // < 567
-  xs, // 767 - 568
-  sm, // 1023 - 768
-  md, // 1279 - 1024
-  lg, // 1439 - 1280
-  xl, // 1919 - 1440
-  xxl // > 1920
-}
-
-export enum DeviceSizeBootstrap {
-  xsm, // < 479
+export enum DeviceSize2 {
+  xsm, // < 480
   ssm, // 575 - 480
   sm, // 767 - 576
   md, // 991 - 768
@@ -20,7 +11,7 @@ export enum DeviceSizeBootstrap {
   xxl // > 1680
 }
 
-export const useDeviceSize = (): DeviceSize => {
+export const useDeviceSize2 = (): DeviceSize2 => {
   const [windowWidth, setWindowWidth] = useState<number | undefined>();
 
   useEffect(() => {
@@ -40,15 +31,15 @@ export const useDeviceSize = (): DeviceSize => {
   }, []); // Empty array ensures that effect is only run on mount
 
   return useMemo(() => {
-    if (windowWidth && windowWidth < 567) return DeviceSize.xxs;
-    if (windowWidth && windowWidth < 768) return DeviceSize.xs;
-    if (windowWidth && windowWidth < 1024) return DeviceSize.sm;
-    if (windowWidth && windowWidth < 1280) return DeviceSize.md;
-    if (windowWidth && windowWidth < 1440) return DeviceSize.lg;
-    if (windowWidth && windowWidth < 1920) return DeviceSize.xl;
+    if (windowWidth && windowWidth < 480) return DeviceSize2.xsm;
+    if (windowWidth && windowWidth < 576) return DeviceSize2.ssm;
+    if (windowWidth && windowWidth < 768) return DeviceSize2.sm;
+    if (windowWidth && windowWidth < 992) return DeviceSize2.md;
+    if (windowWidth && windowWidth < 1200) return DeviceSize2.lg;
+    if (windowWidth && windowWidth < 1680) return DeviceSize2.xl;
 
-    return DeviceSize.xxl;
+    return DeviceSize2.xxl;
   }, [windowWidth]);
 };
 
-export default useDeviceSize;
+export default useDeviceSize2;

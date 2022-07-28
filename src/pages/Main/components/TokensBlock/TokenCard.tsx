@@ -47,7 +47,7 @@ const TokenCard: FC<TokenCardProps> = ({
         src={imageUrl}
       />}
 
-      {isImgUrlValid && <TokenImg imgUrl={imageUrl} />}
+      {isImgUrlValid && <TokenBackground imgUrl={imageUrl} />}
       <TokenTitle>
         <Text
           color='primary-500'
@@ -62,7 +62,7 @@ const TokenCard: FC<TokenCardProps> = ({
             src={clock}
           />
           <Text
-            color='grey-500'
+            color='additional-dark'
             size='xs'
           >{timeDifference(dateOfCreation, timeNow)}</Text>
         </TokenProperties>
@@ -98,7 +98,7 @@ const TokenCollectionLink = styled(Link)`
   line-height: 18px;
 `;
 
-const TokenImg = styled.div<{imgUrl: string}>`
+const TokenBackground = styled.div<{imgUrl: string}>`
   width: 100%;
   background-image: url(${(props) => props.imgUrl});
   background-position: center;

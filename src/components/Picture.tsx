@@ -69,8 +69,6 @@ const Picture: FC<PictureProps> = ({ className, src }) => {
 
 const PictureWrapper = styled.div`
   position: relative;
-  /* width: 174px;
-  height: 174px; */
   overflow: hidden;
   display: flex;
   align-items: center;

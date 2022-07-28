@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { DeviceSize2, useApi, useDeviceSize2 } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
@@ -20,18 +20,18 @@ interface TokensProps {
   collectionId?: number
 }
 
-export const Tokens: VFC<TokensProps> = ({ collectionId, pageSize = 6, searchString }) => {
+export const Tokens: VFC<TokensProps> = ({ collectionId, pageSize = 12, searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(tokensOptions[0]);
 
-  const deviceSize = useDeviceSize();
+  const deviceSize = useDeviceSize2();
 
   const tokensLimit = useMemo(() => {
-    if (deviceSize === DeviceSize.sm || deviceSize === DeviceSize.xs || deviceSize === DeviceSize.xxs) return 6;
-    if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.md) return 4;
+    if (deviceSize === DeviceSize2.xxl) return 12;
+    if (deviceSize === DeviceSize2.lg || deviceSize === DeviceSize2.xl) return 8;
 
-    return 5;
+    return 6;
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
@@ -94,19 +94,23 @@ const TokensWrapper = styled.div`
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
   
-  @media(max-width: 1439px) {
-    grid-template-columns: repeat(4, 1fr);
+  @media(min-width: 1680px) {
+    grid-template-columns: repeat(6, 1fr);
   }  
   
-  @media(max-width: 1023px) {
+  @media(max-width: 1679px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+   @media(max-width: 991px) {
     grid-template-columns: repeat(3, 1fr);
   }
   
-  @media(max-width: 767px) {
+  @media(max-width: 575px) {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  @media(max-width: 480px) {
+  @media(max-width: 479px) {
     grid-template-columns: 1fr;
   }
 `;
