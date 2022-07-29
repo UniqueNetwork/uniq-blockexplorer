@@ -6,7 +6,7 @@ interface BlurredCoverProps {
 }
 
 export const BlurredCover = styled.div<BlurredCoverProps>`
-  background-image: url(${(props) => props.coverSrc});
+  background-image: ${(props) => props.coverSrc ? `url(${props.coverSrc})` : 'none'};
   background-color: ${(props) => props.color};
   background-repeat: no-repeat;
   background-size: cover;

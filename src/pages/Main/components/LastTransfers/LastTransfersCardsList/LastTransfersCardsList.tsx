@@ -14,8 +14,6 @@ interface MobileCardsListProps {
 }
 
 export const LastTransfersCardsList: VFC<MobileCardsListProps> = ({ columns, data, loading }) => {
-  console.log('data', data, 'columns', columns);
-
   if (loading) {
     return (
       <LoadingComponent />

@@ -47,8 +47,6 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     });
   }, [searchString, fetchMoreCollections, orderBy]);
 
-  console.log('collection', collections, 'selectedSort', selectedSort);
-
   return (
     <Wrapper>
       <HeaderWithDropdown

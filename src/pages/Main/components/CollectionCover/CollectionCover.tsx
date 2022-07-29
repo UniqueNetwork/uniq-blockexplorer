@@ -15,7 +15,7 @@ interface CollectionCoverProps {
 export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, coverSrc }) => {
   const imgSrc = useImageLoader(getCoverURLFromCollection(coverSrc));
   const color = useRandomColor();
-  const collectionCoverColor = coverSrc ? 'transparent' : color;
+  const collectionCoverColor = imgSrc ? 'transparent' : color;
 
   return (
     <Wrapper>
