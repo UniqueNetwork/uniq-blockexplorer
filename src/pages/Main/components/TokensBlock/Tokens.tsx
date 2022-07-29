@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState, VFC } from 'react';
+import { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { DeviceSize2, useApi, useDeviceSize2 } from '@app/hooks';
+import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
@@ -79,7 +79,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
 };
 
 const Wrapper = styled(PagePaperWrapper)`
-  @media (max-width: 767px) {
+  @media ${deviceWidth.smallerThan.md} {
     button.unique-button {
       width: 100%;
     }
@@ -93,23 +93,23 @@ const TokensWrapper = styled.div`
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
   
-  @media(min-width: 1680px) {
+  @media ${deviceWidth.only.xxl} {
     grid-template-columns: repeat(6, 1fr);
   }  
   
-  @media(max-width: 1679px) {
+  @media ${deviceWidth.smallerThan.xxl} {
     grid-template-columns: repeat(4, 1fr);
   }
 
-   @media(max-width: 991px) {
+   @media ${deviceWidth.smallerThan.lg} {
     grid-template-columns: repeat(3, 1fr);
   }
   
-  @media(max-width: 575px) {
+  @media ${deviceWidth.smallerThan.sm} {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  @media(max-width: 479px) {
+  @media ${deviceWidth.smallerThan.xs} {
     grid-template-columns: 1fr;
   }
 `;

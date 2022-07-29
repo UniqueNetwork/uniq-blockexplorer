@@ -2,8 +2,8 @@ import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
-import { useApi } from '@app/hooks';
-import { getImageURL, timeDifference, validateUrl } from '@app/utils';
+import { useApi, useImageLoader } from '@app/hooks';
+import { getImageURL, timeDifference } from '@app/utils';
 import { Token } from '@app/api';
 
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -33,21 +33,21 @@ const TokenCard: FC<TokenCardProps> = ({
     }
   }, []);
 
-  const imageUrl = getImageURL(imagePath);
+  const imageUrl = useImageLoader(getImageURL(imagePath));
 
-  const isImgUrlValid = validateUrl(imageUrl);
+  // const isImgUrlValid = validateUrl(imageUrl);
 
   return (
     <TokenCardLink
       onClick={onNFTCardClick}
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
     >
-      {!isImgUrlValid && <TokenPicture
+      {!imageUrl && (<TokenPicture
         alt={tokenId.toString()}
         src={imageUrl}
-      />}
+      />)}
 
-      {isImgUrlValid && <TokenBackground imgUrl={imageUrl} />}
+      {imageUrl && <TokenBackground imgUrl={imageUrl} />}
       <TokenTitle>
         <Text
           color='primary-500'

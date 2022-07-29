@@ -5,4 +5,3 @@ export * from './textUtils';
 export * from './timestampUtils';
 export * from './tokenImage';
 export * from './addressMirroring';
-export * from './validateUrl';
