@@ -41,8 +41,6 @@ export const useGraphQlStatistics = ({ filter, offset, orderBy, pageSize }: UseG
     }
   });
 
-  console.log('collection', data, 'orderBy', orderBy, 'pageSize', pageSize);
-
   return {
     fetchStatisticsError,
     isStatisticsFetching,
