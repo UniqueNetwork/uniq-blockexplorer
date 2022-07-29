@@ -1,5 +1,5 @@
-import { gql, HttpLink, useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect, useRef } from 'react';
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
