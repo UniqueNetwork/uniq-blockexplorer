@@ -7,7 +7,6 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
-    "standard",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
@@ -50,7 +49,6 @@ module.exports = {
   },
   plugins: [
     "@typescript-eslint",
-    "header",
     "import",
     "import-newlines",
     "react-hooks",

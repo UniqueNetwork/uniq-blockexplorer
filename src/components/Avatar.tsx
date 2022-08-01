@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
-import type { AccountId, AccountIndex, Address } from '@polkadot/types/interfaces';
 
 interface AvatarProps {
   size: 'large' | 'middle' | 'small' | 'x-small'
   src?: string,
-  value?: AccountId | AccountIndex | Address | string | Uint8Array | null;
+  value?: string | Uint8Array | null;
   className?: string
 }
 
