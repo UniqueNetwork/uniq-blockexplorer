@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { Token, tokens as gqlTokens } from '@app/api';
-import { TokenCard, Search } from '@app/components';
+import { Search, TokenCard } from '@app/components';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
@@ -84,7 +84,6 @@ const ItemsCountWrapper = styled.div`
 `;
 
 const TokensWrapper = styled.div`
-
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-column-gap: calc(var(--gap) * 1.5);

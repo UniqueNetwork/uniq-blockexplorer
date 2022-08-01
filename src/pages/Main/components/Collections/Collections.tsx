@@ -25,7 +25,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(collectionsOptions[0]);
 
-  const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'asc' } : { actions_count: 'asc' }, [selectedSort.id]);
+  const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'desc' } : { actions_count: 'desc' }, [selectedSort.id]);
 
   const { collections, fetchMoreCollections, isCollectionsFetching, timestamp } = gqlCollections.useGraphQlCollections({ orderBy, pageSize });
   const linkUrl = `/${currentChain.network}/collections`;
