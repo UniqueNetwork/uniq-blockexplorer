@@ -1,5 +1,6 @@
 import { VFC } from 'react';
-import BaseIdentityIcon from '@polkadot/react-identicon';
+import Jdenticon from 'react-jdenticon';
+import styled from 'styled-components';
 import { useNotifications } from '@unique-nft/ui-kit';
 
 interface IdentityIconProps {
@@ -15,13 +16,8 @@ export const IdentityIcon: VFC<IdentityIconProps> = ({ address, className }) => 
   };
 
   return (
-    <BaseIdentityIcon
-      className={className}
-      onCopy={handleAddressCopy}
-      // prefix='2'
-      size={32}
-      theme='substrate'
-      value={address}
-    />
+    <div>
+      <Jdenticon size="48" value={address} />
+    </div>
   );
 };
