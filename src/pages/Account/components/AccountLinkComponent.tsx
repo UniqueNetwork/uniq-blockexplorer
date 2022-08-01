@@ -5,6 +5,7 @@ import { shortcutText } from '@app/utils';
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { IdentityIcon } from '@app/components';
 
 interface AccountLinkProps {
   value: string
@@ -45,6 +46,7 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
       onClick={onAccountClick}
       to={`/${currentChain?.network}/account/${value}`}
     >
+      <IdentityIcon address={value} />
       <Text
         color={'primary-600'}
         size={size}
