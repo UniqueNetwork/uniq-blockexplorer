@@ -4,11 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { Token, tokens as gqlTokens } from '@app/api';
-import { Search } from '@app/components';
+import { Search, TokenCard } from '@app/components';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
-import TokenCard from '@app/pages/Main/components/TokensBlock/TokenCard';
 
 interface TokensComponentProps {
   accountId: string

@@ -4,7 +4,7 @@ import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
-import { PagePaperWrapper } from '@app/components';
+import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
@@ -12,7 +12,6 @@ import { tokens as gqlTokens } from '@app/api/graphQL';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
-import TokenCard from './TokenCard';
 
 interface TokensProps {
   searchString?: string
