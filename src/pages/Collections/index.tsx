@@ -9,7 +9,7 @@ const CollectionsPage: FC = () => {
   return (<PagePaper>
     <SearchComponent
       onSearchChange={setSearchString}
-      placeholder={'Extrinsic / collection / account'}
+      placeholder={'Сollection / account'}
     />
     <div>
       <CollectionsComponent
