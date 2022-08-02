@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 import { useApi } from '@app/hooks';
 import { Table, PagePaperWrapper } from '@app/components';
+import { getTokenSymbols } from '@app/utils/getTokenSymbols';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
@@ -58,7 +59,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
       />
       <Table
         columns={getTransferColumns(
-          '',
+          getTokenSymbols(currentChain?.network),
           currentChain?.network
         )}
         data={transfersWithTimeDifference(transfers)}
