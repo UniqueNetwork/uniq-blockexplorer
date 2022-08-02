@@ -1,5 +1,7 @@
 import amplitude from 'amplitude-js';
 
 export const logUserEvents = (event: string) => {
-  amplitude.getInstance().logEvent(event);
+  if (process.env.NODE_ENV !== 'development') {
+    amplitude.getInstance().logEvent(event);
+  }
 };
