@@ -32,7 +32,7 @@ export const LastTransfersCardsList: VFC<MobileCardsListProps> = ({ columns, dat
         <LastTransfersCard
           columns={columns}
           item={item}
-          key={item.block_number}
+          key={item.block_index}
         />
       ))}
     </Wrapper>

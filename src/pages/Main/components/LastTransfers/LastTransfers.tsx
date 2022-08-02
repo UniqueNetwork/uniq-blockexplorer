@@ -50,8 +50,6 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
 
   if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
 
-  console.log('currentChain', currentChain);
-
   return (
     <Wrapper>
       <HeaderWithDropdown
