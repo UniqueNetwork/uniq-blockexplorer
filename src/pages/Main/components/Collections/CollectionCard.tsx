@@ -44,6 +44,8 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
       to={`/${currentChain.network}/collections/${collectionId}`}
     >
       <CollectionCover
+        collectionId={collectionId}
+        collectionName={name}
         coverSrc={collection_cover}
       />
       <CollectionInfo>
@@ -103,6 +105,7 @@ const CollectionCardLink = styled(Link)`
   height: 220px;
 
   &:hover {
+    transform: translate(0, -5px);
     text-decoration: none;
   }
 

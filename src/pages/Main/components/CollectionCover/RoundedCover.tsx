@@ -1,28 +1,32 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
+import { IdentityIcon } from '@app/components';
 
 interface RoundedCoverProps {
+  collectionId: number;
   color: string;
   coverSrc: string | undefined;
-  name?: string;
 }
 
-export const RoundedCover: VFC<RoundedCoverProps> = ({ color, coverSrc, name }) => {
-  return (
-    <Wrapper color={color}>
-      { coverSrc && (
-        <img
-          alt={`collection ${name ?? ''} cover`}
-          src={coverSrc}
-        />
-      )}
-    </Wrapper>
-  );
-};
+export const RoundedCover: VFC<RoundedCoverProps> = ({ collectionId, color, coverSrc }) => (
+  <Wrapper color={color}>
+    { coverSrc ? (
+      <img
+        alt={`collection ${collectionId ?? ''} cover`}
+        src={coverSrc}
+      />
+    ) : (
+      <IdentityIcon
+        address={`collection ${collectionId ?? ''} cover`}
+        size='84'
+      />
+    )}
+  </Wrapper>
+);
 
 const Wrapper = styled.div<{ color: string }>`
-  background-color: ${(props) => props.color};
-  border: 2px solid #FFFFFF;
+  background-color: white;
+  border: 2px solid ${(props) => props.color};
   box-sizing: border-box;
   border-radius: 48px;
   height: 88px;

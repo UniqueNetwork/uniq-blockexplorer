@@ -7,12 +7,13 @@ import { BlurredCover } from './BlurredCover';
 import { RoundedCover } from './RoundedCover';
 
 interface CollectionCoverProps {
+  collectionId: number;
   coverSrc?: string;
   collectionName?: string;
 }
 
 // TODO also use tokens[0].token_image https://cryptousetech.atlassian.net/browse/SCAN-303
-export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, coverSrc }) => {
+export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionId, coverSrc }) => {
   const imgSrc = useImageLoader(getCoverURLFromCollection(coverSrc));
   const color = useRandomColor();
   const collectionCoverColor = imgSrc ? 'transparent' : color;
@@ -26,9 +27,9 @@ export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionName, cov
         />
       </BlurredWrapper>
       <RoundedCover
+        collectionId={collectionId}
         color={collectionCoverColor}
         coverSrc={imgSrc}
-        name={collectionName}
       />
     </Wrapper>
   );
