@@ -9,8 +9,7 @@ export const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
     dataIndex: 'block_index',
     key: 'block_index',
     render: (value: string) => <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>,
-    title: 'Extrinsic',
-
+    title: 'Extrinsic ID',
     width: 100
   },
   { dataIndex: 'time_difference', key: 'age', title: 'Age', width: 100 },

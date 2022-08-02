@@ -12,30 +12,31 @@ const collectionsQuery = gql`
     ) {
       data {
         actions_count
-      collection_cover
-      collection_id
-      const_chain_schema
-      date_of_creation
-      description
-      holders_count
-      limits_account_ownership
-      limits_sponsore_data_rate
-      limits_sponsore_data_size
-      mint_mode
-      name
-      offchain_schema
-      owner
-      owner_normalized
-      owner_can_destroy
-      owner_can_transfer
-      schema_version
-      sponsorship
-      token_limit
-      token_prefix
-      tokens_count
-      type
+        collection_cover
+        collection_id
+        const_chain_schema
+        date_of_creation
+        description
+        holders_count
+        limits_account_ownership
+        limits_sponsore_data_rate
+        limits_sponsore_data_size
+        mint_mode
+        name
+        offchain_schema
+        owner
+        owner_normalized
+        owner_can_destroy
+        owner_can_transfer
+        schema_version
+        sponsorship
+        token_limit
+        token_prefix
+        tokens_count
+        type
       }
       count
+      timestamp
     }
   }
 `;
@@ -119,7 +120,8 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
     fetchCollectionsError,
     fetchMoreCollections,
     fetchOrderedCollections,
-    isCollectionsFetching
+    isCollectionsFetching,
+    timestamp: data?.collections?.timestamp || 0
   };
 };
 

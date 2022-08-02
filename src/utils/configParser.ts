@@ -59,7 +59,8 @@ export const getNetworkParams = (
     gqlEndpoint: findNetworkParamByName(config, network, 'API'),
     name: findNetworkParamByName(config, network, 'NAME'),
     network,
-    rpcEndpoint: findNetworkParamByName(config, network, 'RPC')
+    rpcEndpoint: findNetworkParamByName(config, network, 'RPC'),
+    symbol: findNetworkParamByName(config, network, 'SYMBOL')
   };
 
   return chain;

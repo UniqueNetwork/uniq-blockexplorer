@@ -5,9 +5,24 @@ import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
 import { useApi } from '@app/hooks';
 import { getChainBackground } from '@app/utils';
+import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
+import { Statistics } from '@app/api/graphQL/statistics/types';
 
 export const TokenInformation: VFC = () => {
   const { currentChain } = useApi();
+  const { statistics } = useGraphQlStatistics({ offset: 0, pageSize: 10 });
+  const statisticsMap: { [name: string]: number } = {};
+
+  statistics?.forEach((item: Statistics) => {
+    statisticsMap[item.name] = item.count;
+  });
+
+  const totalSupplyPercentage = statisticsMap.circulating_supply && statisticsMap.total_supply
+    ? (statisticsMap.circulating_supply * 100 / statisticsMap.total_supply).toFixed(1)
+    : 0;
+  const lockedSupplyPercentage = statisticsMap.locked_supply && statisticsMap.total_supply
+    ? (statisticsMap.locked_supply * 100 / statisticsMap.total_supply).toFixed(1)
+    : 0;
 
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
@@ -15,40 +30,44 @@ export const TokenInformation: VFC = () => {
         <TokenInfoHeader>Token information <Small>All time</Small></TokenInfoHeader>
         <Body>
           <div>
-            <BigAmount>11,847</BigAmount>
+            <BigAmount>{statisticsMap.holders}</BigAmount>
             <P>Holders</P>
           </div>
           <div>
-            <BigAmount>806,998М</BigAmount>
+            <BigAmount>{statisticsMap.total_supply}</BigAmount>
             <P>Total supply</P>
           </div>
-          <div>
-            <BigAmount>22,9% <Small>(239,707M)</Small></BigAmount>
-            <P>Circulating supply</P>
-          </div>
-          <div>
-            <BigAmount>77,1% <Small>(807,757M)</Small></BigAmount>
-            <P>Locked supply</P>
-          </div>
+          { !!totalSupplyPercentage && (
+            <div>
+              <BigAmount>{totalSupplyPercentage}% <Small>({ statisticsMap.circulating_supply })</Small></BigAmount>
+              <P>Circulating supply</P>
+            </div>
+          )}
+          { !!lockedSupplyPercentage && (
+            <div>
+              <BigAmount>{lockedSupplyPercentage}% <Small>({ statisticsMap.locked_supply })</Small></BigAmount>
+              <P>Locked supply</P>
+            </div>
+          )}
         </Body>
       </TokenInfo>
       <TokenInfo>
         <TokenInfoHeader>Statistics <Small>All time</Small></TokenInfoHeader>
         <Body>
           <div>
-            <BigLinkAmount>949,768</BigLinkAmount>
+            <BigLinkAmount>{statisticsMap?.blocks}</BigLinkAmount>
             <P>Blocks</P>
           </div>
           <div>
-            <BigLinkAmount>26,025</BigLinkAmount>
+            <BigLinkAmount>{statisticsMap?.transfers}</BigLinkAmount>
             <P>Transfers</P>
           </div>
           <div>
-            <BigLinkAmount>949,097</BigLinkAmount>
+            <BigLinkAmount>{statisticsMap?.tokens}</BigLinkAmount>
             <P>NFTs</P>
           </div>
           <div>
-            <BigLinkAmount>310</BigLinkAmount>
+            <BigLinkAmount>{statisticsMap?.collections}</BigLinkAmount>
             <P>Collections</P>
           </div>
         </Body>

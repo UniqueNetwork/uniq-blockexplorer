@@ -7,6 +7,7 @@ export type Chain = {
   name: string;
   gqlEndpoint: string;
   rpcEndpoint: string;
+  symbol: string;
 }
 
 export type ApiContextProps = {

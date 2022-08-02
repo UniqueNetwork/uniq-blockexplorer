@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 import { useApi } from '@app/hooks';
 import { Table, PagePaperWrapper } from '@app/components';
-import { getTokenSymbols } from '@app/utils/getTokenSymbols';
+import { Desktop, Mobile } from '@app/styles/styled-components';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
@@ -13,6 +13,7 @@ import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { lastTransferOptions } from './lastTransferOptions';
 
 import { transfers as gqlTransfers } from '../../../../api/graphQL';
+import { LastTransfersCardsList } from './LastTransfersCardsList';
 
 export type LastTransfersProps = {
   searchString?: string
@@ -49,6 +50,8 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
 
   if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
 
+  console.log('currentChain', currentChain);
+
   return (
     <Wrapper>
       <HeaderWithDropdown
@@ -57,15 +60,27 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
         setSelectedSort={setSelectedSort}
         title='Last transfers'
       />
-      <Table
-        columns={getTransferColumns(
-          getTokenSymbols(currentChain?.network),
-          currentChain?.network
-        )}
-        data={transfersWithTimeDifference(transfers)}
-        loading={isTransfersFetching}
-        rowKey='block_index'
-      />
+      <Desktop>
+        <Table
+          columns={getTransferColumns(
+            currentChain?.symbol,
+            currentChain?.network
+          )}
+          data={transfersWithTimeDifference(transfers)}
+          loading={isTransfersFetching}
+          rowKey='block_index'
+        />
+      </Desktop>
+      <Mobile>
+        <LastTransfersCardsList
+          columns={getTransferColumns(
+            currentChain?.symbol,
+            currentChain?.network
+          )}
+          data={transfersWithTimeDifference(transfers)}
+          loading={isTransfersFetching}
+        />
+      </Mobile>
       <Button
         iconRight={{
           color: '#fff',

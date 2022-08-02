@@ -1,4 +1,5 @@
 export { default as Avatar } from './Avatar';
+export * from './IdentityIcon';
 export { default as LoadingComponent } from './LoadingComponent';
 export { default as Pagination } from './Pagination';
 export { default as Picture } from './Picture';
