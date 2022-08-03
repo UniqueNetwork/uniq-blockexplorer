@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { PagePaperWrapper, TokenCard } from '@app/components';
@@ -33,9 +33,18 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
+    const linkUrl = `/${currentChain.network}/tokens`;
+    const navigateTo: {pathname: string, search?: string} = {pathname: linkUrl};
+
+    if(searchString){
+      const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
+
+      navigateTo.search = searchParams;
+    }
+
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_MAIN_PAGE);
-    navigate(`/${currentChain.network}/tokens`);
-  }, [currentChain, navigate]);
+    navigate(navigateTo);
+  }, [currentChain, navigate, searchString]);
 
   const { isTokensFetching, timestamp, tokens } = gqlTokens.useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
