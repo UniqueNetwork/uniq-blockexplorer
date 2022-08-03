@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { PagePaperWrapper } from '@app/components';
-import { collections as gqlCollections, CollectionSorting } from '@app/api/graphQL';
+import { collections as gqlCollections, CollectionSorting, tokens as gqlTokens } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
@@ -28,6 +28,23 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'desc' } : { actions_count: 'desc' }, [selectedSort.id]);
 
   const { collections, fetchMoreCollections, isCollectionsFetching, timestamp } = gqlCollections.useGraphQlCollections({ orderBy, pageSize });
+  const collectionIds = collections?.map((collection) =>  collection.collection_id);
+  const { tokens } = gqlTokens.useGraphQlTokens({
+    filter: {
+      _and: [
+        { collection_id: { _in: collectionIds } },
+        { token_id: { _eq: 1 } }
+      ]
+    },
+    offset: 0,
+    pageSize
+  });
+
+  const collectionsWithTokenCover = collections?.map((collection) => ({
+    ...collection,
+    collection_cover: collection.collection_cover || tokens?.find((token) => token.collection_id === collection.collection_id)?.image_path || ''
+  }));
+
   const linkUrl = `/${currentChain.network}/collections`;
 
   const onClick = useCallback(() => {
@@ -57,7 +74,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
       />
       <CollectionsList>
         {isCollectionsFetching && <LoadingComponent />}
-        {collections.map((collection) => (
+        {collectionsWithTokenCover.map((collection) => (
           <CollectionCard
             key={`collection-${collection.collection_id}`}
             timestamp={timestamp}

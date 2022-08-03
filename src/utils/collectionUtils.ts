@@ -11,5 +11,11 @@ export const getCoverURLFromCollection = (collectionCover: string | undefined) =
     return collectionCover;
   }
 
+  try {
+    JSON.parse(collectionCover).ipfs;
+  } catch (e) {
+    //
+  }
+
   return `${IPFSGateway}/${collectionCover}`;
 };

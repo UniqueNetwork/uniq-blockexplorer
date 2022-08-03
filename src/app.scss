@@ -5,6 +5,11 @@ body {
   font-family: Inter;
 }
 
+.notification-alert {
+  position: fixed;
+  top: var(--gap);
+}
+
 .app-wrapper {
   background: var(--bg-page);
   box-sizing: border-box;
