@@ -20,9 +20,6 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
   const navigate = useNavigate();
 
   const onSearch = useCallback(() => {
-    if (!searchString) {
-      return;
-    }
 
     // user analytics
     const path = window.location.pathname;
@@ -38,7 +35,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
     }
 
     // ethers address or substrate address
-    if ((/0x[0-9A-Fa-f]{40}/g).test(searchString) || (/^\w{48}\w*$/.test(searchString || ''))) {
+    if ((/0x[0-9A-Fa-f]{40}/g).test(searchString || '') || (/^\w{48}\w*$/.test(searchString || ''))) {
       navigate(`/${currentChain.network}/account/${searchString || ''}`);
 
       return;
@@ -50,7 +47,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
       return;
     }
 
-    onSearchChange(searchString.trim());
+    onSearchChange(searchString ? searchString.trim() : searchString);
   }, [currentChain.network, navigate, onSearchChange, searchString]);
 
   const onSearchKeyDown = useCallback(

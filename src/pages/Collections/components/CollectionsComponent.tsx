@@ -11,13 +11,13 @@ import { useSearchParams } from 'react-router-dom';
 
 const CollectionsComponent = ({
   pageSize = 20,
-  orderBy: defaultOrderBy = { date_of_creation: 'desc' },
-  searchString
+  orderBy: defaultOrderBy = { date_of_creation: 'desc' }
 }: CollectionsComponentProps) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
 
   const [queryParams] = useSearchParams();
+  const searchString = queryParams.get('search') || '';
 
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);

@@ -2,7 +2,7 @@ import { Icon, Select } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Token, tokens as gqlTokens, TokenSorting } from '@app/api';
 import { Pagination, Search, Table } from '@app/components';
@@ -43,12 +43,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
-
+  const [queryParams, setQueryParams] = useSearchParams();
+  const searchString = queryParams.get('search') || '';
   const { accountId, collectionId } = useParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchString, setSearchString] = useState<string | undefined>('');
   const [selectOption, setSelectOption] = useState<SelectOptionProps>();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const {
@@ -97,6 +97,16 @@ const TokensComponent: FC<TokensComponentProps> = ({
     [setView]
   );
 
+  const onSearchChange = (value: string)=>{
+    if (!value) {
+      queryParams.delete('search');
+    } else {
+      queryParams.set('search', value);
+    }
+
+    setQueryParams(queryParams);
+  };
+
   const tokenColumns = useMemo(() => {
     return getTokensColumns(currentChain.network, orderBy, setOrderBy);
   }, [currentChain.network, orderBy]);
@@ -112,7 +122,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
     <>
       <TopBar>
         <Search
-          onSearchChange={setSearchString}
+          onSearchChange={onSearchChange}
           placeholder={'NFT / collection'}
         />
         <Controls>

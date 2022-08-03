@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
 import { useApi } from '@app/hooks';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { PagePaperWrapper } from '@app/components';
@@ -28,6 +28,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'desc' } : { actions_count: 'desc' }, [selectedSort.id]);
 
   const { collections, fetchMoreCollections, isCollectionsFetching, timestamp } = gqlCollections.useGraphQlCollections({ orderBy, pageSize });
+ 
   const collectionIds = collections?.map((collection) =>  collection.collection_id);
   const { tokens } = gqlTokens.useGraphQlTokens({
     filter: {
@@ -45,12 +46,19 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     collection_cover: collection.collection_cover || tokens?.find((token) => token.collection_id === collection.collection_id)?.image_path || ''
   }));
 
-  const linkUrl = `/${currentChain.network}/collections`;
-
   const onClick = useCallback(() => {
+    const linkUrl = `/${currentChain.network}/collections`;
+    const navigateTo: {pathname: string, search?: string} = {pathname: linkUrl};
+
+    if(searchString){
+      const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
+
+      navigateTo.search = searchParams;
+    }
+
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
-    navigate(linkUrl);
-  }, [linkUrl, navigate]);
+    navigate(navigateTo);
+  }, [ currentChain, navigate, searchString]);
 
   useEffect(() => {
     if (searchString === undefined) {
