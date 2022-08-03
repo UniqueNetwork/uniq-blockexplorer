@@ -43,13 +43,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
-  const [queryParams] = useSearchParams();
-  const searchParams = queryParams.get('search');
+  const [queryParams, setQueryParams] = useSearchParams();
+  const searchString = queryParams.get('search') || '';
   const { accountId, collectionId } = useParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchString, setSearchString] = useState<string | undefined>(searchParams || '');
   const [selectOption, setSelectOption] = useState<SelectOptionProps>();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const {
@@ -98,6 +97,16 @@ const TokensComponent: FC<TokensComponentProps> = ({
     [setView]
   );
 
+  const onSearchChange = (value: string)=>{
+    if (!value) {
+      queryParams.delete('search');
+    } else {
+      queryParams.set('search', value);
+    }
+
+    setQueryParams(queryParams);
+  };
+
   const tokenColumns = useMemo(() => {
     return getTokensColumns(currentChain.network, orderBy, setOrderBy);
   }, [currentChain.network, orderBy]);
@@ -113,7 +122,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
     <>
       <TopBar>
         <Search
-          onSearchChange={setSearchString}
+          onSearchChange={onSearchChange}
           placeholder={'NFT / collection'}
         />
         <Controls>
