@@ -45,7 +45,7 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
 
   return (
     <Wrapper>
-      <IdentityIcon address={value} />
+      <IdentityIcon address={value} copyable />
       <Link
         onClick={onAccountClick}
         to={`/${currentChain?.network}/account/${value}`}

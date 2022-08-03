@@ -18,7 +18,6 @@ const TokenCard: FC<TokenCardProps> = ({
   collection_name: name,
   date_of_creation: dateOfCreation,
   image_path: imagePath,
-  owner,
   timeNow,
   token_id: tokenId,
   token_prefix: prefix
