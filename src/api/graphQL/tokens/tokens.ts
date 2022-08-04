@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
@@ -44,7 +44,7 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
-  const getWhere = useCallback(
+  const getWhere = (
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
         ...(filter || {}),
@@ -58,9 +58,9 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
           }
           : {})
       }
-    }),
-    []
-  );
+    }));
+
+  const where = getWhere(filter, searchString);
 
   const {
     data,
@@ -75,20 +75,22 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
       limit: pageSize,
       offset,
       orderBy,
-      where: getWhere(filter, searchString)
+      where,
     }
   });
 
-  return {
+  return useMemo(() => ({
     fetchTokensError,
     isTokensFetching,
     timestamp: data?.tokens?.timestamp,
     tokens: data?.tokens?.data,
     tokensCount: data?.tokens?.count || 0
-  };
+  }), [data?.tokens?.count, data?.tokens?.data, data?.tokens?.timestamp, fetchTokensError, isTokensFetching]);
 };
 
 export const useGraphQlToken = (collectionId: number, tokenId: number) => {
+  const where = { collection_id: { _eq: collectionId }, token_id: { _eq: tokenId } };
+
   const {
     data,
     error: fetchTokensError,
@@ -99,7 +101,7 @@ export const useGraphQlToken = (collectionId: number, tokenId: number) => {
     variables: {
       limit: 1,
       offset: 0,
-      where: { collection_id: { _eq: collectionId }, token_id: { _eq: tokenId } }
+      where
     }
   });
 

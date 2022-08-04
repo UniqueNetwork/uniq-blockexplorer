@@ -8,7 +8,7 @@ import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
-import { tokens as gqlTokens } from '@app/api/graphQL';
+import { useGraphQlTokens } from '@app/api/graphQL';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
@@ -46,8 +46,10 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     navigate(navigateTo);
   }, [currentChain, navigate, searchString]);
 
-  const { isTokensFetching, timestamp, tokens } = gqlTokens.useGraphQlTokens({
-    filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
+  const filter = collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined;
+
+  const { isTokensFetching, timestamp, tokens } = useGraphQlTokens({
+    filter,
     offset: 0,
     orderBy: { collection_id: 'desc', token_id: 'desc' },
     pageSize: tokensLimit,

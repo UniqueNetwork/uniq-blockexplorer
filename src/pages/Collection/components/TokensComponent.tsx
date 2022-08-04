@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button, Heading, Text } from '@unique-nft/ui-kit';
 
-import { tokens as gqlTokens } from '@app/api';
+import { useGraphQlTokens } from '@app/api';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { LoadingComponent, TokenCard } from '@app/components';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -21,7 +21,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
 
   const deviceSize = useDeviceSize();
 
-  const { isTokensFetching, tokens, tokensCount } = gqlTokens.useGraphQlTokens({
+  const { isTokensFetching, tokens, tokensCount } = useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
     offset: 0,
     pageSize

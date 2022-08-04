@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
-import { Token, tokens as gqlTokens } from '@app/api';
+import { Token, useGraphQlTokens } from '@app/api';
 import { Search, TokenCard } from '@app/components';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
@@ -28,7 +28,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
     substrateAddress = substrateMirror;
   }
 
-  const { tokens, tokensCount } = gqlTokens.useGraphQlTokens({ filter: {
+  const { tokens, tokensCount } = useGraphQlTokens({ filter: {
     _or: [
       { owner: { _eq: accountId } },
       { owner_normalized: { _eq: normalizeSubstrate(substrateAddress) } }
