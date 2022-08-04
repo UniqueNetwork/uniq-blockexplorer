@@ -7,7 +7,7 @@ import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 
 import AccountDetailComponent from './components/AccountDetailComponent';
-import LastTransfersComponent from '../Main/components/LastTransfersComponent';
+import { LastTransfers } from '../Main/components/LastTransfers/LastTransfers';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
@@ -65,7 +65,7 @@ const AccountPage = () => {
           />
         </Tabs>
       </AssetsWrapper>
-      <LastTransfersComponent
+      <LastTransfers
         accountId={substrateAddress}
         pageSize={10}
       />
