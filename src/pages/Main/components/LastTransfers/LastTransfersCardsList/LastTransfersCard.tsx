@@ -1,7 +1,8 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 import styled from 'styled-components';
 import { ColumnType } from 'rc-table/lib/interface';
 import { TransferWithTimeDif } from '@app/api';
+import { deviceWidth } from '@app/hooks';
 
 interface MobileCardProps {
   columns: ColumnType<TransferWithTimeDif>[];
@@ -31,7 +32,7 @@ export const LastTransfersCard: VFC<MobileCardProps> = ({ columns, item }) => {
         </CardRow>
         <CardRow>
           <div>{columns[4].title}</div>
-          <div>{columns[4]?.render ? columns[4]?.render(item.to_owner, item, 4) : item.to_owner}</div>
+          <div>{columns[4]?.render ? columns[4]?.render(item.amount, item, 4) : item.amount}</div>
         </CardRow>
       </CardBody>
     </Wrapper>
@@ -62,7 +63,7 @@ const Wrapper = styled.div`
 const FlexBaseline = styled.div`
   display: flex;
   grid-column-gap: var(--gap);
-  align-items: baseline;
+  align-items: center;
 `;
 
 const CardLeft = styled(FlexBaseline)`
@@ -87,13 +88,23 @@ const CardBody = styled.div`
   grid-column-gap: var(--gap);
   align-items: baseline;
   justify-content: space-between;
+
+   @media ${deviceWidth.smallerThan.xs} {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const CardRight = styled.div`
-  font-weight: 500;
+  font-weight: 400;
   font-size: 14px;
   line-height: 22px;
   color: var(--dark);
 `;
 
-const CardRow = styled(FlexBaseline)``;
+const CardRow = styled(FlexBaseline)`
+  span {
+  font-size: 14px !important;
+  line-height: 22px !important;
+  }
+`;

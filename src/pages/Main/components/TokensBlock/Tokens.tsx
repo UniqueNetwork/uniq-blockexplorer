@@ -55,6 +55,8 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     pageSize: tokensLimit,
     searchString
   });
+  
+  if (!tokens?.length) return null;
 
   return (
     <Wrapper>

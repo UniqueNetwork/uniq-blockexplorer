@@ -74,6 +74,8 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     });
   }, [searchString, fetchMoreCollections, orderBy]);
 
+  if (!collections.length) return null;
+
   return (
     <Wrapper>
       <HeaderWithDropdown
