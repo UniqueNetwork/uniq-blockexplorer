@@ -7,10 +7,6 @@ export const useImageLoader = (imageSrc: string | undefined) => {
     let isMounted = true;
 
     if (imageSrc) {
-      if (!imageSrc) {
-        return;
-      }
-
       const image = new Image();
 
       image.onload = () => isMounted && setImgSrc(imageSrc);
