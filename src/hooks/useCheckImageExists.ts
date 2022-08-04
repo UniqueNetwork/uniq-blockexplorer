@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useImageLoader = (imageSrc: string | undefined) => {
+export const useCheckImageExists = (imageSrc: string | undefined) => {
   const [imgSrc, setImgSrc] = useState<string>();
 
   useEffect(() => {
