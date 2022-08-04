@@ -17,6 +17,17 @@ const Header: FC = () => {
 
   const navigate = useNavigate();
 
+  const onLogoClick = useCallback(
+    () => {
+      const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
+
+      if (onTheMainPage) {
+        window.location.reload();
+      }
+    },
+    [currentChain?.network]
+  );
+
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
       if (option) {
@@ -42,7 +53,10 @@ const Header: FC = () => {
     <>
       <HeaderWrapper>
         <HeaderNavWrapper>
-          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
+          <Link
+            onClick={onLogoClick}
+            to={`/${currentChain ? currentChain?.network + '/' : ''}`}
+          >
             <Logo
               alt='Logo'
               src='/logos/logo_product.svg'
