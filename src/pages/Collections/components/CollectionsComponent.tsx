@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
 import { useApi } from '@app/hooks';
+import { CollectionSorting, useGraphQlCollections } from '@app/api';
 
 import { CollectionsComponentProps } from '../types';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
 import { getCollectionsColumns } from './collectionsColumnsSchema';
-import { collections as gqlCollections, CollectionSorting } from '../../../api/graphQL';
-import { useSearchParams } from 'react-router-dom';
+
 
 const CollectionsComponent = ({
   pageSize = 20,
@@ -42,7 +44,7 @@ const CollectionsComponent = ({
     collectionsCount,
     fetchMoreCollections,
     isCollectionsFetching
-  } = gqlCollections.useGraphQlCollections({ filter, orderBy: defaultOrderBy, pageSize });
+  } = useGraphQlCollections({ filter, orderBy: defaultOrderBy, pageSize });
 
   useEffect(() => {
     const offset = (currentPage - 1) * pageSize;

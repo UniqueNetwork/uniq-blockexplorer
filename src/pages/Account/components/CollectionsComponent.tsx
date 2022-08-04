@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { useApi } from '@app/hooks';
+import { Collection, useGraphQlCollections } from '@app/api/graphQL';
 
-import { Collection, collections as gqlCollection } from '../../../api/graphQL';
 import CollectionCard from '../../../components/CollectionCard';
 import SearchComponent from '../../../components/SearchComponent';
 
@@ -20,7 +20,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const navigate = useNavigate();
 
   const { collections, collectionsCount, fetchMoreCollections } =
-    gqlCollection.useGraphQlCollections({
+    useGraphQlCollections({
       filter: {
         _or: [
           { owner: { _eq: accountId } },

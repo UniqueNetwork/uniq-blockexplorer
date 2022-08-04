@@ -34,8 +34,6 @@ const TokenCard: FC<TokenCardProps> = ({
 
   const imageUrl = useImageLoader(getImageURL(imagePath));
 
-  // const isImgUrlValid = validateUrl(imageUrl);
-
   return (
     <TokenCardLink
       onClick={onNFTCardClick}

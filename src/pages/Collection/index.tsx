@@ -1,23 +1,25 @@
 import { Heading, Tabs } from '@unique-nft/ui-kit';
 import { FC, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
+import { useGraphQlCollection } from '@app/api';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+
 import Avatar from '../../components/Avatar';
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
-import { collections as gqlCollections, tokens as gqlTokens } from '../../api/graphQL/';
-import { useParams } from 'react-router-dom';
 import HoldersComponent from './components/HoldersComponent';
 import PagePaper from '../../components/PagePaper';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 
 const detailTabs = ['Basic data', 'Extended'];
 
 const CollectionPage: FC = () => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
   const { collectionId } = useParams<{ collectionId: string }>();
-  const { collection } = gqlCollections.useGraphQlCollection(Number(collectionId));
+  const { collection } = useGraphQlCollection(Number(collectionId));
 
   // user analytics
   useEffect(() => {
@@ -46,11 +48,11 @@ const CollectionPage: FC = () => {
         <CollectionBasicDataComponent
           collection={collection}
           collectionId={collectionId || ''}
-          key={'collections'}
+          key='collections'
         />
         <CollectionExtendedDataComponent
           collection={collection}
-          key={'tokens'}
+          key='tokens'
         />
       </Tabs>
     </PagePaper>
@@ -62,21 +64,6 @@ const CollectionPage: FC = () => {
           key={'holder'}
         />
       </HoldersWrapper>
-      {/* <Tabs */}
-      {/*  activeIndex={activeEventsTabIndex} */}
-      {/*  labels={eventsTabs} */}
-      {/*  onClick={setActiveEventsTabIndex} */}
-      {/* /> */}
-      {/* <Tabs */}
-      {/*  activeIndex={activeEventsTabIndex} */}
-      {/* > */}
-      {/* <TokenEventsComponent */}
-      {/*  key={'tokens-events'} */}
-      {/* /> */}
-      {/* <CollectionEventsComponent */}
-      {/*  key={'collection-events'} */}
-      {/* /> */}
-      {/* </Tabs> */}
     </PagePaper>}
   </>
   );

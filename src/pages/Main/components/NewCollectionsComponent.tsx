@@ -1,10 +1,11 @@
 import React, { FC, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
 import { Button } from '@unique-nft/ui-kit';
 import { useApi } from '@app/hooks';
+import { useGraphQlCollections } from '@app/api';
 
-import { collections as gqlCollections } from '../../../api/graphQL';
 import LoadingComponent from '../../../components/LoadingComponent';
 import CollectionCard from '../../../components/CollectionCard';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -19,7 +20,7 @@ const NewCollectionsComponent: FC<NewCollectionsComponentProps> = ({ pageSize = 
   const { currentChain } = useApi();
   const navigate = useNavigate();
 
-  const { collections, fetchMoreCollections, isCollectionsFetching } = gqlCollections.useGraphQlCollections({ orderBy: { collection_id: 'desc' }, pageSize });
+  const { collections, fetchMoreCollections, isCollectionsFetching } = useGraphQlCollections({ orderBy: { collection_id: 'desc' }, pageSize });
 
   const onClick = useCallback(() => {
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);

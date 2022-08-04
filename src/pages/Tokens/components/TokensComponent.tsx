@@ -4,7 +4,7 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Token, tokens as gqlTokens, TokenSorting } from '@app/api';
+import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
 import { Pagination, Search, Table } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 
@@ -56,7 +56,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
     timestamp,
     tokens,
     tokensCount
-  } = gqlTokens.useGraphQlTokens({
+  } = useGraphQlTokens({
     filter: filter({ accountId, collectionId }),
     offset: (currentPage - 1) * pageSize,
     orderBy,

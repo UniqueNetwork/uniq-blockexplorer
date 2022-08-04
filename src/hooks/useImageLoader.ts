@@ -1,30 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useImageLoader = (imageSrc: string | undefined) => {
   const [imgSrc, setImgSrc] = useState<string>();
 
-  const checkImageBeforeLoad = useCallback(
-    (url: string) => {
+  useEffect(() => {
+    let isMounted = true;
+
+    if (imageSrc) {
       if (!imageSrc) {
         return;
       }
 
       const image = new Image();
 
-      image.onload = () => {
-        setImgSrc(imageSrc);
-      };
+      image.onload = () => isMounted && setImgSrc(imageSrc);
 
-      image.src = url;
-    },
-    [imageSrc]
-  );
-
-  useEffect(() => {
-    if (imageSrc) {
-      checkImageBeforeLoad(imageSrc);
+      image.src = imageSrc;
     }
-  }, [checkImageBeforeLoad, imageSrc]);
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [imageSrc]);
 
   return imgSrc;
 };

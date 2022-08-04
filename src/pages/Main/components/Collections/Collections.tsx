@@ -5,7 +5,7 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { PagePaperWrapper } from '@app/components';
-import { collections as gqlCollections, CollectionSorting, tokens as gqlTokens } from '@app/api/graphQL';
+import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
@@ -27,16 +27,18 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
 
   const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'desc' } : { actions_count: 'desc' }, [selectedSort.id]);
 
-  const { collections, fetchMoreCollections, isCollectionsFetching, timestamp } = gqlCollections.useGraphQlCollections({ orderBy, pageSize });
+  const { collections, fetchMoreCollections, isCollectionsFetching, timestamp } = useGraphQlCollections({ orderBy, pageSize });
  
   const collectionIds = collections?.map((collection) =>  collection.collection_id);
-  const { tokens } = gqlTokens.useGraphQlTokens({
-    filter: {
-      _and: [
-        { collection_id: { _in: collectionIds } },
-        { token_id: { _eq: 1 } }
-      ]
-    },
+  const filter = {
+    _and: [
+      { collection_id: { _in: collectionIds } },
+      { token_id: { _eq: 1 } }
+    ]
+  };
+
+  const { tokens } = useGraphQlTokens({
+    filter,
     offset: 0,
     pageSize
   });
