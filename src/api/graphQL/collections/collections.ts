@@ -41,9 +41,7 @@ const collectionsQuery = gql`
   }
 `;
 
-export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlCollectionsProps) => {
-  const client = useApolloClient();
-
+export const useGraphQlCollections = ({ filter, orderBy, pageSize, searchString }: useGraphQlCollectionsProps) => {
   const getWhere = useCallback(
     (_filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
@@ -68,9 +66,7 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
   const {
     data,
     error: fetchCollectionsError,
-    fetchMore,
     loading: isCollectionsFetching,
-    refetch
   } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -80,46 +76,15 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize }: useGraphQlC
       limit: pageSize,
       offset: 0,
       orderBy,
-      where: getWhere(filter)
+      where: getWhere(filter, searchString)
     }
   });
 
-  const fetchMoreCollections = useCallback(
-    ({ limit = pageSize, offset, searchString, orderBy, filter }: FetchMoreCollectionsOptions) => {
-      return fetchMore({
-        variables: {
-          limit,
-          offset,
-          orderBy,
-          where: getWhere(filter, searchString)
-        }
-      });
-    },
-    [fetchMore, getWhere, pageSize]
-  );
-
-  const fetchOrderedCollections = useCallback(
-    ({ orderBy }: FetchMoreCollectionsOptions) => {
-      return refetch({
-        orderBy
-      });
-    },
-    [refetch]
-  );
-
-  useEffect(() => {
-    fetchMore({})
-      .catch((errMsg) => {
-        throw new Error(errMsg);
-      });
-  }, [client.link, fetchMore]);
 
   return {
     collections: data?.collections?.data || [],
     collectionsCount: data?.collections?.count || 0,
     fetchCollectionsError,
-    fetchMoreCollections,
-    fetchOrderedCollections,
     isCollectionsFetching,
     timestamp: data?.collections?.timestamp || 0
   };

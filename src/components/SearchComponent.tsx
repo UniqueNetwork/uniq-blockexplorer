@@ -1,8 +1,8 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
 import { FC, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-import { useApi } from '../hooks/useApi';
+import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
@@ -14,21 +14,18 @@ interface SearchComponentProps {
 
 const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder, value }) => {
   const [searchString, setSearchString] = useState<string | undefined>(value);
+  const { pathname } = useLocation();
 
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
 
   const onSearch = useCallback(() => {
-
-    // user analytics
-    const path = window.location.pathname;
-
-    if (path.includes('tokens')) {
+    if (pathname.includes('tokens')) {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_NFTS_PAGE);
-    } else if (path.includes('collections')) {
+    } else if (pathname.includes('collections')) {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_COLLECTIONS_PAGE);
-    } else if (path.includes('account')) {
+    } else if (pathname.includes('account')) {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_ACCOUNT_PAGE);
     } else {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_MAIN_PAGE);
@@ -48,7 +45,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
     }
 
     onSearchChange(searchString ? searchString.trim() : searchString);
-  }, [currentChain.network, navigate, onSearchChange, searchString]);
+  }, [currentChain.network, navigate, onSearchChange, pathname, searchString]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {

@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
@@ -18,8 +18,10 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
+  // TODO - fix search for all pages and remove this
+  const [searchString, setSearchString] = useState<string | undefined>();
 
-  const { collections, collectionsCount, fetchMoreCollections } =
+  const { collections, collectionsCount } =
     useGraphQlCollections({
       filter: {
         _or: [
@@ -27,29 +29,18 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
           { owner_normalized: { _eq: accountId } }
         ]
       },
-      pageSize
-    });
-
-  const onClickSeeMore = useCallback(() => {
-    navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
-  }, [currentChain.network, navigate, accountId]);
-
-  const onSearch = useCallback((searchString: string) => {
-    void fetchMoreCollections({
-      filter: {
-        _or: [
-          { owner: { _eq: accountId } },
-          { owner_normalized: { _eq: accountId } }
-        ]
-      },
+      pageSize,
       searchString
     });
-  }, [accountId, fetchMoreCollections]);
+
+  const onClickSeeMore = () => {
+    navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
+  };
 
   return (<>
     <ControlsWrapper>
       <SearchComponent
-        onSearchChange={onSearch}
+        onSearchChange={setSearchString}
         placeholder={'NFT / collection'}
       />
     </ControlsWrapper>

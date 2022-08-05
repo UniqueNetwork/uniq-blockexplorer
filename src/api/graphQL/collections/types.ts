@@ -64,6 +64,7 @@ export type useGraphQlCollectionsProps = {
   pageSize: number
   orderBy?: CollectionSorting
   filter?: Record<string, unknown>
+  searchString?: string;
 }
 
 export type FetchMoreCollectionsOptions = {
