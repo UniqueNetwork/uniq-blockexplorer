@@ -12,7 +12,13 @@ export const getCoverURLFromCollection = (collectionCover: string | undefined) =
   }
 
   try {
-    JSON.parse(collectionCover).ipfs;
+    const cover = JSON.parse(collectionCover).ipfs as string;
+
+    if (cover.startsWith('http')) {
+      return cover;
+    }
+
+    return `${IPFSGateway}/${cover}`;
   } catch (e) {
     //
   }

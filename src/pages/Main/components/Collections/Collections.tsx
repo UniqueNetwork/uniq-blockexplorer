@@ -18,7 +18,7 @@ interface CollectionsProps {
   searchString?: string
 }
 
-const pageSize = 6;
+const pageSize = 20;
 
 export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const { currentChain } = useApi();
