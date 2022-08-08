@@ -24,12 +24,39 @@ const tokensQuery = gql`
   }
 `;
 
+const parseSearchString = (searchString: string): { num?: number, str?: string } => {
+  let num, str;
+  const querys = searchString.split(' ');
+
+  querys.map((query) => {
+
+    let param = query;
+
+    // if first symbol is '#', trim it
+    if (query.charCodeAt(0) === 35) {
+      param = query.substr(1);
+    }
+
+    if (query === '') {
+      return;
+    }
+
+    if (isNaN(parseInt(param))) {
+      str = param;
+    } else if (typeof parseInt(param) === 'number') {
+      num = parseInt(param);
+    }
+  });
+
+  return { num, str };
+};
+
 const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return [
-    { token_prefix: { _ilike: `%${searchString}%` } },
-    ...(Number(searchString) ? [{ token_id: { _eq: Number(searchString) } }] : []),
-    { collection_name: { _ilike: `%${searchString}%` } },
-    ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
+    { token_prefix: { _ilike: `%${parseSearchString(searchString).str || searchString}%` } },
+    ...(parseSearchString(searchString).num ? [{ token_id: { _eq: parseSearchString(searchString).num || Number(searchString) } }] : []),
+    { collection_name: { _ilike: `%${parseSearchString(searchString).str || searchString}%` } },
+    ...(parseSearchString(searchString).num ? [{ collection_id: { _eq: parseSearchString(searchString).num || Number(searchString) } }] : [])
   ];
 };
 
@@ -40,18 +67,30 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return splitSearch
     .map((searchPart: string) => Number(searchPart.trim()))
     .filter((id: number) => Number.isInteger(id))
-    .map((searchPart: number) => ({ collection_id: { _eq: Number(searchPart) } }));
+    .map((searchPart: number) => ({ token_id: { _eq: parseSearchString(searchPart.toString()).num || Number(searchPart) } }));
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
+  if (searchString) {
+    parseSearchString(searchString);
+  }
+
+  // if searchString contain number and text
+  const searchByTokenPrefixAndId = searchString && parseSearchString(searchString).num && parseSearchString(searchString).str;
+
   const getWhere = (
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
         ...(filter || {}),
+        ...(searchString && searchByTokenPrefixAndId ? {
+          token_id: { _eq: parseSearchString(searchString).num },
+          token_prefix: { _ilike: `%${parseSearchString(searchString).str}%` }
+        } : {}),
         ...(searchString
           ? {
             _or: [
               ...getSearchQuery(searchString),
+              // Why is there an address search if the address never gets here?
               { owner: { _eq: searchString } },
               { owner_normalized: { _eq: searchString } }
             ]
