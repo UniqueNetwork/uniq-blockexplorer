@@ -42,21 +42,8 @@ const CollectionsComponent = ({
   const {
     collections,
     collectionsCount,
-    fetchMoreCollections,
     isCollectionsFetching
-  } = useGraphQlCollections({ filter, orderBy: defaultOrderBy, pageSize });
-
-  useEffect(() => {
-    const offset = (currentPage - 1) * pageSize;
-
-    void fetchMoreCollections({
-      filter,
-      limit: pageSize,
-      offset,
-      orderBy,
-      searchString
-    });
-  }, [pageSize, currentPage, orderBy, searchString, fetchMoreCollections, filter]);
+  } = useGraphQlCollections({ filter, orderBy: defaultOrderBy, pageSize, searchString });
 
   return (
     <>
@@ -64,7 +51,7 @@ const CollectionsComponent = ({
         columns={getCollectionsColumns(currentChain.network, orderBy, setOrderBy)}
         data={collections || []}
         loading={isCollectionsFetching}
-        rowKey={'collection_id'}
+        rowKey='collection_id'
       />
       <PaginationComponent
         count={collectionsCount || 0}
