@@ -3,7 +3,7 @@ import { Button } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-import { lastBlocks } from '@app/api/graphQL';
+import { useGraphQlBlocks } from '@app/api/graphQL';
 import { PagePaperWrapper, Table } from '@app/components';
 import { useApi } from '@app/hooks/useApi';
 import { Desktop, Mobile } from '@app/styles/styled-components';
@@ -23,24 +23,16 @@ export const LastBlocks = ({
   const navigate = useNavigate();
   const linkText = 'See all';
   const linkUrl = `/${currentChain.network}/last-blocks`;
+  const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
 
-  const { blockCount, blocks, fetchMoreBlocks, isBlocksFetching, timestamp } = lastBlocks.useGraphQlBlocks({
-    pageSize
+  const { blockCount, blocks, isBlocksFetching, timestamp } = useGraphQlBlocks({
+    pageSize,
+    searchString: prettifiedBlockSearchString
   });
 
   const onClickSeeMore = () => {
     navigate(linkUrl);
   };
-
-  useEffect(() => {
-    const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
-
-    void fetchMoreBlocks({
-      limit: pageSize,
-      offset: 0,
-      searchString: prettifiedBlockSearchString
-    });
-  }, [pageSize, searchString, fetchMoreBlocks]);
 
   if (/[^$,.\d]/.test(searchString || '') || blockCount === 0) return null;
 

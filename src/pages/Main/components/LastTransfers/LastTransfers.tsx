@@ -12,7 +12,7 @@ import { transfersWithTimeDifference } from './transfersWithTimeDifference';
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { lastTransferOptions } from './lastTransferOptions';
 
-import { transfers as gqlTransfers } from '../../../../api/graphQL';
+import { useGraphQlLastTransfers } from '@app/api';
 import { LastTransfersCardsList } from './LastTransfersCardsList';
 
 export type LastTransfersProps = {
@@ -30,23 +30,14 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(lastTransferOptions[0]);
   const linkUrl = `/${currentChain.network}/last-transfers`;
+  const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
 
-  const { fetchMoreTransfers, isTransfersFetching, transfers, transfersCount } =
-    gqlTransfers.useGraphQlLastTransfers({ accountId, pageSize });
+  const { isTransfersFetching, transfers, transfersCount } =
+    useGraphQlLastTransfers({ accountId, pageSize, searchString: prettifiedBlockSearchString });
 
   const onClickSeeMore = () => {
     navigate(linkUrl);
   };
-
-  useEffect(() => {
-    const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
-
-    void fetchMoreTransfers({
-      limit: pageSize,
-      offset: 0,
-      searchString: prettifiedBlockSearchString
-    });
-  }, [pageSize, searchString, fetchMoreTransfers, accountId]);
 
   if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
 
