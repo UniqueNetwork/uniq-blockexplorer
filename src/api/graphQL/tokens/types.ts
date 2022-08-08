@@ -12,7 +12,7 @@ export interface Token {
   collection_id: number
   collection_name: string
   data: {
-    attributes: DecodedAttributes[];
+    attributes: DecodedAttributes;
     image: {
       url?: string;
       fullUrl?: string;

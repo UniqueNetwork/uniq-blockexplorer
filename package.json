@@ -43,6 +43,7 @@
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.4.5",
     "postcss": "^8.4.4",
     "postcss-flexbugs-fixes": "^5.0.2",
@@ -80,6 +81,7 @@
   "devDependencies": {
     "@types/amplitude-js": "^8.16.2",
     "@types/jest": "^27.0.3",
+    "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.12",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",

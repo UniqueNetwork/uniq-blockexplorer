@@ -5,7 +5,7 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
 import { Avatar, LoadingComponent, Picture } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { getImageURL, timestampFormat } from '@app/utils';
+import { convertAttributesToView, getImageURL, timestampFormat } from '@app/utils';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -42,12 +42,13 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_prefix: prefix
   } = token;
 
-  const tokenImage = data?.image?.fullUrl || data?.image?.url || imagePath;
-  const imageUrl = getImageURL(tokenImage);
+  const imageUrl = getImageURL(data?.image?.fullUrl || data?.image?.url || imagePath);
 
   if (loading) return <LoadingComponent />;
 
-  console.log('data', data);
+  const attributes = convertAttributesToView(data?.attributes);
+
+  console.log('attributes', attributes, 'data', data, 'token', token);
 
   return (
     <Wrapper>
@@ -71,21 +72,21 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         </TokenInfo>
         <TokenAttributes>
           <Heading size='4'>Attributes</Heading>
-          {/* <div>
-            {Object.keys(data).filter((key) => key !== 'ipfsJson').map((key) => (
+          <div>
+            {Object.keys(attributes).map((key) => (
               <div key={`attribute-${key}`}>
                 <Text color='grey-500'>{key}</Text>
-                <TagsWrapper>
-                  {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => (
+                {/*<TagsWrapper>
+                  {Array.isArray(attributes[key]) && (attributes[key] as string[]).map((item, index) => (
                     <Tag key={`item-${item}-${index}`}>{item}</Tag>
                   ))}
                   {typeof data[key] === 'string' && (
                     <Tag>{data[key]}</Tag>
                   )}
-                </TagsWrapper>
+                </TagsWrapper>*/}
               </div>
             ))}
-          </div> */}
+          </div>
         </TokenAttributes>
         <CollectionInfoWrapper>
           <CollectionLink
