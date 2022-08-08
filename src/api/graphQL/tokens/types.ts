@@ -1,3 +1,5 @@
+import { DecodedAttributes } from '@unique-nft/api';
+
 export interface TokensVariables {
   limit: number
   offset: number
@@ -9,7 +11,13 @@ export interface Token {
   token_id: number
   collection_id: number
   collection_name: string
-  data: Record<string, string | string[]>
+  data: {
+    attributes: DecodedAttributes[];
+    image: {
+      url?: string;
+      fullUrl?: string;
+    }
+  }
   date_of_creation: number
   token_prefix: string
   owner: string

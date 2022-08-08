@@ -7,10 +7,11 @@ import { Avatar, LoadingComponent, Picture } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { getImageURL, timestampFormat } from '@app/utils';
 
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 interface TokenDetailComponentProps {
   token?: Token
@@ -41,9 +42,12 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_prefix: prefix
   } = token;
 
-  const imageUrl = getImageURL(imagePath);
+  const tokenImage = data?.image?.fullUrl || data?.image?.url || imagePath;
+  const imageUrl = getImageURL(tokenImage);
 
   if (loading) return <LoadingComponent />;
+
+  console.log('data', data);
 
   return (
     <Wrapper>
@@ -52,13 +56,13 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         src={imageUrl}
       />
       <div>
-        <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
+        <Heading size='2'>{`${prefix} #${id}`}</Heading>
         <TokenInfo>
-          <Text color={'grey-500'}>Created on</Text>
+          <Text color='grey-500'>Created on</Text>
           <Text>{timestampFormat(createdOn)}</Text>
-          <Text color={'grey-500'}>Owner</Text>
+          <Text color='grey-500'>Owner</Text>
           <OwnerWrapper>
-            <Avatar size={'x-small'} />
+            <Avatar size='x-small' />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
               value={owner}
@@ -66,27 +70,36 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
-          <Heading size={'4'}>Attributes</Heading>
-          <div>
-            {Object.keys(data).filter((key) => key !== 'ipfsJson').map((key) => (<div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
-              <TagsWrapper>
-                {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => <Tag key={`item-${item}-${index}`}>{item}</Tag>)}
-                {typeof data[key] === 'string' && <Tag>{data[key]}</Tag>}
-              </TagsWrapper>
-            </div>)
-            )}
-          </div>
+          <Heading size='4'>Attributes</Heading>
+          {/* <div>
+            {Object.keys(data).filter((key) => key !== 'ipfsJson').map((key) => (
+              <div key={`attribute-${key}`}>
+                <Text color='grey-500'>{key}</Text>
+                <TagsWrapper>
+                  {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => (
+                    <Tag key={`item-${item}-${index}`}>{item}</Tag>
+                  ))}
+                  {typeof data[key] === 'string' && (
+                    <Tag>{data[key]}</Tag>
+                  )}
+                </TagsWrapper>
+              </div>
+            ))}
+          </div> */}
         </TokenAttributes>
         <CollectionInfoWrapper>
-          <CollectionLink onClick={onCollectionClick} to={`/${currentChain.network}/collections/${collectionId}`}>
+          <CollectionLink
+            onClick={onCollectionClick}
+            to={`/${currentChain.network}/collections/${collectionId}`}
+          >
             <Avatar
-              size={'small'}
+              size='small'
               src={getCoverURLFromCollection(token.collection_cover)}
             />
             <div>
-              <Heading size={'4'}>{name}</Heading>
+              <Heading size='4'>{name}</Heading>
               <div>
-                <Text color={'grey-500'}>{description || ''}</Text>
+                <Text color='grey-500'>{description || ''}</Text>
               </div>
             </div>
           </CollectionLink>
