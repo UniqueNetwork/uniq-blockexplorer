@@ -33,9 +33,7 @@ const getLastTransfersQuery = gql`
   }
 `;
 
-export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastTransfersProps) => {
-  const client = useApolloClient();
-
+export const useGraphQlLastTransfers = ({ accountId, pageSize, searchString }: useGraphQlLastTransfersProps) => {
   const getWhere = useCallback(
     (searchString?: string) => ({
       _and: {
@@ -70,7 +68,6 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
   const {
     data,
     error: fetchTransfersError,
-    fetchMore,
     loading: isTransfersFetching
   } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
     fetchPolicy: 'network-only',
@@ -80,32 +77,11 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize }: useGraphQlLastT
     variables: {
       limit: pageSize,
       offset: 0,
-      where: getWhere()
+      where: getWhere(searchString)
     }
   });
 
-  useEffect(() => {
-    fetchMore({})
-      .catch((errMsg) => {
-        throw new Error(errMsg);
-      });
-  }, [client.link, fetchMore]);
-
-  const fetchMoreTransfers = useCallback(
-    ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
-      return fetchMore({
-        variables: {
-          limit,
-          offset,
-          where: getWhere(searchString)
-        }
-      });
-    },
-    [fetchMore, pageSize, getWhere]
-  );
-
   return {
-    fetchMoreTransfers,
     fetchTransfersError,
     isTransfersFetching,
     timestamp: data?.extrinsics?.timestamp,

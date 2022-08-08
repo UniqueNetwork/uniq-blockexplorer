@@ -32,6 +32,7 @@ export interface TransfersData {
 }
 
 export type useGraphQlLastTransfersProps = {
-  pageSize: number
-  accountId?: string
+  pageSize: number;
+  accountId?: string;
+  searchString?: string;
 }

@@ -25,7 +25,8 @@ export interface LastBlocksData {
 }
 
 export type useGraphQlBlocksProps = {
-  pageSize: number
+  pageSize: number;
+  searchString?: string;
 }
 
 export type FetchMoreBlocksOptions = {
