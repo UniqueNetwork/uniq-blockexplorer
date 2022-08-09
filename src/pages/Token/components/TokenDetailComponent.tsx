@@ -31,6 +31,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   }
 
   const {
+    attributes,
     collection_description: description,
     collection_id: collectionId,
     collection_name: name,
@@ -46,9 +47,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   if (loading) return <LoadingComponent />;
 
-  const attributes = convertAttributesToView(data?.attributes);
-
-  console.log('attributes', attributes, 'data', data, 'token', token);
+  const attributesParsed = convertAttributesToView(attributes);
 
   return (
     <Wrapper>
@@ -73,17 +72,17 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         <TokenAttributes>
           <Heading size='4'>Attributes</Heading>
           <div>
-            {Object.keys(attributes).map((key) => (
-              <div key={`attribute-${key}`}>
-                <Text color='grey-500'>{key}</Text>
-                {/*<TagsWrapper>
-                  {Array.isArray(attributes[key]) && (attributes[key] as string[]).map((item, index) => (
+            {attributesParsed.map((attr) => (
+              <div key={`attribute-${attr.name}`}>
+                <Text color='grey-500'>{attr.name}</Text>
+                <TagsWrapper>
+                  {Array.isArray(attr.value) && attr.value.map((item, index) => (
                     <Tag key={`item-${item}-${index}`}>{item}</Tag>
                   ))}
-                  {typeof data[key] === 'string' && (
-                    <Tag>{data[key]}</Tag>
+                  {typeof attr.value === 'string' && (
+                    <Tag>{attr.value}</Tag>
                   )}
-                </TagsWrapper>*/}
+                </TagsWrapper>
               </div>
             ))}
           </div>

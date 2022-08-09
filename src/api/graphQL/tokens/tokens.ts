@@ -6,6 +6,7 @@ const tokensQuery = gql`
   query getTokens($limit: Int, $offset: Int, $where: TokenWhereParams = {}, $orderBy: TokenOrderByParams = {}) {
     tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
+        attributes
         collection_cover
         collection_description
         collection_id

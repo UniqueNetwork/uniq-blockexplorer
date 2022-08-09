@@ -8,11 +8,11 @@ export interface TokensVariables {
 }
 
 export interface Token {
+  attributes: DecodedAttributes;
   token_id: number
   collection_id: number
   collection_name: string
   data: {
-    attributes: DecodedAttributes;
     image: {
       url?: string;
       fullUrl?: string;

@@ -12,7 +12,7 @@ export type AttributeValue = {
 
 export interface AttributeView {
   name: string;
-  value: string;
+  value: string | string[];
 }
 
 const getValueOrDefaultValue = (obj: LocalizedStringOrBoxedNumberWithDefault, lang = 'en'): string => {
@@ -28,7 +28,7 @@ export const convertAttributesToView = (attributes: DecodedAttributes): Attribut
     if (value.isArray) {
       return {
         name: getValueOrDefaultValue(value.name),
-        value: (value.value as LocalizedStringOrBoxedNumberWithDefault[]).map((val: LocalizedStringOrBoxedNumberWithDefault) => getValueOrDefaultValue(val)).join(' ,'),
+        value: (value.value as LocalizedStringOrBoxedNumberWithDefault[]).map((val: LocalizedStringOrBoxedNumberWithDefault) => getValueOrDefaultValue(val)),
       };
     }
 
