@@ -54,9 +54,9 @@ const parseSearchString = (searchString: string): { num?: number, str?: string }
 const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return [
     { token_prefix: { _ilike: `%${parseSearchString(searchString).str || searchString}%` } },
-    ...(parseSearchString(searchString).num ? [{ token_id: { _eq: parseSearchString(searchString).num || Number(searchString) } }] : []),
-    { collection_name: { _ilike: `%${parseSearchString(searchString).str || searchString}%` } },
-    ...(parseSearchString(searchString).num ? [{ collection_id: { _eq: parseSearchString(searchString).num || Number(searchString) } }] : [])
+    ...(Number(searchString) ? [{ token_id: { _eq: Number(searchString) } }] : []),
+    { collection_name: { _ilike: `%${searchString}%` } },
+    ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
   ];
 };
 
@@ -67,7 +67,7 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return splitSearch
     .map((searchPart: string) => Number(searchPart.trim()))
     .filter((id: number) => Number.isInteger(id))
-    .map((searchPart: number) => ({ token_id: { _eq: parseSearchString(searchPart.toString()).num || Number(searchPart) } }));
+    .map((searchPart: number) => ({ collection_id: { _eq: Number(searchPart) } }));
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
@@ -75,7 +75,7 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
     parseSearchString(searchString);
   }
 
-  // if searchString contain number and text
+  // if searchString contain number and text we'll be looking for by token_prefix and token_id
   const searchByTokenPrefixAndId = searchString && parseSearchString(searchString).num && parseSearchString(searchString).str;
 
   const getWhere = (
