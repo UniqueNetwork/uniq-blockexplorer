@@ -26,9 +26,9 @@ const tokensQuery = gql`
 
 const parseSearchString = (searchString: string): { num?: number, str?: string } => {
   let num, str;
-  const querys = searchString.split(' ');
+  const queries = searchString.split(' ');
 
-  querys.map((query) => {
+  queries.map((query) => {
 
     let param = query;
 
