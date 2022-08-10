@@ -24,9 +24,36 @@ const tokensQuery = gql`
   }
 `;
 
+const parseSearchString = (searchString: string): { num?: number, str?: string } => {
+  let num, str;
+  const queries = searchString.split(' ');
+
+  queries.map((query) => {
+
+    let param = query;
+
+    // if first symbol is '#', trim it
+    if (query.charCodeAt(0) === 35) {
+      param = query.substr(1);
+    }
+
+    if (query === '') {
+      return;
+    }
+
+    if (isNaN(parseInt(param))) {
+      str = param;
+    } else if (typeof parseInt(param) === 'number') {
+      num = parseInt(param);
+    }
+  });
+
+  return { num, str };
+};
+
 const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return [
-    { token_prefix: { _ilike: `%${searchString}%` } },
+    { token_prefix: { _ilike: `%${parseSearchString(searchString).str || searchString}%` } },
     ...(Number(searchString) ? [{ token_id: { _eq: Number(searchString) } }] : []),
     { collection_name: { _ilike: `%${searchString}%` } },
     ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
@@ -44,14 +71,26 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
 };
 
 export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
+  if (searchString) {
+    parseSearchString(searchString);
+  }
+
+  // if searchString contain number and text we'll be looking for by token_prefix and token_id
+  const searchByTokenPrefixAndId = searchString && parseSearchString(searchString).num && parseSearchString(searchString).str;
+
   const getWhere = (
     (filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
         ...(filter || {}),
+        ...(searchString && searchByTokenPrefixAndId ? {
+          token_id: { _eq: parseSearchString(searchString).num },
+          token_prefix: { _ilike: `%${parseSearchString(searchString).str}%` }
+        } : {}),
         ...(searchString
           ? {
             _or: [
               ...getSearchQuery(searchString),
+              // Why is there an address search if the address never gets here?
               { owner: { _eq: searchString } },
               { owner_normalized: { _eq: searchString } }
             ]
