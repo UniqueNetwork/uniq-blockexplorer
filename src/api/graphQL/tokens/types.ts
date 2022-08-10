@@ -12,11 +12,9 @@ export interface Token {
   token_id: number
   collection_id: number
   collection_name: string
-  data: {
-    image: {
-      url?: string;
-      fullUrl?: string;
-    }
+  image: {
+    url?: string;
+    fullUrl: string | null;
   }
   date_of_creation: number
   token_prefix: string

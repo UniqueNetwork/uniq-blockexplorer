@@ -17,7 +17,7 @@ const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
   date_of_creation: dateOfCreation,
-  image_path: imagePath,
+  image,
   timeNow,
   token_id: tokenId,
   token_prefix: prefix
@@ -32,7 +32,7 @@ const TokenCard: FC<TokenCardProps> = ({
     }
   }, []);
 
-  const imageUrl = useCheckImageExists(getImageURL(imagePath));
+  const imageUrl = useCheckImageExists(image.fullUrl || image.url);
 
   return (
     <TokenCardLink

@@ -5,7 +5,7 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
 import { Avatar, LoadingComponent, Picture } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { convertAttributesToView, getImageURL, timestampFormat } from '@app/utils';
+import { convertAttributesToView, timestampFormat } from '@app/utils';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -35,15 +35,14 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     collection_description: description,
     collection_id: collectionId,
     collection_name: name,
-    data,
     date_of_creation: createdOn,
-    image_path: imagePath,
+    image,
     owner,
     token_id: id,
     token_prefix: prefix
   } = token;
 
-  const imageUrl = getImageURL(data?.image?.fullUrl || data?.image?.url || imagePath);
+  const imageUrl = image?.fullUrl || image?.url;
 
   if (loading) return <LoadingComponent />;
 
