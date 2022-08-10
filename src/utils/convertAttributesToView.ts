@@ -16,7 +16,7 @@ export interface AttributeView {
 }
 
 const getValueOrDefaultValue = (obj: LocalizedStringOrBoxedNumberWithDefault, lang = 'en'): string => {
-  return (obj as LocalizedStringWithDefault)[lang] ?? obj._;
+  return (obj as LocalizedStringWithDefault)[lang] ?? obj._?.toString();
 };
 
 export const convertAttributesToView = (attributes: DecodedAttributes): AttributeView[] => {
