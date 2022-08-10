@@ -25,8 +25,6 @@ export const TokenInformation: VFC = () => {
     : 0;
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
 
-  console.log('statisticsMap', statisticsMap);
-
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
       <TokenInfo>
