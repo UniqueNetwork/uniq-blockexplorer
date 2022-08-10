@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
 import { useApi } from '@app/hooks';
-import { getChainBackground } from '@app/utils';
+import {formatLongNumber, getChainBackground} from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
 
@@ -23,20 +23,27 @@ export const TokenInformation: VFC = () => {
   const lockedSupplyPercentage = statisticsMap.locked_supply && statisticsMap.total_supply
     ? (statisticsMap.locked_supply * 100 / statisticsMap.total_supply).toFixed(1)
     : 0;
+  const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
+
+  console.log('statisticsMap', statisticsMap);
 
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
       <TokenInfo>
         <TokenInfoHeader>Token information <Small>All time</Small></TokenInfoHeader>
         <Body>
-          <div>
-            <BigAmount>{statisticsMap.holders}</BigAmount>
-            <P>Holders</P>
-          </div>
-          <div>
-            <BigAmount>{statisticsMap.total_supply}</BigAmount>
-            <P>Total supply</P>
-          </div>
+          { !!statisticsMap.holders && (
+            <div>
+              <BigAmount>{statisticsMap.holders}</BigAmount>
+              <P>Holders</P>
+            </div>
+          )}
+          { !!totalSupply && (
+            <div>
+              <BigAmount>{formatLongNumber(totalSupply)}</BigAmount>
+              <P>Total supply</P>
+            </div>
+          )}
           { !!totalSupplyPercentage && (
             <div>
               <BigAmount>{totalSupplyPercentage}% <Small>({ statisticsMap.circulating_supply })</Small></BigAmount>
