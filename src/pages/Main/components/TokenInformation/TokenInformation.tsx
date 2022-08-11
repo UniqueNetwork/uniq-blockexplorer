@@ -187,6 +187,7 @@ const BigAmount = styled(Header3)`
   display: flex;
   align-items: flex-end;
   grid-column-gap: calc(var(--gap) / 4);
+  min-height: 36px;
 
   @media (max-width: 767px) {
     display: flex;
@@ -197,4 +198,5 @@ const BigAmount = styled(Header3)`
 
 const BigLinkAmount = styled(Header3)`
   color: var(--primary-500);
+  min-height: 36px;
 `;
