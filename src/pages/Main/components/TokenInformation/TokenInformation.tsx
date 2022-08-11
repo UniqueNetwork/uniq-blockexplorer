@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
 import { useApi } from '@app/hooks';
-import {formatLongNumber, getChainBackground} from '@app/utils';
+import { formatLongNumber, getChainBackground } from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
 
