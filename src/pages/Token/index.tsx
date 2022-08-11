@@ -11,6 +11,8 @@ const TokenPage: FC = () => {
 
   const { isTokensFetching, token } = useGraphQlToken(Number(collectionId), Number(tokenId));
 
+  if (!token) return null;
+
   return (
     <PagePaper>
       <TokenDetailComponent

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
 import { Avatar, LoadingComponent, Picture } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, timestampFormat } from '@app/utils';
 
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -14,7 +14,7 @@ import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 interface TokenDetailComponentProps {
-  token?: Token
+  token: Token
   loading?: boolean
 }
 
@@ -26,9 +26,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     logUserEvents(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
   }, []);
 
-  if (!token) {
-    return null;
-  }
 
   const {
     attributes,
@@ -42,7 +39,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_prefix: prefix
   } = token;
 
-  const imageUrl = image?.fullUrl || image?.url;
+  const imageUrl = useCheckImageExists(image.fullUrl);
 
   if (loading) return <LoadingComponent />;
 

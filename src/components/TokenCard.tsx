@@ -32,7 +32,7 @@ const TokenCard: FC<TokenCardProps> = ({
     }
   }, []);
 
-  const imageUrl = useCheckImageExists(image.fullUrl || image.url);
+  const imageUrl = useCheckImageExists(image.fullUrl);
 
   return (
     <TokenCardLink

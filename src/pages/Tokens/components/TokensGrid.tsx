@@ -32,7 +32,7 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) =>
       >
         <TokenPicture
           alt={`${token.token_prefix} #${token.token_id}`}
-          src={token.image.fullUrl || token.image.url}
+          src={token.image.fullUrl}
         />
         <Text
           color={'secondary-500'}

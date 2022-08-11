@@ -13,7 +13,6 @@ export interface Token {
   collection_id: number
   collection_name: string
   image: {
-    url?: string;
     fullUrl: string | null;
   }
   date_of_creation: number
