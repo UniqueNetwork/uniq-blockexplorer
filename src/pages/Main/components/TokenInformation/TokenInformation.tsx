@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
-import { useApi } from '@app/hooks';
+import { deviceWidth, useApi } from '@app/hooks';
 import { formatLongNumber, getChainBackground } from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 export const TokenInformation: VFC = () => {
   const { currentChain } = useApi();
@@ -24,6 +25,10 @@ export const TokenInformation: VFC = () => {
     ? (statisticsMap.locked_supply * 100 / statisticsMap.total_supply).toFixed(1)
     : 0;
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
+
+  if(!statistics){
+    return (<SkeletonWrapper><Skeleton /></SkeletonWrapper>);
+  }
 
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
@@ -80,6 +85,45 @@ export const TokenInformation: VFC = () => {
     </Wrapper>
   );
 };
+
+const SkeletonWrapper = styled(PagePaperWrapper)`
+  padding: 0;
+  min-height: 200px;
+  max-height: 200px;
+  background-color: grey;
+
+  .unique-skeleton{
+    border-radius: var(--gap) !important;
+    height: 200px !important;
+  }
+
+  @media ${deviceWidth.biggerThan.lg} {
+    min-height: 160px;
+    max-height: 160px;
+
+    .unique-skeleton{
+      height: 160px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.xl} {
+    min-height: 201px;
+    max-height: 201px;
+
+    .unique-skeleton{
+      height: 201px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    min-height: 316px;
+    max-height: 316px;
+
+    .unique-skeleton{
+      height: 316px !important;
+    }
+  }
+`;
 
 const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   font-family: 'Raleway';
