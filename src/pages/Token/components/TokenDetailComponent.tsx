@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
 import { Avatar, LoadingComponent, Picture } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { convertAttributesToView, getImageURL, timestampFormat } from '@app/utils';
+import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
+import { convertAttributesToView, timestampFormat } from '@app/utils';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -14,7 +14,7 @@ import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 interface TokenDetailComponentProps {
-  token?: Token
+  token: Token
   loading?: boolean
 }
 
@@ -26,24 +26,20 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     logUserEvents(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
   }, []);
 
-  if (!token) {
-    return null;
-  }
 
   const {
     attributes,
     collection_description: description,
     collection_id: collectionId,
     collection_name: name,
-    data,
     date_of_creation: createdOn,
-    image_path: imagePath,
+    image,
     owner,
     token_id: id,
     token_prefix: prefix
   } = token;
 
-  const imageUrl = getImageURL(data?.image?.fullUrl || data?.image?.url || imagePath);
+  const imageUrl = useCheckImageExists(image.fullUrl);
 
   if (loading) return <LoadingComponent />;
 

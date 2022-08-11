@@ -45,7 +45,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
 
   const collectionsWithTokenCover = collections?.map((collection) => ({
     ...collection,
-    collection_cover: collection.collection_cover || tokens?.find((token) => token.collection_id === collection.collection_id)?.image_path || ''
+    collection_cover: collection.collection_cover || tokens?.find((token) => token.collection_id === collection.collection_id)?.image.fullUrl || ''
   }));
 
   const onClick = useCallback(() => {

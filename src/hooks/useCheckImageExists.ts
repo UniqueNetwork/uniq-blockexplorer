@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useCheckImageExists = (imageSrc: string | undefined) => {
+export const useCheckImageExists = (imageSrc?: string | null) => {
   const [imgSrc, setImgSrc] = useState<string>();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export const useCheckImageExists = (imageSrc: string | undefined) => {
 
       image.src = imageSrc;
     }
-    
+
     return () => {
       isMounted = false;
     };

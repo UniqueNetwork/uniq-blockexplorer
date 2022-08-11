@@ -11,11 +11,10 @@ const tokensQuery = gql`
         collection_description
         collection_id
         collection_name
-        data
         date_of_creation
         owner
         owner_normalized
-        image_path
+        image
         token_id
         token_prefix
       }
