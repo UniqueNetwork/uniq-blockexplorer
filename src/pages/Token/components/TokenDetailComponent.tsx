@@ -1,21 +1,20 @@
-import React, { FC, Suspense, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
-import { Avatar, LoadingComponent } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { getImageURL, timestampFormat } from '@app/utils';
+import { Avatar, LoadingComponent, Picture } from '@app/components';
+import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
+import { convertAttributesToView, timestampFormat } from '@app/utils';
 
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
-const Picture = React.lazy(()=>import('@app/components/Picture'));
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 interface TokenDetailComponentProps {
-  token?: Token
+  token: Token
   loading?: boolean
 }
 
@@ -27,43 +26,40 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     logUserEvents(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
   }, []);
 
-  if (!token) {
-    return null;
-  }
 
   const {
+    attributes,
     collection_description: description,
     collection_id: collectionId,
     collection_name: name,
-    data,
     date_of_creation: createdOn,
-    image_path: imagePath,
+    image,
     owner,
     token_id: id,
     token_prefix: prefix
   } = token;
 
-  const imageUrl = getImageURL(imagePath);
+  const imageUrl = useCheckImageExists(image.fullUrl);
 
   if (loading) return <LoadingComponent />;
+
+  const attributesParsed = convertAttributesToView(attributes);
 
   return (
     
     <Wrapper>
-      <Suspense fallback={<div>Loading...</div>}>
-        <TokenPicture
-          alt={`${prefix}-${id}`}
-          src={imageUrl}
-        />
-      </Suspense>
+      <TokenPicture
+        alt={`${prefix}-${id}`}
+        src={imageUrl}
+      />
       <div>
-        <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
+        <Heading size='2'>{`${prefix} #${id}`}</Heading>
         <TokenInfo>
-          <Text color={'grey-500'}>Created on</Text>
+          <Text color='grey-500'>Created on</Text>
           <Text>{timestampFormat(createdOn)}</Text>
-          <Text color={'grey-500'}>Owner</Text>
+          <Text color='grey-500'>Owner</Text>
           <OwnerWrapper>
-            <Avatar size={'x-small'} />
+            <Avatar size='x-small' />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
               value={owner}
@@ -71,16 +67,17 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
-          <Heading size={'4'}>Attributes</Heading>
+          <Heading size='4'>Attributes</Heading>
           <div>
-            {Object.keys(data).filter((key) => key !== 'ipfsJson').map((key) => (
-              <div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
+            {attributesParsed.map((attr) => (
+              <div key={`attribute-${attr.name}`}>
+                <Text color='grey-500'>{attr.name}</Text>
                 <TagsWrapper>
-                  {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => (
+                  {Array.isArray(attr.value) && attr.value.map((item, index) => (
                     <Tag key={`item-${item}-${index}`}>{item}</Tag>
                   ))}
-                  {typeof data[key] === 'string' && (
-                    <Tag>{data[key]}</Tag>
+                  {typeof attr.value === 'string' && (
+                    <Tag>{attr.value}</Tag>
                   )}
                 </TagsWrapper>
               </div>
@@ -93,13 +90,13 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
             to={`/${currentChain.network}/collections/${collectionId}`}
           >
             <Avatar
-              size={'small'}
+              size='small'
               src={getCoverURLFromCollection(token.collection_cover)}
             />
             <div>
-              <Heading size={'4'}>{name}</Heading>
+              <Heading size='4'>{name}</Heading>
               <div>
-                <Text color={'grey-500'}>{description || ''}</Text>
+                <Text color='grey-500'>{description || ''}</Text>
               </div>
             </div>
           </CollectionLink>

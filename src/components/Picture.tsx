@@ -5,7 +5,7 @@ import LoadingComponent from './LoadingComponent';
 
 interface PictureProps {
   className?: string
-  src?: string
+  src?: string | null
   alt: string
 }
 
