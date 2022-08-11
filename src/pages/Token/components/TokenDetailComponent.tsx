@@ -1,9 +1,9 @@
-import { FC, useCallback } from 'react';
+import React, { FC, Suspense, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
-import { Avatar, LoadingComponent, Picture } from '@app/components';
+import { Avatar, LoadingComponent } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { getImageURL, timestampFormat } from '@app/utils';
 
@@ -11,6 +11,8 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+
+const Picture = React.lazy(()=>import('@app/components/Picture'));
 
 interface TokenDetailComponentProps {
   token?: Token
@@ -46,11 +48,14 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   if (loading) return <LoadingComponent />;
 
   return (
+    
     <Wrapper>
-      <TokenPicture
-        alt={`${prefix}-${id}`}
-        src={imageUrl}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <TokenPicture
+          alt={`${prefix}-${id}`}
+          src={imageUrl}
+        />
+      </Suspense>
       <div>
         <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
         <TokenInfo>
@@ -83,7 +88,10 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
         </TokenAttributes>
         <CollectionInfoWrapper>
-          <CollectionLink onClick={onCollectionClick} to={`/${currentChain.network}/collections/${collectionId}`}>
+          <CollectionLink
+            onClick={onCollectionClick}
+            to={`/${currentChain.network}/collections/${collectionId}`}
+          >
             <Avatar
               size={'small'}
               src={getCoverURLFromCollection(token.collection_cover)}
@@ -98,6 +106,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         </CollectionInfoWrapper>
       </div>
     </Wrapper>
+    
   );
 };
 

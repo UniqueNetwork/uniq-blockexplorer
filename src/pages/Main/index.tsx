@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import { Skeleton } from '@unique-nft/ui-kit';
+import React, { Suspense, useState } from 'react';
 import styled from 'styled-components';
 
-import { Collections, LastBlocks, LastTransfers, SearchHeader, TokenInformation, Tokens } from './components';
+import { Collections, LastBlocks, LastTransfers, SearchHeader, Tokens } from './components';
+
+const TokenInformation = React.lazy(()=>import('@app/pages/Main/components/TokenInformation/TokenInformation'));
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
@@ -11,7 +14,13 @@ const MainPage = () => {
       <SearchHeader
         setSearchString={setSearchString}
       />
-      <TokenInformation />
+      <Suspense fallback={<Skeleton  
+        height={'100%'}
+        width={'100%'}
+      />}
+      >
+        <TokenInformation />
+      </Suspense>
       <div>
         <Tokens
           searchString={searchString}

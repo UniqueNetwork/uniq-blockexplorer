@@ -193,3 +193,5 @@ const BigAmount = styled(Header3)`
 const BigLinkAmount = styled(Header3)`
   color: var(--primary-500);
 `;
+
+export default TokenInformation;
