@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
+
 import { Collection } from '@app/api';
 
 interface ExtendedDataComponentProps {

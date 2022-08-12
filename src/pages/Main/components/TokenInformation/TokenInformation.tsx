@@ -17,13 +17,14 @@ export const TokenInformation: VFC = () => {
     statisticsMap[item.name] = item.count;
   });
 
-  const totalSupplyPercentage = statisticsMap.circulating_supply && statisticsMap.total_supply
-    ? (statisticsMap.circulating_supply * 100 / statisticsMap.total_supply).toFixed(1)
-    : 0;
-  const lockedSupplyPercentage = statisticsMap.locked_supply && statisticsMap.total_supply
-    ? (statisticsMap.locked_supply * 100 / statisticsMap.total_supply).toFixed(1)
-    : 0;
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
+
+  const totalSupplyPercentage = statisticsMap.circulating_supply && totalSupply
+    ? (statisticsMap.circulating_supply * 100 / totalSupply).toFixed(1)
+    : 0;
+  const lockedSupplyPercentage = statisticsMap.locked_supply && totalSupply
+    ? (statisticsMap.locked_supply * 100 / totalSupply).toFixed(1)
+    : 0;
 
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
@@ -32,7 +33,7 @@ export const TokenInformation: VFC = () => {
         <Body>
           { !!statisticsMap.holders && (
             <div>
-              <BigAmount>{statisticsMap.holders}</BigAmount>
+              <BigAmount>{formatLongNumber(statisticsMap.holders)}</BigAmount>
               <P>Holders</P>
             </div>
           )}
@@ -44,13 +45,13 @@ export const TokenInformation: VFC = () => {
           )}
           { !!totalSupplyPercentage && (
             <div>
-              <BigAmount>{totalSupplyPercentage}% <Small>({ statisticsMap.circulating_supply })</Small></BigAmount>
+              <BigAmount>{totalSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.circulating_supply) })</Small></BigAmount>
               <P>Circulating supply</P>
             </div>
           )}
           { !!lockedSupplyPercentage && (
             <div>
-              <BigAmount>{lockedSupplyPercentage}% <Small>({ statisticsMap.locked_supply })</Small></BigAmount>
+              <BigAmount>{lockedSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.locked_supply) })</Small></BigAmount>
               <P>Locked supply</P>
             </div>
           )}

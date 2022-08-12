@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Icon } from '@unique-nft/ui-kit';
-import usePagination, { DOTS } from '../hooks/usePagination';
 import styled from 'styled-components';
+
+import usePagination, { DOTS } from '../hooks/usePagination';
 
 interface PaginationProps {
   count: number // total number of elements in DB

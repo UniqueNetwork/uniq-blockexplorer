@@ -1,6 +1,8 @@
-import { TChainNetwork } from '@app/api/ApiContext';
-import { encodeAddress, blake2AsHex } from '@polkadot/util-crypto';
 import { Buffer } from 'buffer';
+
+import { encodeAddress, blake2AsHex } from '@polkadot/util-crypto';
+
+import { TChainNetwork } from '@app/api/ApiContext';
 
 export type TAddressFormat = TChainNetwork | 'normalized';
 

@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
+
 import { AccountData, AccountVariables } from './types';
 
 const accountQuery = gql`

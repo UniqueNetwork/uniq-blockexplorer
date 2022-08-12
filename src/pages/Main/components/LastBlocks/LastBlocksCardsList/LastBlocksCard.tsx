@@ -1,6 +1,7 @@
 import React, { VFC } from 'react';
 import styled from 'styled-components';
 import { ColumnType } from 'rc-table/lib/interface';
+
 import { LastBlockWithTimeDif } from '@app/api';
 
 interface MobileCardProps {

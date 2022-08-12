@@ -2,6 +2,7 @@ import { Button, InputText } from '@unique-nft/ui-kit';
 import { FC, useCallback, useState } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
+
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';

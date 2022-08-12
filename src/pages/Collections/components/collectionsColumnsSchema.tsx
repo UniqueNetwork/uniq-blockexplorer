@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import { timestampTableFormat } from '@app/utils';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import { Collection, CollectionSorting } from '../../../api/graphQL';
 import CollectionTableCell from '../../../components/CollectionTableCell';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 export const getCollectionsColumns = (chainId: string, orderBy: CollectionSorting, onOrderChange: (orderBy: CollectionSorting) => void) => [
   {

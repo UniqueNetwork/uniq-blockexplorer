@@ -1,11 +1,12 @@
 import React, { FC, useCallback } from 'react';
-import Avatar from './Avatar';
-import { Collection } from '../api/graphQL';
 import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+
+import Avatar from './Avatar';
 
 interface CollectionTableCellProps {
   chainId: string

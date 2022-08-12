@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Dropdown, Icon, Text } from '@unique-nft/ui-kit';
+import { Dropdown, Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
-import { useApi } from '../../hooks/useApi';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { options } from './config';
+import { useApi } from '@app/hooks';
 
 const Menu: FC = () => {
   const { currentChain } = useApi();

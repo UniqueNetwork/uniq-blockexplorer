@@ -2,10 +2,10 @@ import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
-import { useApi, useCheckImageExists } from '@app/hooks';
-import { getImageURL, timeDifference } from '@app/utils';
-import { Token } from '@app/api';
 
+import { useApi, useCheckImageExists } from '@app/hooks';
+import { timeDifference } from '@app/utils';
+import { Token } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';

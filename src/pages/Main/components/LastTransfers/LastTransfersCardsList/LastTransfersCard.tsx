@@ -1,6 +1,7 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
 import { ColumnType } from 'rc-table/lib/interface';
+
 import { TransferWithTimeDif } from '@app/api';
 import { deviceWidth } from '@app/hooks';
 

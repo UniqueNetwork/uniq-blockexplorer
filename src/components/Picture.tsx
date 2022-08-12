@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+
 import LoadingComponent from './LoadingComponent';
 
 interface PictureProps {

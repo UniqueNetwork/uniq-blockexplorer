@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
+
 import { account as gqlAccount } from '@app/api/graphQL';
 import { Avatar, LoadingComponent } from '@app/components';
+import { useDeviceSize, DeviceSize } from '@app/hooks';
+
 import { formatAmount, shortcutText } from '../../../utils/textUtils';
-import { useApi, useDeviceSize, DeviceSize } from '@app/hooks';
 
 interface AccountProps {
   accountId: string

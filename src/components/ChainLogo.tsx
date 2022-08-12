@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
+
+import { useApi } from '@app/hooks';
+
 import { chainLogos, emptyLogos, namedLogos, nodeLogos } from '../logos';
-import { useApi } from '../hooks/useApi';
 
 interface Props {
   className?: string

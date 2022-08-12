@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState, useMemo, VFC } from 'react';
+import React, { useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
-import { useApi } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
+import { useApi } from '@app/hooks';
 import { PagePaperWrapper } from '@app/components';
 import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';

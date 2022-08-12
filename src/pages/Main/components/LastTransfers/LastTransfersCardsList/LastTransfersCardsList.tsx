@@ -1,11 +1,12 @@
 import React, { VFC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
+import { ColumnType } from 'rc-table/lib/interface';
 
 import { LoadingComponent } from '@app/components';
-import { LastTransfersCard } from './LastTransfersCard';
-import { ColumnType } from 'rc-table/lib/interface';
 import { TransferWithTimeDif } from '@app/api';
+
+import { LastTransfersCard } from './LastTransfersCard';
 
 interface MobileCardsListProps {
   columns: ColumnType<TransferWithTimeDif>[];

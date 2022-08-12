@@ -2,11 +2,11 @@ import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
+
 import { Token } from '@app/api';
 import { Avatar, LoadingComponent, Picture } from '@app/components';
 import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, timestampFormat } from '@app/utils';
-
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';

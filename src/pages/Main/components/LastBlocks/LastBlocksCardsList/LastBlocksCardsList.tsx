@@ -1,11 +1,12 @@
 import React, { VFC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
+import { ColumnType } from 'rc-table/lib/interface';
 
 import { LoadingComponent } from '@app/components';
-import { LastBlocksCard } from './LastBlocksCard';
-import { ColumnType } from 'rc-table/lib/interface';
 import { LastBlockWithTimeDif } from '@app/api';
+
+import { LastBlocksCard } from './LastBlocksCard';
 
 interface MobileCardsListProps {
   columns: ColumnType<LastBlockWithTimeDif>[];

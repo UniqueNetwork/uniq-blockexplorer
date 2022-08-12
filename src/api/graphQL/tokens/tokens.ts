@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
+
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`

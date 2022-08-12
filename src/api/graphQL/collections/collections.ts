@@ -1,6 +1,7 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect } from 'react';
-import { CollectionsData, CollectionsVariables, FetchMoreCollectionsOptions, useGraphQlCollectionsProps } from './types';
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
+
+import { CollectionsData, CollectionsVariables, useGraphQlCollectionsProps } from './types';
 
 const collectionsQuery = gql`
   query getCollections($limit: Int, $offset: Int, $where: CollectionWhereParams = {}, $orderBy: CollectionOrderByParams = {}) {

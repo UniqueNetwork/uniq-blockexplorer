@@ -1,5 +1,6 @@
 import React, { VFC } from 'react';
 import styled from 'styled-components';
+
 import { Header1 } from '@app/styles/styled-components';
 import { useApi } from '@app/hooks';
 import SearchComponent from '@app/components/SearchComponent';

@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TagManager from 'react-gtm-module';
-import App from './App';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
+
+import App from './App';
 import { Account, Block, Collections, Collection, Extrinsic, Main, Tokens, Token } from './pages';
 import config from './config';
 

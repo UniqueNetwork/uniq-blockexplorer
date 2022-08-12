@@ -1,5 +1,6 @@
 import { gql, useApolloClient, useQuery } from '@apollo/client';
 import { useCallback, useEffect } from 'react';
+
 import { FetchMoreHoldersOptions, HoldersData, HoldersVariables, useGraphQlHoldersProps } from './types';
 
 const holdersQuery = gql`
