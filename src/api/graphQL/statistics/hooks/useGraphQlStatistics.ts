@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { ApolloError, useQuery } from '@apollo/client';
+
 import { StatisticsVariables, StatisticsData, StatisticsOrderByParams, Statistics } from '../types';
 import { statisticsQuery } from '../statistics';
 

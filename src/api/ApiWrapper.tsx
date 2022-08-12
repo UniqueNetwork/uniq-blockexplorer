@@ -1,12 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
+
 import { defaultChainKey } from '@app/utils';
+import { getApolloClient } from '@app/api/graphQL/apolloClient';
 
 import { ApiContextProps, ApiProvider } from './ApiContext';
 import config from '../config';
 
-import { getApolloClient } from '@app/api/graphQL/apolloClient';
 
 interface ChainProviderProps {
   children: React.ReactNode

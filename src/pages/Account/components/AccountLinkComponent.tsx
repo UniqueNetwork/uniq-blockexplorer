@@ -1,8 +1,8 @@
 import { FC, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-
 import { Text } from '@unique-nft/ui-kit';
+
 import { shortcutText } from '@app/utils';
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -45,7 +45,10 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
 
   return (
     <Wrapper>
-      <IdentityIcon address={value} copyable />
+      <IdentityIcon
+        address={value}
+        copyable
+      />
       <Link
         onClick={onAccountClick}
         to={`/${currentChain?.network}/account/${value}`}

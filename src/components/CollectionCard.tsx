@@ -2,14 +2,16 @@ import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
+
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
 import { shortcutText } from '@app/utils';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 import Avatar from './Avatar';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '../analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
+
 
 type CollectionCardProps = Collection
 

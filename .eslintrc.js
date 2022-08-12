@@ -10,6 +10,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    'plugin:import/typescript',
   ],
   ignorePatterns: [
     ".eslintrc.js",
@@ -146,8 +147,6 @@ module.exports = {
     "sort-keys-fix/sort-keys-fix": "warn",
     "sort-keys": "error",
     "no-void": "off",
-    // needs to be switched on at some point
-    "@typescript-eslint/no-explicit-any": "off",
     // this seems very broken atm, false positives
     "@typescript-eslint/unbound-method": "off",
     // suppress errors for missing 'import React' in files
@@ -161,6 +160,22 @@ module.exports = {
       "named": "never",
       "asyncArrow": "always"
     }],
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          ['parent', 'sibling'],
+          'index',
+          'object',
+        ],
+        pathGroups: [{ pattern: '@app/**', group: 'internal', position: 'after' }],
+        pathGroupsExcludedImportTypes: ['@app/**'],
+        'newlines-between': 'always',
+      },
+    ],
   },
   settings: {
     "import/extensions": [".js", ".ts", ".tsx"],

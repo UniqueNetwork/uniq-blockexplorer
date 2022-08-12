@@ -1,20 +1,21 @@
 import { gql, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
+
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
   query getTokens($limit: Int, $offset: Int, $where: TokenWhereParams = {}, $orderBy: TokenOrderByParams = {}) {
     tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
+        attributes
         collection_cover
         collection_description
         collection_id
         collection_name
-        data
         date_of_creation
         owner
         owner_normalized
-        image_path
+        image
         token_id
         token_prefix
       }

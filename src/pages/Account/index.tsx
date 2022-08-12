@@ -2,17 +2,19 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Heading, Tabs } from '@unique-nft/ui-kit';
+
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
+import { LastTransfers } from '@app/pages/Main/components';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 import AccountDetailComponent from './components/AccountDetailComponent';
-import { LastTransfers } from '../Main/components/LastTransfers/LastTransfers';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
+
 
 const assetsTabs = ['Collections', 'NFTs'];
 

@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
+
 import { useApi } from '@app/hooks';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
 import { Menu } from './Menu';
 import LoadingComponent from './LoadingComponent';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 
 const Header: FC = () => {
   const { currentChain } = useApi();

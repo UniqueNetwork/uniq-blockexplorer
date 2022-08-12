@@ -5,7 +5,7 @@ const countDecimal = (num: number) => {
   return index == -1 ? 0 : (text.length - index - 1);
 };
 
-export const formatLongNumber = (number: number): string => {
+export const formatLongNumber = (number = 0): string => {
 
   // over a million
   if (number >= 1000000) {

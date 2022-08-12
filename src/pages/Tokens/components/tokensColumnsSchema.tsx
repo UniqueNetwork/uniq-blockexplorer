@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { getImageURL, timestampTableFormat } from '@app/utils';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import { Token, TokenSorting } from '../../../api/graphQL';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 import CollectionTableCell from '../../../components/CollectionTableCell';
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 export const getTokensColumns = (chainId: string, orderBy: TokenSorting, onOrderChange: (orderBy: TokenSorting) => void) => [
   {

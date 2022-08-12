@@ -1,6 +1,7 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect } from 'react';
-import { LastBlocksData, LastBlocksVariables, FetchMoreBlocksOptions, useGraphQlBlocksProps } from './types';
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
+
+import { LastBlocksData, LastBlocksVariables, useGraphQlBlocksProps } from './types';
 
 const getLatestBlocksQuery = gql`
   query GetLatestBlocks($limit: Int, $offset: Int, $order_by: BlockOrderByParams, $where: BlockWhereParams) {

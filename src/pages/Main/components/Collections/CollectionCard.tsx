@@ -5,15 +5,13 @@ import { Text, Heading, Icon } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
+import { logUserEvents, timeDifference } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
-
 // TODO - move fingerPrint and clock icon to the UI kit - fix bug with colors
 import fingerPrint from '@app/images/icons/fingerPrint.svg';
 import clock from '@app/images/icons/clock.svg';
 
 import { CollectionCover } from '../CollectionCover';
-import { timeDifference } from '@app/utils';
 
 interface CollectionCardProps extends Collection {
   timestamp: number;

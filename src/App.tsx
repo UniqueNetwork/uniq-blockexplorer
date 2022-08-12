@@ -1,13 +1,12 @@
 import './app.scss';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-
 import { Notifications } from '@unique-nft/ui-kit';
+import amplitude from 'amplitude-js';
 
 import PageLayout from './components/PageLayout';
 // contains gql and rpc with contexts and providers
 import ApiWrapper from './api/ApiWrapper';
-import amplitude from 'amplitude-js';
 
 // exclude analytics for development mode
 if (process.env.NODE_ENV !== 'development') {

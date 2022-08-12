@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
 import { useApi } from '@app/hooks';
-import { getChainBackground } from '@app/utils';
+import { formatLongNumber, getChainBackground } from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
 
@@ -17,11 +17,13 @@ export const TokenInformation: VFC = () => {
     statisticsMap[item.name] = item.count;
   });
 
-  const totalSupplyPercentage = statisticsMap.circulating_supply && statisticsMap.total_supply
-    ? (statisticsMap.circulating_supply * 100 / statisticsMap.total_supply).toFixed(1)
+  const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
+
+  const totalSupplyPercentage = statisticsMap.circulating_supply && totalSupply
+    ? (statisticsMap.circulating_supply * 100 / totalSupply).toFixed(1)
     : 0;
-  const lockedSupplyPercentage = statisticsMap.locked_supply && statisticsMap.total_supply
-    ? (statisticsMap.locked_supply * 100 / statisticsMap.total_supply).toFixed(1)
+  const lockedSupplyPercentage = statisticsMap.locked_supply && totalSupply
+    ? (statisticsMap.locked_supply * 100 / totalSupply).toFixed(1)
     : 0;
 
   return (
@@ -29,23 +31,27 @@ export const TokenInformation: VFC = () => {
       <TokenInfo>
         <TokenInfoHeader>Token information <Small>All time</Small></TokenInfoHeader>
         <Body>
-          <div>
-            <BigAmount>{statisticsMap.holders}</BigAmount>
-            <P>Holders</P>
-          </div>
-          <div>
-            <BigAmount>{statisticsMap.total_supply}</BigAmount>
-            <P>Total supply</P>
-          </div>
+          { !!statisticsMap.holders && (
+            <div>
+              <BigAmount>{formatLongNumber(statisticsMap.holders)}</BigAmount>
+              <P>Holders</P>
+            </div>
+          )}
+          { !!totalSupply && (
+            <div>
+              <BigAmount>{formatLongNumber(totalSupply)}</BigAmount>
+              <P>Total supply</P>
+            </div>
+          )}
           { !!totalSupplyPercentage && (
             <div>
-              <BigAmount>{totalSupplyPercentage}% <Small>({ statisticsMap.circulating_supply })</Small></BigAmount>
+              <BigAmount>{totalSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.circulating_supply) })</Small></BigAmount>
               <P>Circulating supply</P>
             </div>
           )}
           { !!lockedSupplyPercentage && (
             <div>
-              <BigAmount>{lockedSupplyPercentage}% <Small>({ statisticsMap.locked_supply })</Small></BigAmount>
+              <BigAmount>{lockedSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.locked_supply) })</Small></BigAmount>
               <P>Locked supply</P>
             </div>
           )}
@@ -182,6 +188,7 @@ const BigAmount = styled(Header3)`
   display: flex;
   align-items: flex-end;
   grid-column-gap: calc(var(--gap) / 4);
+  min-height: 36px;
 
   @media (max-width: 767px) {
     display: flex;
@@ -192,4 +199,5 @@ const BigAmount = styled(Header3)`
 
 const BigLinkAmount = styled(Header3)`
   color: var(--primary-500);
+  min-height: 36px;
 `;

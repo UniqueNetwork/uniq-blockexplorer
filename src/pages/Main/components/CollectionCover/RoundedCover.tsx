@@ -1,5 +1,6 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
+
 import { IdentityIcon } from '@app/components';
 
 interface RoundedCoverProps {

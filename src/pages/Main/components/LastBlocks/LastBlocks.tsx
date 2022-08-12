@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -6,14 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useGraphQlBlocks } from '@app/api/graphQL';
 import { PagePaperWrapper, Table } from '@app/components';
 import { useApi } from '@app/hooks/useApi';
-import { Desktop, Mobile } from '@app/styles/styled-components';
+import { HeaderWithDropdown } from '@app/pages/Main/components/HeaderWithDropdown';
 
 import { BlockComponentProps } from '../../types';
-
 import { getLastBlocksColumns } from './getLastBlocksColumns';
 import { blocksWithTimeDifference } from './blocksWithTimeDifference';
-import { HeaderWithDropdown } from '@app/pages/Main/components/HeaderWithDropdown';
 import { LastBlocksCardsList } from './LastBlocksCardsList';
+import { DeviceSize2, useDeviceSize2 } from '../../../../hooks/useDeviceSize2';
 
 export const LastBlocks = ({
   pageSize = 5,
@@ -21,9 +20,11 @@ export const LastBlocks = ({
 }: BlockComponentProps) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
+  const deviceSize = useDeviceSize2();
   const linkText = 'See all';
   const linkUrl = `/${currentChain.network}/last-blocks`;
   const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
+  const isMobile = deviceSize <= DeviceSize2.sm;
 
   const { blockCount, blocks, isBlocksFetching, timestamp } = useGraphQlBlocks({
     pageSize,
@@ -41,21 +42,21 @@ export const LastBlocks = ({
       <HeaderWithDropdown
         title='Last blocks'
       />
-      <Desktop>
+      { !isMobile && (
         <Table
           columns={getLastBlocksColumns(currentChain.network)}
           data={blocksWithTimeDifference(blocks, timestamp)}
           loading={isBlocksFetching}
           rowKey={'block_number'}
         />
-      </Desktop>
-      <Mobile>
+      )}
+      { isMobile && (
         <LastBlocksCardsList
           columns={getLastBlocksColumns(currentChain.network)}
           data={!isBlocksFetching ? blocksWithTimeDifference(blocks, timestamp) : []}
           loading={isBlocksFetching}
         />
-      </Mobile>
+      )}
       <Button
         iconRight={{
           color: '#fff',

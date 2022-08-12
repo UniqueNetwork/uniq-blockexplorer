@@ -1,6 +1,5 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect } from 'react';
-import { FetchMoreBlocksOptions } from '@app/api';
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
 
 import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
 // { timestamp: desc }

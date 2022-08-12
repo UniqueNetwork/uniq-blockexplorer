@@ -2,12 +2,13 @@ import { Text } from '@unique-nft/ui-kit';
 import { FC, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Token } from '@app/api';
-import { getImageURL, timeDifference } from '@app/utils';
 
-import Picture from '../../../components/Picture';
+import { Token } from '@app/api';
+import { timeDifference } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+
+import Picture from '../../../components/Picture';
 
 interface TokensGridProps {
   chainNetwork: string;
@@ -32,16 +33,16 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) =>
       >
         <TokenPicture
           alt={`${token.token_prefix} #${token.token_id}`}
-          src={getImageURL((token).image_path)}
+          src={token.image.fullUrl}
         />
         <Text
           color={'secondary-500'}
           size='l'
           weight='regular'
         >{`${token.token_prefix} #${token.token_id}`}</Text>
-        <TokenCollectionLink
+        <Link
           to={`/${chainNetwork}/collections/${token.collection_id}`}
-        >{`${token.token_prefix} [id ${token.collection_id}]`}</TokenCollectionLink>
+        >{`${token.token_prefix} [id ${token.collection_id}]`}</Link>
         <TokenDate
           color={'grey-500'}
           size='xs'
@@ -77,9 +78,6 @@ const TokenLink = styled(Link)`
 
 const TokenDate = styled(Text)`
   margin-top: 8px;
-`;
-
-const TokenCollectionLink = styled(Link)`
 `;
 
 const TokenPicture = styled(Picture)`

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import ExtrinsicDetail from './components/ExtrinsicDetail';
 import PagePaper from '../../components/PagePaper';
 

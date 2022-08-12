@@ -12,6 +12,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jdenticon": "^2.2.0",
+    "@unique-nft/sdk": "^0.4.25",
     "@unique-nft/ui-kit": "^0.0.31",
     "amplitude-js": "^8.18.5",
     "babel-jest": "^27.4.2",
@@ -42,6 +43,7 @@
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.4.5",
     "postcss": "^8.4.4",
     "postcss-flexbugs-fixes": "^5.0.2",
@@ -79,6 +81,7 @@
   "devDependencies": {
     "@types/amplitude-js": "^8.16.2",
     "@types/jest": "^27.0.3",
+    "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.12",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",

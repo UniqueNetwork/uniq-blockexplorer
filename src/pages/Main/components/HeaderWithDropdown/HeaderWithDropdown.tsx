@@ -1,8 +1,8 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
+import { Dropdown, Icon, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
-import { Dropdown, Icon, SelectOptionProps } from '@unique-nft/ui-kit';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];

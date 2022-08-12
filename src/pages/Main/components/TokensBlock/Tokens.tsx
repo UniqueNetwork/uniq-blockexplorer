@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
+import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
 import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -55,7 +55,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     pageSize: tokensLimit,
     searchString
   });
-  
+
   if (!tokens?.length) return null;
 
   return (
