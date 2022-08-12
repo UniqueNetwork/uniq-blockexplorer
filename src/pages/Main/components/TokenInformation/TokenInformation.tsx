@@ -88,12 +88,9 @@ export const TokenInformation: VFC = () => {
 
 const SkeletonWrapper = styled(PagePaperWrapper)`
   padding: 0;
-  min-height: 200px;
-  max-height: 200px;
 
   .unique-skeleton{
     border-radius: var(--gap) !important;
-    height: 200px !important;
   }
 
   @media ${deviceWidth.biggerThan.lg} {
@@ -243,5 +240,3 @@ const BigLinkAmount = styled(Header3)`
   color: var(--primary-500);
   min-height: 36px;
 `;
-
-export default TokenInformation;

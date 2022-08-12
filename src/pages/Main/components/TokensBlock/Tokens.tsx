@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
-import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
+import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
 import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
 import { useGraphQlTokens } from '@app/api/graphQL';
-import { Skeleton } from '@unique-nft/ui-kit';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
@@ -124,7 +123,7 @@ const TokensWrapper = styled.div`
   
   @media ${deviceWidth.biggerThan.md} {
     grid-template-columns: repeat(4, 1fr);
-  }  
+  }
 
    @media ${deviceWidth.smallerThan.lg} {
     grid-template-columns: repeat(3, 1fr);

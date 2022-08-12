@@ -1,6 +1,6 @@
-
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import LoadingComponent from './LoadingComponent';
@@ -39,7 +39,6 @@ const Picture: FC<PictureProps> = ({ className, src }) => {
   }, [src]);
 
   return (<PictureWrapper className={className}>
-    {/* {isLoading && <PictureLoadingComponent />} */}
     {isLoading && <Skeleton
       height={'100%'}
       width={'100%'}
@@ -65,7 +64,6 @@ const Picture: FC<PictureProps> = ({ className, src }) => {
           <image
             height='100%'
             href={imageSrc}
-            // preserveAspectRatio='xMinYMin slice'
             width='100%'
             x='0'
             y='0'
@@ -73,7 +71,6 @@ const Picture: FC<PictureProps> = ({ className, src }) => {
         )} 
       </svg>
     )}
-    
   </PictureWrapper>);
 };
 
@@ -82,12 +79,6 @@ const PictureWrapper = styled.div`
   overflow: hidden;
   display: flex;
   align-items: center;
-`;
-
-const PictureLoadingComponent = styled(LoadingComponent)`
-  svg {
-    width: 32px !important;
-  }
 `;
 
 export default Picture;

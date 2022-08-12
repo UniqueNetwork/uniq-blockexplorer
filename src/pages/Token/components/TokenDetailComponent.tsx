@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
@@ -46,7 +46,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   const attributesParsed = convertAttributesToView(attributes);
 
   return (
-    
     <Wrapper>
       <TokenPicture
         alt={`${prefix}-${id}`}
@@ -103,7 +102,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         </CollectionInfoWrapper>
       </div>
     </Wrapper>
-    
   );
 };
 
