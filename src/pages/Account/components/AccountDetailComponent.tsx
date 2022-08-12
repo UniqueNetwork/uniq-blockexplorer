@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 import { account as gqlAccount } from '@app/api/graphQL';
 import { Avatar, LoadingComponent } from '@app/components';
 import { formatAmount, shortcutText } from '../../../utils/textUtils';
-import { useApi, useDeviceSize, DeviceSize } from '@app/hooks';
+import { useDeviceSize, DeviceSize } from '@app/hooks';
 
 interface AccountProps {
   accountId: string
@@ -39,7 +39,7 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
       <div>
         <Text size={'l'}>Account name</Text>
         <h2>
-          {deviceSize <= DeviceSize.md
+          {deviceSize <= DeviceSize.lg
             ? shortcutText(accountAddress)
             : accountAddress}
         </h2>

@@ -1,4 +1,3 @@
-import { Skeleton } from '@unique-nft/ui-kit';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 

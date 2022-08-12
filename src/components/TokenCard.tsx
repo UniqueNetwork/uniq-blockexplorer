@@ -124,9 +124,9 @@ const TokenBackground = styled.div<{imgUrl: string}>`
   border-radius: 8px 8px 0 0;
   
   &:after {
-  content: '';
-  display: block;
-  padding-top: 100%;
+    content: '';
+    display: block;
+    padding-top: 100%;
   }
 `;
 

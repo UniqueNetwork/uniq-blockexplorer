@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
+import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
@@ -23,10 +23,10 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(tokensOptions[0]);
 
-  const deviceSize = useDeviceSize2();
+  const deviceSize = useDeviceSize();
 
   const tokensLimit = useMemo(() => {
-    if (deviceSize === DeviceSize2.xxl || deviceSize === DeviceSize2.lg || deviceSize === DeviceSize2.xl) return 8;
+    if (deviceSize === DeviceSize.xxl || deviceSize === DeviceSize.lg || deviceSize === DeviceSize.xl) return 8;
 
     return 6;
   }, [deviceSize]);
