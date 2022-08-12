@@ -40,19 +40,19 @@ const Picture: FC<PictureProps> = ({ className, src }) => {
 
   return (<PictureWrapper className={className}>
     {isLoading && <Skeleton
-      height={'100%'}
-      width={'100%'}
+      height='100%'
+      width='100%'
     />}
     {!isLoading && (
       <svg
-        fill={'white'}
+        fill='white'
         height='100%'
         viewBox='0 0 1000 1000'
         width='100%'
       >
         {!imageSrc && <g>
           <rect
-            fill={'#D2D3D6'}
+            fill='#D2D3D6'
             height={1000}
             width={1000}
             x={0}
