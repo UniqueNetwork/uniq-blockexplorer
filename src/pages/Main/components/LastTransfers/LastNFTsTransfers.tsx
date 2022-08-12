@@ -35,9 +35,6 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
       searchString: prettifiedBlockSearchString,
     });
 
-  // eslint-disable-next-line no-console
-  console.log('nftTransfers', nftTransfers);
-
   if (/[^$,-,.\d]/.test(searchString || '') || nftTransfersCount === 0) return null;
 
   return (
