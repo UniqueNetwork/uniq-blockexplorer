@@ -8,7 +8,7 @@ import { timestampFormat } from '@app/utils';
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import TokensComponent from './TokensComponent';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { useDeviceSize, DeviceSize } from '@app/hooks';
 
 interface BasicDataComponentProps {
   collectionId: string
@@ -67,7 +67,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
               size={'x-small'}
             />
             <AccountLinkComponent
-              noShort={deviceSize >= DeviceSize.lg}
+              noShort={deviceSize >= DeviceSize.xl}
               value={owner || ''}
             />
           </OwnerAccountWrapper>

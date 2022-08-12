@@ -1,10 +1,10 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button, Heading, Text } from '@unique-nft/ui-kit';
 
 import { useGraphQlTokens } from '@app/api';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
 import { LoadingComponent, TokenCard } from '@app/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';

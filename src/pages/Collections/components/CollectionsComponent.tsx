@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { useApi } from '@app/hooks';
 import { CollectionSorting, useGraphQlCollections } from '@app/api';
+import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
 
 import { CollectionsComponentProps } from '../types';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
 import { getCollectionsColumns } from './collectionsColumnsSchema';

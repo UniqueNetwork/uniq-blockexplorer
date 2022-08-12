@@ -1,15 +1,14 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
+import { useDeviceSize, DeviceSize } from '@app/hooks';
+import { formatAmount, formatBlockNumber, shortcutText, timestampFormat } from '@app/utils';
 
 import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import LoadingComponent from '../../../components/LoadingComponent';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
-import { formatAmount, formatBlockNumber, shortcutText, timestampFormat } from '@app/utils';
 import ChainLogo from '../../../components/ChainLogo';
-import { useApi } from '@app/hooks';
 
 const ExtrinsicDetail: FC = () => {
   const { blockIndex } = useParams();

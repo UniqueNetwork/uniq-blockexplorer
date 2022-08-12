@@ -5,7 +5,7 @@ import AccountLinkComponent from '../../Account/components/AccountLinkComponent'
 import Table from '../../../components/Table';
 import { Holder, holders as gqlHolders, HolderSorting } from '../../../api/graphQL';
 import PaginationComponent from '../../../components/Pagination';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
+import { useDeviceSize, DeviceSize } from '@app/hooks';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 
