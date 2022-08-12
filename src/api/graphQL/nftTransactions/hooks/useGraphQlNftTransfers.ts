@@ -1,13 +1,18 @@
-import { useCallback } from "react";
-import {ApolloError, useQuery} from "@apollo/client";
-import { statisticsQuery } from "@app/api/graphQL/statistics/statistics";
-import { TokenTransaction, TokenTransactionsData, TokenTransactionsOrderByParams, TokenTransactionsVariables } from "@app/api/graphQL/nftTransactions/types";
+import { useCallback } from 'react';
+import { ApolloError, useQuery } from '@apollo/client';
+
+import {
+  TokenTransaction,
+  TokenTransactionsData,
+  TokenTransactionsVariables,
+} from '@app/api/graphQL/nftTransactions/types';
+
+import { nftTransactionsQuery } from '../nftTransactions';
 
 export interface UseGraphQlNftTransfersProps {
   pageSize: number;
-  filter?: Record<string, unknown>;
-  offset: number;
-  orderBy?: TokenTransactionsOrderByParams;
+  accountId?: string;
+  searchString?: string;
 }
 
 export interface UseGraphQlNftTransfersResult {
@@ -18,34 +23,64 @@ export interface UseGraphQlNftTransfersResult {
   timestamp?: number;
 }
 
-export const useGraphQlNftTransfers = ({ filter, offset, orderBy, pageSize }: UseGraphQlNftTransfersProps): UseGraphQlNftTransfersResult => {
+export const useGraphQlNftTransfers = ({
+  accountId,
+  pageSize,
+  searchString,
+}: UseGraphQlNftTransfersProps): UseGraphQlNftTransfersResult => {
   const getWhere = useCallback(
-    (filter?: Record<string, unknown>) => (filter || {}),
-    []
+    (searchString?: string) => ({
+      _and: {
+        ...(accountId
+          ? {
+              _or: [
+                // { from_owner: { _eq: accountId } },
+                // { from_owner_normalized: { _eq: accountId } },
+                { to_owner: { _eq: accountId } },
+                { to_owner_normalized: { _eq: accountId } },
+              ],
+            }
+          : {}),
+        ...(searchString
+          ? {
+              _or: {
+                block_index: { _eq: searchString },
+                // from_owner: { _eq: searchString },
+                // from_owner_normalized: { _eq: searchString },
+                to_owner: { _eq: searchString },
+                to_owner_normalized: { _eq: searchString },
+              },
+            }
+          : {}),
+      },
+    }),
+    [accountId],
   );
 
   const {
     data,
     error: fetchNftTransfersError,
-    loading: isNftTransfersFetching
-  } = useQuery<TokenTransactionsData, TokenTransactionsVariables>(statisticsQuery, {
+    loading: isNftTransfersFetching,
+  } = useQuery<TokenTransactionsData, TokenTransactionsVariables>(nftTransactionsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
-      offset,
-      orderBy,
-      where: getWhere(filter)
-    }
+      offset: 0,
+      where: getWhere(searchString),
+    },
   });
+
+  // eslint-disable-next-line no-console
+  console.log('data', data);
 
   return {
     fetchNftTransfersError,
     isNftTransfersFetching,
-    nftTransfers: data?.transactions?.data,
-    nftTransfersCount: data?.transactions?.count || 0,
-    timestamp: data?.transactions?.timestamp
+    nftTransfers: data?.tokenTransactions?.data,
+    nftTransfersCount: data?.tokenTransactions?.count || 0,
+    timestamp: data?.tokenTransactions?.timestamp,
   };
 };

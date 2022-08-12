@@ -1,30 +1,32 @@
-import React, {useState, VFC} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useState, VFC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {Button, SelectOptionProps} from '@unique-nft/ui-kit';
+import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { useApi } from '@app/hooks';
 import { PagePaperWrapper } from '@app/components';
 
-import { HeaderWithDropdown} from '../HeaderWithDropdown';
+import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { lastTransferOptions, SELECTED_BLOCK_NFT } from './lastTransferOptions';
-import { LastCoinsTransfers } from "./LastCoinsTransfers";
-import { LastNFTsTransfers } from "./LastNFTsTransfers";
+import { LastCoinsTransfers } from './LastCoinsTransfers';
+import { LastNFTsTransfers } from './LastNFTsTransfers';
 
 export type LastTransfersProps = {
-  searchString?: string
-  pageSize?: number
-  accountId?: string
-}
+  searchString?: string;
+  pageSize?: number;
+  accountId?: string;
+};
 
 export const LastTransfers: VFC<LastTransfersProps> = ({
   accountId,
   pageSize = 5,
-  searchString
+  searchString,
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(lastTransferOptions[0]);
+  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
+    lastTransferOptions[0],
+  );
   const linkUrl = `/${currentChain.network}/last-transfers`;
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
 
@@ -38,9 +40,9 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
         options={lastTransferOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
-        title='Last transfers'
+        title="Last transfers"
       />
-      { showNFTs ? (
+      {showNFTs ? (
         <LastNFTsTransfers
           accountId={accountId}
           pageSize={pageSize}
@@ -57,11 +59,11 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
         iconRight={{
           color: '#fff',
           name: 'arrow-right',
-          size: 12
+          size: 12,
         }}
+        role="primary"
+        title="See all"
         onClick={onClickSeeMore}
-        role='primary'
-        title='See all'
       />
     </Wrapper>
   );

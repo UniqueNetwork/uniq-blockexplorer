@@ -6,13 +6,13 @@ import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from 
 // { amount: desc }
 
 const getLastTransfersQuery = gql`
-  query getLastTransfers($limit: Int, $offset: Int,  $orderBy: ExtrinsicOrderByParams = {}, $where: ExtrinsicWhereParams = {}) {
-    extrinsics(
-      limit: $limit
-      offset: $offset
-      order_by: $orderBy
-      where: $where
-    ) {
+  query getLastTransfers(
+    $limit: Int
+    $offset: Int
+    $orderBy: ExtrinsicOrderByParams = {}
+    $where: ExtrinsicWhereParams = {}
+  ) {
+    extrinsics(limit: $limit, offset: $offset, order_by: $orderBy, where: $where) {
       data {
         block_number
         block_index
@@ -24,7 +24,7 @@ const getLastTransfersQuery = gql`
         success
         timestamp
         to_owner
-        to_owner_normalized    
+        to_owner_normalized
       }
       count
       timestamp
@@ -32,42 +32,48 @@ const getLastTransfersQuery = gql`
   }
 `;
 
-export const useGraphQlLastTransfers = ({ accountId, pageSize, searchString }: useGraphQlLastTransfersProps) => {
+export const useGraphQlLastTransfers = ({
+  accountId,
+  pageSize,
+  searchString,
+}: useGraphQlLastTransfersProps) => {
   const getWhere = useCallback(
     (searchString?: string) => ({
       _and: {
         amount: { _neq: 0 },
-        method: { _in: ['transfer', 'transferAll', 'transferKeepAlive', 'vestedTransfer'] },
+        method: {
+          _in: ['transfer', 'transferAll', 'transferKeepAlive', 'vestedTransfer'],
+        },
         ...(accountId
           ? {
-            _or: [
-              { from_owner: { _eq: accountId } },
-              { from_owner_normalized: { _eq: accountId } },
-              { to_owner: { _eq: accountId } },
-              { to_owner_normalized: { _eq: accountId } }
-            ]
-          }
+              _or: [
+                { from_owner: { _eq: accountId } },
+                { from_owner_normalized: { _eq: accountId } },
+                { to_owner: { _eq: accountId } },
+                { to_owner_normalized: { _eq: accountId } },
+              ],
+            }
           : {}),
         ...(searchString
           ? {
-            _or: {
-              block_index: { _eq: searchString },
-              from_owner: { _eq: searchString },
-              from_owner_normalized: { _eq: searchString },
-              to_owner: { _eq: searchString },
-              to_owner_normalized: { _eq: searchString }
+              _or: {
+                block_index: { _eq: searchString },
+                from_owner: { _eq: searchString },
+                from_owner_normalized: { _eq: searchString },
+                to_owner: { _eq: searchString },
+                to_owner_normalized: { _eq: searchString },
+              },
             }
-          }
-          : {})
-      }
+          : {}),
+      },
     }),
-    [accountId]
+    [accountId],
   );
 
   const {
     data,
     error: fetchTransfersError,
-    loading: isTransfersFetching
+    loading: isTransfersFetching,
   } = useQuery<TransfersData, TransfersVariables>(getLastTransfersQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -76,8 +82,8 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize, searchString }: u
     variables: {
       limit: pageSize,
       offset: 0,
-      where: getWhere(searchString)
-    }
+      where: getWhere(searchString),
+    },
   });
 
   return {
@@ -85,7 +91,7 @@ export const useGraphQlLastTransfers = ({ accountId, pageSize, searchString }: u
     isTransfersFetching,
     timestamp: data?.extrinsics?.timestamp,
     transfers: data?.extrinsics?.data,
-    transfersCount: data?.extrinsics?.count || 0
+    transfersCount: data?.extrinsics?.count || 0,
   };
 };
 

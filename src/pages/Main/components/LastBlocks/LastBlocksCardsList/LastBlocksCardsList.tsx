@@ -8,33 +8,29 @@ import { LastBlockWithTimeDif } from '@app/api';
 
 import { LastBlocksCard } from './LastBlocksCard';
 
-interface MobileCardsListProps {
+interface LastBlocksCardsListProps {
   columns: ColumnType<LastBlockWithTimeDif>[];
   data?: LastBlockWithTimeDif[];
   loading?: boolean;
 }
 
-export const LastBlocksCardsList: VFC<MobileCardsListProps> = ({ columns, data, loading }) => {
+export const LastBlocksCardsList: VFC<LastBlocksCardsListProps> = ({
+  columns,
+  data,
+  loading,
+}) => {
   if (loading) {
-    return (
-      <LoadingComponent />
-    );
+    return <LoadingComponent />;
   }
 
   if (!loading && data?.length === 0) {
-    return (
-      <Text className={'text_grey'}>No data</Text>
-    );
+    return <Text className={'text_grey'}>No data</Text>;
   }
 
   return (
     <Wrapper>
-      { data?.map((item) => (
-        <LastBlocksCard
-          columns={columns}
-          item={item}
-          key={item.block_number}
-        />
+      {data?.map((item) => (
+        <LastBlocksCard columns={columns} item={item} key={item.block_number} />
       ))}
     </Wrapper>
   );

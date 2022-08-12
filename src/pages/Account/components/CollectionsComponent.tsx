@@ -10,7 +10,7 @@ import CollectionCard from '../../../components/CollectionCard';
 import SearchComponent from '../../../components/SearchComponent';
 
 interface CollectionsComponentProps {
-  accountId: string
+  accountId: string;
 }
 
 const pageSize = 6;
@@ -21,50 +21,48 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   // TODO - fix search for all pages and remove this
   const [searchString, setSearchString] = useState<string | undefined>();
 
-  const { collections, collectionsCount } =
-    useGraphQlCollections({
-      filter: {
-        _or: [
-          { owner: { _eq: accountId } },
-          { owner_normalized: { _eq: accountId } }
-        ]
-      },
-      pageSize,
-      searchString
-    });
+  const { collections, collectionsCount } = useGraphQlCollections({
+    filter: {
+      _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
+    },
+    pageSize,
+    searchString,
+  });
 
   const onClickSeeMore = () => {
     navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
   };
 
-  return (<>
-    <ControlsWrapper>
-      <SearchComponent
-        onSearchChange={setSearchString}
-        placeholder={'NFT / collection'}
-      />
-    </ControlsWrapper>
-    <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
-    <CollectionsWrapper>
-      {collections?.map &&
+  return (
+    <>
+      <ControlsWrapper>
+        <SearchComponent
+          placeholder={'NFT / collection'}
+          onSearchChange={setSearchString}
+        />
+      </ControlsWrapper>
+      <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
+      <CollectionsWrapper>
+        {collections?.map &&
           collections.map((collection: Collection) => (
             <CollectionCard
               key={`collection-${collection.collection_id}`}
               {...collection}
             />
           ))}
-    </CollectionsWrapper>
-    <Button
-      iconRight={{
-        color: '#fff',
-        name: 'arrow-right',
-        size: 12
-      }}
-      onClick={onClickSeeMore}
-      role='primary'
-      title={'See all'}
-    />
-  </>);
+      </CollectionsWrapper>
+      <Button
+        iconRight={{
+          color: '#fff',
+          name: 'arrow-right',
+          size: 12,
+        }}
+        role="primary"
+        title={'See all'}
+        onClick={onClickSeeMore}
+      />
+    </>
+  );
 };
 
 const ControlsWrapper = styled.div`

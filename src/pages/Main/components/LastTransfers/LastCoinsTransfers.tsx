@@ -2,54 +2,51 @@ import React, { VFC } from 'react';
 
 import { DeviceSize2, useApi, useDeviceSize2 } from '@app/hooks';
 import { Table } from '@app/components';
-import { useGraphQlLastTransfers } from '@app/api';
+import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
 import { LastTransfersCardsList } from './LastTransfersCardsList';
 
 export type LastTransfersProps = {
-  searchString?: string
-  pageSize?: number
-  accountId?: string
-}
+  searchString?: string;
+  pageSize?: number;
+  accountId?: string;
+};
 
 export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   accountId,
   pageSize = 5,
-  searchString
+  searchString,
 }) => {
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize2();
-  const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
+  const prettifiedBlockSearchString =
+    searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize2.sm;
 
-  const { isTransfersFetching, transfers, transfersCount } =
-    useGraphQlLastTransfers({ accountId, pageSize, searchString: prettifiedBlockSearchString });
+  const { isTransfersFetching, transfers, transfersCount } = useGraphQlLastTransfers({
+    accountId,
+    pageSize,
+    searchString: prettifiedBlockSearchString,
+  });
 
   if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
 
   return (
     <>
-    
-      { !isMobile && (
+      {!isMobile && (
         <Table
-          columns={getTransferColumns(
-            currentChain?.symbol,
-            currentChain?.network
-          )}
-          data={transfersWithTimeDifference(transfers)}
+          columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
+          data={transfersWithTimeDifference<Transfer>(transfers)}
           loading={isTransfersFetching}
-          rowKey='block_index'
+          rowKey="block_index"
         />
       )}
-      { isMobile && (
+      {isMobile && (
         <LastTransfersCardsList
-          columns={getTransferColumns(
-            currentChain?.symbol,
-            currentChain?.network
-          )}
-          data={transfersWithTimeDifference(transfers)}
+          columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
+          data={transfersWithTimeDifference<Transfer>(transfers)}
           loading={isTransfersFetching}
         />
       )}

@@ -19,3 +19,4 @@ export * from './transfers/transfers';
 export * from './transfers/types';
 export * from './blocks/block';
 export * from './blocks/types';
+export * from './nftTransactions';

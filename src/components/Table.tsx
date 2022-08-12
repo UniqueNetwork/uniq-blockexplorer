@@ -8,10 +8,10 @@ import MobileTable from './MobileTable';
 
 interface TableProps<RecordType = DefaultRecordType> {
   hideMobile?: boolean;
-  columns?: ColumnType<RecordType>[]
-  data?: RecordType[]
-  loading?: boolean
-  rowKey?: string | GetRowKey<RecordType>
+  columns?: ColumnType<RecordType>[];
+  data?: RecordType[];
+  loading?: boolean;
+  rowKey?: string | GetRowKey<RecordType>;
 }
 
 const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
@@ -36,45 +36,42 @@ const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
 
 const TableWrapper = styled.div`
   position: relative;
-  
+
   .rc-table {
     margin-bottom: calc(var(--gap) * 1.5);
-    
+
     table {
       width: 100%;
       border-spacing: 0px;
       table-layout: fixed !important;
     }
-    
+
     &-thead {
-      
       tr {
         background-color: var(--blue-gray);
-
       }
-      
+
       th {
         padding: calc(var(--gap) / 2) var(--gap);
         text-align: left;
         color: var(--grey);
         font-size: 16px;
         font-weight: 500;
-
       }
     }
-    
+
     &-tbody {
       td {
         padding: calc(var(--gap) / 2) var(--gap);
         text-align: left;
         font-size: 16px;
-        border-bottom: 1px dashed #D2D3D6;
+        border-bottom: 1px dashed #d2d3d6;
         color: var(--grey-600);
         overflow: hidden;
         word-break: break-word;
       }
     }
-    
+
     &-placeholder {
       td {
         text-align: center;

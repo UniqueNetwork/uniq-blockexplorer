@@ -3,14 +3,18 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
-import { formatAmount, formatBlockNumber, shortcutText, timestampFormat } from '@app/utils';
+import {
+  formatAmount,
+  formatBlockNumber,
+  shortcutText,
+  timestampFormat,
+} from '@app/utils';
 
 import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import LoadingComponent from '../../../components/LoadingComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import ChainLogo from '../../../components/ChainLogo';
-
 
 const ExtrinsicDetail: FC = () => {
   const { blockIndex } = useParams();
@@ -33,7 +37,7 @@ const ExtrinsicDetail: FC = () => {
     section,
     success,
     timestamp,
-    to_owner: toOwner
+    to_owner: toOwner,
   } = extrinsic || {};
 
   return (
@@ -41,27 +45,13 @@ const ExtrinsicDetail: FC = () => {
       <div>
         <Heading>{`Extrinsic ${blockIndex}`}</Heading>
         <ExtrinsicDataWrapper>
-          <Text
-            color={'grey-500'}
-          >
-            Block
-          </Text>
+          <Text color={'grey-500'}>Block</Text>
           <Text>{formatBlockNumber(blockNumber)}</Text>
-          <Text
-            color={'grey-500'}
-          >
-            Timestamp
-          </Text>
-          <Text>
-            {timestamp ? timestampFormat(timestamp) : ''}
-          </Text>
+          <Text color={'grey-500'}>Timestamp</Text>
+          <Text>{timestamp ? timestampFormat(timestamp) : ''}</Text>
         </ExtrinsicDataWrapper>
         <ExtrinsicDataWrapper>
-          <Text
-            color={'grey-500'}
-          >
-            From
-          </Text>
+          <Text color={'grey-500'}>From</Text>
           <div>
             {fromOwner && (
               <AccountLinkComponent
@@ -71,11 +61,7 @@ const ExtrinsicDetail: FC = () => {
               />
             )}
           </div>
-          <Text
-            color={'grey-500'}
-          >
-            To
-          </Text>
+          <Text color={'grey-500'}>To</Text>
           <div>
             {toOwner && (
               <AccountLinkComponent
@@ -87,58 +73,32 @@ const ExtrinsicDetail: FC = () => {
           </div>
         </ExtrinsicDataWrapper>
         <ExtrinsicDataWrapper>
-          <Text
-            color={'grey-500'}
-          >
-            Amount
-          </Text>
+          <Text color={'grey-500'}>Amount</Text>
           {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
           <ChainLogoWrapper>
             <ChainLogo isInline={true} />
             <Text>{`${formatAmount(amount || 0)}`}</Text>
           </ChainLogoWrapper>
-          <Text
-            color={'grey-500'}
-          >
-            Fee
-          </Text>
+          <Text color={'grey-500'}>Fee</Text>
           <ChainLogoWrapper>
             <ChainLogo isInline={true} />
             <Text>{`${formatAmount(fee || 0)}`}</Text>
           </ChainLogoWrapper>
         </ExtrinsicDataWrapper>
         <ExtrinsicDataWrapper>
-          {hash && <><Text
-            color={'grey-500'}
-          >
-            Hash
-          </Text>
-          <Text>
-            {deviceSize >= DeviceSize.md ? hash : shortcutText(hash)}
-          </Text></>}
-          <Text
-            color={'grey-500'}
-          >
-            Extrinsic
-          </Text>
+          {hash && (
+            <>
+              <Text color={'grey-500'}>Hash</Text>
+              <Text>{deviceSize >= DeviceSize.md ? hash : shortcutText(hash)}</Text>
+            </>
+          )}
+          <Text color={'grey-500'}>Extrinsic</Text>
           <Text>{blockIndex}</Text>
-          <Text
-            color={'grey-500'}
-          >
-            Method
-          </Text>
+          <Text color={'grey-500'}>Method</Text>
           <Text>{method || ''}</Text>
-          <Text
-            color={'grey-500'}
-          >
-            Section
-          </Text>
+          <Text color={'grey-500'}>Section</Text>
           <Text>{section || ''}</Text>
-          <Text
-            color={'grey-500'}
-          >
-            Result
-          </Text>
+          <Text color={'grey-500'}>Result</Text>
           <Text>{success ? 'Success' : 'Error'}</Text>
         </ExtrinsicDataWrapper>
       </div>
@@ -180,14 +140,14 @@ const ExtrinsicDataWrapper = styled.div`
   }
   @media (max-width: 767px) {
     grid-row-gap: 0;
-    &>div, &>span {
+    & > div,
+    & > span {
       grid-column: span 2;
       margin-top: calc(var(--gap) / 2);
       &:nth-child(even) {
         margin-top: calc(var(--gap) / 4);
       }
     }
-    
   }
 `;
 

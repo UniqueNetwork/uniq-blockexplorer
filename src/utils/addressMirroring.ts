@@ -14,7 +14,7 @@ export function getMirrorFromEthersToSubstrate(h160Addr: string, format: TAddres
     POLKADOT: 0,
     QUARTZ: 255,
     UNIQUE: 7391,
-    normalized: 42
+    normalized: 42,
   };
   const prefix = getPrefixForFormat[format];
   const addressBytes = Buffer.from(h160Addr.slice(2), 'hex');

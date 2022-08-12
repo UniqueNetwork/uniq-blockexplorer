@@ -10,12 +10,18 @@ import ApiWrapper from './api/ApiWrapper';
 
 // exclude analytics for development mode
 if (process.env.NODE_ENV !== 'development') {
-  amplitude.getInstance().init(window.ENV?.AMPLITUDE_ANALYTICS_API_KEY || process.env.AMPLITUDE_ANALYTICS_API_KEY || '');
+  amplitude
+    .getInstance()
+    .init(
+      window.ENV?.AMPLITUDE_ANALYTICS_API_KEY ||
+        process.env.AMPLITUDE_ANALYTICS_API_KEY ||
+        '',
+    );
 }
 
 export default function App() {
   return (
-    <div className='app-wrapper'>
+    <div className="app-wrapper">
       <Notifications closingDelay={5000}>
         <ApiWrapper>
           <PageLayout>

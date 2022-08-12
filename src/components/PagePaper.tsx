@@ -2,11 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 export const PagePaper: FC = ({ children }) => {
-  return (
-    <PagePaperWrapper>
-      {children}
-    </PagePaperWrapper>
-  );
+  return <PagePaperWrapper>{children}</PagePaperWrapper>;
 };
 
 export const PagePaperWrapper = styled.div`

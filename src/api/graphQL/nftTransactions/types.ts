@@ -1,4 +1,4 @@
-import { GQLOrderByParamsArgs, GQLWhereOpsString } from '../types';
+import { GQLOrderByParamsArgs } from '../types';
 
 export type TokenTransaction = {
   block_index: string;
@@ -7,39 +7,38 @@ export type TokenTransaction = {
   image: object;
   signer: string;
   signer_normalized: string;
-  timestamp?: number;
+  timestamp: number | null;
+  from_owner: string;
+  from_owner_normalized: string;
   to_owner: string;
   to_owner_normalized: string;
   token_id: number;
   token_name?: string;
   token_prefix?: string;
-}
+};
 
+export interface TokenTransactionWithTimeDif extends TokenTransaction {
+  time_difference: string;
+}
 
 export type TokenTransactionsOrderByParams = {
   block_index: GQLOrderByParamsArgs;
   timestamp: GQLOrderByParamsArgs;
-}
-
-export type  TokenTransactionWhereParams = {
-  _and?: TokenTransactionWhereParams[];
-  _or?: TokenTransactionWhereParams[];
-  block_index?: GQLWhereOpsString;
-}
+};
 
 export type TokenTransactionsVariables = {
   limit: number;
   offset: number;
-  where?: TokenTransactionWhereParams;
-  orderBy?: TokenTransactionsOrderByParams;
-}
+  order_by?: { [name: string]: 'asc' | 'desc' };
+  where?: { [key: string]: unknown };
+};
 
 export type TokenTransactionsDataResponse = {
   count: number;
   data: TokenTransaction[];
   timestamp: number;
-}
+};
 
 export type TokenTransactionsData = {
-  transactions: TokenTransactionsDataResponse;
-}
+  tokenTransactions: TokenTransactionsDataResponse;
+};

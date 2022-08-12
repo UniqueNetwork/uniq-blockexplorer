@@ -14,8 +14,8 @@ import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 interface TokenDetailComponentProps {
-  token: Token
-  loading?: boolean
+  token: Token;
+  loading?: boolean;
 }
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
@@ -26,7 +26,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     logUserEvents(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
   }, []);
 
-
   const {
     attributes,
     collection_description: description,
@@ -36,7 +35,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     image,
     owner,
     token_id: id,
-    token_prefix: prefix
+    token_prefix: prefix,
   } = token;
 
   const imageUrl = useCheckImageExists(image.fullUrl);
@@ -47,37 +46,30 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   return (
     <Wrapper>
-      <TokenPicture
-        alt={`${prefix}-${id}`}
-        src={imageUrl}
-      />
+      <TokenPicture alt={`${prefix}-${id}`} src={imageUrl} />
       <div>
-        <Heading size='2'>{`${prefix} #${id}`}</Heading>
+        <Heading size="2">{`${prefix} #${id}`}</Heading>
         <TokenInfo>
-          <Text color='grey-500'>Created on</Text>
+          <Text color="grey-500">Created on</Text>
           <Text>{timestampFormat(createdOn)}</Text>
-          <Text color='grey-500'>Owner</Text>
+          <Text color="grey-500">Owner</Text>
           <OwnerWrapper>
-            <Avatar size='x-small' />
-            <AccountLinkComponent
-              noShort={deviceSize >= DeviceSize.lg}
-              value={owner}
-            />
+            <Avatar size="x-small" />
+            <AccountLinkComponent noShort={deviceSize >= DeviceSize.lg} value={owner} />
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
-          <Heading size='4'>Attributes</Heading>
+          <Heading size="4">Attributes</Heading>
           <div>
             {attributesParsed.map((attr) => (
               <div key={`attribute-${attr.name}`}>
-                <Text color='grey-500'>{attr.name}</Text>
+                <Text color="grey-500">{attr.name}</Text>
                 <TagsWrapper>
-                  {Array.isArray(attr.value) && attr.value.map((item, index) => (
-                    <Tag key={`item-${item}-${index}`}>{item}</Tag>
-                  ))}
-                  {typeof attr.value === 'string' && (
-                    <Tag>{attr.value}</Tag>
-                  )}
+                  {Array.isArray(attr.value) &&
+                    attr.value.map((item: string, index: number) => (
+                      <Tag key={`item-${item}-${index}`}>{item}</Tag>
+                    ))}
+                  {typeof attr.value === 'string' && <Tag>{attr.value}</Tag>}
                 </TagsWrapper>
               </div>
             ))}
@@ -85,17 +77,17 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         </TokenAttributes>
         <CollectionInfoWrapper>
           <CollectionLink
-            onClick={onCollectionClick}
             to={`/${currentChain.network}/collections/${collectionId}`}
+            onClick={onCollectionClick}
           >
             <Avatar
-              size='small'
+              size="small"
               src={getCoverURLFromCollection(token.collection_cover)}
             />
             <div>
-              <Heading size='4'>{name}</Heading>
+              <Heading size="4">{name}</Heading>
               <div>
-                <Text color='grey-500'>{description || ''}</Text>
+                <Text color="grey-500">{description || ''}</Text>
               </div>
             </div>
           </CollectionLink>
@@ -110,17 +102,15 @@ const Wrapper = styled.div`
   grid-template-columns: 536px 1fr;
   grid-column-gap: var(--gap);
 
-
-  @media(max-width: 1024px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 326px 1fr;
   }
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     grid-template-columns: 224px 1fr;
   }
-  @media(max-width: 568px) {
+  @media (max-width: 568px) {
     grid-template-columns: 1fr;
   }
-  
 `;
 
 const TokenPicture = styled(Picture)`
@@ -131,16 +121,16 @@ const TokenPicture = styled(Picture)`
   svg {
     width: 100%;
   }
-  
-  @media(max-width: 1024px) {
+
+  @media (max-width: 1024px) {
     width: 326px;
     height: 326px;
   }
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     width: 224px;
     height: 224px;
   }
-  @media(max-width: 568px) {
+  @media (max-width: 568px) {
     width: 100%;
     height: 100%;
   }
@@ -195,7 +185,7 @@ const CollectionLink = styled(Link)`
   }
   svg {
     min-width: 40px;
-  }  
+  }
 `;
 
 const OwnerWrapper = styled.div`

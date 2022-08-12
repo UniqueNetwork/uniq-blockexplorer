@@ -8,9 +8,8 @@ import { getApolloClient } from '@app/api/graphQL/apolloClient';
 import { ApiContextProps, ApiProvider } from './ApiContext';
 import config from '../config';
 
-
 interface ChainProviderProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const { chains, defaultChain } = config;
@@ -21,9 +20,9 @@ const ApiWrapper = ({ children }: ChainProviderProps) => {
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
     () => ({
-      currentChain: chainId ? chains[chainId] : defaultChain
+      currentChain: chainId ? chains[chainId] : defaultChain,
     }),
-    [chainId]
+    [chainId],
   );
 
   const client = useMemo(() => {

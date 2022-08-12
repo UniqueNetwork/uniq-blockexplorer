@@ -4,7 +4,12 @@ import { useMemo } from 'react';
 import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
 
 const tokensQuery = gql`
-  query getTokens($limit: Int, $offset: Int, $where: TokenWhereParams = {}, $orderBy: TokenOrderByParams = {}) {
+  query getTokens(
+    $limit: Int
+    $offset: Int
+    $where: TokenWhereParams = {}
+    $orderBy: TokenOrderByParams = {}
+  ) {
     tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
         attributes
@@ -25,12 +30,11 @@ const tokensQuery = gql`
   }
 `;
 
-const parseSearchString = (searchString: string): { num?: number, str?: string } => {
+const parseSearchString = (searchString: string): { num?: number; str?: string } => {
   let num, str;
   const queries = searchString.split(' ');
 
   queries.map((query) => {
-
     let param = query;
 
     // if first symbol is '#', trim it
@@ -54,10 +58,14 @@ const parseSearchString = (searchString: string): { num?: number, str?: string }
 
 const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] => {
   return [
-    { token_prefix: { _ilike: `%${parseSearchString(searchString).str || searchString}%` } },
+    {
+      token_prefix: {
+        _ilike: `%${parseSearchString(searchString).str || searchString}%`,
+      },
+    },
     ...(Number(searchString) ? [{ token_id: { _eq: Number(searchString) } }] : []),
     { collection_name: { _ilike: `%${searchString}%` } },
-    ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
+    ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : []),
   ];
 };
 
@@ -71,41 +79,51 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
     .map((searchPart: number) => ({ collection_id: { _eq: Number(searchPart) } }));
 };
 
-export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchString }: useGraphQlTokensProps) => {
+export const useGraphQlTokens = ({
+  filter,
+  offset,
+  orderBy,
+  pageSize,
+  searchString,
+}: useGraphQlTokensProps) => {
   if (searchString) {
     parseSearchString(searchString);
   }
 
   // if searchString contain number and text we'll be looking for by token_prefix and token_id
-  const searchByTokenPrefixAndId = searchString && parseSearchString(searchString).num && parseSearchString(searchString).str;
+  const searchByTokenPrefixAndId =
+    searchString &&
+    parseSearchString(searchString).num &&
+    parseSearchString(searchString).str;
 
-  const getWhere = (
-    (filter?: Record<string, unknown>, searchString?: string) => ({
-      _and: {
-        ...(filter || {}),
-        ...(searchString && searchByTokenPrefixAndId ? {
-          token_id: { _eq: parseSearchString(searchString).num },
-          token_prefix: { _ilike: `%${parseSearchString(searchString).str}%` }
-        } : {}),
-        ...(searchString
-          ? {
+  const getWhere = (filter?: Record<string, unknown>, searchString?: string) => ({
+    _and: {
+      ...(filter || {}),
+      ...(searchString && searchByTokenPrefixAndId
+        ? {
+            token_id: { _eq: parseSearchString(searchString).num },
+            token_prefix: { _ilike: `%${parseSearchString(searchString).str}%` },
+          }
+        : {}),
+      ...(searchString
+        ? {
             _or: [
               ...getSearchQuery(searchString),
               // Why is there an address search if the address never gets here?
               { owner: { _eq: searchString } },
-              { owner_normalized: { _eq: searchString } }
-            ]
+              { owner_normalized: { _eq: searchString } },
+            ],
           }
-          : {})
-      }
-    }));
+        : {}),
+    },
+  });
 
   const where = getWhere(filter, searchString);
 
   const {
     data,
     error: fetchTokensError,
-    loading: isTokensFetching
+    loading: isTokensFetching,
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -116,16 +134,25 @@ export const useGraphQlTokens = ({ filter, offset, orderBy, pageSize, searchStri
       offset,
       orderBy,
       where,
-    }
+    },
   });
 
-  return useMemo(() => ({
-    fetchTokensError,
-    isTokensFetching,
-    timestamp: data?.tokens?.timestamp,
-    tokens: data?.tokens?.data,
-    tokensCount: data?.tokens?.count || 0
-  }), [data?.tokens?.count, data?.tokens?.data, data?.tokens?.timestamp, fetchTokensError, isTokensFetching]);
+  return useMemo(
+    () => ({
+      fetchTokensError,
+      isTokensFetching,
+      timestamp: data?.tokens?.timestamp,
+      tokens: data?.tokens?.data,
+      tokensCount: data?.tokens?.count || 0,
+    }),
+    [
+      data?.tokens?.count,
+      data?.tokens?.data,
+      data?.tokens?.timestamp,
+      fetchTokensError,
+      isTokensFetching,
+    ],
+  );
 };
 
 export const useGraphQlToken = (collectionId: number, tokenId: number) => {
@@ -134,22 +161,22 @@ export const useGraphQlToken = (collectionId: number, tokenId: number) => {
   const {
     data,
     error: fetchTokensError,
-    loading: isTokensFetching
+    loading: isTokensFetching,
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: 1,
       offset: 0,
-      where
-    }
+      where,
+    },
   });
 
   return {
     fetchTokensError,
     isTokensFetching,
     timestamp: data?.tokens?.timestamp,
-    token: data?.tokens?.data[0] || undefined
+    token: data?.tokens?.data[0] || undefined,
   };
 };
 

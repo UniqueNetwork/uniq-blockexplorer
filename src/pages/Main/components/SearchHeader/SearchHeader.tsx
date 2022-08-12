@@ -17,11 +17,12 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({ setSearchString }) => {
   return (
     <Wrapper>
       <H>
-        Block Explorer&nbsp;<NetworkName networkColor={networkColor}>{currentChain?.name}</NetworkName>
+        Block Explorer&nbsp;
+        <NetworkName networkColor={networkColor}>{currentChain?.name}</NetworkName>
       </H>
       <SearchComponent
-        onSearchChange={setSearchString}
         placeholder={'Extrinsic / collection / NFT / account'}
+        onSearchChange={setSearchString}
       />
     </Wrapper>
   );

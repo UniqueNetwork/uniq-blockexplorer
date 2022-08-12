@@ -14,8 +14,8 @@ import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
 
 interface TokensProps {
-  searchString?: string
-  collectionId?: number
+  searchString?: string;
+  collectionId?: number;
 }
 
 export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
@@ -34,9 +34,9 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
 
   const onClick = useCallback(() => {
     const linkUrl = `/${currentChain.network}/tokens`;
-    const navigateTo: {pathname: string, search?: string} = {pathname: linkUrl};
+    const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
 
-    if(searchString){
+    if (searchString) {
       const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
 
       navigateTo.search = searchParams;
@@ -46,14 +46,16 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     navigate(navigateTo);
   }, [currentChain, navigate, searchString]);
 
-  const filter = collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined;
+  const filter = collectionId
+    ? { collection_id: { _eq: Number(collectionId) } }
+    : undefined;
 
   const { isTokensFetching, timestamp, tokens } = useGraphQlTokens({
     filter,
     offset: 0,
     orderBy: { collection_id: 'desc', token_id: 'desc' },
     pageSize: tokensLimit,
-    searchString
+    searchString,
   });
 
   if (!tokens?.length) return null;
@@ -64,7 +66,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
         options={tokensOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
-        title='Tokens'
+        title="Tokens"
       />
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
@@ -80,11 +82,11 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
         iconRight={{
           color: 'white',
           name: 'arrow-right',
-          size: 10
+          size: 10,
         }}
-        onClick={onClick}
         role={'primary'}
         title={'See all'}
+        onClick={onClick}
       />
     </Wrapper>
   );
@@ -104,23 +106,23 @@ const TokensWrapper = styled.div`
   grid-column-gap: calc(var(--gap) * 1.5);
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
-  
+
   @media ${deviceWidth.only.xxl} {
     grid-template-columns: repeat(6, 1fr);
-  }  
-  
+  }
+
   @media ${deviceWidth.smallerThan.xxl} {
     grid-template-columns: repeat(4, 1fr);
   }
 
-   @media ${deviceWidth.smallerThan.lg} {
+  @media ${deviceWidth.smallerThan.lg} {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   @media ${deviceWidth.smallerThan.sm} {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   @media ${deviceWidth.smallerThan.xs} {
     grid-template-columns: 1fr;
   }

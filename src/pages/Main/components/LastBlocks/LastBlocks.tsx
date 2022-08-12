@@ -14,21 +14,19 @@ import { blocksWithTimeDifference } from './blocksWithTimeDifference';
 import { LastBlocksCardsList } from './LastBlocksCardsList';
 import { DeviceSize2, useDeviceSize2 } from '../../../../hooks/useDeviceSize2';
 
-export const LastBlocks = ({
-  pageSize = 5,
-  searchString
-}: BlockComponentProps) => {
+export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const deviceSize = useDeviceSize2();
   const linkText = 'See all';
   const linkUrl = `/${currentChain.network}/last-blocks`;
-  const prettifiedBlockSearchString = searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
+  const prettifiedBlockSearchString =
+    searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize2.sm;
 
   const { blockCount, blocks, isBlocksFetching, timestamp } = useGraphQlBlocks({
     pageSize,
-    searchString: prettifiedBlockSearchString
+    searchString: prettifiedBlockSearchString,
   });
 
   const onClickSeeMore = () => {
@@ -39,10 +37,8 @@ export const LastBlocks = ({
 
   return (
     <Wrapper>
-      <HeaderWithDropdown
-        title='Last blocks'
-      />
-      { !isMobile && (
+      <HeaderWithDropdown title="Last blocks" />
+      {!isMobile && (
         <Table
           columns={getLastBlocksColumns(currentChain.network)}
           data={blocksWithTimeDifference(blocks, timestamp)}
@@ -50,7 +46,7 @@ export const LastBlocks = ({
           rowKey={'block_number'}
         />
       )}
-      { isMobile && (
+      {isMobile && (
         <LastBlocksCardsList
           columns={getLastBlocksColumns(currentChain.network)}
           data={!isBlocksFetching ? blocksWithTimeDifference(blocks, timestamp) : []}
@@ -61,11 +57,11 @@ export const LastBlocks = ({
         iconRight={{
           color: '#fff',
           name: 'arrow-right',
-          size: 12
+          size: 12,
         }}
-        onClick={onClickSeeMore}
-        role='primary'
+        role="primary"
         title={linkText}
+        onClick={onClickSeeMore}
       />
     </Wrapper>
   );

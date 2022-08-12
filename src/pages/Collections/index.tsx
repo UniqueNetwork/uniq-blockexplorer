@@ -8,8 +8,7 @@ import PagePaper from '../../components/PagePaper';
 const CollectionsPage: FC = () => {
   const [queryParams, setQueryParams] = useSearchParams();
 
-
-  const onSearchChange = (value: string)=>{
+  const onSearchChange = (value: string) => {
     if (!value) {
       queryParams.delete('search');
     } else {
@@ -19,15 +18,17 @@ const CollectionsPage: FC = () => {
     setQueryParams(queryParams);
   };
 
-  return (<PagePaper>
-    <SearchComponent
-      onSearchChange={onSearchChange}
-      placeholder={'Сollection / account'}
-    />
-    <div>
-      <CollectionsComponent />
-    </div>
-  </PagePaper>);
+  return (
+    <PagePaper>
+      <SearchComponent
+        placeholder={'Сollection / account'}
+        onSearchChange={onSearchChange}
+      />
+      <div>
+        <CollectionsComponent />
+      </div>
+    </PagePaper>
+  );
 };
 
 export default CollectionsPage;

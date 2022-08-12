@@ -10,10 +10,9 @@ import PaginationComponent from '../../../components/Pagination';
 import Table from '../../../components/Table';
 import { getCollectionsColumns } from './collectionsColumnsSchema';
 
-
 const CollectionsComponent = ({
   pageSize = 20,
-  orderBy: defaultOrderBy = { date_of_creation: 'desc' }
+  orderBy: defaultOrderBy = { date_of_creation: 'desc' },
 }: CollectionsComponentProps) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
@@ -29,21 +28,19 @@ const CollectionsComponent = ({
 
     if (accountId) {
       return {
-        _or: [
-          { owner: { _eq: accountId } },
-          { owner_normalized: { _eq: accountId } }
-        ]
+        _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
       };
     }
 
     return undefined;
   }, [queryParams]);
 
-  const {
-    collections,
-    collectionsCount,
-    isCollectionsFetching
-  } = useGraphQlCollections({ filter, orderBy: defaultOrderBy, pageSize, searchString });
+  const { collections, collectionsCount, isCollectionsFetching } = useGraphQlCollections({
+    filter,
+    orderBy: defaultOrderBy,
+    pageSize,
+    searchString,
+  });
 
   return (
     <>
@@ -51,14 +48,14 @@ const CollectionsComponent = ({
         columns={getCollectionsColumns(currentChain.network, orderBy, setOrderBy)}
         data={collections || []}
         loading={isCollectionsFetching}
-        rowKey='collection_id'
+        rowKey="collection_id"
       />
       <PaginationComponent
         count={collectionsCount || 0}
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        onPageChange={setCurrentPage}
       />
     </>
   );

@@ -7,7 +7,7 @@ export enum DeviceSize {
   md, // 1279 - 1024
   lg, // 1439 - 1280
   xl, // 1919 - 1440
-  xxl // > 1920
+  xxl, // > 1920
 }
 
 export const useDeviceSize = (): DeviceSize => {

@@ -9,17 +9,17 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import Avatar from './Avatar';
 
 interface CollectionTableCellProps {
-  chainId: string
-  collectionId: string
-  coverImageUrl?: string
-  collectionName: string
+  chainId: string;
+  collectionId: string;
+  coverImageUrl?: string;
+  collectionName: string;
 }
 
 const CollectionTableCell: FC<CollectionTableCellProps> = ({
   chainId,
   collectionId,
   collectionName,
-  coverImageUrl
+  coverImageUrl,
 }) => {
   const onCollectionClick = useCallback(() => {
     const path = window.location.pathname;
@@ -31,19 +31,13 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
 
   return (
     <CollectionLink
-      onClick={onCollectionClick}
       to={`/${chainId}/collections/${collectionId}`}
+      onClick={onCollectionClick}
     >
-      <Avatar
-        size={'small'}
-        src={coverImageUrl}
-      />
+      <Avatar size={'small'} src={coverImageUrl} />
       <CollectionTitle>
         <Text color={'secondary-500'}>{collectionName}</Text>
-        <Text
-          color={'grey-500'}
-          size={'xs'}
-        >{`ID ${collectionId}`}</Text>
+        <Text color={'grey-500'} size={'xs'}>{`ID ${collectionId}`}</Text>
       </CollectionTitle>
     </CollectionLink>
   );
@@ -69,8 +63,8 @@ const CollectionTitle = styled.div`
   }
   &:hover {
     text-decoration: none;
-    .unique-text[class*=size-m] {
-      color: var(--primary-500) !important;  
+    .unique-text[class*='size-m'] {
+      color: var(--primary-500) !important;
     }
   }
 `;

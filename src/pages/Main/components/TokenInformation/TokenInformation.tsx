@@ -19,46 +19,58 @@ export const TokenInformation: VFC = () => {
 
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
 
-  const totalSupplyPercentage = statisticsMap.circulating_supply && totalSupply
-    ? (statisticsMap.circulating_supply * 100 / totalSupply).toFixed(1)
-    : 0;
-  const lockedSupplyPercentage = statisticsMap.locked_supply && totalSupply
-    ? (statisticsMap.locked_supply * 100 / totalSupply).toFixed(1)
-    : 0;
+  const totalSupplyPercentage =
+    statisticsMap.circulating_supply && totalSupply
+      ? ((statisticsMap.circulating_supply * 100) / totalSupply).toFixed(1)
+      : 0;
+  const lockedSupplyPercentage =
+    statisticsMap.locked_supply && totalSupply
+      ? ((statisticsMap.locked_supply * 100) / totalSupply).toFixed(1)
+      : 0;
 
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
       <TokenInfo>
-        <TokenInfoHeader>Token information <Small>All time</Small></TokenInfoHeader>
+        <TokenInfoHeader>
+          Token information <Small>All time</Small>
+        </TokenInfoHeader>
         <Body>
-          { !!statisticsMap.holders && (
+          {!!statisticsMap.holders && (
             <div>
               <BigAmount>{formatLongNumber(statisticsMap.holders)}</BigAmount>
               <P>Holders</P>
             </div>
           )}
-          { !!totalSupply && (
+          {!!totalSupply && (
             <div>
               <BigAmount>{formatLongNumber(totalSupply)}</BigAmount>
               <P>Total supply</P>
             </div>
           )}
-          { !!totalSupplyPercentage && (
+          {!!totalSupplyPercentage && (
             <div>
-              <BigAmount>{totalSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.circulating_supply) })</Small></BigAmount>
+              <BigAmount>
+                {totalSupplyPercentage}%{' '}
+                <Small>({formatLongNumber(statisticsMap.circulating_supply)})</Small>
+              </BigAmount>
               <P>Circulating supply</P>
             </div>
           )}
-          { !!lockedSupplyPercentage && (
+          {!!lockedSupplyPercentage && (
             <div>
-              <BigAmount>{lockedSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.locked_supply) })</Small></BigAmount>
+              <BigAmount>
+                {lockedSupplyPercentage}%{' '}
+                <Small>({formatLongNumber(statisticsMap.locked_supply)})</Small>
+              </BigAmount>
               <P>Locked supply</P>
             </div>
           )}
         </Body>
       </TokenInfo>
       <TokenInfo>
-        <TokenInfoHeader>Statistics <Small>All time</Small></TokenInfoHeader>
+        <TokenInfoHeader>
+          Statistics <Small>All time</Small>
+        </TokenInfoHeader>
         <Body>
           <div>
             <BigLinkAmount>{statisticsMap?.blocks}</BigLinkAmount>
@@ -90,11 +102,11 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   -ms-background-position-x: calc(100% - calc(var(--gap) * 1.5));
   background-position-y: calc(50% - var(--gap));
   -ms-background-position-y: calc(50% - var(--gap));
-  
+
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   grid-column-gap: var(--gap);
-  
+
   small {
     color: var(--blue-grey-700);
     font-family: 'Inter';
@@ -128,12 +140,12 @@ const TokenInfo = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: flex-start;
-    
+
     &:first-child {
       border-bottom: 1px solid var(--blue-gray-200);
       padding-bottom: var(--gap);
     }
-    
+
     &:last-child {
       padding-top: var(--gap);
     }

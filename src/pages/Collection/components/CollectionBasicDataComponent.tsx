@@ -11,11 +11,14 @@ import TokensComponent from './TokensComponent';
 import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 interface BasicDataComponentProps {
-  collectionId: string
-  collection?: Collection
+  collectionId: string;
+  collection?: Collection;
 }
 
-const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection, collectionId }) => {
+const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
+  collection,
+  collectionId,
+}) => {
   const {
     collection_id: id,
     date_of_creation: createdOn,
@@ -23,7 +26,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
     holders_count: holders,
     owner,
     token_prefix: prefix,
-    tokens_count: tokensCount
+    tokens_count: tokensCount,
   } = collection || {};
 
   const deviceSize = useDeviceSize();
@@ -63,9 +66,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
             <Text color={'grey-500'}>{`created on ${timestampFormat(createdOn)}`}</Text>
           </div>
           <OwnerAccountWrapper>
-            <Avatar
-              size={'x-small'}
-            />
+            <Avatar size={'x-small'} />
             <AccountLinkComponent
               noShort={deviceSize >= DeviceSize.lg}
               value={owner || ''}
@@ -74,9 +75,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
         </CreatedAccountWrapper>
       </PropertiesWrapper>
       <div>
-        <TokensComponent
-          collectionId={collectionId}
-        />
+        <TokensComponent collectionId={collectionId} />
       </div>
     </>
   );
@@ -90,7 +89,7 @@ const PropertiesWrapper = styled.div`
   justify-content: space-between;
   margin-bottom: 10px;
 
-  @media(max-width: 767px) {
+  @media (max-width: 767px) {
     flex-direction: column;
   }
 `;
@@ -121,7 +120,7 @@ const CreatedAccountWrapper = styled.div`
   row-gap: calc(var(--gap) / 2);
   flex-direction: column;
 
-  @media(max-width: 767px) {
+  @media (max-width: 767px) {
     align-items: flex-start;
   }
 `;

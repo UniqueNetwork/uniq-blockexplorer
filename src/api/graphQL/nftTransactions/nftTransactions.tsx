@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client';
 
 export const nftTransactionsQuery = gql`
-  query getNftTransfers($limit: Int, $offset: Int,  $orderBy: TransactionsOrderByParams = {}, $where: TransactionWhereParams = {}) {
-    tokenTransactions(
-      limit: $limit
-      offset: $offset
-      order_by: $orderBy
-      where: $where
-    ) {
+  query getNftTransfers(
+    $limit: Int
+    $offset: Int
+    $orderBy: TransactionsOrderByParams = {}
+    $where: TransactionWhereParams = {}
+  ) {
+    tokenTransactions(limit: $limit, offset: $offset, order_by: $orderBy, where: $where) {
       data {
         block_index
         collection_id

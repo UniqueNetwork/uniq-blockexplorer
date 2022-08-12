@@ -7,18 +7,21 @@ import TokenDetailComponent from './components/TokenDetailComponent';
 import PagePaper from '../../components/PagePaper';
 
 const TokenPage: FC = () => {
-  const { collectionId, tokenId } = useParams<{ collectionId: string, tokenId: string }>();
+  const { collectionId, tokenId } = useParams<{
+    collectionId: string;
+    tokenId: string;
+  }>();
 
-  const { isTokensFetching, token } = useGraphQlToken(Number(collectionId), Number(tokenId));
+  const { isTokensFetching, token } = useGraphQlToken(
+    Number(collectionId),
+    Number(tokenId),
+  );
 
   if (!token) return null;
 
   return (
     <PagePaper>
-      <TokenDetailComponent
-        loading={isTokensFetching}
-        token={token}
-      />
+      <TokenDetailComponent loading={isTokensFetching} token={token} />
     </PagePaper>
   );
 };

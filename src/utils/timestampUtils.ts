@@ -7,7 +7,7 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
     currentDate.getUTCDate(),
     currentDate.getUTCHours(),
     currentDate.getUTCMinutes(),
-    currentDate.getUTCSeconds()
+    currentDate.getUTCSeconds(),
   );
   const currentUtcTime = sinceWhen || currentUtcDate.getTime() / 1000;
 
@@ -67,12 +67,15 @@ const timestampFormat = (timestamp: number | undefined) => {
     second: 'numeric',
     timeZone: 'GMT',
     timeZoneName: 'short',
-    year: 'numeric'
+    year: 'numeric',
   });
 };
 
-const timestampTableFormat = (timestamp: number) => new Date(timestamp * 1000).toLocaleString('en-GB', {
-  hour12: false
-}).replaceAll('/', '-');
+const timestampTableFormat = (timestamp: number) =>
+  new Date(timestamp * 1000)
+    .toLocaleString('en-GB', {
+      hour12: false,
+    })
+    .replaceAll('/', '-');
 
 export { timeDifference, timestampFormat, timestampTableFormat };

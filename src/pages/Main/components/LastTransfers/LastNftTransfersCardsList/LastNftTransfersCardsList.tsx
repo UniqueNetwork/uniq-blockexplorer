@@ -4,17 +4,17 @@ import { Text } from '@unique-nft/ui-kit';
 import { ColumnType } from 'rc-table/lib/interface';
 
 import { LoadingComponent } from '@app/components';
-import { TransferWithTimeDif } from '@app/api';
+import { TokenTransactionWithTimeDif } from '@app/api';
 
-import { LastTransfersCard } from './LastTransfersCard';
+import { LastNftTransfersCard } from './LastNftTransfersCard';
 
 interface LastTransfersCardsListProps {
-  columns: ColumnType<TransferWithTimeDif>[];
-  data?: TransferWithTimeDif[];
+  columns: ColumnType<TokenTransactionWithTimeDif>[];
+  data?: TokenTransactionWithTimeDif[];
   loading?: boolean;
 }
 
-export const LastTransfersCardsList: VFC<LastTransfersCardsListProps> = ({
+export const LastNftTransfersCardsList: VFC<LastTransfersCardsListProps> = ({
   columns,
   data,
   loading,
@@ -30,7 +30,7 @@ export const LastTransfersCardsList: VFC<LastTransfersCardsListProps> = ({
   return (
     <Wrapper>
       {data?.map((item) => (
-        <LastTransfersCard columns={columns} item={item} key={item.block_index} />
+        <LastNftTransfersCard columns={columns} item={item} key={item.block_index} />
       ))}
     </Wrapper>
   );

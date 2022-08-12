@@ -6,13 +6,16 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 import LoadingComponent from '../../../components/LoadingComponent';
 import { BlockDetailData, BlockDetailVariables, blockDetail } from '../../../api/graphQL';
 
-const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undefined }> = ({ blockNumber }) => {
-  const {
-    data: blockDetails,
-    loading: isBLockFetching
-  } = useQuery<BlockDetailData, BlockDetailVariables>(blockDetail.getBlockQuery, {
+const BlockDetailComponent: FC<{
+  className?: string;
+  blockNumber: string | undefined;
+}> = ({ blockNumber }) => {
+  const { data: blockDetails, loading: isBLockFetching } = useQuery<
+    BlockDetailData,
+    BlockDetailVariables
+  >(blockDetail.getBlockQuery, {
     notifyOnNetworkStatusChange: true,
-    variables: { block_number: Number(blockNumber) }
+    variables: { block_number: Number(blockNumber) },
   });
 
   if (isBLockFetching) return <LoadingComponent />;
@@ -24,63 +27,51 @@ const BlockDetailComponent: FC<{ className?: string, blockNumber: string | undef
     spec_version: specVersion,
     state_root: stateRoot,
     timestamp,
-    total_events: totalEvents
+    total_events: totalEvents,
   } = blockDetails?.block.data[0] || {};
 
   return (
     <BlockDetailWrapper>
       <Heading>{`Block ${blockNumber || ''}`}</Heading>
-      <div className='block-container'>
-        <Text color='grey-500'>Timestamp</Text>
-        <div className='grid-item_col10'>
+      <div className="block-container">
+        <Text color="grey-500">Timestamp</Text>
+        <div className="grid-item_col10">
           {timestamp && new Date(timestamp * 1000).toLocaleString()}
         </div>
       </div>
 
-      <div className='block-container'>
-        <Text color='grey-500'>Total events</Text>
-        <div className='grid-item_col10'>{totalEvents}</div>
-        <Text color='grey-500'>Spec version</Text>
-        <div className='grid-item_col10'>{specVersion}</div>
+      <div className="block-container">
+        <Text color="grey-500">Total events</Text>
+        <div className="grid-item_col10">{totalEvents}</div>
+        <Text color="grey-500">Spec version</Text>
+        <div className="grid-item_col10">{specVersion}</div>
       </div>
 
-      <div className='block-container'>
-        <Text color='grey-500'>Block hash</Text>
-        <div className='grid-item_col10'>
-          <div
-            className='block__text-wrap'
-            title={blockHash}
-          >
+      <div className="block-container">
+        <Text color="grey-500">Block hash</Text>
+        <div className="grid-item_col10">
+          <div className="block__text-wrap" title={blockHash}>
             {blockHash}
           </div>
         </div>
 
-        <Text color='grey-500'>Parent hash</Text>
-        <div className='grid-item_col10'>
-          <div
-            className='block__text-wrap'
-            title={parentHash}
-          >
+        <Text color="grey-500">Parent hash</Text>
+        <div className="grid-item_col10">
+          <div className="block__text-wrap" title={parentHash}>
             {parentHash}
           </div>
         </div>
 
-        <Text color='grey-500'>Extrinsic root</Text>
-        <div className='grid-item_col10'>
-          <div
-            className='block__text-wrap'
-            title={extrinsicsRoot}
-          >
+        <Text color="grey-500">Extrinsic root</Text>
+        <div className="grid-item_col10">
+          <div className="block__text-wrap" title={extrinsicsRoot}>
             {extrinsicsRoot}
           </div>
         </div>
 
-        <Text color='grey-500'>State root</Text>
-        <div className='grid-item_col10'>
-          <div
-            className='block__text-wrap'
-            title={stateRoot}
-          >
+        <Text color="grey-500">State root</Text>
+        <div className="grid-item_col10">
+          <div className="block__text-wrap" title={stateRoot}>
             {stateRoot}
           </div>
         </div>
@@ -94,7 +85,7 @@ const BlockDetailWrapper = styled.div`
   .block-container {
     display: grid;
     grid-column-gap: var(--gap);
-    border-bottom: 1px dashed #D2D3D6;
+    border-bottom: 1px dashed #d2d3d6;
     grid-template-columns: 120px 1fr;
     font-size: 16px;
     line-height: 20px;
@@ -107,7 +98,7 @@ const BlockDetailWrapper = styled.div`
 
   .container-with-border {
     padding-bottom: calc(var(--gap) * 2);
-    border-bottom: 1px dashed #D2D3D6;
+    border-bottom: 1px dashed #d2d3d6;
   }
 
   @media (max-width: 767px) {

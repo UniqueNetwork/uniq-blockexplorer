@@ -18,16 +18,13 @@ const Header: FC = () => {
 
   const navigate = useNavigate();
 
-  const onLogoClick = useCallback(
-    () => {
-      const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
+  const onLogoClick = useCallback(() => {
+    const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
 
-      if (onTheMainPage) {
-        window.location.reload();
-      }
-    },
-    [currentChain?.network]
-  );
+    if (onTheMainPage) {
+      window.location.reload();
+    }
+  }, [currentChain?.network]);
 
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
@@ -44,10 +41,10 @@ const Header: FC = () => {
         }
 
         navigate(`${option.id as string}/`);
-        location.reload();
+        window.location.reload();
       }
     },
-    [navigate]
+    [navigate],
   );
 
   return (
@@ -55,13 +52,10 @@ const Header: FC = () => {
       <HeaderWrapper>
         <HeaderNavWrapper>
           <Link
-            onClick={onLogoClick}
             to={`/${currentChain ? currentChain?.network + '/' : ''}`}
+            onClick={onLogoClick}
           >
-            <Logo
-              alt='Logo'
-              src='/logos/logo_product.svg'
-            />
+            <Logo alt="Logo" src="/logos/logo_product.svg" />
           </Link>
           <HeaderNav>
             <Menu />
@@ -69,16 +63,16 @@ const Header: FC = () => {
         </HeaderNavWrapper>
         <ChainsSelectWrapper>
           <ChainsSelect
-            onChange={onSelectChange}
             options={Object.values(config.chains).map(({ name, network }) => ({
               iconLeft: {
                 name: `chain-${network.toLowerCase()}`,
-                size: 16
+                size: 16,
               },
               id: network,
-              title: name
+              title: name,
             }))}
             value={currentChain?.network}
+            onChange={onSelectChange}
           />
         </ChainsSelectWrapper>
       </HeaderWrapper>
@@ -124,7 +118,7 @@ const HeaderNav = styled.nav`
     &:hover {
       text-decoration: none;
     }
-    span{
+    span {
       color: var(--primary-500);
     }
   }
@@ -164,22 +158,23 @@ const ChainsSelect = styled(Select)`
       border-radius: 8px;
     }
   }
-  
+
   @media (max-width: 450px) {
     width: auto;
     position: static;
-    
+
     .select-wrapper {
       position: static;
       display: flex;
       .select-value {
         font-size: 0;
         width: 50px;
-        svg, img {
+        svg,
+        img {
           margin-right: 0 !important;
         }
       }
-      .icon-triangle {     
+      .icon-triangle {
         top: auto;
         right: 18px;
       }
@@ -193,7 +188,8 @@ const ChainsSelect = styled(Select)`
         height: calc(100vh - 80px);
         background-color: var(--white-color);
         padding: calc(var(--gap) * 1.5) var(--gap);
-        box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset, 0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
+        box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
+          0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
       }
     }
   }

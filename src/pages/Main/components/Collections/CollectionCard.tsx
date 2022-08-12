@@ -23,7 +23,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
   date_of_creation,
   name,
   timestamp,
-  token_prefix: tokenPrefix
+  token_prefix: tokenPrefix,
 }) => {
   const { currentChain } = useApi();
   const createdTimeDiff = timeDifference(date_of_creation, timestamp);
@@ -38,8 +38,8 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
 
   return (
     <CollectionCardLink
-      onClick={onCollectionsCardClick}
       to={`/${currentChain.network}/collections/${collectionId}`}
+      onClick={onCollectionsCardClick}
     >
       <CollectionCover
         collectionId={collectionId}
@@ -47,41 +47,23 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
         coverSrc={collection_cover}
       />
       <CollectionInfo>
-        <Heading size='4'>{name}</Heading>
+        <Heading size="4">{name}</Heading>
         <CollectionProperties>
           <span>
-            <img
-              alt='collection id'
-              src={fingerPrint}
-            />
-            <Text
-              size='s'
-              weight='light'
-            >
+            <img alt="collection id" src={fingerPrint} />
+            <Text size="s" weight="light">
               {collectionId.toString()}
             </Text>
           </span>
           <span>
-            <Icon
-              name='empty-image'
-              size={13}
-            />
-            <Text
-              size='s'
-              weight='light'
-            >
+            <Icon name="empty-image" size={13} />
+            <Text size="s" weight="light">
               {tokenPrefix}
             </Text>
           </span>
           <span>
-            <img
-              alt='created'
-              src={clock}
-            />
-            <Text
-              size='s'
-              weight='light'
-            >
+            <img alt="created" src={clock} />
+            <Text size="s" weight="light">
               {createdTimeDiff}
             </Text>
           </span>
@@ -114,7 +96,7 @@ const CollectionCardLink = styled(Link)`
     font-size: 18px;
     line-height: 26px;
     text-align: center;
-    
+
     &:hover {
       color: var(--primary-500);
     }
@@ -159,14 +141,14 @@ const CollectionProperties = styled.div`
   display: flex;
   column-gap: var(--gap);
   margin-bottom: calc(var(--gap) / 4);
-  
+
   span {
     display: flex;
     column-gap: calc(var(--gap) / 4);
     align-items: center;
     justify-content: center;
   }
-  
+
   img {
     width: 13px;
   }

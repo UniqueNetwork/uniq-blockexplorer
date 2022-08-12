@@ -21,37 +21,40 @@ const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) =>
   const onTokenClick = useCallback(() => {
     const path = window.location.pathname;
 
-    if (path.includes('tokens')) { logUserEvents(UserEvents.Click.OPEN_NFT_CARD_FROM_NFTS_PAGE); }
+    if (path.includes('tokens')) {
+      logUserEvents(UserEvents.Click.OPEN_NFT_CARD_FROM_NFTS_PAGE);
+    }
   }, []);
 
-  return <TokenGallery>{tokens.map((token) => {
-    return (
-      <TokenLink
-        key={`token-${token.collection_id}-${token.token_id}`}
-        onClick={onTokenClick}
-        to={`/${chainNetwork}/tokens/${token.collection_id}/${token.token_id}`}
-      >
-        <TokenPicture
-          alt={`${token.token_prefix} #${token.token_id}`}
-          src={token.image.fullUrl}
-        />
-        <Text
-          color={'secondary-500'}
-          size='l'
-          weight='regular'
-        >{`${token.token_prefix} #${token.token_id}`}</Text>
-        <Link
-          to={`/${chainNetwork}/collections/${token.collection_id}`}
-        >{`${token.token_prefix} [id ${token.collection_id}]`}</Link>
-        <TokenDate
-          color={'grey-500'}
-          size='xs'
-        >
-          {`${timeDifference(token.date_of_creation, timestamp)}`}
-        </TokenDate>
-      </TokenLink>
-    );
-  })}</TokenGallery>;
+  return (
+    <TokenGallery>
+      {tokens.map((token) => {
+        return (
+          <TokenLink
+            key={`token-${token.collection_id}-${token.token_id}`}
+            to={`/${chainNetwork}/tokens/${token.collection_id}/${token.token_id}`}
+            onClick={onTokenClick}
+          >
+            <TokenPicture
+              alt={`${token.token_prefix} #${token.token_id}`}
+              src={token.image.fullUrl}
+            />
+            <Text
+              color={'secondary-500'}
+              size="l"
+              weight="regular"
+            >{`${token.token_prefix} #${token.token_id}`}</Text>
+            <Link
+              to={`/${chainNetwork}/collections/${token.collection_id}`}
+            >{`${token.token_prefix} [id ${token.collection_id}]`}</Link>
+            <TokenDate color={'grey-500'} size="xs">
+              {`${timeDifference(token.date_of_creation, timestamp)}`}
+            </TokenDate>
+          </TokenLink>
+        );
+      })}
+    </TokenGallery>
+  );
 };
 
 const TokenGallery = styled.div`
@@ -61,7 +64,7 @@ const TokenGallery = styled.div`
   margin-bottom: 60px;
   justify-items: center;
   align-items: stretch;
- 
+
   @media (max-width: 767px) {
     grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
     grid-gap: 32px;
@@ -85,7 +88,7 @@ const TokenPicture = styled(Picture)`
   width: 380px;
   border-radius: var(--bradius);
   margin-bottom: 8px;
-  
+
   @media (max-width: 767px) {
     height: 288px;
     width: 288px;

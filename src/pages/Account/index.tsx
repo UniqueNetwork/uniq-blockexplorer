@@ -15,7 +15,6 @@ import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
 
-
 const assetsTabs = ['Collections', 'NFTs'];
 
 const AccountPage = () => {
@@ -28,8 +27,11 @@ const AccountPage = () => {
   const { currentChain } = useApi();
 
   // if we get an ether address
-  if ((/0x[0-9A-Fa-f]{40}/g).test(accountId as string)) {
-    const substrateMirror = getMirrorFromEthersToSubstrate(accountId as string, currentChain.network);
+  if (/0x[0-9A-Fa-f]{40}/g.test(accountId as string)) {
+    const substrateMirror = getMirrorFromEthersToSubstrate(
+      accountId as string,
+      currentChain.network,
+    );
 
     substrateAddress = substrateMirror;
     accountForTokensSearch = accountId?.toLowerCase();
@@ -54,23 +56,15 @@ const AccountPage = () => {
           labels={assetsTabs}
           onClick={setActiveAssetsTabIndex}
         />
-        <Tabs
-          activeIndex={activeAssetsTabIndex}
-        >
+        <Tabs activeIndex={activeAssetsTabIndex}>
           <CollectionsComponent
             accountId={normalizeSubstrate(substrateAddress as string)}
             key={'collections'}
           />
-          <TokensComponent
-            accountId={accountForTokensSearch as string}
-            key={'tokens'}
-          />
+          <TokensComponent accountId={accountForTokensSearch as string} key={'tokens'} />
         </Tabs>
       </AssetsWrapper>
-      <LastTransfers
-        accountId={substrateAddress}
-        pageSize={10}
-      />
+      <LastTransfers accountId={substrateAddress} pageSize={10} />
     </PagePaper>
   );
 };

@@ -7,9 +7,7 @@ import TokensComponent from './components/TokensComponent';
 const TokensPage: FC = () => {
   return (
     <>
-      <Title>
-        NFTs
-      </Title>
+      <Title>NFTs</Title>
       <PagePaper>
         <TokensComponent />
       </PagePaper>

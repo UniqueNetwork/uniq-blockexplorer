@@ -12,18 +12,22 @@ const PageLayout: FC = () => {
   const layoutProps = useMemo(() => {
     if (pathname === '/') return { heading: 'Block Explorer' };
 
-    if (/^\/extrinsic\//.test(pathname)) { return { breadcrumbs: { options: [{ link: '/', title: 'Home' }, { title: 'Extrinsic' }] } }; }
+    if (/^\/extrinsic\//.test(pathname)) {
+      return {
+        breadcrumbs: { options: [{ link: '/', title: 'Home' }, { title: 'Extrinsic' }] },
+      };
+    }
 
-    if (/^\/account\//.test(pathname)) { return { breadcrumbs: { options: [{ link: '/', title: 'Home' }, { title: 'Account' }] } }; }
+    if (/^\/account\//.test(pathname)) {
+      return {
+        breadcrumbs: { options: [{ link: '/', title: 'Home' }, { title: 'Account' }] },
+      };
+    }
   }, [pathname]);
 
   return (
     <LayoutWrapper>
-      <Layout
-        {...layoutProps}
-        footer={<Footer />}
-        header={<Header />}
-      >
+      <Layout {...layoutProps} footer={<Footer />} header={<Header />}>
         <Outlet />
       </Layout>
     </LayoutWrapper>

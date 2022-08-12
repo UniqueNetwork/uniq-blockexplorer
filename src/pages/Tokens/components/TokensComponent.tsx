@@ -18,29 +18,33 @@ import TokensGrid from './TokensGrid';
 
 export enum ViewType {
   Grid = 'Grid',
-  List = 'List'
+  List = 'List',
 }
 
-const filter = ({ accountId, collectionId }: { accountId?: string, collectionId?: string }) => {
+const filter = ({
+  accountId,
+  collectionId,
+}: {
+  accountId?: string;
+  collectionId?: string;
+}) => {
   let _filter = {};
 
   if (accountId) {
     _filter = {
-      _or: [
-        { owner: { _eq: accountId } },
-        { owner_normalized: { _eq: accountId } }
-      ]
+      _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
     };
   }
 
-  if (collectionId) _filter = { ..._filter, collection_id: { _eq: Number(collectionId) } };
+  if (collectionId)
+    _filter = { ..._filter, collection_id: { _eq: Number(collectionId) } };
 
   return _filter;
 };
 
 const TokensComponent: FC<TokensComponentProps> = ({
   orderBy: defaultOrderBy = { date_of_creation: 'desc_nulls_last' },
-  pageSize = DEFAULT_PAGE_SIZE
+  pageSize = DEFAULT_PAGE_SIZE,
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
@@ -52,17 +56,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectOption, setSelectOption] = useState<SelectOptionProps>();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
-  const {
-    isTokensFetching,
-    timestamp,
-    tokens,
-    tokensCount
-  } = useGraphQlTokens({
+  const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: filter({ accountId, collectionId }),
     offset: (currentPage - 1) * pageSize,
     orderBy,
     pageSize,
-    searchString
+    searchString,
   });
 
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
@@ -79,26 +78,20 @@ const TokensComponent: FC<TokensComponentProps> = ({
         setOrderBy({ [option.sortField]: option.sortDir });
       }
     },
-    [setSelectOption, setOrderBy]
+    [setSelectOption, setOrderBy],
   );
 
-  const selectGrid = useCallback(
-    () => {
-      logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
-      setView(ViewType.Grid);
-    },
-    [setView]
-  );
+  const selectGrid = useCallback(() => {
+    logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
+    setView(ViewType.Grid);
+  }, [setView]);
 
-  const selectList = useCallback(
-    () => {
-      logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
-      setView(ViewType.List);
-    },
-    [setView]
-  );
+  const selectList = useCallback(() => {
+    logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
+    setView(ViewType.List);
+  }, [setView]);
 
-  const onSearchChange = (value: string)=>{
+  const onSearchChange = (value: string) => {
     if (!value) {
       queryParams.delete('search');
     } else {
@@ -112,68 +105,72 @@ const TokensComponent: FC<TokensComponentProps> = ({
     return getTokensColumns(currentChain.network, orderBy, setOrderBy);
   }, [currentChain.network, orderBy]);
 
-  const defaultOption = OPTIONS.find((option) => option.sortDir === defaultSortValue && option.sortField === defaultSortKey)?.id ?? '';
+  const defaultOption =
+    OPTIONS.find(
+      (option) =>
+        option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
+    )?.id ?? '';
 
   const getRowKey = useMemo(
-    () => (item: DefaultRecordType) => `token-${(item as Token).collection_id}-${(item as Token).token_id}`,
-    []
+    () => (item: DefaultRecordType) =>
+      `token-${(item as Token).collection_id}-${(item as Token).token_id}`,
+    [],
   );
 
   return (
     <>
       <TopBar>
-        <Search
-          onSearchChange={onSearchChange}
-          placeholder={'NFT / collection'}
-        />
+        <Search placeholder={'NFT / collection'} onSearchChange={onSearchChange} />
         <Controls>
           <Select
             defaultValue={defaultOption}
-            onChange={selectFilter}
             options={OPTIONS}
             value={selectOption?.id as string}
+            onChange={selectFilter}
           />
           <ViewButtons>
             <ViewButton onClick={selectList}>
               <Icon
-                file={view === ViewType.List ? '/static/list_active.svg' : '/static/list.svg'}
+                file={
+                  view === ViewType.List ? '/static/list_active.svg' : '/static/list.svg'
+                }
                 size={32}
               />
             </ViewButton>
             <ViewButton onClick={selectGrid}>
               <Icon
-                file={view === ViewType.Grid ? '/static/grid_active.svg' : '/static/grid.svg'}
+                file={
+                  view === ViewType.Grid ? '/static/grid_active.svg' : '/static/grid.svg'
+                }
                 size={32}
               />
             </ViewButton>
           </ViewButtons>
         </Controls>
       </TopBar>
-      {view === ViewType.List
-        ? (
-          <Table
-            columns={tokenColumns}
-            data={tokens || []}
-            loading={isTokensFetching}
-            rowKey={getRowKey}
+      {view === ViewType.List ? (
+        <Table
+          columns={tokenColumns}
+          data={tokens || []}
+          loading={isTokensFetching}
+          rowKey={getRowKey}
+        />
+      ) : (
+        <div>
+          <TokensGrid
+            chainNetwork={currentChain.network}
+            timestamp={timestamp}
+            tokens={tokens || []}
           />
-        )
-        : (
-          <div>
-            <TokensGrid
-              chainNetwork={currentChain.network}
-              timestamp={timestamp}
-              tokens={tokens || []}
-            />
-          </div>
-        )}
+        </div>
+      )}
 
       <Pagination
         count={tokensCount || 0}
         currentPage={currentPage}
-        onPageChange={setCurrentPage}
         pageSize={pageSize}
         siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        onPageChange={setCurrentPage}
       />
     </>
   );

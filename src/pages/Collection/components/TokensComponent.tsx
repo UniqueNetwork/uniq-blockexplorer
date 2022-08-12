@@ -10,9 +10,9 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface TokensComponentProps {
-  searchString?: string
-  pageSize?: number
-  collectionId?: string
+  searchString?: string;
+  pageSize?: number;
+  collectionId?: string;
 }
 
 const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16 }) => {
@@ -24,7 +24,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
   const { isTokensFetching, tokens, tokensCount } = useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
     offset: 0,
-    pageSize
+    pageSize,
   });
 
   const tokensLimit = useMemo(() => {
@@ -49,22 +49,21 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
         {tokens?.slice(0, tokensLimit).map((token) => (
-          <TokenCard
-            key={`token-${token.collection_id}-${token.token_id}`}
-            {...token}
-          />
+          <TokenCard key={`token-${token.collection_id}-${token.token_id}`} {...token} />
         ))}
       </TokensWrapper>
-      {tokensCount !== 0 && <Button
-        iconRight={{
-          color: 'white',
-          name: 'arrow-right',
-          size: 10
-        }}
-        onClick={onButtonClick}
-        role={'primary'}
-        title={'See all'}
-      />}
+      {tokensCount !== 0 && (
+        <Button
+          iconRight={{
+            color: 'white',
+            name: 'arrow-right',
+            size: 10,
+          }}
+          role={'primary'}
+          title={'See all'}
+          onClick={onButtonClick}
+        />
+      )}
     </>
   );
 };
@@ -75,20 +74,20 @@ const TokensWrapper = styled.div`
   grid-column-gap: calc(var(--gap) * 1.5);
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
-  
-  @media(max-width: 1439px) {
+
+  @media (max-width: 1439px) {
     grid-template-columns: repeat(4, 1fr);
-  }  
-  
-  @media(max-width: 1023px) {
+  }
+
+  @media (max-width: 1023px) {
     grid-template-columns: repeat(3, 1fr);
   }
-  
-  @media(max-width: 767px) {
+
+  @media (max-width: 767px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  @media(max-width: 567px) {
+
+  @media (max-width: 567px) {
     grid-template-columns: 1fr;
   }
 `;

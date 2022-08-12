@@ -18,9 +18,8 @@ const Menu: FC = () => {
         return 'NFTS';
       } else if (path.includes('collections')) {
         return 'COLLECTIONS';
-      } else {
-        return 'MAIN';
       }
+      return 'MAIN';
     };
 
     const currentPage = getCurrentPage();
@@ -31,21 +30,21 @@ const Menu: FC = () => {
   return (
     <>
       <NavLink
-        onClick={ onMenuClick('NFTS')}
         to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}
+        onClick={onMenuClick('NFTS')}
       >
-        <Text
-          color='additional-dark'
-          size='l'
-        >NFTs</Text></NavLink>
+        <Text color="additional-dark" size="l">
+          NFTs
+        </Text>
+      </NavLink>
       <NavLink
-        onClick={ onMenuClick('COLLECTIONS')}
         to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}
+        onClick={onMenuClick('COLLECTIONS')}
       >
-        <Text
-          color='additional-dark'
-          size='l'
-        >Collections</Text></NavLink>
+        <Text color="additional-dark" size="l">
+          Collections
+        </Text>
+      </NavLink>
       {/* Open comment after creating blockchain and accounts pages */}
       {/* <DropdownStyled
         optionRender={ (option) => {
@@ -89,15 +88,15 @@ const Menu: FC = () => {
 const DropdownStyled = styled(Dropdown)`
   cursor: pointer;
 
-  div[role=listbox]{
+  div[role='listbox'] {
     left: -24px;
   }
 
-   &&& svg{
+  &&& svg {
     position: relative;
     right: 0;
     top: -4px;
-    margin-left:8px;
+    margin-left: 8px;
   }
 `;
 
