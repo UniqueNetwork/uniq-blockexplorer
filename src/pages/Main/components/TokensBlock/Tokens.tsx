@@ -2,13 +2,14 @@ import { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { DeviceSize2, deviceWidth, useApi, useDeviceSize2 } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
+import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
 import { useGraphQlTokens } from '@app/api/graphQL';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
@@ -26,8 +27,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
   const deviceSize = useDeviceSize2();
 
   const tokensLimit = useMemo(() => {
-    if (deviceSize === DeviceSize2.xxl) return 12;
-    if (deviceSize === DeviceSize2.lg || deviceSize === DeviceSize2.xl) return 8;
+    if (deviceSize === DeviceSize2.xxl || deviceSize === DeviceSize2.lg || deviceSize === DeviceSize2.xl) return 8;
 
     return 6;
   }, [deviceSize]);
@@ -56,7 +56,9 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     searchString
   });
 
-  if (!tokens?.length) return null;
+  if (!tokens?.length) {
+    return (<SkeletonWrapper><Skeleton /></SkeletonWrapper>);
+  }
 
   return (
     <Wrapper>
@@ -90,6 +92,21 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
   );
 };
 
+const SkeletonWrapper = styled(PagePaperWrapper)`
+  padding: 0;
+
+  .unique-skeleton{
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+  
+    &:after {
+    content: '';
+    display: block;
+    padding-top: 100%;
+    }
+  }
+`;
+
 const Wrapper = styled(PagePaperWrapper)`
   @media ${deviceWidth.smallerThan.md} {
     button.unique-button {
@@ -105,13 +122,9 @@ const TokensWrapper = styled.div`
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
   
-  @media ${deviceWidth.only.xxl} {
-    grid-template-columns: repeat(6, 1fr);
-  }  
-  
-  @media ${deviceWidth.smallerThan.xxl} {
+  @media ${deviceWidth.biggerThan.md} {
     grid-template-columns: repeat(4, 1fr);
-  }
+  }  
 
    @media ${deviceWidth.smallerThan.lg} {
     grid-template-columns: repeat(3, 1fr);

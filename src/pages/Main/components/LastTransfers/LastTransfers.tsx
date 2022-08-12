@@ -1,4 +1,4 @@
-import React, { useState, useEffect, VFC } from 'react';
+import React, { useState, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,13 +6,12 @@ import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 import { useApi } from '@app/hooks';
 import { Table, PagePaperWrapper } from '@app/components';
 import { Desktop, Mobile } from '@app/styles/styled-components';
+import { useGraphQlLastTransfers } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { lastTransferOptions } from './lastTransferOptions';
-
-import { useGraphQlLastTransfers } from '@app/api';
 import { LastTransfersCardsList } from './LastTransfersCardsList';
 
 export type LastTransfersProps = {

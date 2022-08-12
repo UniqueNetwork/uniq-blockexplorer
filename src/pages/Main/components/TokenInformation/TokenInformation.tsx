@@ -90,7 +90,6 @@ const SkeletonWrapper = styled(PagePaperWrapper)`
   padding: 0;
   min-height: 200px;
   max-height: 200px;
-  background-color: grey;
 
   .unique-skeleton{
     border-radius: var(--gap) !important;

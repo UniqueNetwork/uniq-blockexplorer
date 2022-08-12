@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 import { useApi, useCheckImageExists } from '@app/hooks';
-import { getImageURL, timeDifference } from '@app/utils';
+import { timeDifference } from '@app/utils';
 import { Token } from '@app/api';
-
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import clock from '@app/images/icons/clock.svg';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 type TokenCardProps = Token & {timeNow?: number};
 
@@ -39,7 +39,9 @@ const TokenCard: FC<TokenCardProps> = ({
       onClick={onNFTCardClick}
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
     >
-      {!imageUrl && (<TokenPicture
+
+      {image.fullUrl && !imageUrl && (<SkeletonWrapper><Skeleton /></SkeletonWrapper>)}
+      {!imageUrl && !image.fullUrl &&(<TokenPicture
         alt={tokenId.toString()}
         src={imageUrl}
       />)}
@@ -68,11 +70,28 @@ const TokenCard: FC<TokenCardProps> = ({
   );
 };
 
+const SkeletonWrapper = styled.div`
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+
+  .unique-skeleton{
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+  
+    &:after {
+    content: '';
+    display: block;
+    padding-top: 100%;
+    }
+  }
+`;
+
 const TokenCardLink = styled(Link)`
   width: 100%;
   border: 1px solid var(--blue-gray-200);
   border-radius: calc(var(--bradius) * 2);
   transition: 50ms;
+  overflow: hidden;
   
   &:hover {
     transform: translate(0, -5px);
@@ -107,7 +126,7 @@ const TokenBackground = styled.div<{imgUrl: string}>`
   content: '';
   display: block;
   padding-top: 100%;
-}
+  }
 `;
 
 const TokenTitle = styled.div`
