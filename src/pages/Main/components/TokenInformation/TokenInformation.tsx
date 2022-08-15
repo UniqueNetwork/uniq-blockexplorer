@@ -58,7 +58,7 @@ export const TokenInformation: VFC = () => {
             <div>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.circulating_supply)} </Small>
+                <Small>({formatLongNumber(statisticsMap.circulating_supply)}</Small>
               </BigAmount>
               <P>Circulating&nbsp;supply</P>
             </div>
@@ -67,7 +67,7 @@ export const TokenInformation: VFC = () => {
             <div>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.locked_supply)} </Small>
+                <Small>({formatLongNumber(statisticsMap.locked_supply)}</Small>
               </BigAmount>
               <P>Locked&nbsp;supply</P>
             </div>
