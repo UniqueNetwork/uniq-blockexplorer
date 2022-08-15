@@ -45,34 +45,34 @@ export const TokenInformation: VFC = () => {
         </TokenInfoHeader>
         <Body>
           {!!statisticsMap.holders && (
-            <div>
+            <Cell>
               <BigAmount>{statisticsMap.holders}</BigAmount>
               <P>Holders</P>
-            </div>
+            </Cell>
           )}
           {!!totalSupply && (
-            <div>
+            <Cell>
               <BigAmount>{formatLongNumber(totalSupply)}</BigAmount>
               <P>Total supply</P>
-            </div>
+            </Cell>
           )}
           {!!circulatingSupplyPercentage && (
-            <div>
+            <Cell>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
                 <Small>({formatLongNumber(statisticsMap.circulating_supply)})</Small>
               </BigAmount>
-              <P>Circulating&nbsp;supply</P>
-            </div>
+              <P>Circulating supply</P>
+            </Cell>
           )}
           {!!lockedSupplyPercentage && (
-            <div>
+            <Cell>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
                 <Small>({formatLongNumber(statisticsMap.locked_supply)})</Small>
               </BigAmount>
-              <P>Locked&nbsp;supply</P>
-            </div>
+              <P>Locked supply</P>
+            </Cell>
           )}
         </Body>
       </TokenInfo>
@@ -81,22 +81,22 @@ export const TokenInformation: VFC = () => {
           Statistics <Small>All time</Small>
         </TokenInfoHeader>
         <Body>
-          <div>
+          <Cell>
             <BigLinkAmount>{statisticsMap?.blocks}</BigLinkAmount>
             <P>Blocks</P>
-          </div>
-          <div>
+          </Cell>
+          <Cell>
             <BigLinkAmount>{statisticsMap?.transfers}</BigLinkAmount>
             <P>Transfers</P>
-          </div>
-          <div>
+          </Cell>
+          <Cell>
             <BigLinkAmount>{statisticsMap?.tokens}</BigLinkAmount>
             <P>NFTs</P>
-          </div>
-          <div>
+          </Cell>
+          <Cell>
             <BigLinkAmount>{statisticsMap?.collections}</BigLinkAmount>
             <P>Collections</P>
-          </div>
+          </Cell>
         </Body>
       </TokenInfo>
     </Wrapper>
@@ -159,12 +159,12 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
     line-height: 26px;
   }
 
-  @media (max-width: 1199px) {
+  @media ${deviceWidth.smallerThan.xl} {
     display: flex;
     flex-direction: column;
   }
 
-  @media (max-width: 575px) {
+  @media ${deviceWidth.smallerThan.sm} {
     display: grid;
 
     &:first-child {
@@ -179,9 +179,10 @@ const TokenInfo = styled.div`
   flex-direction: column;
   grid-row-gap: calc(var(--gap) * 1.5);
 
-  @media (min-width: 576px) and (max-width: 1199px) {
+  @media ${deviceWidth.smallerThan.xl} {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 3fr;
+    grid-column-gap: var(--gap);
     align-items: flex-start;
 
     &:first-child {
@@ -194,13 +195,9 @@ const TokenInfo = styled.div`
     }
   }
 
-  @media (max-width: 575px) {
-    display: grid;
-
-    &:first-child {
-      grid-column-start: 1;
-      grid-column-end: 3;
-    }
+  @media ${deviceWidth.smallerThan.md} {
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -209,7 +206,7 @@ const TokenInfoHeader = styled(Header4)`
   align-items: flex-end;
   grid-column-gap: calc(var(--gap) / 2);
 
-  @media (max-width: 1199px) {
+  @media ${deviceWidth.smallerThan.xl} {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -218,19 +215,23 @@ const TokenInfoHeader = styled(Header4)`
 
 const Small = styled(BodyS)`
   color: var(--blue-grey-700);
+
+  @media ${deviceWidth.smallerThan.md} {
+    display: none;
+  }
 `;
 
 const Body = styled.div`
   display: flex;
   grid-column-gap: calc(var(--gap) * 2);
-  align-items: center;
+  align-items: flex-start;
   justify-content: left;
 
-  @media (max-width: 767px) {
+  @media ${deviceWidth.smallerThan.md} {
     align-items: flex-start;
   }
 
-  @media (max-width: 567px) {
+  @media ${deviceWidth.smallerThan.sm} {
     grid-column-gap: calc(var(--gap) * 1.5);
   }
 `;
@@ -250,14 +251,17 @@ const BigAmount = styled(Header3)`
   line-height: 36px;
 
   @media ${deviceWidth.smallerThan.lg} {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     font-size: 20px;
     line-height: 28px;
   }
 
-  @media ${deviceWidth.smallerThan.md} {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  @media ${deviceWidth.smallerThan.sm} {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
   }
 `;
 
@@ -270,4 +274,16 @@ const BigLinkAmount = styled(Header3)`
     font-size: 20px;
     line-height: 28px;
   }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+  }
+`;
+
+const Cell = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;

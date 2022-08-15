@@ -39,7 +39,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const deviceSize = useDeviceSize();
 
   const pageSize = useMemo(() => {
-    if (deviceSize === DeviceSize.xl) return 6;
+    if (deviceSize === DeviceSize.xl || deviceSize === DeviceSize.xxl) return 6;
 
     return 4;
   }, [deviceSize]);
