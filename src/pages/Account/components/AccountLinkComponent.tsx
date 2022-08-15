@@ -51,7 +51,7 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
         to={`/${currentChain?.network}/account/${value}`}
       >
         <Text
-          color={'primary-600'}
+          color={'primary-500'}
           size={size}
         >
           {shortcut}

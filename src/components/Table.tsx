@@ -68,7 +68,7 @@ const TableWrapper = styled.div`
         padding: calc(var(--gap) / 2) var(--gap);
         text-align: left;
         font-size: 16px;
-        border-bottom: 1px dashed #D2D3D6;
+        border-bottom: 1px solid #D2D3D6;
         color: var(--grey-600);
         overflow: hidden;
         word-break: break-word;

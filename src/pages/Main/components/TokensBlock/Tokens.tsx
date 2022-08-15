@@ -55,8 +55,12 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     searchString
   });
 
-  if (!tokens?.length) {
+  if (!tokens) {
     return (<SkeletonWrapper><Skeleton /></SkeletonWrapper>);
+  }
+
+  if (tokens?.length === 0) {
+    return null;
   }
 
   return (
@@ -96,7 +100,7 @@ const SkeletonWrapper = styled(PagePaperWrapper)`
 
   .unique-skeleton{
     width: 100%;
-    border-radius: 8px 8px 0 0;
+    border-radius: var(--gap) !important;
   
     &:after {
     content: '';

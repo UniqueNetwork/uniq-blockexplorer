@@ -25,7 +25,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
   date_of_creation,
   name,
   timestamp,
-  token_prefix: tokenPrefix
+  tokens_count: tokensCount
 }) => {
   const { currentChain } = useApi();
   const createdTimeDiff = timeDifference(date_of_creation, timestamp);
@@ -72,7 +72,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
               size='s'
               weight='light'
             >
-              {tokenPrefix}
+              {tokensCount}
             </Text>
           </span>
           <span>

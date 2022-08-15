@@ -44,7 +44,7 @@ const Wrapper = styled.div`
     font-weight: 700;
     font-size: 28px;
     line-height: 42px;
-    color: var(--link-color);
+    color: var(--primary-500);
     cursor: pointer;
     
     .dropdown-wrapper {
@@ -53,7 +53,7 @@ const Wrapper = styled.div`
         margin-left: calc(var(--gap) / 2);
         
         use {
-          fill: var(--link-color);
+          fill: var(--primary-500);
         }
       }
     }
@@ -71,7 +71,7 @@ const Wrapper = styled.div`
         color: var(--black-color);
         
         &.selected {
-          color: var(--link-color);
+          color: var(--primary-500);
         }
       }
     }
