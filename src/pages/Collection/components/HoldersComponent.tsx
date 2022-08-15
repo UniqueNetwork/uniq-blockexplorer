@@ -2,11 +2,12 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
+import { useDeviceSize, DeviceSize } from '@app/hooks';
+
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import Table from '../../../components/Table';
 import { Holder, holders as gqlHolders, HolderSorting } from '../../../api/graphQL';
 import PaginationComponent from '../../../components/Pagination';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 
 interface HoldersComponentProps {

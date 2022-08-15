@@ -51,6 +51,9 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
   }
 
   if (amount < 1 && timeType === 'second') return 'Less than a second ago';
+  // shrink 'second' and 'minute' to 'sec' and 'min'
+  if (timeType === 'second' || timeType === 'minute')
+    return `${amount} ${timeType.substr(0, 3)} ago`;
 
   return `${amount} ${timeType}${amount >= 2 ? 's' : ''} ago`;
 };

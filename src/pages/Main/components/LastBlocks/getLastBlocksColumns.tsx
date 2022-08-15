@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import { Text } from '@unique-nft/ui-kit';
 
 export const getLastBlocksColumns = (chainId: string) => [
   {
@@ -13,6 +13,11 @@ export const getLastBlocksColumns = (chainId: string) => [
   {
     dataIndex: 'time_difference',
     key: 'time_difference',
+    render: (value: number) => (
+      <Text size="m" weight="light">
+        {value}
+      </Text>
+    ),
     title: 'Age',
     width: 100,
   },

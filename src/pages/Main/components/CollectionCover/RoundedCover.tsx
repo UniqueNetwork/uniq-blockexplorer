@@ -5,16 +5,11 @@ import { IdentityIcon } from '@app/components';
 
 interface RoundedCoverProps {
   collectionId: number;
-  color: string;
   coverSrc: string | undefined;
 }
 
-export const RoundedCover: VFC<RoundedCoverProps> = ({
-  collectionId,
-  color,
-  coverSrc,
-}) => (
-  <Wrapper color={color}>
+export const RoundedCover: VFC<RoundedCoverProps> = ({ collectionId, coverSrc }) => (
+  <Wrapper>
     {coverSrc ? (
       <img alt={`collection ${collectionId ?? ''} cover`} src={coverSrc} />
     ) : (
@@ -23,9 +18,9 @@ export const RoundedCover: VFC<RoundedCoverProps> = ({
   </Wrapper>
 );
 
-const Wrapper = styled.div<{ color: string }>`
+const Wrapper = styled.div`
   background-color: white;
-  border: 2px solid ${(props) => props.color};
+  border: 2px solid white;
   box-sizing: border-box;
   border-radius: 48px;
   height: 88px;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
-import { useApi } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { PagePaperWrapper } from '@app/components';
 import {
   CollectionSorting,
@@ -22,8 +22,6 @@ interface CollectionsProps {
   searchString?: string;
 }
 
-const pageSize = 6;
-
 export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
@@ -38,6 +36,13 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
         : { actions_count: 'desc' },
     [selectedSort.id],
   );
+  const deviceSize = useDeviceSize();
+
+  const pageSize = useMemo(() => {
+    if (deviceSize === DeviceSize.xl) return 6;
+
+    return 4;
+  }, [deviceSize]);
 
   const { collections, isCollectionsFetching, timestamp } = useGraphQlCollections({
     orderBy,

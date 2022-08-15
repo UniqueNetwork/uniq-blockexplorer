@@ -1,6 +1,6 @@
 import React, { VFC } from 'react';
 
-import { DeviceSize2, useApi, useDeviceSize2 } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { Table } from '@app/components';
 import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
@@ -20,10 +20,10 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   searchString,
 }) => {
   const { currentChain } = useApi();
-  const deviceSize = useDeviceSize2();
+  const deviceSize = useDeviceSize();
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
-  const isMobile = deviceSize <= DeviceSize2.sm;
+  const isMobile = deviceSize <= DeviceSize.sm;
 
   const { isTransfersFetching, transfers, transfersCount } = useGraphQlLastTransfers({
     accountId,

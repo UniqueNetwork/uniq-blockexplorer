@@ -12,17 +12,17 @@ import { BlockComponentProps } from '../../types';
 import { getLastBlocksColumns } from './getLastBlocksColumns';
 import { blocksWithTimeDifference } from './blocksWithTimeDifference';
 import { LastBlocksCardsList } from './LastBlocksCardsList';
-import { DeviceSize2, useDeviceSize2 } from '../../../../hooks/useDeviceSize2';
+import { DeviceSize, useDeviceSize } from '../../../../hooks/useDeviceSize';
 
 export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const deviceSize = useDeviceSize2();
+  const deviceSize = useDeviceSize();
   const linkText = 'See all';
   const linkUrl = `/${currentChain.network}/last-blocks`;
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
-  const isMobile = deviceSize <= DeviceSize2.sm;
+  const isMobile = deviceSize <= DeviceSize.sm;
 
   const { blockCount, blocks, isBlocksFetching, timestamp } = useGraphQlBlocks({
     pageSize,

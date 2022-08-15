@@ -2,6 +2,7 @@ import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 import { useApi, useCheckImageExists } from '@app/hooks';
 import { timeDifference } from '@app/utils';
@@ -39,8 +40,17 @@ const TokenCard: FC<TokenCardProps> = ({
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
       onClick={onNFTCardClick}
     >
-      {!imageUrl && <TokenPicture alt={tokenId.toString()} src={imageUrl} />}
-
+      {/* imgUrl exists, but the picture has not yet loaded */}
+      {image.fullUrl && !imageUrl && (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
+      )}
+      {/* the picture has not exists */}
+      {!imageUrl && !image.fullUrl && (
+        <TokenPicture alt={tokenId.toString()} src={imageUrl} />
+      )}
+      {/* the picture has loaded */}
       {imageUrl && <TokenBackground imgUrl={imageUrl} />}
       <TokenTitle>
         <Text color="primary-500" size="l">{`${prefix || ''} #${tokenId}`}</Text>
@@ -64,11 +74,28 @@ const TokenCard: FC<TokenCardProps> = ({
   );
 };
 
+const SkeletonWrapper = styled.div`
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+
+  .unique-skeleton {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+
+    &:after {
+      content: '';
+      display: block;
+      padding-top: 100%;
+    }
+  }
+`;
+
 const TokenCardLink = styled(Link)`
   width: 100%;
   border: 1px solid var(--blue-gray-200);
   border-radius: calc(var(--bradius) * 2);
   transition: 50ms;
+  overflow: hidden;
 
   &:hover {
     transform: translate(0, -5px);

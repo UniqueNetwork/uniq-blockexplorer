@@ -4,11 +4,11 @@ import { Text } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { timestampFormat } from '@app/utils';
+import { useDeviceSize, DeviceSize } from '@app/hooks';
 
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import TokensComponent from './TokensComponent';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 interface BasicDataComponentProps {
   collectionId: string;
@@ -68,7 +68,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
           <OwnerAccountWrapper>
             <Avatar size={'x-small'} />
             <AccountLinkComponent
-              noShort={deviceSize >= DeviceSize.lg}
+              noShort={deviceSize >= DeviceSize.xl}
               value={owner || ''}
             />
           </OwnerAccountWrapper>

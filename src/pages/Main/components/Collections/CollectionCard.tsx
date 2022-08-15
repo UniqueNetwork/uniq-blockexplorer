@@ -5,11 +5,12 @@ import { Text, Heading, Icon } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
-import { logUserEvents, timeDifference } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 // TODO - move fingerPrint and clock icon to the UI kit - fix bug with colors
 import fingerPrint from '@app/images/icons/fingerPrint.svg';
 import clock from '@app/images/icons/clock.svg';
+import { timeDifference } from '@app/utils';
 
 import { CollectionCover } from '../CollectionCover';
 
@@ -23,7 +24,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
   date_of_creation,
   name,
   timestamp,
-  token_prefix: tokenPrefix,
+  tokens_count: tokensCount,
 }) => {
   const { currentChain } = useApi();
   const createdTimeDiff = timeDifference(date_of_creation, timestamp);
@@ -58,7 +59,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
           <span>
             <Icon name="empty-image" size={13} />
             <Text size="s" weight="light">
-              {tokenPrefix}
+              {tokensCount}
             </Text>
           </span>
           <span>

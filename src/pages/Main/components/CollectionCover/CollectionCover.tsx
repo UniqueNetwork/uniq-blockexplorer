@@ -27,11 +27,7 @@ export const CollectionCover: VFC<CollectionCoverProps> = ({
       <BlurredWrapper>
         <BlurredContent color={collectionCoverColor} coverSrc={imgSrc} />
       </BlurredWrapper>
-      <RoundedCover
-        collectionId={collectionId}
-        color={collectionCoverColor}
-        coverSrc={imgSrc}
-      />
+      <RoundedCover collectionId={collectionId} coverSrc={imgSrc} />
     </Wrapper>
   );
 };

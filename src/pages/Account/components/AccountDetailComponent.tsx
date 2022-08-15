@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
@@ -36,18 +36,18 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
         <Avatar size="large" value={accountAddress} />
       </div>
       <div>
-        <Text size={'l'}>Account name</Text>
+        <Text size="l">Account name</Text>
         <h2>
-          {deviceSize <= DeviceSize.md ? shortcutText(accountAddress) : accountAddress}
+          {deviceSize <= DeviceSize.lg ? shortcutText(accountAddress) : accountAddress}
         </h2>
       </div>
-      <Text color={'grey-500'}>Balance</Text>
+      <Text color="grey-500">Balance</Text>
       <BalanceWrapper>
         <Text>{`${formatAmount(freeBalance)} ${tokenSymbol} (total) `}</Text>
-        <Text color={'grey-500'}>{`${formatAmount(
+        <Text color="grey-500">{`${formatAmount(
           lockedBalance,
         )} ${tokenSymbol} (locked) `}</Text>
-        <Text color={'grey-500'}>{`${formatAmount(
+        <Text color="grey-500">{`${formatAmount(
           availableBalance,
         )} ${tokenSymbol} (transferable)`}</Text>
       </BalanceWrapper>

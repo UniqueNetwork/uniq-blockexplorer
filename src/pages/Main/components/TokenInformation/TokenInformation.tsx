@@ -1,9 +1,10 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
-import { useApi } from '@app/hooks';
+import { deviceWidth, useApi } from '@app/hooks';
 import { formatLongNumber, getChainBackground } from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
@@ -16,17 +17,25 @@ export const TokenInformation: VFC = () => {
   statistics?.forEach((item: Statistics) => {
     statisticsMap[item.name] = item.count;
   });
-
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
 
-  const totalSupplyPercentage =
-    statisticsMap.circulating_supply && totalSupply
+  const circulatingSupplyPercentage =
+    statisticsMap.circulating_supply && statisticsMap.locked_supply
       ? ((statisticsMap.circulating_supply * 100) / totalSupply).toFixed(1)
       : 0;
+
   const lockedSupplyPercentage =
-    statisticsMap.locked_supply && totalSupply
+    statisticsMap.locked_supply && statisticsMap.circulating_supply
       ? ((statisticsMap.locked_supply * 100) / totalSupply).toFixed(1)
       : 0;
+
+  if (!statistics) {
+    return (
+      <SkeletonWrapper>
+        <Skeleton />
+      </SkeletonWrapper>
+    );
+  }
 
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
@@ -37,7 +46,7 @@ export const TokenInformation: VFC = () => {
         <Body>
           {!!statisticsMap.holders && (
             <div>
-              <BigAmount>{formatLongNumber(statisticsMap.holders)}</BigAmount>
+              <BigAmount>{statisticsMap.holders}</BigAmount>
               <P>Holders</P>
             </div>
           )}
@@ -47,13 +56,13 @@ export const TokenInformation: VFC = () => {
               <P>Total supply</P>
             </div>
           )}
-          {!!totalSupplyPercentage && (
+          {!!circulatingSupplyPercentage && (
             <div>
               <BigAmount>
-                {totalSupplyPercentage}%{' '}
+                {circulatingSupplyPercentage}%{' '}
                 <Small>({formatLongNumber(statisticsMap.circulating_supply)})</Small>
               </BigAmount>
-              <P>Circulating supply</P>
+              <P>Circulating&nbsp;supply</P>
             </div>
           )}
           {!!lockedSupplyPercentage && (
@@ -62,7 +71,7 @@ export const TokenInformation: VFC = () => {
                 {lockedSupplyPercentage}%{' '}
                 <Small>({formatLongNumber(statisticsMap.locked_supply)})</Small>
               </BigAmount>
-              <P>Locked supply</P>
+              <P>Locked&nbsp;supply</P>
             </div>
           )}
         </Body>
@@ -94,6 +103,41 @@ export const TokenInformation: VFC = () => {
   );
 };
 
+const SkeletonWrapper = styled(PagePaperWrapper)`
+  padding: 0;
+
+  .unique-skeleton {
+    border-radius: var(--gap) !important;
+  }
+
+  @media ${deviceWidth.biggerThan.lg} {
+    min-height: 160px;
+    max-height: 160px;
+
+    .unique-skeleton {
+      height: 160px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.xl} {
+    min-height: 201px;
+    max-height: 201px;
+
+    .unique-skeleton {
+      height: 201px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    min-height: 316px;
+    max-height: 316px;
+
+    .unique-skeleton {
+      height: 316px !important;
+    }
+  }
+`;
+
 const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   font-family: 'Raleway';
   background-image: url(${(props) => props.chainLogo});
@@ -103,9 +147,8 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   background-position-y: calc(50% - var(--gap));
   -ms-background-position-y: calc(50% - var(--gap));
 
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  grid-column-gap: var(--gap);
+  display: flex;
+  justify-content: space-between;
 
   small {
     color: var(--blue-grey-700);
@@ -198,11 +241,20 @@ const P = styled(BodyM)`
 
 const BigAmount = styled(Header3)`
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   grid-column-gap: calc(var(--gap) / 4);
   min-height: 36px;
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 36px;
 
-  @media (max-width: 767px) {
+  @media ${deviceWidth.smallerThan.lg} {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  @media ${deviceWidth.smallerThan.md} {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -210,6 +262,12 @@ const BigAmount = styled(Header3)`
 `;
 
 const BigLinkAmount = styled(Header3)`
+  font-family: 'Inter';
   color: var(--primary-500);
   min-height: 36px;
+
+  @media ${deviceWidth.smallerThan.lg} {
+    font-size: 20px;
+    line-height: 28px;
+  }
 `;
