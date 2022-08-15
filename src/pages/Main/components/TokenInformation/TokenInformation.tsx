@@ -19,15 +19,13 @@ export const TokenInformation: VFC = () => {
   });
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
 
-  const circulatingSupplyPercentage =
-    statisticsMap.circulating_supply && statisticsMap.locked_supply
-      ? ((statisticsMap.circulating_supply * 100) / totalSupply).toFixed(1)
-      : 0;
+  const circulatingSupplyPercentage = !!(statisticsMap.circulating_supply && totalSupply)
+    ? ((statisticsMap.circulating_supply * 100) / totalSupply).toFixed(1)
+    : 0;
 
-  const lockedSupplyPercentage =
-    statisticsMap.locked_supply && statisticsMap.circulating_supply
-      ? ((statisticsMap.locked_supply * 100) / totalSupply).toFixed(1)
-      : 0;
+  const lockedSupplyPercentage = !!(statisticsMap.locked_supply && totalSupply)
+    ? ((statisticsMap.locked_supply * 100) / totalSupply).toFixed(1)
+    : 0;
 
   if (!statistics) {
     return (
@@ -60,7 +58,7 @@ export const TokenInformation: VFC = () => {
             <div>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.circulating_supply)})</Small>
+                <Small>({formatLongNumber(statisticsMap.circulating_supply)} </Small>
               </BigAmount>
               <P>Circulating&nbsp;supply</P>
             </div>
@@ -69,7 +67,7 @@ export const TokenInformation: VFC = () => {
             <div>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.locked_supply)})</Small>
+                <Small>({formatLongNumber(statisticsMap.locked_supply)} </Small>
               </BigAmount>
               <P>Locked&nbsp;supply</P>
             </div>
