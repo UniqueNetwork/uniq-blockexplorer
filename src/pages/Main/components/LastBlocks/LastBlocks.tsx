@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { Button } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';

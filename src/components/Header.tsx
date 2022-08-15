@@ -69,13 +69,13 @@ const Header: FC = () => {
         <ChainsSelectWrapper>
           <ChainsSelect
             onChange={onSelectChange}
-            options={Object.values(config.chains).map(({ name, network }) => ({
+            options={Object.values(config.chains).map(({ network }) => ({
               iconLeft: {
                 name: `chain-${network.toLowerCase()}`,
                 size: 16
               },
               id: network,
-              title: name
+              title: network.charAt(0) + network.slice(1).toLowerCase()
             }))}
             value={currentChain?.network}
           />

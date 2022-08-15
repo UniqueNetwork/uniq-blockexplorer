@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState, useMemo, VFC } from 'react';
+import React, { useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
-import { useApi } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
@@ -18,17 +18,22 @@ interface CollectionsProps {
   searchString?: string
 }
 
-const pageSize = 6;
-
 export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(collectionsOptions[0]);
 
   const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'desc' } : { actions_count: 'desc' }, [selectedSort.id]);
+  const deviceSize = useDeviceSize();
+
+  const pageSize = useMemo(() => {
+    if (deviceSize === DeviceSize.xl) return 6;
+
+    return 4;
+  }, [deviceSize]);
 
   const { collections, isCollectionsFetching, timestamp } = useGraphQlCollections({ orderBy, pageSize, searchString });
- 
+  
   const collectionIds = collections?.map((collection) =>  collection.collection_id);
   const filter = {
     _and: [

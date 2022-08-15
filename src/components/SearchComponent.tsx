@@ -78,10 +78,8 @@ const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder
 
 const SearchWrapper = styled.div`
   display: flex;
-  margin-bottom: calc(var(--gap) * 2);
 
   @media (max-width: 767px) {
-    margin-bottom: 24px;
     width: 100%;
     
     button.unique-button {
@@ -94,6 +92,7 @@ const SearchInput = styled(InputText)`
   box-sizing: border-box;
   width: 418px;
   margin-right: calc(var(--gap) / 2);
+  background-color: var(--white-color);
 
   @media (max-width: 767px) {
     width: 100%;

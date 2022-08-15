@@ -17,14 +17,16 @@ export const TokenInformation: VFC = () => {
   statistics?.forEach((item: Statistics) => {
     statisticsMap[item.name] = item.count;
   });
-
-  const totalSupplyPercentage = statisticsMap.circulating_supply && statisticsMap.total_supply
-    ? (statisticsMap.circulating_supply * 100 / statisticsMap.total_supply).toFixed(1)
-    : 0;
-  const lockedSupplyPercentage = statisticsMap.locked_supply && statisticsMap.total_supply
-    ? (statisticsMap.locked_supply * 100 / statisticsMap.total_supply).toFixed(1)
-    : 0;
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
+
+  const circulatingSupplyPercentage = statisticsMap.circulating_supply && statisticsMap.locked_supply
+    ? (statisticsMap.circulating_supply * 100 / totalSupply).toFixed(1)
+    : 0;
+
+  const lockedSupplyPercentage = statisticsMap.locked_supply && statisticsMap.circulating_supply
+    ? (statisticsMap.locked_supply * 100 / totalSupply).toFixed(1)
+    : 0;
+  
 
   if(!statistics){
     return (<SkeletonWrapper><Skeleton /></SkeletonWrapper>);
@@ -47,16 +49,16 @@ export const TokenInformation: VFC = () => {
               <P>Total supply</P>
             </div>
           )}
-          { !!totalSupplyPercentage && (
+          { !!circulatingSupplyPercentage && (
             <div>
-              <BigAmount>{totalSupplyPercentage}% <Small>({ statisticsMap.circulating_supply })</Small></BigAmount>
-              <P>Circulating supply</P>
+              <BigAmount>{circulatingSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.circulating_supply) })</Small></BigAmount>
+              <P>Circulating&nbsp;supply</P>
             </div>
           )}
           { !!lockedSupplyPercentage && (
             <div>
-              <BigAmount>{lockedSupplyPercentage}% <Small>({ statisticsMap.locked_supply })</Small></BigAmount>
-              <P>Locked supply</P>
+              <BigAmount>{lockedSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.locked_supply) })</Small></BigAmount>
+              <P>Locked&nbsp;supply</P>
             </div>
           )}
         </Body>
@@ -130,9 +132,8 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   background-position-y: calc(50% - var(--gap));
   -ms-background-position-y: calc(50% - var(--gap));
   
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  grid-column-gap: var(--gap);
+  display: flex;
+  justify-content: space-between;
   
   small {
     color: var(--blue-grey-700);
@@ -225,11 +226,20 @@ const P = styled(BodyM)`
 
 const BigAmount = styled(Header3)`
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   grid-column-gap: calc(var(--gap) / 4);
   min-height: 36px;
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 36px;
 
-  @media (max-width: 767px) {
+  @media ${deviceWidth.smallerThan.lg} {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  @media ${deviceWidth.smallerThan.md} {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -237,6 +247,12 @@ const BigAmount = styled(Header3)`
 `;
 
 const BigLinkAmount = styled(Header3)`
+  font-family: 'Inter';
   color: var(--primary-500);
   min-height: 36px;
+
+  @media ${deviceWidth.smallerThan.lg} {
+    font-size: 20px;
+    line-height: 28px;
+  }
 `;
