@@ -22,7 +22,7 @@ module.exports = {
   rules: {
     'no-return-await': 'error',
     'no-console': [
-      'error',
+      'warn',
       {
         allow: ['warn', 'error'],
       },
