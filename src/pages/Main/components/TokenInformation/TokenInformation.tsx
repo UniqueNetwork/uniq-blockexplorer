@@ -1,5 +1,6 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
@@ -7,7 +8,6 @@ import { deviceWidth, useApi } from '@app/hooks';
 import { formatLongNumber, getChainBackground } from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
-import { Skeleton } from '@unique-nft/ui-kit';
 
 export const TokenInformation: VFC = () => {
   const { currentChain } = useApi();
@@ -19,52 +19,67 @@ export const TokenInformation: VFC = () => {
   });
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
 
-  const circulatingSupplyPercentage = statisticsMap.circulating_supply && statisticsMap.locked_supply
-    ? (statisticsMap.circulating_supply * 100 / totalSupply).toFixed(1)
-    : 0;
+  const circulatingSupplyPercentage =
+    statisticsMap.circulating_supply && statisticsMap.locked_supply
+      ? ((statisticsMap.circulating_supply * 100) / totalSupply).toFixed(1)
+      : 0;
 
-  const lockedSupplyPercentage = statisticsMap.locked_supply && statisticsMap.circulating_supply
-    ? (statisticsMap.locked_supply * 100 / totalSupply).toFixed(1)
-    : 0;
-  
+  const lockedSupplyPercentage =
+    statisticsMap.locked_supply && statisticsMap.circulating_supply
+      ? ((statisticsMap.locked_supply * 100) / totalSupply).toFixed(1)
+      : 0;
 
-  if(!statistics){
-    return (<SkeletonWrapper><Skeleton /></SkeletonWrapper>);
+  if (!statistics) {
+    return (
+      <SkeletonWrapper>
+        <Skeleton />
+      </SkeletonWrapper>
+    );
   }
 
   return (
     <Wrapper chainLogo={getChainBackground(currentChain)}>
       <TokenInfo>
-        <TokenInfoHeader>Token information <Small>All time</Small></TokenInfoHeader>
+        <TokenInfoHeader>
+          Token information <Small>All time</Small>
+        </TokenInfoHeader>
         <Body>
-          { !!statisticsMap.holders && (
+          {!!statisticsMap.holders && (
             <div>
               <BigAmount>{statisticsMap.holders}</BigAmount>
               <P>Holders</P>
             </div>
           )}
-          { !!totalSupply && (
+          {!!totalSupply && (
             <div>
               <BigAmount>{formatLongNumber(totalSupply)}</BigAmount>
               <P>Total supply</P>
             </div>
           )}
-          { !!circulatingSupplyPercentage && (
+          {!!circulatingSupplyPercentage && (
             <div>
-              <BigAmount>{circulatingSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.circulating_supply) })</Small></BigAmount>
+              <BigAmount>
+                {circulatingSupplyPercentage}%{' '}
+                <Small>({formatLongNumber(statisticsMap.circulating_supply)})</Small>
+              </BigAmount>
               <P>Circulating&nbsp;supply</P>
             </div>
           )}
-          { !!lockedSupplyPercentage && (
+          {!!lockedSupplyPercentage && (
             <div>
-              <BigAmount>{lockedSupplyPercentage}% <Small>({ formatLongNumber(statisticsMap.locked_supply) })</Small></BigAmount>
+              <BigAmount>
+                {lockedSupplyPercentage}%{' '}
+                <Small>({formatLongNumber(statisticsMap.locked_supply)})</Small>
+              </BigAmount>
               <P>Locked&nbsp;supply</P>
             </div>
           )}
         </Body>
       </TokenInfo>
       <TokenInfo>
-        <TokenInfoHeader>Statistics <Small>All time</Small></TokenInfoHeader>
+        <TokenInfoHeader>
+          Statistics <Small>All time</Small>
+        </TokenInfoHeader>
         <Body>
           <div>
             <BigLinkAmount>{statisticsMap?.blocks}</BigLinkAmount>
@@ -91,7 +106,7 @@ export const TokenInformation: VFC = () => {
 const SkeletonWrapper = styled(PagePaperWrapper)`
   padding: 0;
 
-  .unique-skeleton{
+  .unique-skeleton {
     border-radius: var(--gap) !important;
   }
 
@@ -99,7 +114,7 @@ const SkeletonWrapper = styled(PagePaperWrapper)`
     min-height: 160px;
     max-height: 160px;
 
-    .unique-skeleton{
+    .unique-skeleton {
       height: 160px !important;
     }
   }
@@ -108,7 +123,7 @@ const SkeletonWrapper = styled(PagePaperWrapper)`
     min-height: 201px;
     max-height: 201px;
 
-    .unique-skeleton{
+    .unique-skeleton {
       height: 201px !important;
     }
   }
@@ -117,7 +132,7 @@ const SkeletonWrapper = styled(PagePaperWrapper)`
     min-height: 316px;
     max-height: 316px;
 
-    .unique-skeleton{
+    .unique-skeleton {
       height: 316px !important;
     }
   }
@@ -131,10 +146,10 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   -ms-background-position-x: calc(100% - calc(var(--gap) * 1.5));
   background-position-y: calc(50% - var(--gap));
   -ms-background-position-y: calc(50% - var(--gap));
-  
+
   display: flex;
   justify-content: space-between;
-  
+
   small {
     color: var(--blue-grey-700);
     font-family: 'Inter';
@@ -168,12 +183,12 @@ const TokenInfo = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: flex-start;
-    
+
     &:first-child {
       border-bottom: 1px solid var(--blue-gray-200);
       padding-bottom: var(--gap);
     }
-    
+
     &:last-child {
       padding-top: var(--gap);
     }

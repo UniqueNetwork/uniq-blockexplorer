@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-
 import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
+
+import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -14,8 +14,8 @@ import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
 
 interface TokensProps {
-  searchString?: string
-  collectionId?: number
+  searchString?: string;
+  collectionId?: number;
 }
 
 export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
@@ -26,16 +26,21 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
   const deviceSize = useDeviceSize();
 
   const tokensLimit = useMemo(() => {
-    if (deviceSize === DeviceSize.xxl || deviceSize === DeviceSize.lg || deviceSize === DeviceSize.xl) return 8;
+    if (
+      deviceSize === DeviceSize.xxl ||
+      deviceSize === DeviceSize.lg ||
+      deviceSize === DeviceSize.xl
+    )
+      return 8;
 
     return 6;
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
     const linkUrl = `/${currentChain.network}/tokens`;
-    const navigateTo: {pathname: string, search?: string} = {pathname: linkUrl};
+    const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
 
-    if(searchString){
+    if (searchString) {
       const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
 
       navigateTo.search = searchParams;
@@ -45,18 +50,24 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     navigate(navigateTo);
   }, [currentChain, navigate, searchString]);
 
-  const filter = collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined;
+  const filter = collectionId
+    ? { collection_id: { _eq: Number(collectionId) } }
+    : undefined;
 
   const { isTokensFetching, timestamp, tokens } = useGraphQlTokens({
     filter,
     offset: 0,
     orderBy: { collection_id: 'desc', token_id: 'desc' },
     pageSize: tokensLimit,
-    searchString
+    searchString,
   });
 
   if (!tokens) {
-    return (<SkeletonWrapper><Skeleton /></SkeletonWrapper>);
+    return (
+      <SkeletonWrapper>
+        <Skeleton />
+      </SkeletonWrapper>
+    );
   }
 
   if (tokens?.length === 0) {
@@ -69,7 +80,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
         options={tokensOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
-        title='Tokens'
+        title="Tokens"
       />
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
@@ -85,11 +96,11 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
         iconRight={{
           color: 'white',
           name: 'arrow-right',
-          size: 10
+          size: 10,
         }}
+        role="primary"
+        title="See all"
         onClick={onClick}
-        role={'primary'}
-        title={'See all'}
       />
     </Wrapper>
   );
@@ -98,14 +109,14 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
 const SkeletonWrapper = styled(PagePaperWrapper)`
   padding: 0;
 
-  .unique-skeleton{
+  .unique-skeleton {
     width: 100%;
     border-radius: var(--gap) !important;
-  
+
     &:after {
-    content: '';
-    display: block;
-    padding-top: 100%;
+      content: '';
+      display: block;
+      padding-top: 100%;
     }
   }
 `;
@@ -124,19 +135,19 @@ const TokensWrapper = styled.div`
   grid-column-gap: calc(var(--gap) * 1.5);
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
-  
+
   @media ${deviceWidth.biggerThan.md} {
     grid-template-columns: repeat(4, 1fr);
   }
 
-   @media ${deviceWidth.smallerThan.lg} {
+  @media ${deviceWidth.smallerThan.lg} {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   @media ${deviceWidth.smallerThan.sm} {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   @media ${deviceWidth.smallerThan.xs} {
     grid-template-columns: 1fr;
   }

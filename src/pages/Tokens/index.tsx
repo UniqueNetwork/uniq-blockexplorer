@@ -1,14 +1,13 @@
 import React, { FC } from 'react';
+import styled from 'styled-components';
+
 import PagePaper from '../../components/PagePaper';
 import TokensComponent from './components/TokensComponent';
-import styled from 'styled-components';
 
 const TokensPage: FC = () => {
   return (
     <>
-      <Title>
-        NFTs
-      </Title>
+      <Title>NFTs</Title>
       <PagePaper>
         <TokensComponent />
       </PagePaper>

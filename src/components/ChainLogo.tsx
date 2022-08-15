@@ -1,14 +1,16 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
+
+import { useApi } from '@app/hooks';
+
 import { chainLogos, emptyLogos, namedLogos, nodeLogos } from '../logos';
-import { useApi } from '../hooks/useApi';
 
 interface Props {
-  className?: string
-  isInline?: boolean
-  logo?: keyof typeof namedLogos
-  onClick?: () => void
-  withoutHl?: boolean
+  className?: string;
+  isInline?: boolean;
+  logo?: keyof typeof namedLogos;
+  onClick?: () => void;
+  withoutHl?: boolean;
 }
 
 function sanitize(value?: string): string {
@@ -27,13 +29,7 @@ function ChainLogo({ logo, onClick }: Props): React.ReactElement<Props> {
   }, [logo, currentChain.name]);
 
   return (
-    <ChainLogoImg
-      alt='chain logo'
-      height={24}
-      onClick={onClick}
-      src={img}
-      width={24}
-    />
+    <ChainLogoImg alt="chain logo" height={24} src={img} width={24} onClick={onClick} />
   );
 }
 

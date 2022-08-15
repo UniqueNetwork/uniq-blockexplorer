@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 const getBlockQuery = gql`
   query getBlockDetails($block_number: Int!) {
-    block(where: {block_number: {_eq: $block_number}}) {
+    block(where: { block_number: { _eq: $block_number } }) {
       data {
         timestamp
         total_events

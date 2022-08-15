@@ -1,8 +1,17 @@
 import { gql } from '@apollo/client';
 
 const getExtrinsicsQuery = gql`
-  query getLastTransfers($limit: Int, $offset: Int, $where: view_extrinsic_bool_exp = {}) {
-    view_extrinsic(limit: $limit, offset: $offset, order_by: { timestamp: desc }, where: $where) {
+  query getLastTransfers(
+    $limit: Int
+    $offset: Int
+    $where: view_extrinsic_bool_exp = {}
+  ) {
+    view_extrinsic(
+      limit: $limit
+      offset: $offset
+      order_by: { timestamp: desc }
+      where: $where
+    ) {
       timestamp
       hash
       method

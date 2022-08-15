@@ -1,5 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-/* eslint-disable sort-keys */
 // Here are the dimensions according to the grid SCAN.2.0
 import { useEffect, useMemo, useState } from 'react';
 
@@ -10,7 +8,7 @@ export enum DeviceSize {
   md, // 991 - 768
   lg, // 1199 - 992
   xl, // 1679 - 1200
-  xxl // > 1680
+  xxl, // > 1680
 }
 
 // for css @media queries
@@ -22,7 +20,7 @@ export const deviceWidth = {
     md: '(min-width: 768px) and (max-width: 991px)',
     lg: '(min-width: 992px) and (max-width: 1199px)',
     xl: '(min-width: 1200px) and (max-width: 1679px)',
-    xxl: '(min-width: 1680px)'
+    xxl: '(min-width: 1680px)',
   },
   biggerThan: {
     xxs: '(min-width: 480px)',
@@ -30,7 +28,7 @@ export const deviceWidth = {
     sm: '(min-width: 768px)',
     md: '(min-width: 992px)',
     lg: '(min-width: 1200px)',
-    xl: '(min-width: 1680px)'
+    xl: '(min-width: 1680px)',
   },
   smallerThan: {
     xs: '(max-width: 479px)',
@@ -38,8 +36,8 @@ export const deviceWidth = {
     md: '(max-width: 767px)',
     lg: '(max-width: 991px)',
     xl: '(max-width: 1199px)',
-    xxl: '(max-width: 1679px)'
-  }
+    xxl: '(max-width: 1679px)',
+  },
 };
 
 export const useDeviceSize = (): DeviceSize => {

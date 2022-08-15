@@ -1,11 +1,15 @@
 import React, { useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { PagePaperWrapper } from '@app/components';
-import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api/graphQL';
+import {
+  CollectionSorting,
+  useGraphQlCollections,
+  useGraphQlTokens,
+} from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
@@ -15,15 +19,23 @@ import { CollectionCard } from './CollectionCard';
 import { collectionsOptions } from './collectionsOptions';
 
 interface CollectionsProps {
-  searchString?: string
+  searchString?: string;
 }
 
 export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(collectionsOptions[0]);
+  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
+    collectionsOptions[0],
+  );
 
-  const orderBy = useMemo((): CollectionSorting => selectedSort.id === 'new' ? { date_of_creation: 'desc' } : { actions_count: 'desc' }, [selectedSort.id]);
+  const orderBy = useMemo(
+    (): CollectionSorting =>
+      selectedSort.id === 'new'
+        ? { date_of_creation: 'desc' }
+        : { actions_count: 'desc' },
+    [selectedSort.id],
+  );
   const deviceSize = useDeviceSize();
 
   const pageSize = useMemo(() => {
@@ -32,32 +44,37 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     return 4;
   }, [deviceSize]);
 
-  const { collections, isCollectionsFetching, timestamp } = useGraphQlCollections({ orderBy, pageSize, searchString });
-  
-  const collectionIds = collections?.map((collection) =>  collection.collection_id);
+  const { collections, isCollectionsFetching, timestamp } = useGraphQlCollections({
+    orderBy,
+    pageSize,
+    searchString,
+  });
+
+  const collectionIds = collections?.map((collection) => collection.collection_id);
   const filter = {
-    _and: [
-      { collection_id: { _in: collectionIds } },
-      { token_id: { _eq: 1 } }
-    ]
+    _and: [{ collection_id: { _in: collectionIds } }, { token_id: { _eq: 1 } }],
   };
 
   const { tokens } = useGraphQlTokens({
     filter,
     offset: 0,
-    pageSize
+    pageSize,
   });
 
   const collectionsWithTokenCover = collections?.map((collection) => ({
     ...collection,
-    collection_cover: collection.collection_cover || tokens?.find((token) => token.collection_id === collection.collection_id)?.image.fullUrl || ''
+    collection_cover:
+      collection.collection_cover ||
+      tokens?.find((token) => token.collection_id === collection.collection_id)?.image
+        .fullUrl ||
+      '',
   }));
 
   const onClick = useCallback(() => {
     const linkUrl = `/${currentChain.network}/collections`;
-    const navigateTo: {pathname: string, search?: string} = {pathname: linkUrl};
+    const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
 
-    if(searchString){
+    if (searchString) {
       const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
 
       navigateTo.search = searchParams;
@@ -65,7 +82,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
 
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
     navigate(navigateTo);
-  }, [ currentChain, navigate, searchString]);
+  }, [currentChain, navigate, searchString]);
 
   if (!collections.length) return null;
 
@@ -75,7 +92,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
         options={collectionsOptions}
         selectedSort={selectedSort}
         setSelectedSort={setSelectedSort}
-        title='Collections'
+        title="Collections"
       />
       <CollectionsList>
         {isCollectionsFetching && <LoadingComponent />}
@@ -91,11 +108,11 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
         iconRight={{
           color: 'white',
           name: 'arrow-right',
-          size: 10
+          size: 10,
         }}
+        role="primary"
+        title="See all"
         onClick={onClick}
-        role='primary'
-        title='See all'
       />
     </Wrapper>
   );

@@ -6,41 +6,59 @@ import { Text } from '@unique-nft/ui-kit';
 import LoadingComponent from './LoadingComponent';
 
 interface MobileTableProps<RecordType = DefaultRecordType> {
-  className?: string
-  columns?: ColumnType<RecordType>[]
-  data?: RecordType[]
-  loading?: boolean
-  rowKey?: string | GetRowKey<RecordType>
+  className?: string;
+  columns?: ColumnType<RecordType>[];
+  data?: RecordType[];
+  loading?: boolean;
+  rowKey?: string | GetRowKey<RecordType>;
 }
 
-const MobileTable: FC<MobileTableProps> = ({
-  columns,
-  data,
-  loading,
-  rowKey
-}) => {
+const MobileTable: FC<MobileTableProps> = ({ columns, data, loading, rowKey }) => {
   let children = <LoadingComponent />;
 
-  if (!loading && data?.length === 0) children = <Text className={'text_grey'}>No data</Text>;
+  if (!loading && data?.length === 0)
+    children = <Text className={'text_grey'}>No data</Text>;
   else if (!loading) {
-    children = <>{data?.map((item, index) => (
-      <MobileTableRow
-        key={typeof rowKey === 'function' ? rowKey(item, index) : item[rowKey as keyof DefaultRecordType]}
-      >
-        {columns?.map((column) => (
-          <div key={`column-${column.key || ''}`}>
-            {typeof column?.title === 'object' ? <>{column.title}</> : <Text color='grey-500'>{`${column?.title || ''}`}</Text>}
-            {column.render && <>{column.render(item[column.dataIndex as keyof DefaultRecordType], item, index)}</>}
-            {!column.render && <Text>{item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}</Text>}
-          </div>
+    children = (
+      <>
+        {data?.map((item, index) => (
+          <MobileTableRow
+            key={
+              typeof rowKey === 'function'
+                ? rowKey(item, index)
+                : item[rowKey as keyof DefaultRecordType]
+            }
+          >
+            {columns?.map((column) => (
+              <div key={`column-${column.key || ''}`}>
+                {typeof column?.title === 'object' ? (
+                  <>{column.title}</>
+                ) : (
+                  <Text color="grey-500">{`${column?.title || ''}`}</Text>
+                )}
+                {column.render && (
+                  <>
+                    {column.render(
+                      item[column.dataIndex as keyof DefaultRecordType],
+                      item,
+                      index,
+                    )}
+                  </>
+                )}
+                {!column.render && (
+                  <Text>
+                    {item[column.dataIndex as keyof DefaultRecordType]?.toString() || ''}
+                  </Text>
+                )}
+              </div>
+            ))}
+          </MobileTableRow>
         ))}
-      </MobileTableRow>
-    ))}</>;
+      </>
+    );
   }
 
-  return (
-    <MobileTableWrapper>{children}</MobileTableWrapper>
-  );
+  return <MobileTableWrapper>{children}</MobileTableWrapper>;
 };
 
 const MobileTableWrapper = styled.div`
@@ -57,7 +75,7 @@ const MobileTableRow = styled.div`
   @media (min-width: 768px) {
     display: none;
   }
-  
+
   div {
     display: flex;
     align-items: center;
@@ -71,8 +89,8 @@ const MobileTableRow = styled.div`
       }
     }
   }
-  
-  @media(max-width: 320px) {
+
+  @media (max-width: 320px) {
     grid-template-columns: 1fr;
   }
 `;

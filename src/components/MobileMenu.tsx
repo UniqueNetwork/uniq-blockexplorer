@@ -10,12 +10,9 @@ const MobileMenu: FC = () => {
   const location = useLocation();
   const currentLocation = useRef<string>();
 
-  const onMenuClick = useCallback(
-    () => {
-      setIsOpen(!isOpen);
-    },
-    [setIsOpen, isOpen]
-  );
+  const onMenuClick = useCallback(() => {
+    setIsOpen(!isOpen);
+  }, [setIsOpen, isOpen]);
 
   useEffect(() => {
     if (currentLocation.current && currentLocation.current !== location.pathname) {
@@ -25,13 +22,16 @@ const MobileMenu: FC = () => {
     currentLocation.current = location.pathname;
   }, [location, setIsOpen]);
 
-  return (<MobileMenuWrapper>
-    <MobileMenuIcon
-      isOpen={isOpen}
-      onClick={onMenuClick}
-    />
-    {isOpen && <MobileMenuNav><Menu /></MobileMenuNav>}
-  </MobileMenuWrapper>);
+  return (
+    <MobileMenuWrapper>
+      <MobileMenuIcon isOpen={isOpen} onClick={onMenuClick} />
+      {isOpen && (
+        <MobileMenuNav>
+          <Menu />
+        </MobileMenuNav>
+      )}
+    </MobileMenuWrapper>
+  );
 };
 
 const MobileMenuWrapper = styled.div`
@@ -54,7 +54,8 @@ const MobileMenuNav = styled.nav`
   display: flex;
   flex-direction: column;
   row-gap: calc(var(--gap) * 1.5);
-  box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset, 0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
+  box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
+    0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
   a {
     font-size: 16px;
     line-height: 24px;
@@ -71,7 +72,7 @@ const MobileMenuNav = styled.nav`
     &:hover {
       text-decoration: none;
     }
-    span{
+    span {
       color: var(--primary-500);
     }
   }

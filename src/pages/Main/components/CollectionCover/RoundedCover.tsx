@@ -1,5 +1,6 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
+
 import { IdentityIcon } from '@app/components';
 
 interface RoundedCoverProps {
@@ -9,16 +10,10 @@ interface RoundedCoverProps {
 
 export const RoundedCover: VFC<RoundedCoverProps> = ({ collectionId, coverSrc }) => (
   <Wrapper>
-    { coverSrc ? (
-      <img
-        alt={`collection ${collectionId ?? ''} cover`}
-        src={coverSrc}
-      />
+    {coverSrc ? (
+      <img alt={`collection ${collectionId ?? ''} cover`} src={coverSrc} />
     ) : (
-      <IdentityIcon
-        address={`collection ${collectionId ?? ''} cover`}
-        size='84'
-      />
+      <IdentityIcon address={`collection ${collectionId ?? ''} cover`} size="84" />
     )}
   </Wrapper>
 );
@@ -34,7 +29,7 @@ const Wrapper = styled.div`
   top: calc(100% - 46px);
   left: calc(50% - 46px);
   overflow: hidden;
-  
+
   img {
     width: 88px;
     height: 88px;

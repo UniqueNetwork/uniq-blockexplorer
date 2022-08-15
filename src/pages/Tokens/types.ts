@@ -1,10 +1,11 @@
-import { TokenSorting } from '../../api/graphQL';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 
+import { TokenSorting } from '../../api/graphQL';
+
 export interface TokensComponentProps {
-  orderBy?: TokenSorting
-  pageSize?: number
-  searchString?: string
+  orderBy?: TokenSorting;
+  pageSize?: number;
+  searchString?: string;
 }
 
 export interface IconProps {

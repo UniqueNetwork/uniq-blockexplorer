@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 import { ApolloError, useQuery } from '@apollo/client';
-import { StatisticsVariables, StatisticsData, StatisticsOrderByParams, Statistics } from '../types';
+
+import {
+  StatisticsVariables,
+  StatisticsData,
+  StatisticsOrderByParams,
+  Statistics,
+} from '../types';
 import { statisticsQuery } from '../statistics';
 
 export interface UseGraphQlStatisticsProps {
@@ -18,16 +24,18 @@ export interface UseGraphQlStatisticsResult {
   timestamp?: number;
 }
 
-export const useGraphQlStatistics = ({ filter, offset, orderBy, pageSize }: UseGraphQlStatisticsProps): UseGraphQlStatisticsResult => {
-  const getWhere = useCallback(
-    (filter?: Record<string, unknown>) => (filter || {}),
-    []
-  );
+export const useGraphQlStatistics = ({
+  filter,
+  offset,
+  orderBy,
+  pageSize,
+}: UseGraphQlStatisticsProps): UseGraphQlStatisticsResult => {
+  const getWhere = useCallback((filter?: Record<string, unknown>) => filter || {}, []);
 
   const {
     data,
     error: fetchStatisticsError,
-    loading: isStatisticsFetching
+    loading: isStatisticsFetching,
   } = useQuery<StatisticsData, StatisticsVariables>(statisticsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -37,8 +45,8 @@ export const useGraphQlStatistics = ({ filter, offset, orderBy, pageSize }: UseG
       limit: pageSize,
       offset,
       orderBy,
-      where: getWhere(filter)
-    }
+      where: getWhere(filter),
+    },
   });
 
   return {
@@ -46,6 +54,6 @@ export const useGraphQlStatistics = ({ filter, offset, orderBy, pageSize }: UseG
     isStatisticsFetching,
     statistics: data?.statistics?.data,
     statisticsCount: data?.statistics?.count || 0,
-    timestamp: data?.statistics?.timestamp
+    timestamp: data?.statistics?.timestamp,
   };
 };

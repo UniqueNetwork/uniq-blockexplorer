@@ -1,15 +1,20 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect } from 'react';
-import { CollectionsData, CollectionsVariables, FetchMoreCollectionsOptions, useGraphQlCollectionsProps } from './types';
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
+
+import {
+  CollectionsData,
+  CollectionsVariables,
+  useGraphQlCollectionsProps,
+} from './types';
 
 const collectionsQuery = gql`
-  query getCollections($limit: Int, $offset: Int, $where: CollectionWhereParams = {}, $orderBy: CollectionOrderByParams = {}) {
-    collections(
-      where: $where
-      limit: $limit
-      offset: $offset
-      order_by: $orderBy
-    ) {
+  query getCollections(
+    $limit: Int
+    $offset: Int
+    $where: CollectionWhereParams = {}
+    $orderBy: CollectionOrderByParams = {}
+  ) {
+    collections(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
         actions_count
         collection_cover
@@ -41,26 +46,33 @@ const collectionsQuery = gql`
   }
 `;
 
-export const useGraphQlCollections = ({ filter, orderBy, pageSize, searchString }: useGraphQlCollectionsProps) => {
+export const useGraphQlCollections = ({
+  filter,
+  orderBy,
+  pageSize,
+  searchString,
+}: useGraphQlCollectionsProps) => {
   const getWhere = useCallback(
     (_filter?: Record<string, unknown>, searchString?: string) => ({
       _and: {
         ...(_filter || {}),
         ...(searchString
           ? {
-            _or: [
-              { name: { _ilike: `%${searchString}%` } },
-              { description: { _ilike: `%${searchString}%` } },
-              { owner: { _eq: searchString } },
-              { owner_normalized: { _eq: searchString } },
-              { token_prefix: { _ilike: `%${searchString}%` } },
-              ...(Number(searchString) ? [{ collection_id: { _eq: Number(searchString) } }] : [])
-            ]
-          }
-          : {})
-      }
+              _or: [
+                { name: { _ilike: `%${searchString}%` } },
+                { description: { _ilike: `%${searchString}%` } },
+                { owner: { _eq: searchString } },
+                { owner_normalized: { _eq: searchString } },
+                { token_prefix: { _ilike: `%${searchString}%` } },
+                ...(Number(searchString)
+                  ? [{ collection_id: { _eq: Number(searchString) } }]
+                  : []),
+              ],
+            }
+          : {}),
+      },
     }),
-    []
+    [],
   );
 
   const {
@@ -76,17 +88,16 @@ export const useGraphQlCollections = ({ filter, orderBy, pageSize, searchString 
       limit: pageSize,
       offset: 0,
       orderBy,
-      where: getWhere(filter, searchString)
-    }
+      where: getWhere(filter, searchString),
+    },
   });
-
 
   return {
     collections: data?.collections?.data || [],
     collectionsCount: data?.collections?.count || 0,
     fetchCollectionsError,
     isCollectionsFetching,
-    timestamp: data?.collections?.timestamp || 0
+    timestamp: data?.collections?.timestamp || 0,
   };
 };
 
@@ -94,7 +105,7 @@ export const useGraphQlCollection = (collectionId: number) => {
   const {
     data,
     error: fetchCollectionsError,
-    loading: isCollectionFetching
+    loading: isCollectionFetching,
   } = useQuery<CollectionsData, CollectionsVariables>(collectionsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
@@ -103,14 +114,14 @@ export const useGraphQlCollection = (collectionId: number) => {
     variables: {
       limit: 1,
       offset: 0,
-      where: { collection_id: { _eq: collectionId } }
-    }
+      where: { collection_id: { _eq: collectionId } },
+    },
   });
 
   return {
     collection: data?.collections.data[0] || undefined,
     fetchCollectionsError,
-    isCollectionFetching
+    isCollectionFetching,
   };
 };
 

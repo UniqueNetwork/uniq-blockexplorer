@@ -1,34 +1,31 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { Collections, LastBlocks, LastTransfers, SearchHeader, TokenInformation, Tokens } from './components';
+import {
+  Collections,
+  LastBlocks,
+  LastTransfers,
+  SearchHeader,
+  TokenInformation,
+  Tokens,
+} from './components';
 
 const MainPage = () => {
   const [searchString, setSearchString] = useState<string | undefined>();
 
   return (
     <>
-      <SearchHeader
-        setSearchString={setSearchString}
-      />
+      <SearchHeader setSearchString={setSearchString} />
       <TokenInformation />
       <div>
-        <Tokens
-          searchString={searchString}
-        />
+        <Tokens searchString={searchString} />
       </div>
       <Main2BlocksWrapper>
-        <LastTransfers
-          searchString={searchString}
-        />
-        <LastBlocks
-          searchString={searchString}
-        />
+        <LastTransfers searchString={searchString} />
+        <LastBlocks searchString={searchString} />
       </Main2BlocksWrapper>
       <div>
-        <Collections
-          searchString={searchString}
-        />
+        <Collections searchString={searchString} />
       </div>
     </>
   );

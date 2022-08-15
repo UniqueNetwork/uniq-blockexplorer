@@ -2,6 +2,8 @@ import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
+import { Skeleton } from '@unique-nft/ui-kit';
+
 import { useApi, useCheckImageExists } from '@app/hooks';
 import { timeDifference } from '@app/utils';
 import { Token } from '@app/api';
@@ -9,9 +11,8 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import clock from '@app/images/icons/clock.svg';
-import { Skeleton } from '@unique-nft/ui-kit';
 
-type TokenCardProps = Token & {timeNow?: number};
+type TokenCardProps = Token & { timeNow?: number };
 
 const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
@@ -20,7 +21,7 @@ const TokenCard: FC<TokenCardProps> = ({
   image,
   timeNow,
   token_id: tokenId,
-  token_prefix: prefix
+  token_prefix: prefix,
 }) => {
   const { currentChain } = useApi();
   // user analytics
@@ -36,35 +37,37 @@ const TokenCard: FC<TokenCardProps> = ({
 
   return (
     <TokenCardLink
-      onClick={onNFTCardClick}
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
+      onClick={onNFTCardClick}
     >
       {/* imgUrl exists, but the picture has not yet loaded */}
-      {image.fullUrl && !imageUrl && (<SkeletonWrapper><Skeleton /></SkeletonWrapper>)}
+      {image.fullUrl && !imageUrl && (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
+      )}
       {/* the picture has not exists */}
-      {!imageUrl && !image.fullUrl &&(<TokenPicture
-        alt={tokenId.toString()}
-        src={imageUrl}
-      />)}
+      {!imageUrl && !image.fullUrl && (
+        <TokenPicture alt={tokenId.toString()} src={imageUrl} />
+      )}
       {/* the picture has loaded */}
       {imageUrl && <TokenBackground imgUrl={imageUrl} />}
       <TokenTitle>
-        <Text
-          color='primary-500'
-          size='l'
-        >{`${prefix || ''} #${tokenId}`}</Text>
+        <Text color="primary-500" size="l">{`${prefix || ''} #${tokenId}`}</Text>
         <div>
-          <TokenCollectionLink to={`/${currentChain ? currentChain?.network + '/' : ''}collections/${collectionId}`}>{name} [ID {collectionId}]</TokenCollectionLink>
+          <TokenCollectionLink
+            to={`/${
+              currentChain ? currentChain?.network + '/' : ''
+            }collections/${collectionId}`}
+          >
+            {name} [ID {collectionId}]
+          </TokenCollectionLink>
         </div>
         <TokenProperties>
-          <img
-            alt='created'
-            src={clock}
-          />
-          <Text
-            color='additional-dark'
-            size='xs'
-          >{timeDifference(dateOfCreation, timeNow)}</Text>
+          <img alt="created" src={clock} />
+          <Text color="additional-dark" size="xs">
+            {timeDifference(dateOfCreation, timeNow)}
+          </Text>
         </TokenProperties>
       </TokenTitle>
     </TokenCardLink>
@@ -75,14 +78,14 @@ const SkeletonWrapper = styled.div`
   width: 100%;
   border-radius: 8px 8px 0 0;
 
-  .unique-skeleton{
+  .unique-skeleton {
     width: 100%;
     border-radius: 8px 8px 0 0;
-  
+
     &:after {
-    content: '';
-    display: block;
-    padding-top: 100%;
+      content: '';
+      display: block;
+      padding-top: 100%;
     }
   }
 `;
@@ -93,7 +96,7 @@ const TokenCardLink = styled(Link)`
   border-radius: calc(var(--bradius) * 2);
   transition: 50ms;
   overflow: hidden;
-  
+
   &:hover {
     transform: translate(0, -5px);
     text-decoration: none;
@@ -103,9 +106,9 @@ const TokenCardLink = styled(Link)`
 const TokenPicture = styled(Picture)`
   overflow: hidden;
   border-radius: 8px 8px 0 0;
-  
+
   svg {
-    width: 100%
+    width: 100%;
   }
 `;
 
@@ -115,14 +118,14 @@ const TokenCollectionLink = styled(Link)`
   line-height: 18px;
 `;
 
-const TokenBackground = styled.div<{imgUrl: string}>`
+const TokenBackground = styled.div<{ imgUrl: string }>`
   width: 100%;
   background-image: url(${(props) => props.imgUrl});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 8px 8px 0 0;
-  
+
   &:after {
     content: '';
     display: block;
@@ -132,7 +135,7 @@ const TokenBackground = styled.div<{imgUrl: string}>`
 
 const TokenTitle = styled.div`
   margin: var(--gap);
-  
+
   a {
     word-break: break-word;
   }
@@ -142,8 +145,8 @@ const TokenProperties = styled.div`
   display: flex;
   align-items: center;
   margin-top: calc(var(--gap) / 2);
-  
-  img{
+
+  img {
     width: 13px;
     height: 13px;
     margin-right: 5px;

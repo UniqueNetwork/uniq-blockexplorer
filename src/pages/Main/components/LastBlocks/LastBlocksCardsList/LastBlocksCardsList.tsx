@@ -1,39 +1,36 @@
 import React, { VFC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
+import { ColumnType } from 'rc-table/lib/interface';
 
 import { LoadingComponent } from '@app/components';
-import { LastBlocksCard } from './LastBlocksCard';
-import { ColumnType } from 'rc-table/lib/interface';
 import { LastBlockWithTimeDif } from '@app/api';
 
-interface MobileCardsListProps {
+import { LastBlocksCard } from './LastBlocksCard';
+
+interface LastBlocksCardsListProps {
   columns: ColumnType<LastBlockWithTimeDif>[];
   data?: LastBlockWithTimeDif[];
   loading?: boolean;
 }
 
-export const LastBlocksCardsList: VFC<MobileCardsListProps> = ({ columns, data, loading }) => {
+export const LastBlocksCardsList: VFC<LastBlocksCardsListProps> = ({
+  columns,
+  data,
+  loading,
+}) => {
   if (loading) {
-    return (
-      <LoadingComponent />
-    );
+    return <LoadingComponent />;
   }
 
   if (!loading && data?.length === 0) {
-    return (
-      <Text className={'text_grey'}>No data</Text>
-    );
+    return <Text className={'text_grey'}>No data</Text>;
   }
 
   return (
     <Wrapper>
-      { data?.map((item) => (
-        <LastBlocksCard
-          columns={columns}
-          item={item}
-          key={item.block_number}
-        />
+      {data?.map((item) => (
+        <LastBlocksCard columns={columns} item={item} key={item.block_number} />
       ))}
     </Wrapper>
   );

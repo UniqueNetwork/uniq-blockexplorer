@@ -28,44 +28,39 @@ const CollectionPage: FC = () => {
     }
   }, [activeDetailTabIndex]);
 
-  return (<>
-    <PagePaper>
-      <CollectionTitle>
-        <Avatar
-          size={'large'}
-          src={getCoverURLFromCollection(collection?.collection_cover)}
+  return (
+    <>
+      <PagePaper>
+        <CollectionTitle>
+          <Avatar
+            size={'large'}
+            src={getCoverURLFromCollection(collection?.collection_cover)}
+          />
+          <Heading size={'2'}>{collection?.name || ''}</Heading>
+        </CollectionTitle>
+        <Tabs
+          activeIndex={activeDetailTabIndex}
+          labels={detailTabs}
+          onClick={setActiveDetailTabIndex}
         />
-        <Heading size={'2'}>{collection?.name || ''}</Heading>
-      </CollectionTitle>
-      <Tabs
-        activeIndex={activeDetailTabIndex}
-        labels={detailTabs}
-        onClick={setActiveDetailTabIndex}
-      />
-      <Tabs
-        activeIndex={activeDetailTabIndex}
-      >
-        <CollectionBasicDataComponent
-          collection={collection}
-          collectionId={collectionId || ''}
-          key='collections'
-        />
-        <CollectionExtendedDataComponent
-          collection={collection}
-          key='tokens'
-        />
-      </Tabs>
-    </PagePaper>
-    {activeDetailTabIndex === 0 && <PagePaper>
-      <HoldersWrapper>
-        <Heading size={'2'}>Holders</Heading>
-        <HoldersComponent
-          collectionId={collectionId}
-          key={'holder'}
-        />
-      </HoldersWrapper>
-    </PagePaper>}
-  </>
+        <Tabs activeIndex={activeDetailTabIndex}>
+          <CollectionBasicDataComponent
+            collection={collection}
+            collectionId={collectionId || ''}
+            key="collections"
+          />
+          <CollectionExtendedDataComponent collection={collection} key="tokens" />
+        </Tabs>
+      </PagePaper>
+      {activeDetailTabIndex === 0 && (
+        <PagePaper>
+          <HoldersWrapper>
+            <Heading size={'2'}>Holders</Heading>
+            <HoldersComponent collectionId={collectionId} key={'holder'} />
+          </HoldersWrapper>
+        </PagePaper>
+      )}
+    </>
   );
 };
 
@@ -80,8 +75,6 @@ const CollectionTitle = styled.div`
   }
 `;
 
-const HoldersWrapper = styled.div`
-  
-`;
+const HoldersWrapper = styled.div``;
 
 export default CollectionPage;

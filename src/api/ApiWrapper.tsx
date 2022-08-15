@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
+
 import { defaultChainKey } from '@app/utils';
+import { getApolloClient } from '@app/api/graphQL/apolloClient';
 
 import { ApiContextProps, ApiProvider } from './ApiContext';
 import config from '../config';
 
-import { getApolloClient } from '@app/api/graphQL/apolloClient';
-
 interface ChainProviderProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const { chains, defaultChain } = config;
@@ -20,9 +20,9 @@ const ApiWrapper = ({ children }: ChainProviderProps) => {
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
     () => ({
-      currentChain: chainId ? chains[chainId] : defaultChain
+      currentChain: chainId ? chains[chainId] : defaultChain,
     }),
-    [chainId]
+    [chainId],
   );
 
   const client = useMemo(() => {

@@ -8,4 +8,14 @@ import Token from './Token';
 import Transfers from './Transfers';
 import Block from './Block';
 
-export { Account, Collections, Collection, Extrinsic, Main, Tokens, Token, Transfers, Block };
+export {
+  Account,
+  Collections,
+  Collection,
+  Extrinsic,
+  Main,
+  Tokens,
+  Token,
+  Transfers,
+  Block,
+};

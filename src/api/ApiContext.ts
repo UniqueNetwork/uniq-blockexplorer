@@ -8,13 +8,15 @@ export type Chain = {
   gqlEndpoint: string;
   rpcEndpoint: string;
   symbol: string;
-}
+};
 
 export type ApiContextProps = {
   currentChain: Chain;
-}
+};
 
-const ApiContext: Context<ApiContextProps> = createContext({} as unknown as ApiContextProps);
+const ApiContext: Context<ApiContextProps> = createContext(
+  {} as unknown as ApiContextProps,
+);
 const ApiConsumer: Consumer<ApiContextProps> = ApiContext.Consumer;
 const ApiProvider: Provider<ApiContextProps> = ApiContext.Provider;
 

@@ -1,39 +1,40 @@
 import React, { FC } from 'react';
+
 import Table from '../../../components/Table';
 
 interface TokensEventsComponentProps {
-  events?: Event[]
-  collectionId?: number
-  tokenId?: number
-  loading?: boolean
+  events?: Event[];
+  collectionId?: number;
+  tokenId?: number;
+  loading?: boolean;
 }
 
 type Event = {
-  id: string
-  action: string
-  age: string
-  fee: string
-  author: string
-  result: string
-}
+  id: string;
+  action: string;
+  age: string;
+  fee: string;
+  author: string;
+  result: string;
+};
 
 const columns = [
   {
     dataIndex: 'token',
     key: 'token',
     title: 'Item',
-    width: 100
+    width: 100,
   },
   {
     dataIndex: 'action',
     key: 'action',
     title: 'Action',
-    width: 100
+    width: 100,
   },
   { dataIndex: 'age', key: 'age', title: 'Time', width: 100 },
   { dataIndex: 'fee', key: 'fee', title: 'Fee', width: 100 },
   { dataIndex: 'author', key: 'author', title: 'Author', width: 100 },
-  { dataIndex: 'result', key: 'result', title: 'Result', width: 100 }
+  { dataIndex: 'result', key: 'result', title: 'Result', width: 100 },
 ];
 
 const TokenEventsComponent: FC<TokensEventsComponentProps> = ({ events, loading }) => {

@@ -3,7 +3,7 @@ import { timeDifference } from '@app/utils';
 
 export const blocksWithTimeDifference = (
   blocks: LastBlock[] | undefined,
-  timestamp?: number
+  timestamp?: number,
 ): LastBlockWithTimeDif[] => {
   if (!blocks || !Array.isArray(blocks)) {
     return [];
@@ -11,6 +11,6 @@ export const blocksWithTimeDifference = (
 
   return blocks.map((block: LastBlock) => ({
     ...block,
-    time_difference: timeDifference(block.timestamp, timestamp)
+    time_difference: timeDifference(block.timestamp, timestamp),
   }));
 };

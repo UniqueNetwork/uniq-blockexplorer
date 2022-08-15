@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Heading, Tabs } from '@unique-nft/ui-kit';
+
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
+import { LastTransfers } from '@app/pages/Main/components';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 import AccountDetailComponent from './components/AccountDetailComponent';
-import { LastTransfers } from '../Main/components/LastTransfers/LastTransfers';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 
 const assetsTabs = ['Collections', 'NFTs'];
 
@@ -26,8 +27,11 @@ const AccountPage = () => {
   const { currentChain } = useApi();
 
   // if we get an ether address
-  if ((/0x[0-9A-Fa-f]{40}/g).test(accountId as string)) {
-    const substrateMirror = getMirrorFromEthersToSubstrate(accountId as string, currentChain.network);
+  if (/0x[0-9A-Fa-f]{40}/g.test(accountId as string)) {
+    const substrateMirror = getMirrorFromEthersToSubstrate(
+      accountId as string,
+      currentChain.network,
+    );
 
     substrateAddress = substrateMirror;
     accountForTokensSearch = accountId?.toLowerCase();
@@ -52,23 +56,15 @@ const AccountPage = () => {
           labels={assetsTabs}
           onClick={setActiveAssetsTabIndex}
         />
-        <Tabs
-          activeIndex={activeAssetsTabIndex}
-        >
+        <Tabs activeIndex={activeAssetsTabIndex}>
           <CollectionsComponent
             accountId={normalizeSubstrate(substrateAddress as string)}
             key={'collections'}
           />
-          <TokensComponent
-            accountId={accountForTokensSearch as string}
-            key={'tokens'}
-          />
+          <TokensComponent accountId={accountForTokensSearch as string} key={'tokens'} />
         </Tabs>
       </AssetsWrapper>
-      <LastTransfers
-        accountId={substrateAddress}
-        pageSize={10}
-      />
+      <LastTransfers accountId={substrateAddress} pageSize={10} />
     </PagePaper>
   );
 };

@@ -6,13 +6,18 @@ import ArrowDownUp from './ArrowDownUp';
 import { CollectionSorting } from '../api/graphQL';
 
 interface TableSortableColumnProps {
-  dataIndex: string
+  dataIndex: string;
   title: string;
-  orderBy: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>
-  onOrderChange(sorting: CollectionSorting): void
+  orderBy: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>;
+  onOrderChange(sorting: CollectionSorting): void;
 }
 
-const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({ dataIndex, onOrderChange, orderBy, title }) => {
+const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
+  dataIndex,
+  onOrderChange,
+  orderBy,
+  title,
+}) => {
   const direction = useMemo(() => {
     if (orderBy[dataIndex] === 'asc') return 'up';
     if (orderBy[dataIndex] === 'desc') return 'down';
@@ -32,10 +37,7 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({ dataIndex, onO
   return (
     <>
       <ColumnTitleText color={'grey-500'}>{title}</ColumnTitleText>
-      <StyledArrowDownUp
-        direction={direction}
-        onClick={onArrowsClick}
-      />
+      <StyledArrowDownUp direction={direction} onClick={onArrowsClick} />
     </>
   );
 };
@@ -45,7 +47,7 @@ const ColumnTitleText = styled(Text)`
 `;
 
 const StyledArrowDownUp = styled(ArrowDownUp)`
-  @media(max-width: 1023px) {
+  @media (max-width: 1023px) {
     display: none;
   }
 `;

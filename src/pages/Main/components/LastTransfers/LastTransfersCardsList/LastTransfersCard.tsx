@@ -1,6 +1,7 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
 import { ColumnType } from 'rc-table/lib/interface';
+
 import { TransferWithTimeDif } from '@app/api';
 import { deviceWidth } from '@app/hooks';
 
@@ -15,24 +16,36 @@ export const LastTransfersCard: VFC<MobileCardProps> = ({ columns, item }) => {
       <CardHeader>
         <CardLeft>
           <div>{columns[0].title}</div>
-          <div>{columns[0]?.render ? columns[0]?.render(item.block_index, item, 0) : item.block_index}</div>
+          <div>
+            {columns[0]?.render
+              ? columns[0]?.render(item.block_index, item, 0)
+              : item.block_index}
+          </div>
         </CardLeft>
-        <CardRight>
-          {item.time_difference}
-        </CardRight>
+        <CardRight>{item.time_difference}</CardRight>
       </CardHeader>
       <CardBody>
         <CardRow>
           <div>{columns[2].title}</div>
-          <div>{columns[2]?.render ? columns[2]?.render(item.from_owner, item, 2) : item.from_owner}</div>
+          <div>
+            {columns[2]?.render
+              ? columns[2]?.render(item.from_owner, item, 2)
+              : item.from_owner}
+          </div>
         </CardRow>
         <CardRow>
           <div>{columns[3].title}</div>
-          <div>{columns[3]?.render ? columns[3]?.render(item.to_owner, item, 3) : item.to_owner}</div>
+          <div>
+            {columns[3]?.render
+              ? columns[3]?.render(item.to_owner, item, 3)
+              : item.to_owner}
+          </div>
         </CardRow>
         <CardRow>
           <div>{columns[4].title}</div>
-          <div>{columns[4]?.render ? columns[4]?.render(item.amount, item, 4) : item.amount}</div>
+          <div>
+            {columns[4]?.render ? columns[4]?.render(item.amount, item, 4) : item.amount}
+          </div>
         </CardRow>
       </CardBody>
     </Wrapper>
@@ -44,17 +57,17 @@ const Wrapper = styled.div`
   font-size: 12px;
   line-height: 18px;
   color: var(--blue-gray-600);
-  
+
   a {
     color: var(--link-color);
   }
-  
+
   display: flex;
   flex-direction: column;
   grid-row-gap: var(--gap);
   border-bottom: 1px solid var(--grey-200);
   padding: var(--gap);
-  
+
   &:first-child {
     padding-top: 0;
   }
@@ -89,7 +102,7 @@ const CardBody = styled.div`
   align-items: baseline;
   justify-content: space-between;
 
-   @media ${deviceWidth.smallerThan.xs} {
+  @media ${deviceWidth.smallerThan.xs} {
     display: flex;
     flex-direction: column;
   }
@@ -104,7 +117,7 @@ const CardRight = styled.div`
 
 const CardRow = styled(FlexBaseline)`
   span {
-  font-size: 14px !important;
-  line-height: 22px !important;
+    font-size: 14px !important;
+    line-height: 22px !important;
   }
 `;

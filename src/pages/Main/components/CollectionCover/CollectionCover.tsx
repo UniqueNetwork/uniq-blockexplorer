@@ -1,5 +1,6 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
+
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { useCheckImageExists, useRandomColor } from '@app/hooks';
 
@@ -13,7 +14,10 @@ interface CollectionCoverProps {
 }
 
 // TODO also use tokens[0].token_image https://cryptousetech.atlassian.net/browse/SCAN-303
-export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionId, coverSrc }) => {
+export const CollectionCover: VFC<CollectionCoverProps> = ({
+  collectionId,
+  coverSrc,
+}) => {
   const imgSrc = useCheckImageExists(getCoverURLFromCollection(coverSrc));
   const color = useRandomColor();
   const collectionCoverColor = imgSrc ? 'transparent' : color;
@@ -21,15 +25,9 @@ export const CollectionCover: VFC<CollectionCoverProps> = ({ collectionId, cover
   return (
     <Wrapper>
       <BlurredWrapper>
-        <BlurredContent
-          color={collectionCoverColor}
-          coverSrc={imgSrc}
-        />
+        <BlurredContent color={collectionCoverColor} coverSrc={imgSrc} />
       </BlurredWrapper>
-      <RoundedCover
-        collectionId={collectionId}
-        coverSrc={imgSrc}
-      />
+      <RoundedCover collectionId={collectionId} coverSrc={imgSrc} />
     </Wrapper>
   );
 };

@@ -1,5 +1,6 @@
 import React, { VFC } from 'react';
 import styled from 'styled-components';
+
 import { Header1 } from '@app/styles/styled-components';
 import { deviceWidth, useApi } from '@app/hooks';
 import SearchComponent from '@app/components/SearchComponent';
@@ -12,16 +13,18 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({ setSearchString }) => {
   const { currentChain } = useApi();
 
   const networkColor = `var(--${currentChain?.name?.replaceAll(' ', '-').toLowerCase()})`;
-  const networkName = currentChain?.network.charAt(0) + currentChain?.network.slice(1).toLowerCase();
+  const networkName =
+    currentChain?.network.charAt(0) + currentChain?.network.slice(1).toLowerCase();
 
   return (
     <Wrapper>
       <H>
-        Block Explorer&nbsp;<NetworkName networkColor={networkColor}>{networkName}</NetworkName>
+        Block Explorer&nbsp;
+        <NetworkName networkColor={networkColor}>{networkName}</NetworkName>
       </H>
       <SearchComponent
-        onSearchChange={setSearchString}
         placeholder={'Extrinsic / collection / NFT / account'}
+        onSearchChange={setSearchString}
       />
     </Wrapper>
   );
@@ -43,14 +46,13 @@ const H = styled(Header1)`
   margin-bottom: calc(var(--gap));
 
   @media ${deviceWidth.biggerThan.xs} {
-    margin-bottom: calc(var(--gap) * 3/2);
+    margin-bottom: calc(var(--gap) * 3 / 2);
   }
 
   @media ${deviceWidth.biggerThan.sm} {
     margin-top: calc(var(--gap) * 3);
     margin-bottom: calc(var(--gap) * 2);
   }
-  
 
   @media (max-width: 767px) {
     flex-direction: column;

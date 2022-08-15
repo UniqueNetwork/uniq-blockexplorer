@@ -8,45 +8,47 @@ export const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
   {
     dataIndex: 'block_index',
     key: 'block_index',
-    render: (value: string) => <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>,
-    title: 'Extrinsic ID',
-    width: 100
-  },
-  { dataIndex: 'time_difference', 
-    key: 'age', 
-    render: (value: number) => (
-      <Text
-        size='m'
-        weight='light'
-      >{value}</Text>
+    render: (value: string) => (
+      <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>
     ),
-    title: 'Age', 
-    width: 100 },
+    title: 'Extrinsic ID',
+    width: 100,
+  },
+  {
+    dataIndex: 'time_difference',
+    key: 'age',
+    render: (value: number) => (
+      <Text size="m" weight="light">
+        {value}
+      </Text>
+    ),
+    title: 'Age',
+    width: 100,
+  },
   {
     dataIndex: 'from_owner',
     key: 'from_owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'From',
-    width: 100
+    width: 100,
   },
   {
     dataIndex: 'to_owner',
     key: 'to_owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'To',
-    width: 100
+    width: 100,
   },
   /* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */
   {
     dataIndex: 'amount',
     key: 'amount',
     render: (value: number) => (
-      <Text
-        size='m'
-        weight='light'
-      >{`${formatLongNumber(value) || 0} ${tokenSymbol}`}</Text>
+      <Text size="m" weight="light">{`${
+        formatLongNumber(value) || 0
+      } ${tokenSymbol}`}</Text>
     ),
     title: 'Amount',
-    width: 100
-  }
+    width: 100,
+  },
 ];

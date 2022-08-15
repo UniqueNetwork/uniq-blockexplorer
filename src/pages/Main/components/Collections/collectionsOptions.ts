@@ -3,10 +3,10 @@ import { SelectOptionProps } from '@unique-nft/ui-kit';
 export const collectionsOptions: SelectOptionProps[] = [
   {
     id: 'new',
-    title: 'New'
+    title: 'New',
   },
   {
     id: 'top',
-    title: 'Top'
-  }
+    title: 'Top',
+  },
 ];

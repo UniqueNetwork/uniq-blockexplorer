@@ -1,13 +1,22 @@
-import { Transfer, TransferWithTimeDif } from '@app/api';
 import { timeDifference } from '@app/utils';
 
-export const transfersWithTimeDifference = (transfers: Transfer[] | undefined): (TransferWithTimeDif)[] => {
-  if (!transfers || !Array.isArray(transfers)) {
+export type WithTimestamp = {
+  timestamp: number | null;
+};
+
+export type TimeDifference = {
+  time_difference: string;
+};
+
+export function transfersWithTimeDifference<T extends WithTimestamp>(
+  items: T[] | undefined,
+): (T & TimeDifference)[] {
+  if (!items || !Array.isArray(items)) {
     return [];
   }
 
-  return transfers.map((transfer: Transfer) => ({
-    ...transfer,
-    time_difference: transfer.timestamp ? timeDifference(transfer.timestamp) : ''
+  return items.map((item: T) => ({
+    ...item,
+    time_difference: item.timestamp ? timeDifference(item.timestamp) : '',
   }));
-};
+}

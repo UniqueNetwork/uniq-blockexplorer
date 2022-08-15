@@ -4,7 +4,7 @@ export enum GQLOrderByParamsArgs {
   asc_nulls_last = 'asc_nulls_last',
   desc = 'desc',
   desc_nulls_first = 'desc_nulls_first',
-  desc_nulls_last = 'desc_nulls_last'
+  desc_nulls_last = 'desc_nulls_last',
 }
 
 export type GQLWhereOpsInt = {
@@ -13,7 +13,7 @@ export type GQLWhereOpsInt = {
   _in?: number[];
   _like?: number;
   _neq?: number;
-}
+};
 
 export type GQLWhereOpsString = {
   _eq?: string;
@@ -21,4 +21,4 @@ export type GQLWhereOpsString = {
   _in?: string[];
   _like?: string;
   _neq?: string;
-}
+};
