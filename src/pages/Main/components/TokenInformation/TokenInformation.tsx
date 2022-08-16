@@ -58,7 +58,9 @@ export const TokenInformation: VFC = () => {
             <div>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.circulating_supply)}</Small>
+                <SmallDesktop>
+                  ({formatLongNumber(statisticsMap.circulating_supply)})
+                </SmallDesktop>
               </BigAmount>
               <P>Circulating&nbsp;supply</P>
             </div>
@@ -67,7 +69,9 @@ export const TokenInformation: VFC = () => {
             <div>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.locked_supply)}</Small>
+                <SmallDesktop>
+                  ({formatLongNumber(statisticsMap.locked_supply)})
+                </SmallDesktop>
               </BigAmount>
               <P>Locked&nbsp;supply</P>
             </div>
@@ -157,12 +161,12 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
     line-height: 26px;
   }
 
-  @media (max-width: 1199px) {
+  @media ${deviceWidth.smallerThan.xl} {
     display: flex;
     flex-direction: column;
   }
 
-  @media (max-width: 575px) {
+  @media ${deviceWidth.smallerThan.sm} {
     display: grid;
 
     &:first-child {
@@ -177,7 +181,7 @@ const TokenInfo = styled.div`
   flex-direction: column;
   grid-row-gap: calc(var(--gap) * 1.5);
 
-  @media (min-width: 576px) and (max-width: 1199px) {
+  @media ${deviceWidth.biggerThan.xs} and ${deviceWidth.smallerThan.xl} {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: flex-start;
@@ -192,7 +196,7 @@ const TokenInfo = styled.div`
     }
   }
 
-  @media (max-width: 575px) {
+  @media ${deviceWidth.smallerThan.sm} {
     display: grid;
 
     &:first-child {
@@ -207,7 +211,7 @@ const TokenInfoHeader = styled(Header4)`
   align-items: flex-end;
   grid-column-gap: calc(var(--gap) / 2);
 
-  @media (max-width: 1199px) {
+  @media ${deviceWidth.smallerThan.xl} {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -218,23 +222,30 @@ const Small = styled(BodyS)`
   color: var(--blue-grey-700);
 `;
 
+const SmallDesktop = styled(Small)`
+  @media ${deviceWidth.smallerThan.md} {
+    display: none;
+  }
+`;
+
 const Body = styled.div`
   display: flex;
   grid-column-gap: calc(var(--gap) * 2);
   align-items: center;
   justify-content: left;
 
-  @media (max-width: 767px) {
+  @media ${deviceWidth.smallerThan.md} {
     align-items: flex-start;
   }
 
-  @media (max-width: 567px) {
-    grid-column-gap: calc(var(--gap) * 1.5);
+  @media ${deviceWidth.smallerThan.sm} {
+    grid-column-gap: var(--gap);
   }
 `;
 
 const P = styled(BodyM)`
   color: var(--blue-grey-700);
+  word-break: break-word;
 `;
 
 const BigAmount = styled(Header3)`

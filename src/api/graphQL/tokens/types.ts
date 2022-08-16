@@ -22,6 +22,7 @@ export interface Token {
   image_path: string;
   collection_cover: string;
   collection_description: string;
+  transfers_count: number;
 }
 
 export interface TokensData {

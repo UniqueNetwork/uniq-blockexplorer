@@ -23,6 +23,7 @@ const tokensQuery = gql`
         image
         token_id
         token_prefix
+        transfers_count
       }
       count
       timestamp
