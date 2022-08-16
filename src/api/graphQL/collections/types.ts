@@ -27,6 +27,7 @@ export interface Collection {
   token_limit: number;
   token_prefix: string;
   tokens_count: number;
+  transfers_count: number;
   holders_count: number;
   type: string;
   mint_mode: string;
