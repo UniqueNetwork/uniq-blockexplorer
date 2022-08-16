@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Dropdown, Icon, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
+import { deviceWidth } from '@app/hooks';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];
@@ -18,7 +19,7 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   title,
 }) => (
   <Wrapper>
-    <Header size="2">{title}</Header>
+    <StyledHeader size="2">{title}</StyledHeader>
     {selectedSort && (
       <Dropdown
         options={options}
@@ -33,6 +34,14 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
     )}
   </Wrapper>
 );
+
+const StyledHeader = styled(Header)`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
+  }
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -77,7 +86,7 @@ const Wrapper = styled.div`
     }
   }
 
-  @media (min-width: 758px) and (max-width: 1199px) {
+  @media ${deviceWidth.biggerThan.sm} and ${deviceWidth.smallerThan.xl} {
     position: relative;
 
     .header-dropdown-link {
@@ -89,4 +98,10 @@ const Wrapper = styled.div`
   }
 `;
 
-const SelectedOption = styled.div``;
+const SelectedOption = styled.div`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
+  }
+`;
