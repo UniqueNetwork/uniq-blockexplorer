@@ -258,18 +258,23 @@ const Body = styled.div`
 
 const P = styled(BodyM)`
   color: var(--blue-grey-700);
-  word-break: break-word;
+
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 400;
+  }
 `;
 
 const BigAmount = styled(Header3)`
   display: flex;
   align-items: baseline;
   grid-column-gap: calc(var(--gap) / 4);
-  min-height: 36px;
   font-family: 'Inter';
   font-weight: 700;
   font-size: 24px;
   line-height: 36px;
+  margin-bottom: 4px;
 
   @media ${deviceWidth.smallerThan.lg} {
     display: flex;
@@ -289,7 +294,8 @@ const BigAmount = styled(Header3)`
 const BigLChainAmount = styled(Header3)<{ chainColor: string }>`
   font-family: 'Inter';
   color: var(${(props) => props.chainColor});
-  min-height: 36px;
+  line-height: 36px;
+  margin-bottom: 4px;
 
   @media ${deviceWidth.smallerThan.lg} {
     font-size: 20px;

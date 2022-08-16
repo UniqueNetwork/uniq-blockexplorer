@@ -45,6 +45,12 @@ const H = styled(Header1)`
   display: flex;
   margin-bottom: calc(var(--gap));
 
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: 700;
+  }
+
   @media ${deviceWidth.biggerThan.xs} {
     margin-bottom: calc(var(--gap) * 3 / 2);
   }
@@ -52,12 +58,6 @@ const H = styled(Header1)`
   @media ${deviceWidth.biggerThan.sm} {
     margin-top: calc(var(--gap) * 3);
     margin-bottom: calc(var(--gap) * 2);
-  }
-
-  @media (max-width: 767px) {
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
   }
 `;
 
