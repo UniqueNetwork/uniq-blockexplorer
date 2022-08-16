@@ -5,7 +5,7 @@ import { Skeleton } from '@unique-nft/ui-kit';
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
 import { deviceWidth, useApi } from '@app/hooks';
-import { formatLongNumber, getChainBackground } from '@app/utils';
+import { formatLongNumber, getChainBackground, getChainColor } from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
 
@@ -60,7 +60,9 @@ export const TokenInformation: VFC = () => {
             <Cell>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.circulating_supply)})</Small>
+                <SmallDesktop>
+                  ({formatLongNumber(statisticsMap.circulating_supply)})
+                </SmallDesktop>
               </BigAmount>
               <P>Circulating supply</P>
             </Cell>
@@ -69,7 +71,9 @@ export const TokenInformation: VFC = () => {
             <Cell>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
-                <Small>({formatLongNumber(statisticsMap.locked_supply)})</Small>
+                <SmallDesktop>
+                  ({formatLongNumber(statisticsMap.locked_supply)})
+                </SmallDesktop>
               </BigAmount>
               <P>Locked supply</P>
             </Cell>
@@ -82,19 +86,27 @@ export const TokenInformation: VFC = () => {
         </TokenInfoHeader>
         <Body>
           <Cell>
-            <BigLinkAmount>{statisticsMap?.blocks}</BigLinkAmount>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.blocks}
+            </BigLChainAmount>
             <P>Blocks</P>
           </Cell>
           <Cell>
-            <BigLinkAmount>{statisticsMap?.transfers}</BigLinkAmount>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.transfers}
+            </BigLChainAmount>
             <P>Transfers</P>
           </Cell>
           <Cell>
-            <BigLinkAmount>{statisticsMap?.tokens}</BigLinkAmount>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.tokens}
+            </BigLChainAmount>
             <P>NFTs</P>
           </Cell>
           <Cell>
-            <BigLinkAmount>{statisticsMap?.collections}</BigLinkAmount>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.collections}
+            </BigLChainAmount>
             <P>Collections</P>
           </Cell>
         </Body>
@@ -195,7 +207,7 @@ const TokenInfo = styled.div`
     }
   }
 
-  @media ${deviceWidth.smallerThan.md} {
+  @media ${deviceWidth.smallerThan.sm} {
     display: flex;
     flex-direction: column;
   }
@@ -211,9 +223,19 @@ const TokenInfoHeader = styled(Header4)`
     flex-direction: column;
     align-items: flex-start;
   }
+
+  @media ${deviceWidth.smallerThan.md} {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+  }
 `;
 
 const Small = styled(BodyS)`
+  color: var(--blue-grey-700);
+`;
+
+const SmallDesktop = styled(Small)`
   color: var(--blue-grey-700);
 
   @media ${deviceWidth.smallerThan.md} {
@@ -258,16 +280,16 @@ const BigAmount = styled(Header3)`
     line-height: 28px;
   }
 
-  @media ${deviceWidth.smallerThan.sm} {
-    font-size: 16px;
-    line-height: 24px;
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 14px;
+    line-height: 22px;
     font-weight: 500;
   }
 `;
 
-const BigLinkAmount = styled(Header3)`
+const BigLChainAmount = styled(Header3)<{ chainColor: string }>`
   font-family: 'Inter';
-  color: var(--primary-500);
+  color: var(${(props) => props.chainColor});
   min-height: 36px;
 
   @media ${deviceWidth.smallerThan.lg} {
@@ -275,9 +297,9 @@ const BigLinkAmount = styled(Header3)`
     line-height: 28px;
   }
 
-  @media ${deviceWidth.smallerThan.sm} {
-    font-size: 16px;
-    line-height: 24px;
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 14px;
+    line-height: 22px;
     font-weight: 500;
   }
 `;
