@@ -33,9 +33,10 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     (): CollectionSorting =>
       selectedSort.id === 'new'
         ? { date_of_creation: 'desc' }
-        : { actions_count: 'desc' },
+        : { transfers_count: 'desc' },
     [selectedSort.id],
   );
+
   const deviceSize = useDeviceSize();
 
   const pageSize = useMemo(() => {
@@ -66,7 +67,7 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     collection_cover:
       collection.collection_cover ||
       tokens?.find((token) => token.collection_id === collection.collection_id)?.image
-        .fullUrl ||
+        ?.fullUrl ||
       '',
   }));
 

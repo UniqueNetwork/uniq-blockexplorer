@@ -19,15 +19,13 @@ export const TokenInformation: VFC = () => {
   });
   const totalSupply = statisticsMap.circulating_supply + statisticsMap.locked_supply;
 
-  const circulatingSupplyPercentage =
-    statisticsMap.circulating_supply && statisticsMap.locked_supply
-      ? ((statisticsMap.circulating_supply * 100) / totalSupply).toFixed(1)
-      : 0;
+  const circulatingSupplyPercentage = !!(statisticsMap.circulating_supply && totalSupply)
+    ? ((statisticsMap.circulating_supply * 100) / totalSupply).toFixed(1)
+    : 0;
 
-  const lockedSupplyPercentage =
-    statisticsMap.locked_supply && statisticsMap.circulating_supply
-      ? ((statisticsMap.locked_supply * 100) / totalSupply).toFixed(1)
-      : 0;
+  const lockedSupplyPercentage = !!(statisticsMap.locked_supply && totalSupply)
+    ? ((statisticsMap.locked_supply * 100) / totalSupply).toFixed(1)
+    : 0;
 
   if (!statistics) {
     return (
@@ -254,12 +252,13 @@ const Body = styled.div`
   }
 
   @media ${deviceWidth.smallerThan.sm} {
-    grid-column-gap: calc(var(--gap) * 1.5);
+    grid-column-gap: var(--gap);
   }
 `;
 
 const P = styled(BodyM)`
   color: var(--blue-grey-700);
+  word-break: break-word;
 `;
 
 const BigAmount = styled(Header3)`

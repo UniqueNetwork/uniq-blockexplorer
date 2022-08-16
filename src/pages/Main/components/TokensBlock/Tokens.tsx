@@ -8,7 +8,7 @@ import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import LoadingComponent from '@app/components/LoadingComponent';
-import { useGraphQlTokens } from '@app/api/graphQL';
+import { TokenSorting, useGraphQlTokens } from '@app/api/graphQL';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
@@ -54,10 +54,18 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     ? { collection_id: { _eq: Number(collectionId) } }
     : undefined;
 
+  const orderBy = useMemo(
+    (): TokenSorting =>
+      selectedSort.id === 'new'
+        ? { date_of_creation: 'desc' }
+        : { transfers_count: 'desc' },
+    [selectedSort.id],
+  );
+
   const { isTokensFetching, timestamp, tokens } = useGraphQlTokens({
     filter,
     offset: 0,
-    orderBy: { collection_id: 'desc', token_id: 'desc' },
+    orderBy,
     pageSize: tokensLimit,
     searchString,
   });
