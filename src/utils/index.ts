@@ -2,6 +2,7 @@ export * from './classNames';
 export * from './configParser';
 export * from './convertAttributesToView';
 export * from './getChainBackground';
+export * from './getChainColor';
 export * from './logUserEvents';
 export * from './textUtils';
 export * from './timestampUtils';

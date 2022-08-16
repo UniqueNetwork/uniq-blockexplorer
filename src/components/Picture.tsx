@@ -2,8 +2,6 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
-import LoadingComponent from './LoadingComponent';
-
 interface PictureProps {
   className?: string;
   src?: string | null;

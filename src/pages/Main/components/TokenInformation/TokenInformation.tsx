@@ -5,7 +5,7 @@ import { Skeleton } from '@unique-nft/ui-kit';
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components/PagePaper';
 import { deviceWidth, useApi } from '@app/hooks';
-import { formatLongNumber, getChainBackground } from '@app/utils';
+import { formatLongNumber, getChainBackground, getChainColor } from '@app/utils';
 import { useGraphQlStatistics } from '@app/api/graphQL/statistics';
 import { Statistics } from '@app/api/graphQL/statistics/types';
 
@@ -43,38 +43,38 @@ export const TokenInformation: VFC = () => {
         </TokenInfoHeader>
         <Body>
           {!!statisticsMap.holders && (
-            <div>
+            <Cell>
               <BigAmount>{statisticsMap.holders}</BigAmount>
               <P>Holders</P>
-            </div>
+            </Cell>
           )}
           {!!totalSupply && (
-            <div>
+            <Cell>
               <BigAmount>{formatLongNumber(totalSupply)}</BigAmount>
               <P>Total supply</P>
-            </div>
+            </Cell>
           )}
           {!!circulatingSupplyPercentage && (
-            <div>
+            <Cell>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
                 <SmallDesktop>
                   ({formatLongNumber(statisticsMap.circulating_supply)})
                 </SmallDesktop>
               </BigAmount>
-              <P>Circulating&nbsp;supply</P>
-            </div>
+              <P>Circulating supply</P>
+            </Cell>
           )}
           {!!lockedSupplyPercentage && (
-            <div>
+            <Cell>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
                 <SmallDesktop>
                   ({formatLongNumber(statisticsMap.locked_supply)})
                 </SmallDesktop>
               </BigAmount>
-              <P>Locked&nbsp;supply</P>
-            </div>
+              <P>Locked supply</P>
+            </Cell>
           )}
         </Body>
       </TokenInfo>
@@ -83,22 +83,30 @@ export const TokenInformation: VFC = () => {
           Statistics <Small>All time</Small>
         </TokenInfoHeader>
         <Body>
-          <div>
-            <BigLinkAmount>{statisticsMap?.blocks}</BigLinkAmount>
+          <Cell>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.blocks}
+            </BigLChainAmount>
             <P>Blocks</P>
-          </div>
-          <div>
-            <BigLinkAmount>{statisticsMap?.transfers}</BigLinkAmount>
+          </Cell>
+          <Cell>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.transfers}
+            </BigLChainAmount>
             <P>Transfers</P>
-          </div>
-          <div>
-            <BigLinkAmount>{statisticsMap?.tokens}</BigLinkAmount>
+          </Cell>
+          <Cell>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.tokens}
+            </BigLChainAmount>
             <P>NFTs</P>
-          </div>
-          <div>
-            <BigLinkAmount>{statisticsMap?.collections}</BigLinkAmount>
+          </Cell>
+          <Cell>
+            <BigLChainAmount chainColor={getChainColor(currentChain)}>
+              {statisticsMap?.collections}
+            </BigLChainAmount>
             <P>Collections</P>
-          </div>
+          </Cell>
         </Body>
       </TokenInfo>
     </Wrapper>
@@ -181,9 +189,10 @@ const TokenInfo = styled.div`
   flex-direction: column;
   grid-row-gap: calc(var(--gap) * 1.5);
 
-  @media ${deviceWidth.biggerThan.xs} and ${deviceWidth.smallerThan.xl} {
+  @media ${deviceWidth.smallerThan.xl} {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 3fr;
+    grid-column-gap: var(--gap);
     align-items: flex-start;
 
     &:first-child {
@@ -197,12 +206,8 @@ const TokenInfo = styled.div`
   }
 
   @media ${deviceWidth.smallerThan.sm} {
-    display: grid;
-
-    &:first-child {
-      grid-column-start: 1;
-      grid-column-end: 3;
-    }
+    display: flex;
+    flex-direction: column;
   }
 `;
 
@@ -216,6 +221,12 @@ const TokenInfoHeader = styled(Header4)`
     flex-direction: column;
     align-items: flex-start;
   }
+
+  @media ${deviceWidth.smallerThan.md} {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+  }
 `;
 
 const Small = styled(BodyS)`
@@ -223,6 +234,8 @@ const Small = styled(BodyS)`
 `;
 
 const SmallDesktop = styled(Small)`
+  color: var(--blue-grey-700);
+
   @media ${deviceWidth.smallerThan.md} {
     display: none;
   }
@@ -231,7 +244,7 @@ const SmallDesktop = styled(Small)`
 const Body = styled.div`
   display: flex;
   grid-column-gap: calc(var(--gap) * 2);
-  align-items: center;
+  align-items: flex-start;
   justify-content: left;
 
   @media ${deviceWidth.smallerThan.md} {
@@ -245,18 +258,44 @@ const Body = styled.div`
 
 const P = styled(BodyM)`
   color: var(--blue-grey-700);
-  word-break: break-word;
+
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 400;
+  }
 `;
 
 const BigAmount = styled(Header3)`
   display: flex;
   align-items: baseline;
   grid-column-gap: calc(var(--gap) / 4);
-  min-height: 36px;
   font-family: 'Inter';
   font-weight: 700;
   font-size: 24px;
   line-height: 36px;
+  margin-bottom: 4px;
+
+  @media ${deviceWidth.smallerThan.lg} {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 500;
+  }
+`;
+
+const BigLChainAmount = styled(Header3)<{ chainColor: string }>`
+  font-family: 'Inter';
+  color: var(${(props) => props.chainColor});
+  line-height: 36px;
+  margin-bottom: 4px;
 
   @media ${deviceWidth.smallerThan.lg} {
     font-size: 20px;
@@ -264,19 +303,14 @@ const BigAmount = styled(Header3)`
   }
 
   @media ${deviceWidth.smallerThan.md} {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 500;
   }
 `;
 
-const BigLinkAmount = styled(Header3)`
-  font-family: 'Inter';
-  color: var(--primary-500);
-  min-height: 36px;
-
-  @media ${deviceWidth.smallerThan.lg} {
-    font-size: 20px;
-    line-height: 28px;
-  }
+const Cell = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
