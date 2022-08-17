@@ -139,11 +139,11 @@ const TokensWrapper = styled.div`
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
 
-  @media ${deviceWidth.biggerThan.lg} {
+  @media ${deviceWidth.biggerThan.xl} {
     grid-template-columns: repeat(6, 1fr);
   }
 
-  @media ${deviceWidth.smallerThan.xl} {
+  @media ${deviceWidth.smallerThan.xxl} {
     grid-template-columns: repeat(4, 1fr);
   }
 

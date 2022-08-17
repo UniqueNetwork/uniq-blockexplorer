@@ -213,7 +213,7 @@ const TokenInfo = styled.div`
 
 const TokenInfoHeader = styled(Header4)`
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   grid-column-gap: calc(var(--gap) / 2);
 
   @media ${deviceWidth.smallerThan.xl} {
@@ -226,6 +226,11 @@ const TokenInfoHeader = styled(Header4)`
     font-weight: 500;
     font-size: 18px;
     line-height: 26px;
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    flex-direction: row;
+    align-items: baseline;
   }
 `;
 
