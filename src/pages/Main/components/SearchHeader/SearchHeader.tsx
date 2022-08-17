@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Header1 } from '@app/styles/styled-components';
 import { deviceWidth, useApi } from '@app/hooks';
+import { getChainColor } from '@app/utils';
 import SearchComponent from '@app/components/SearchComponent';
 
 interface SearchHeaderProps {
@@ -11,8 +12,7 @@ interface SearchHeaderProps {
 
 export const SearchHeader: VFC<SearchHeaderProps> = ({ setSearchString }) => {
   const { currentChain } = useApi();
-
-  const networkColor = `var(--${currentChain?.name?.replaceAll(' ', '-').toLowerCase()})`;
+  const networkColor = getChainColor(currentChain);
   const networkName =
     currentChain?.network.charAt(0) + currentChain?.network.slice(1).toLowerCase();
 
@@ -62,5 +62,5 @@ const H = styled(Header1)`
 `;
 
 const NetworkName = styled.span<{ networkColor: string }>`
-  color: ${(props) => props.networkColor};
+  color: var(${(props) => props.networkColor});
 `;
