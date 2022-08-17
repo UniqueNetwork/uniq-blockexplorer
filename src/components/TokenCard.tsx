@@ -40,16 +40,8 @@ const TokenCard: FC<TokenCardProps> = ({
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
       onClick={onNFTCardClick}
     >
-      {/* imgUrl exists, but the picture has not yet loaded */}
-      {image.fullUrl && !imageUrl && (
-        <SkeletonWrapper>
-          <Skeleton />
-        </SkeletonWrapper>
-      )}
       {/* the picture has not exists */}
-      {!imageUrl && !image.fullUrl && (
-        <TokenPicture alt={tokenId.toString()} src={imageUrl} />
-      )}
+      {!imageUrl && <TokenPicture alt={tokenId.toString()} src={imageUrl} />}
       {/* the picture has loaded */}
       {imageUrl && <TokenBackground imgUrl={imageUrl} />}
       <TokenTitle>

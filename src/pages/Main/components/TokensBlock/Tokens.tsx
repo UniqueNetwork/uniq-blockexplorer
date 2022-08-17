@@ -7,7 +7,6 @@ import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
-import LoadingComponent from '@app/components/LoadingComponent';
 import { TokenSorting, useGraphQlTokens } from '@app/api/graphQL';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
@@ -26,12 +25,9 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
   const deviceSize = useDeviceSize();
 
   const tokensLimit = useMemo(() => {
-    if (
-      deviceSize === DeviceSize.xxl ||
-      deviceSize === DeviceSize.lg ||
-      deviceSize === DeviceSize.xl
-    )
-      return 8;
+    if (deviceSize === DeviceSize.xxl) return 12;
+
+    if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.xl) return 8;
 
     return 6;
   }, [deviceSize]);
@@ -70,7 +66,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     searchString,
   });
 
-  if (!tokens) {
+  if (isTokensFetching) {
     return (
       <SkeletonWrapper>
         <Skeleton />
@@ -78,7 +74,7 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     );
   }
 
-  if (tokens?.length === 0) {
+  if (!tokens) {
     return null;
   }
 
@@ -91,7 +87,6 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
         title="Tokens"
       />
       <TokensWrapper>
-        {isTokensFetching && <LoadingComponent />}
         {tokens?.slice(0, tokensLimit).map((token) => (
           <TokenCard
             key={`token-${token.collection_id}-${token.token_id}`}
@@ -144,7 +139,11 @@ const TokensWrapper = styled.div`
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);
 
-  @media ${deviceWidth.biggerThan.md} {
+  @media ${deviceWidth.biggerThan.lg} {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  @media ${deviceWidth.smallerThan.xl} {
     grid-template-columns: repeat(4, 1fr);
   }
 
