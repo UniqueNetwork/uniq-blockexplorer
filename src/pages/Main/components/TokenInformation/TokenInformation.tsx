@@ -156,9 +156,9 @@ const Wrapper = styled(PagePaperWrapper)<{ chainLogo: string }>`
   -ms-background-position-x: calc(100% - calc(var(--gap) * 1.5));
   background-position-y: calc(50% - var(--gap));
   -ms-background-position-y: calc(50% - var(--gap));
-
   display: flex;
-  justify-content: space-between;
+  grid-column-gap: calc(var(--gap) * 4);
+  justify-content: flex-start;
 
   small {
     color: var(--blue-grey-700);
@@ -213,7 +213,7 @@ const TokenInfo = styled.div`
 
 const TokenInfoHeader = styled(Header4)`
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   grid-column-gap: calc(var(--gap) / 2);
 
   @media ${deviceWidth.smallerThan.xl} {
@@ -226,6 +226,11 @@ const TokenInfoHeader = styled(Header4)`
     font-weight: 500;
     font-size: 18px;
     line-height: 26px;
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    flex-direction: row;
+    align-items: baseline;
   }
 `;
 
