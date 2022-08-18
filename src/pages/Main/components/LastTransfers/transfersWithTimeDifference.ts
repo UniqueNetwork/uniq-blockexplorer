@@ -10,6 +10,7 @@ export type TimeDifference = {
 
 export function transfersWithTimeDifference<T extends WithTimestamp>(
   items: T[] | undefined,
+  timestamp?: number,
 ): (T & TimeDifference)[] {
   if (!items || !Array.isArray(items)) {
     return [];
@@ -17,6 +18,6 @@ export function transfersWithTimeDifference<T extends WithTimestamp>(
 
   return items.map((item: T) => ({
     ...item,
-    time_difference: item.timestamp ? timeDifference(item.timestamp) : '',
+    time_difference: item.timestamp ? timeDifference(item.timestamp, timestamp) : '',
   }));
 }
