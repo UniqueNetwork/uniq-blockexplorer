@@ -180,6 +180,7 @@ const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: calc(var(--gap) * 3);
   .unique-select .select-wrapper > svg {
     z-index: unset;
   }

@@ -24,8 +24,6 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
 
-  console.log('prettifiedBlockSearchString', prettifiedBlockSearchString);
-
   const { blockCount, blocks, isBlocksFetching, timestamp } = useGraphQlBlocks({
     pageSize,
     searchString: prettifiedBlockSearchString,
@@ -40,7 +38,7 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
   return (
     <Wrapper>
       <HeaderWithDropdown title="Last blocks" />
-      {nothingToShow && <Stub />}
+      {nothingToShow && !isBlocksFetching && <Stub />}
       {isBlocksFetching && (
         <SkeletonWrapper>
           <Skeleton />
@@ -80,6 +78,10 @@ const Wrapper = styled(PagePaperWrapper)`
   flex-direction: column;
   .unique-font-heading.size-2 {
     margin-bottom: calc(var(--gap) * 2);
+  }
+
+  td {
+    line-height: 57px;
   }
 
   @media (max-width: 767px) {

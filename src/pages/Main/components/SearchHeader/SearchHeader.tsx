@@ -14,7 +14,9 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({ setSearchString }) => {
   const { currentChain } = useApi();
   const networkColor = getChainColor(currentChain);
   const networkName =
-    currentChain?.network.charAt(0) + currentChain?.network.slice(1).toLowerCase();
+    currentChain?.network === 'UNIQUE'
+      ? currentChain.name
+      : currentChain?.network.charAt(0) + currentChain?.network.slice(1).toLowerCase();
 
   return (
     <Wrapper>

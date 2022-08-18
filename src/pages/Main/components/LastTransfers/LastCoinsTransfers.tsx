@@ -14,12 +14,14 @@ export type LastTransfersProps = {
   searchString?: string;
   pageSize?: number;
   accountId?: string;
+  offButton: (val: boolean) => void;
 };
 
 export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   accountId,
   pageSize = 5,
   searchString,
+  offButton,
 }) => {
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
@@ -43,7 +45,11 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
     );
   }
 
-  if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return <Stub />;
+  if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) {
+    offButton(false);
+    return <Stub />;
+  }
+  offButton(true);
 
   return (
     <>

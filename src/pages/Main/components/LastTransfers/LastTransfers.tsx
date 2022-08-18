@@ -31,6 +31,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
     lastTransferOptions[1],
   );
+  const [contentExist, setContentExist] = useState<boolean>(false);
   const linkUrl = `/${currentChain.network}/last-transfers`;
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
   const showCoins = selectedSort.id === SELECTED_BLOCK_COIN;
@@ -52,25 +53,29 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
           accountId={accountId}
           pageSize={pageSize}
           searchString={searchString}
+          offButton={setContentExist}
         />
       )}
       {showCoins && (
         <LastCoinsTransfers
           accountId={accountId}
+          offButton={setContentExist}
           pageSize={pageSize}
           searchString={searchString}
         />
       )}
-      <ButtonWrapper
-        iconRight={{
-          color: '#fff',
-          name: 'arrow-right',
-          size: 12,
-        }}
-        role="primary"
-        title="See all"
-        onClick={onClickSeeMore}
-      />
+      {contentExist && (
+        <ButtonWrapper
+          iconRight={{
+            color: '#fff',
+            name: 'arrow-right',
+            size: 12,
+          }}
+          role="primary"
+          title="See all"
+          onClick={onClickSeeMore}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -78,6 +83,11 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
 const Wrapper = styled(PagePaperWrapper)`
   display: flex;
   flex-direction: column;
+
+  td {
+    line-height: 57px;
+  }
+
   @media (max-width: 767px) {
     button.unique-button {
       width: 100%;
