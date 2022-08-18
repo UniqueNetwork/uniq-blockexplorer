@@ -1,8 +1,8 @@
-import React, { useMemo, VFC } from 'react';
+import React, { VFC } from 'react';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { Table } from '@app/components';
-import { useGraphQlLastTransfers, Transfer, CollectionSorting } from '@app/api';
+import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
@@ -25,12 +25,13 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
 
-  const { isTransfersFetching, transfers, transfersCount } = useGraphQlLastTransfers({
-    accountId,
-    pageSize,
-    orderBy: { timestamp: 'desc' },
-    searchString: prettifiedBlockSearchString,
-  });
+  const { isTransfersFetching, timestamp, transfers, transfersCount } =
+    useGraphQlLastTransfers({
+      accountId,
+      pageSize,
+      orderBy: { timestamp: 'desc' },
+      searchString: prettifiedBlockSearchString,
+    });
 
   if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
 
@@ -39,7 +40,7 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
       {!isMobile && (
         <Table
           columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
-          data={transfersWithTimeDifference<Transfer>(transfers)}
+          data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
           loading={isTransfersFetching}
           rowKey="block_index"
         />
@@ -47,7 +48,7 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
       {isMobile && (
         <LastTransfersCardsList
           columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
-          data={transfersWithTimeDifference<Transfer>(transfers)}
+          data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
           loading={isTransfersFetching}
         />
       )}
