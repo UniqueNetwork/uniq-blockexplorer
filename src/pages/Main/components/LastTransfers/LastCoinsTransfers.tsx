@@ -27,11 +27,13 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
 
-  const { isTransfersFetching, transfers, transfersCount } = useGraphQlLastTransfers({
-    accountId,
-    pageSize,
-    searchString: prettifiedBlockSearchString,
-  });
+  const { isTransfersFetching, timestamp, transfers, transfersCount } =
+    useGraphQlLastTransfers({
+      accountId,
+      pageSize,
+      orderBy: { timestamp: 'desc' },
+      searchString: prettifiedBlockSearchString,
+    });
 
   if (isTransfersFetching) {
     return (
@@ -48,7 +50,7 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
       {!isMobile && (
         <Table
           columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
-          data={transfersWithTimeDifference<Transfer>(transfers)}
+          data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
           loading={isTransfersFetching}
           rowKey="block_index"
         />
@@ -56,7 +58,7 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
       {isMobile && (
         <LastTransfersCardsList
           columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
-          data={transfersWithTimeDifference<Transfer>(transfers)}
+          data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
           loading={isTransfersFetching}
         />
       )}

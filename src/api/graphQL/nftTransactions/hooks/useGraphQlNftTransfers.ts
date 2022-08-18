@@ -12,6 +12,7 @@ import { nftTransactionsQuery } from '../nftTransactions';
 export interface UseGraphQlNftTransfersProps {
   pageSize: number;
   accountId?: string;
+  orderBy?: { [name: string]: 'asc' | 'desc' };
   searchString?: string;
 }
 
@@ -26,6 +27,7 @@ export interface UseGraphQlNftTransfersResult {
 export const useGraphQlNftTransfers = ({
   accountId,
   pageSize,
+  orderBy,
   searchString,
 }: UseGraphQlNftTransfersProps): UseGraphQlNftTransfersResult => {
   const getWhere = useCallback(
@@ -34,8 +36,8 @@ export const useGraphQlNftTransfers = ({
         ...(accountId
           ? {
               _or: [
-                // { from_owner: { _eq: accountId } },
-                // { from_owner_normalized: { _eq: accountId } },
+                { owner: { _eq: accountId } },
+                { owner_normalized: { _eq: accountId } },
                 { to_owner: { _eq: accountId } },
                 { to_owner_normalized: { _eq: accountId } },
               ],
@@ -45,8 +47,8 @@ export const useGraphQlNftTransfers = ({
           ? {
               _or: {
                 block_index: { _eq: searchString },
-                // from_owner: { _eq: searchString },
-                // from_owner_normalized: { _eq: searchString },
+                owner: { _eq: searchString },
+                owner_normalized: { _eq: searchString },
                 to_owner: { _eq: searchString },
                 to_owner_normalized: { _eq: searchString },
               },
@@ -69,12 +71,10 @@ export const useGraphQlNftTransfers = ({
     variables: {
       limit: pageSize,
       offset: 0,
+      orderBy,
       where: getWhere(searchString),
     },
   });
-
-  // eslint-disable-next-line no-console
-  console.log('data', data);
 
   return {
     fetchNftTransfersError,

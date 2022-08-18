@@ -30,10 +30,11 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
 
-  const { isNftTransfersFetching, nftTransfers, nftTransfersCount } =
+  const { isNftTransfersFetching, nftTransfers, nftTransfersCount, timestamp } =
     useGraphQlNftTransfers({
       accountId,
       pageSize,
+      orderBy: { timestamp: 'desc' },
       searchString: prettifiedBlockSearchString,
     });
 
@@ -54,7 +55,7 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
       {!isMobile && (
         <Table
           columns={getTransferNftColumns(currentChain?.network)}
-          data={transfersWithTimeDifference<TokenTransaction>(nftTransfers)}
+          data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
           loading={isNftTransfersFetching}
           rowKey="block_index"
         />
@@ -62,7 +63,7 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
       {isMobile && (
         <LastNftTransfersCardsList
           columns={getTransferNftColumns(currentChain?.network)}
-          data={transfersWithTimeDifference<TokenTransaction>(nftTransfers)}
+          data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
           loading={isNftTransfersFetching}
         />
       )}
