@@ -34,6 +34,7 @@ const getLastTransfersQuery = gql`
 
 export const useGraphQlLastTransfers = ({
   accountId,
+  orderBy,
   pageSize,
   searchString,
 }: useGraphQlLastTransfersProps) => {
@@ -82,6 +83,7 @@ export const useGraphQlLastTransfers = ({
     variables: {
       limit: pageSize,
       offset: 0,
+      orderBy,
       where: getWhere(searchString),
     },
   });

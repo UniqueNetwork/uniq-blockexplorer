@@ -1,7 +1,7 @@
 export interface TransfersVariables {
   limit: number;
   offset: number;
-  order_by?: { [name: string]: 'asc' | 'desc' };
+  orderBy?: { [name: string]: 'asc' | 'desc' };
   where?: { [key: string]: unknown };
 }
 
@@ -34,5 +34,6 @@ export interface TransfersData {
 export type useGraphQlLastTransfersProps = {
   pageSize: number;
   accountId?: string;
+  orderBy?: { [name: string]: 'asc' | 'desc' };
   searchString?: string;
 };
