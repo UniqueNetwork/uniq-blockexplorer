@@ -34,8 +34,8 @@ export const useGraphQlNftTransfers = ({
         ...(accountId
           ? {
               _or: [
-                // { from_owner: { _eq: accountId } },
-                // { from_owner_normalized: { _eq: accountId } },
+                { owner: { _eq: accountId } },
+                { owner_normalized: { _eq: accountId } },
                 { to_owner: { _eq: accountId } },
                 { to_owner_normalized: { _eq: accountId } },
               ],
@@ -45,8 +45,8 @@ export const useGraphQlNftTransfers = ({
           ? {
               _or: {
                 block_index: { _eq: searchString },
-                // from_owner: { _eq: searchString },
-                // from_owner_normalized: { _eq: searchString },
+                owner: { _eq: searchString },
+                owner_normalized: { _eq: searchString },
                 to_owner: { _eq: searchString },
                 to_owner_normalized: { _eq: searchString },
               },
