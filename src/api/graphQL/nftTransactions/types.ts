@@ -27,7 +27,7 @@ export type TokenTransactionsOrderByParams = {
 export type TokenTransactionsVariables = {
   limit: number;
   offset: number;
-  order_by?: { [name: string]: 'asc' | 'desc' };
+  orderBy?: { [name: string]: 'asc' | 'desc' };
   where?: { [key: string]: unknown };
 };
 

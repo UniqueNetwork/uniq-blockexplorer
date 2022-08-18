@@ -12,6 +12,7 @@ import { nftTransactionsQuery } from '../nftTransactions';
 export interface UseGraphQlNftTransfersProps {
   pageSize: number;
   accountId?: string;
+  orderBy?: { [name: string]: 'asc' | 'desc' };
   searchString?: string;
 }
 
@@ -26,6 +27,7 @@ export interface UseGraphQlNftTransfersResult {
 export const useGraphQlNftTransfers = ({
   accountId,
   pageSize,
+  orderBy,
   searchString,
 }: UseGraphQlNftTransfersProps): UseGraphQlNftTransfersResult => {
   const getWhere = useCallback(
@@ -69,6 +71,7 @@ export const useGraphQlNftTransfers = ({
     variables: {
       limit: pageSize,
       offset: 0,
+      orderBy,
       where: getWhere(searchString),
     },
   });
