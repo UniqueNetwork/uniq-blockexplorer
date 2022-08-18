@@ -1,8 +1,8 @@
-import React, { VFC } from 'react';
+import React, { useMemo, VFC } from 'react';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { Table } from '@app/components';
-import { useGraphQlLastTransfers, Transfer } from '@app/api';
+import { useGraphQlLastTransfers, Transfer, CollectionSorting } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
@@ -28,6 +28,7 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   const { isTransfersFetching, transfers, transfersCount } = useGraphQlLastTransfers({
     accountId,
     pageSize,
+    orderBy: { timestamp: 'desc' },
     searchString: prettifiedBlockSearchString,
   });
 

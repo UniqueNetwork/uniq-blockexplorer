@@ -32,6 +32,7 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
     useGraphQlNftTransfers({
       accountId,
       pageSize,
+      orderBy: { timestamp: 'desc' },
       searchString: prettifiedBlockSearchString,
     });
 
