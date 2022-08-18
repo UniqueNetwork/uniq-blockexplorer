@@ -11,6 +11,16 @@ export enum DeviceSize {
   xxl, // > 1680
 }
 
+export const DeviceSizes = {
+  xxs: '479px',
+  xs: '575p',
+  sm: '767px',
+  md: '991px',
+  lg: '1199px',
+  xl: '1679px',
+  xxl: '1680',
+};
+
 // for css @media queries
 export const deviceWidth = {
   only: {
