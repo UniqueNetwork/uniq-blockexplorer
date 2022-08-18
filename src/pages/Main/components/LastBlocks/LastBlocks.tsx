@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button } from '@unique-nft/ui-kit';
+import { Button, Skeleton } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 import { useGraphQlBlocks } from '@app/api/graphQL';
-import { PagePaperWrapper, Table } from '@app/components';
+import { PagePaperWrapper, Stub, Table } from '@app/components';
 import { useApi } from '@app/hooks/useApi';
 import { HeaderWithDropdown } from '@app/pages/Main/components/HeaderWithDropdown';
 
@@ -24,6 +24,8 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
 
+  console.log('prettifiedBlockSearchString', prettifiedBlockSearchString);
+
   const { blockCount, blocks, isBlocksFetching, timestamp } = useGraphQlBlocks({
     pageSize,
     searchString: prettifiedBlockSearchString,
@@ -33,12 +35,18 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
     navigate(linkUrl);
   };
 
-  if (/[^$,.\d]/.test(searchString || '') || blockCount === 0) return null;
+  const nothingToShow = !prettifiedBlockSearchString && blockCount === 0;
 
   return (
     <Wrapper>
       <HeaderWithDropdown title="Last blocks" />
-      {!isMobile && (
+      {nothingToShow && <Stub />}
+      {isBlocksFetching && (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
+      )}
+      {!isMobile && !isBlocksFetching && (
         <Table
           columns={getLastBlocksColumns(currentChain.network)}
           data={blocksWithTimeDifference(blocks, timestamp)}
@@ -46,14 +54,14 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
           rowKey={'block_number'}
         />
       )}
-      {isMobile && (
+      {isMobile && !isBlocksFetching && (
         <LastBlocksCardsList
           columns={getLastBlocksColumns(currentChain.network)}
           data={!isBlocksFetching ? blocksWithTimeDifference(blocks, timestamp) : []}
           loading={isBlocksFetching}
         />
       )}
-      <Button
+      <ButtonWrapper
         iconRight={{
           color: '#fff',
           name: 'arrow-right',
@@ -68,6 +76,8 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
 };
 
 const Wrapper = styled(PagePaperWrapper)`
+  display: flex;
+  flex-direction: column;
   .unique-font-heading.size-2 {
     margin-bottom: calc(var(--gap) * 2);
   }
@@ -76,5 +86,21 @@ const Wrapper = styled(PagePaperWrapper)`
     button.unique-button {
       width: 100%;
     }
+  }
+`;
+
+const ButtonWrapper = styled(Button)`
+  width: 123px;
+`;
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 150px;
+    border-radius: var(--gap) !important;
   }
 `;

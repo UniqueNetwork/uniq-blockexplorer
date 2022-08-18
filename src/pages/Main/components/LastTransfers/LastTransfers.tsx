@@ -1,4 +1,4 @@
-import React, { useState, VFC } from 'react';
+import { useState, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
@@ -7,7 +7,11 @@ import { useApi } from '@app/hooks';
 import { PagePaperWrapper } from '@app/components';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
-import { lastTransferOptions, SELECTED_BLOCK_NFT } from './lastTransferOptions';
+import {
+  lastTransferOptions,
+  SELECTED_BLOCK_COIN,
+  SELECTED_BLOCK_NFT,
+} from './lastTransferOptions';
 import { LastCoinsTransfers } from './LastCoinsTransfers';
 import { LastNFTsTransfers } from './LastNFTsTransfers';
 
@@ -25,10 +29,11 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
-    lastTransferOptions[0],
+    lastTransferOptions[1],
   );
   const linkUrl = `/${currentChain.network}/last-transfers`;
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
+  const showCoins = selectedSort.id === SELECTED_BLOCK_COIN;
 
   const onClickSeeMore = () => {
     navigate(linkUrl);
@@ -42,20 +47,21 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
         setSelectedSort={setSelectedSort}
         title="Last transfers"
       />
-      {showNFTs ? (
+      {showNFTs && (
         <LastNFTsTransfers
           accountId={accountId}
           pageSize={pageSize}
           searchString={searchString}
         />
-      ) : (
+      )}
+      {showCoins && (
         <LastCoinsTransfers
           accountId={accountId}
           pageSize={pageSize}
           searchString={searchString}
         />
       )}
-      <Button
+      <ButtonWrapper
         iconRight={{
           color: '#fff',
           name: 'arrow-right',
@@ -70,9 +76,15 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
 };
 
 const Wrapper = styled(PagePaperWrapper)`
+  display: flex;
+  flex-direction: column;
   @media (max-width: 767px) {
     button.unique-button {
       width: 100%;
     }
   }
+`;
+
+const ButtonWrapper = styled(Button)`
+  width: 123px;
 `;
