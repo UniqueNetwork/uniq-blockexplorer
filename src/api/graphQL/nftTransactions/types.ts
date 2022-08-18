@@ -5,8 +5,8 @@ export type TokenTransaction = {
   collection_id: number;
   collection_name?: string;
   image: object;
-  signer: string;
-  signer_normalized: string;
+  owner: string;
+  owner_normalized: string;
   timestamp: number | null;
   from_owner: string;
   from_owner_normalized: string;

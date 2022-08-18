@@ -13,8 +13,8 @@ export const nftTransactionsQuery = gql`
         collection_id
         collection_name
         image
-        signer
-        signer_normalized
+        owner
+        owner_normalized
         timestamp
         to_owner
         to_owner_normalized
