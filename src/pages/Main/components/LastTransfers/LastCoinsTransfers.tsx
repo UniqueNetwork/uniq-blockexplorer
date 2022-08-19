@@ -1,7 +1,9 @@
-import React, { VFC } from 'react';
+import { useEffect, VFC } from 'react';
+import styled from 'styled-components';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { Table } from '@app/components';
+import { Stub, Table } from '@app/components';
 import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
@@ -12,12 +14,14 @@ export type LastTransfersProps = {
   searchString?: string;
   pageSize?: number;
   accountId?: string;
+  hideButton: (val: boolean) => void;
 };
 
 export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   accountId,
   pageSize = 5,
   searchString,
+  hideButton,
 }) => {
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
@@ -33,7 +37,27 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
       searchString: prettifiedBlockSearchString,
     });
 
-  if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) return null;
+  useEffect(() => {
+    if (
+      /[^$,-,.\d]/.test(searchString || '') ||
+      (transfersCount === 0 && isTransfersFetching)
+    ) {
+      hideButton(false);
+    }
+    hideButton(true);
+  }, [transfersCount, isTransfersFetching, searchString, hideButton]);
+
+  if (isTransfersFetching) {
+    return (
+      <SkeletonWrapper>
+        <Skeleton />
+      </SkeletonWrapper>
+    );
+  }
+
+  if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) {
+    return <Stub />;
+  }
 
   return (
     <>
@@ -55,3 +79,15 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
     </>
   );
 };
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 150px;
+    border-radius: var(--gap) !important;
+  }
+`;

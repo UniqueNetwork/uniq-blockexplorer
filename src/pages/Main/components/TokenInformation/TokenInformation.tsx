@@ -54,7 +54,7 @@ export const TokenInformation: VFC = () => {
               <P>Total supply</P>
             </Cell>
           )}
-          {!!circulatingSupplyPercentage && (
+          {'circulating_supply' in statisticsMap && (
             <Cell>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
@@ -65,7 +65,7 @@ export const TokenInformation: VFC = () => {
               <P>Circulating supply</P>
             </Cell>
           )}
-          {!!lockedSupplyPercentage && (
+          {'locked_supply' in statisticsMap && (
             <Cell>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
