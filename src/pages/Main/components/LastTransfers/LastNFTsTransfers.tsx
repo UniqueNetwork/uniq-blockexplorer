@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { useEffect, VFC } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
@@ -40,6 +40,16 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
       searchString: prettifiedBlockSearchString,
     });
 
+  useEffect(() => {
+    if (
+      /[^$,-,.\d]/.test(searchString || '') ||
+      (nftTransfersCount === 0 && isNftTransfersFetching)
+    ) {
+      hideButton(false);
+    }
+    hideButton(true);
+  }, [nftTransfersCount, isNftTransfersFetching, searchString, hideButton]);
+
   if (isNftTransfersFetching) {
     return (
       <SkeletonWrapper>
@@ -49,10 +59,8 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
   }
 
   if (/[^$,-,.\d]/.test(searchString || '') || nftTransfersCount === 0) {
-    hideButton(false);
     return <Stub />;
   }
-  hideButton(true);
 
   return (
     <>

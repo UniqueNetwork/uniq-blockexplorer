@@ -36,13 +36,6 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
   const showCoins = selectedSort.id === SELECTED_BLOCK_COIN;
 
-  const switchButton = useCallback(
-    (value: boolean) => {
-      setContentExist(value);
-    },
-    [setContentExist],
-  );
-
   const onClickSeeMore = () => {
     navigate(linkUrl);
   };
@@ -60,13 +53,13 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
           accountId={accountId}
           pageSize={pageSize}
           searchString={searchString}
-          hideButton={switchButton}
+          hideButton={setContentExist}
         />
       )}
       {showCoins && (
         <LastCoinsTransfers
           accountId={accountId}
-          hideButton={switchButton}
+          hideButton={setContentExist}
           pageSize={pageSize}
           searchString={searchString}
         />
