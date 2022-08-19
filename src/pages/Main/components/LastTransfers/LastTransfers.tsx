@@ -64,7 +64,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
           searchString={searchString}
         />
       )}
-      {contentExist && (
+      {false && (
         <ButtonWrapper
           iconRight={{
             color: '#fff',

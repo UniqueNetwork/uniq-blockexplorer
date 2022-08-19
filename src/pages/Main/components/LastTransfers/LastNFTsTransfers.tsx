@@ -1,9 +1,9 @@
-import { useEffect, VFC } from 'react';
+import { useEffect, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { Stub, Table } from '@app/components';
+import { Pagination, Stub, Table } from '@app/components';
 import {
   TokenTransaction,
   useGraphQlNftTransfers,
@@ -31,6 +31,7 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { isNftTransfersFetching, nftTransfers, nftTransfersCount, timestamp } =
     useGraphQlNftTransfers({
@@ -79,6 +80,13 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
           loading={isNftTransfersFetching}
         />
       )}
+      <Pagination
+        count={nftTransfersCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        onPageChange={setCurrentPage}
+      />
     </>
   );
 };
