@@ -1,4 +1,4 @@
-import { useState, VFC } from 'react';
+import { useCallback, useState, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
@@ -36,6 +36,13 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
   const showCoins = selectedSort.id === SELECTED_BLOCK_COIN;
 
+  const switchButton = useCallback(
+    (value: boolean) => {
+      setContentExist(value);
+    },
+    [setContentExist],
+  );
+
   const onClickSeeMore = () => {
     navigate(linkUrl);
   };
@@ -53,13 +60,13 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
           accountId={accountId}
           pageSize={pageSize}
           searchString={searchString}
-          offButton={setContentExist}
+          hideButton={switchButton}
         />
       )}
       {showCoins && (
         <LastCoinsTransfers
           accountId={accountId}
-          offButton={setContentExist}
+          hideButton={switchButton}
           pageSize={pageSize}
           searchString={searchString}
         />

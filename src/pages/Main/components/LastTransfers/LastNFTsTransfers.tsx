@@ -1,4 +1,4 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
@@ -17,14 +17,14 @@ export type LastTransfersProps = {
   searchString?: string;
   pageSize?: number;
   accountId?: string;
-  offButton: (val: boolean) => void;
+  hideButton: (val: boolean) => void;
 };
 
 export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
   accountId,
   pageSize = 5,
   searchString,
-  offButton,
+  hideButton,
 }) => {
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
@@ -49,10 +49,10 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
   }
 
   if (/[^$,-,.\d]/.test(searchString || '') || nftTransfersCount === 0) {
-    offButton(false);
+    hideButton(false);
     return <Stub />;
   }
-  offButton(true);
+  hideButton(true);
 
   return (
     <>
