@@ -120,14 +120,16 @@ const TokensComponent: FC<TokensComponentProps> = ({
   return (
     <>
       <TopBar>
-        <Search placeholder={'NFT / collection'} onSearchChange={onSearchChange} />
+        <Search placeholder="NFT / collection" onSearchChange={onSearchChange} />
         <Controls>
-          <Select
-            defaultValue={defaultOption}
-            options={OPTIONS}
-            value={selectOption?.id as string}
-            onChange={selectFilter}
-          />
+          {view === ViewType.Grid && (
+            <Select
+              defaultValue={defaultOption}
+              options={OPTIONS}
+              value={selectOption?.id as string}
+              onChange={selectFilter}
+            />
+          )}
           <ViewButtons>
             <ViewButton onClick={selectList}>
               <Icon
