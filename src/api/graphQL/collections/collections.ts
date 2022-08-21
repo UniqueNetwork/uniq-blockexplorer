@@ -49,6 +49,7 @@ const collectionsQuery = gql`
 
 export const useGraphQlCollections = ({
   filter,
+  offset = 0,
   orderBy,
   pageSize,
   searchString,
@@ -87,7 +88,7 @@ export const useGraphQlCollections = ({
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
-      offset: 0,
+      offset,
       orderBy,
       where: getWhere(filter, searchString),
     },
