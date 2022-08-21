@@ -43,8 +43,6 @@ const CollectionsComponent = ({
     searchString,
   });
 
-  console.log('pageSize', pageSize, 'orderBy', orderBy);
-
   return (
     <>
       <Table

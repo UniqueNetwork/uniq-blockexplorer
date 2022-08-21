@@ -90,7 +90,7 @@ export const useGraphQlCollections = ({
       limit: pageSize,
       offset,
       orderBy,
-      where: getWhere(filter, searchString),
+      where: getWhere(filter, searchString?.trim().toLowerCase()),
     },
   });
 
