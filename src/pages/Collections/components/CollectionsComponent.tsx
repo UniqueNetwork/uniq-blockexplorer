@@ -21,6 +21,7 @@ const CollectionsComponent = ({
 
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const offset = currentPage * pageSize;
 
   const filter = useMemo(() => {
     const accountId = queryParams.get('accountId');
@@ -36,7 +37,8 @@ const CollectionsComponent = ({
 
   const { collections, collectionsCount, isCollectionsFetching } = useGraphQlCollections({
     filter,
-    orderBy: defaultOrderBy,
+    offset,
+    orderBy,
     pageSize,
     searchString,
   });

@@ -63,6 +63,7 @@ export type CollectionSorting = {
 
 export type useGraphQlCollectionsProps = {
   pageSize: number;
+  offset?: number;
   orderBy?: CollectionSorting;
   filter?: Record<string, unknown>;
   searchString?: string;

@@ -2,9 +2,10 @@ import { FC } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { PagePaperWrapper } from '@app/components';
+
 import CollectionsComponent from './components/CollectionsComponent';
 import SearchComponent from '../../components/SearchComponent';
-import { PagePaperWrapper } from '../../components/PagePaper';
 
 const CollectionsPage: FC = () => {
   const [queryParams, setQueryParams] = useSearchParams();
@@ -22,7 +23,7 @@ const CollectionsPage: FC = () => {
   return (
     <PagePaper>
       <SearchComponent
-        placeholder={'Сollection / account'}
+        placeholder="Collection / account"
         onSearchChange={onSearchChange}
       />
       <div>
