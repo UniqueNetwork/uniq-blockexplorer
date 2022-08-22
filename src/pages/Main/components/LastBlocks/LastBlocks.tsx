@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 import { useGraphQlBlocks } from '@app/api/graphQL';
-import { PagePaperWrapper, Stub, Table } from '@app/components';
+import { PagePaperWrapper, Pagination, Stub, Table } from '@app/components';
 import { useApi } from '@app/hooks/useApi';
 import { HeaderWithDropdown } from '@app/pages/Main/components/HeaderWithDropdown';
 
@@ -23,8 +23,11 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
+  const [currentPage, setCurrentPage] = useState(1);
+  const offset = (currentPage - 1) * pageSize;
 
   const { blockCount, blocks, isBlocksFetching, timestamp } = useGraphQlBlocks({
+    offset,
     pageSize,
     searchString: prettifiedBlockSearchString,
   });
@@ -59,16 +62,25 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
           loading={isBlocksFetching}
         />
       )}
-      <ButtonWrapper
-        iconRight={{
-          color: '#fff',
-          name: 'arrow-right',
-          size: 12,
-        }}
-        role="primary"
-        title={linkText}
-        onClick={onClickSeeMore}
+      <Pagination
+        count={blockCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        onPageChange={setCurrentPage}
       />
+      {false && (
+        <ButtonWrapper
+          iconRight={{
+            color: '#fff',
+            name: 'arrow-right',
+            size: 12,
+          }}
+          role="primary"
+          title={linkText}
+          onClick={onClickSeeMore}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -80,8 +92,8 @@ const Wrapper = styled(PagePaperWrapper)`
     margin-bottom: calc(var(--gap) * 2);
   }
 
-  td {
-    line-height: 57px;
+  && td {
+    padding: calc(var(--gap) * 1.5) var(--gap);
   }
 
   @media (max-width: 767px) {

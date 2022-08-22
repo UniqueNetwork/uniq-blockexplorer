@@ -64,7 +64,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
           searchString={searchString}
         />
       )}
-      {contentExist && (
+      {false && (
         <ButtonWrapper
           iconRight={{
             color: '#fff',
@@ -83,10 +83,6 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
 const Wrapper = styled(PagePaperWrapper)`
   display: flex;
   flex-direction: column;
-
-  td {
-    line-height: 57px;
-  }
 
   @media (max-width: 767px) {
     button.unique-button {

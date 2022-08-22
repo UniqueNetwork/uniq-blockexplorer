@@ -39,9 +39,11 @@ export const getTransferNftColumns = (chainId?: string) => [
     dataIndex: 'collection_name',
     key: 'collection_name',
     render: (value: string) => (
-      <Text size="m" weight="light">
-        {value}
-      </Text>
+      <CollectionWrapper>
+        <Text size="m" weight="light">
+          {value}
+        </Text>
+      </CollectionWrapper>
     ),
     title: 'Collection',
     width: 100,
@@ -82,4 +84,12 @@ const LinkInner = styled.div`
     height: 40px;
     width: 40px;
   }
+`;
+
+const CollectionWrapper = styled.div`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
