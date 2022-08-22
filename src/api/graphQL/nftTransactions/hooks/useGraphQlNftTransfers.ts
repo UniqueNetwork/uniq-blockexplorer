@@ -14,7 +14,7 @@ export interface UseGraphQlNftTransfersProps {
   accountId?: string;
   orderBy?: { [name: string]: 'asc' | 'desc' };
   searchString?: string;
-  offset: number;
+  offset?: number;
 }
 
 export interface UseGraphQlNftTransfersResult {
