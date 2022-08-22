@@ -50,30 +50,22 @@ const BlockDetailComponent: FC<{
       <div className="block-container">
         <Text color="grey-500">Block hash</Text>
         <div className="grid-item_col10">
-          <div className="block__text-wrap" title={blockHash}>
-            {blockHash}
-          </div>
+          <BlockText title={blockHash}>{blockHash}</BlockText>
         </div>
 
         <Text color="grey-500">Parent hash</Text>
         <div className="grid-item_col10">
-          <div className="block__text-wrap" title={parentHash}>
-            {parentHash}
-          </div>
+          <BlockText title={parentHash}>{parentHash}</BlockText>
         </div>
 
         <Text color="grey-500">Extrinsic root</Text>
         <div className="grid-item_col10">
-          <div className="block__text-wrap" title={extrinsicsRoot}>
-            {extrinsicsRoot}
-          </div>
+          <BlockText title={extrinsicsRoot}>{extrinsicsRoot}</BlockText>
         </div>
 
         <Text color="grey-500">State root</Text>
         <div className="grid-item_col10">
-          <div className="block__text-wrap" title={stateRoot}>
-            {stateRoot}
-          </div>
+          <BlockText title={stateRoot}>{stateRoot}</BlockText>
         </div>
       </div>
     </BlockDetailWrapper>
@@ -115,6 +107,10 @@ const BlockDetailWrapper = styled.div`
       }
     }
   }
+`;
+
+const BlockText = styled.div`
+  word-break: break-all;
 `;
 
 export default BlockDetailComponent;
