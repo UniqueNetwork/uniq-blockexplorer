@@ -32,11 +32,13 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
   const [currentPage, setCurrentPage] = useState(1);
+  const offset = (currentPage - 1) * pageSize;
 
   const { isNftTransfersFetching, nftTransfers, nftTransfersCount, timestamp } =
     useGraphQlNftTransfers({
       accountId,
       pageSize,
+      offset,
       orderBy: { timestamp: 'desc' },
       searchString: prettifiedBlockSearchString,
     });
@@ -66,12 +68,14 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
   return (
     <>
       {!isMobile && (
-        <Table
-          columns={getTransferNftColumns(currentChain?.network)}
-          data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
-          loading={isNftTransfersFetching}
-          rowKey="block_index"
-        />
+        <TableWrapper>
+          <Table
+            columns={getTransferNftColumns(currentChain?.network)}
+            data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
+            loading={isNftTransfersFetching}
+            rowKey="block_index"
+          />
+        </TableWrapper>
       )}
       {isMobile && (
         <LastNftTransfersCardsList
@@ -98,7 +102,13 @@ const SkeletonWrapper = styled.div`
 
   .unique-skeleton {
     width: 100%;
-    min-height: 150px;
+    min-height: 450px;
     border-radius: var(--gap) !important;
+  }
+`;
+
+const TableWrapper = styled.div`
+  && td {
+    padding: calc(var(--gap));
   }
 `;

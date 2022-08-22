@@ -23,7 +23,11 @@ const getLatestBlocksQuery = gql`
   }
 `;
 
-export const useGraphQlBlocks = ({ pageSize, searchString }: useGraphQlBlocksProps) => {
+export const useGraphQlBlocks = ({
+  offset = 0,
+  pageSize,
+  searchString,
+}: useGraphQlBlocksProps) => {
   const getWhere = useCallback(
     (searchString?: string) =>
       searchString && searchString?.length > 0
@@ -49,7 +53,7 @@ export const useGraphQlBlocks = ({ pageSize, searchString }: useGraphQlBlocksPro
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
-      offset: 0,
+      offset,
       order_by: { block_number: 'desc' },
       where: getWhere(searchString),
     },

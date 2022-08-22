@@ -36,4 +36,5 @@ export type useGraphQlLastTransfersProps = {
   accountId?: string;
   orderBy?: { [name: string]: 'asc' | 'desc' };
   searchString?: string;
+  offset?: number;
 };

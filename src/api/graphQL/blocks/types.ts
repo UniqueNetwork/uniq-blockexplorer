@@ -26,6 +26,7 @@ export interface LastBlocksData {
 
 export type useGraphQlBlocksProps = {
   pageSize: number;
+  offset?: number;
   searchString?: string;
 };
 

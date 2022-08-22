@@ -48,10 +48,10 @@ export const LastNftTransfersCard: VFC<MobileCardProps> = ({ columns, item }) =>
         </div>
       </CardRow>
       <CardRow>
-        <div>{columns[4].title}</div>
+        <div>{columns[5].title}</div>
         <div>
-          {columns[4]?.render
-            ? columns[4]?.render(item.to_owner_normalized, item, 4)
+          {columns[5]?.render
+            ? columns[5]?.render(item.to_owner_normalized, item, 5)
             : item.to_owner_normalized}
         </div>
       </CardRow>

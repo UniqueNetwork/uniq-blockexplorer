@@ -1,9 +1,9 @@
-import { useEffect, VFC } from 'react';
+import { useEffect, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { Stub, Table } from '@app/components';
+import { Pagination, Stub, Table } from '@app/components';
 import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
@@ -28,11 +28,14 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
   const isMobile = deviceSize <= DeviceSize.sm;
+  const [currentPage, setCurrentPage] = useState(1);
+  const offset = (currentPage - 1) * pageSize;
 
   const { isTransfersFetching, timestamp, transfers, transfersCount } =
     useGraphQlLastTransfers({
       accountId,
       pageSize,
+      offset,
       orderBy: { timestamp: 'desc' },
       searchString: prettifiedBlockSearchString,
     });
@@ -62,12 +65,14 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   return (
     <>
       {!isMobile && (
-        <Table
-          columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
-          data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
-          loading={isTransfersFetching}
-          rowKey="block_index"
-        />
+        <TableWrapper>
+          <Table
+            columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
+            data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
+            loading={isTransfersFetching}
+            rowKey="block_index"
+          />
+        </TableWrapper>
       )}
       {isMobile && (
         <LastTransfersCardsList
@@ -76,6 +81,13 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
           loading={isTransfersFetching}
         />
       )}
+      <Pagination
+        count={transfersCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        onPageChange={setCurrentPage}
+      />
     </>
   );
 };
@@ -87,7 +99,13 @@ const SkeletonWrapper = styled.div`
 
   .unique-skeleton {
     width: 100%;
-    min-height: 150px;
+    min-height: 450px;
     border-radius: var(--gap) !important;
+  }
+`;
+
+const TableWrapper = styled.div`
+  && td {
+    padding: calc(var(--gap) * 1.5);
   }
 `;

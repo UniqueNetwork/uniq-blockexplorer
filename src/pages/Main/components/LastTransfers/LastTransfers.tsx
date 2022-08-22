@@ -84,10 +84,6 @@ const Wrapper = styled(PagePaperWrapper)`
   display: flex;
   flex-direction: column;
 
-  td {
-    line-height: 57px;
-  }
-
   @media (max-width: 767px) {
     button.unique-button {
       width: 100%;
