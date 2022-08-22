@@ -15,7 +15,7 @@ const BlockDetailComponent: FC<{
     BlockDetailVariables
   >(blockDetail.getBlockQuery, {
     notifyOnNetworkStatusChange: true,
-    variables: { block_number: Number(blockNumber) },
+    variables: { blockNumber: Number(blockNumber) },
   });
 
   if (isBLockFetching) return <LoadingComponent />;
