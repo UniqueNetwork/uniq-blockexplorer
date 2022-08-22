@@ -76,9 +76,6 @@ export const useGraphQlNftTransfers = ({
     },
   });
 
-  // eslint-disable-next-line no-console
-  console.log('data', data);
-
   return {
     fetchNftTransfersError,
     isNftTransfersFetching,

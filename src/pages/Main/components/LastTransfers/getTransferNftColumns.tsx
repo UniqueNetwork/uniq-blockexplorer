@@ -13,7 +13,7 @@ export const getTransferNftColumns = (chainId?: string) => [
     render: (value: string, row: any) => (
       <Link
         className="token-transfer-cell"
-        to={`/${chainId ? chainId + '/' : ''}tokens/${value}`}
+        to={`/${chainId ? chainId + '/' : ''}tokens/${row.collection_id}/${value}`}
       >
         <LinkInner>
           <Picture alt={value.toString()} src={row.image} />
