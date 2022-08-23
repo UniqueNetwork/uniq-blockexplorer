@@ -1,22 +1,18 @@
-export interface ConstChainSchemaField {
-  id: number;
-  rule: 'required' | 'optional';
+export interface AttributeField {
+  isArray: boolean;
+  name: {
+    _: string;
+  };
+  optional: boolean;
   type: string;
 }
 
-export interface ConstChainSchema {
-  nested: {
-    onChainMetaData: {
-      nested: {
-        NFTMeta: {
-          fields: Record<string, ConstChainSchemaField>;
-        };
-      };
-    };
-  };
+export interface Attributes {
+  [key: string]: AttributeField;
 }
 
 export interface Collection {
+  attributes_schema: Attributes;
   collection_cover: string;
   collection_id: number;
   description: string;
@@ -38,7 +34,7 @@ export interface Collection {
   limits_account_ownership: number;
   limits_sponsore_data_rate: null;
   limits_sponsore_data_size: null;
-  const_chain_schema: ConstChainSchema | null;
+  const_chain_schema: null;
   date_of_creation: number;
 }
 
