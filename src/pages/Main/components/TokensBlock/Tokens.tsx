@@ -1,9 +1,10 @@
-import { useCallback, useMemo, useState, VFC } from 'react';
+import { useCallback, useEffect, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import { Header } from '@app/styles/styled-components';
 import { PagePaperWrapper, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -13,11 +14,18 @@ import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
 
 interface TokensProps {
+  searchModeOn: boolean;
   searchString?: string;
   collectionId?: number;
+  setResultExist?: (val: boolean) => void;
 }
 
-export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
+export const Tokens: VFC<TokensProps> = ({
+  collectionId,
+  searchString,
+  searchModeOn,
+  setResultExist,
+}) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(tokensOptions[0]);
@@ -66,6 +74,13 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     searchString,
   });
 
+  useEffect(() => {
+    if (searchModeOn && !isTokensFetching && setResultExist && !!tokens?.length) {
+      setResultExist(true);
+      console.log('in tokens');
+    }
+  }, [tokens, isTokensFetching, searchModeOn, setResultExist]);
+
   if (isTokensFetching) {
     return (
       <SkeletonWrapper>
@@ -74,18 +89,22 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
     );
   }
 
-  if (!tokens) {
+  if (!tokens?.length) {
     return null;
   }
 
   return (
     <Wrapper>
-      <HeaderWithDropdown
-        options={tokensOptions}
-        selectedSort={selectedSort}
-        setSelectedSort={setSelectedSort}
-        title="Tokens"
-      />
+      {searchModeOn ? (
+        <StyledHeader size="2">Tokens</StyledHeader>
+      ) : (
+        <HeaderWithDropdown
+          options={tokensOptions}
+          selectedSort={selectedSort}
+          setSelectedSort={setSelectedSort}
+          title="Tokens"
+        />
+      )}
       <TokensWrapper>
         {tokens?.slice(0, tokensLimit).map((token) => (
           <TokenCard
@@ -95,19 +114,28 @@ export const Tokens: VFC<TokensProps> = ({ collectionId, searchString }) => {
           />
         ))}
       </TokensWrapper>
-      <Button
-        iconRight={{
-          color: 'white',
-          name: 'arrow-right',
-          size: 10,
-        }}
-        role="primary"
-        title="See all"
-        onClick={onClick}
-      />
+      {tokens.length > tokensLimit && (
+        <Button
+          iconRight={{
+            color: 'white',
+            name: 'arrow-right',
+            size: 10,
+          }}
+          role="primary"
+          title="See all"
+          onClick={onClick}
+        />
+      )}
     </Wrapper>
   );
 };
+const StyledHeader = styled(Header)`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
+  }
+`;
 
 const SkeletonWrapper = styled(PagePaperWrapper)`
   padding: 0;

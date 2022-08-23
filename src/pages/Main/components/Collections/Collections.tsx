@@ -1,9 +1,10 @@
-import React, { useCallback, useState, useMemo, VFC } from 'react';
+import { useEffect, useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import { Header } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components';
 import {
   CollectionSorting,
@@ -19,10 +20,16 @@ import { CollectionCard } from './CollectionCard';
 import { collectionsOptions } from './collectionsOptions';
 
 interface CollectionsProps {
+  searchModeOn: boolean;
   searchString?: string;
+  setResultExist?: (val: boolean) => void;
 }
 
-export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
+export const Collections: VFC<CollectionsProps> = ({
+  searchModeOn,
+  searchString,
+  setResultExist,
+}) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
@@ -50,6 +57,17 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     pageSize,
     searchString,
   });
+
+  useEffect(() => {
+    if (
+      searchModeOn &&
+      !isCollectionsFetching &&
+      setResultExist &&
+      !!collections?.length
+    ) {
+      setResultExist(true);
+    }
+  }, [collections, isCollectionsFetching, setResultExist, searchModeOn]);
 
   const collectionIds = collections?.map((collection) => collection.collection_id);
   const filter = {
@@ -89,12 +107,16 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
 
   return (
     <Wrapper>
-      <HeaderWithDropdown
-        options={collectionsOptions}
-        selectedSort={selectedSort}
-        setSelectedSort={setSelectedSort}
-        title="Collections"
-      />
+      {searchModeOn ? (
+        <StyledHeader size="2">Collections</StyledHeader>
+      ) : (
+        <HeaderWithDropdown
+          options={collectionsOptions}
+          selectedSort={selectedSort}
+          setSelectedSort={setSelectedSort}
+          title="Collections"
+        />
+      )}
       <CollectionsList>
         {isCollectionsFetching && <LoadingComponent />}
         {collectionsWithTokenCover.map((collection) => (
@@ -105,16 +127,18 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
           />
         ))}
       </CollectionsList>
-      <Button
-        iconRight={{
-          color: 'white',
-          name: 'arrow-right',
-          size: 10,
-        }}
-        role="primary"
-        title="See all"
-        onClick={onClick}
-      />
+      {collections.length > pageSize && (
+        <Button
+          iconRight={{
+            color: 'white',
+            name: 'arrow-right',
+            size: 10,
+          }}
+          role="primary"
+          title="See all"
+          onClick={onClick}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -124,6 +148,14 @@ const Wrapper = styled(PagePaperWrapper)`
     button.unique-button {
       width: 100%;
     }
+  }
+`;
+
+const StyledHeader = styled(Header)`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
   }
 `;
 
