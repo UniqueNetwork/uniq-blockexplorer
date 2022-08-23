@@ -49,10 +49,10 @@ export const useGraphQlNftTransfers = ({
           ? {
               _or: {
                 block_index: { _eq: searchString },
-                // owner: { _eq: searchString },
-                // owner_normalized: { _eq: searchString },
-                // to_owner: { _eq: searchString },
-                // to_owner_normalized: { _eq: searchString },
+                owner: { _eq: searchString },
+                owner_normalized: { _eq: searchString },
+                to_owner: { _eq: searchString },
+                to_owner_normalized: { _eq: searchString },
               },
             }
           : {}),
