@@ -11,11 +11,15 @@ interface SearchComponentProps {
   placeholder?: string;
   value?: string;
   onSearchChange(value: string | undefined): void;
+  setSearchModeOn?: (value: boolean) => void;
+  setResultExist?: (value: boolean) => void;
 }
 
 const SearchComponent: FC<SearchComponentProps> = ({
   onSearchChange,
   placeholder,
+  setSearchModeOn,
+  setResultExist,
   value,
 }) => {
   const [searchString, setSearchString] = useState<string | undefined>(value);
@@ -46,10 +50,13 @@ const SearchComponent: FC<SearchComponentProps> = ({
       return;
     }
 
-    if (/^\d+-\d+$/.test(searchString || '')) {
-      navigate(`/${currentChain.network}/extrinsic/${searchString || ''}`);
+    //temporary for search page
+    if (setSearchModeOn) {
+      setSearchModeOn(searchString !== '');
 
-      return;
+      if (setResultExist) {
+        setResultExist(false);
+      }
     }
 
     onSearchChange(searchString ? searchString.trim() : searchString);

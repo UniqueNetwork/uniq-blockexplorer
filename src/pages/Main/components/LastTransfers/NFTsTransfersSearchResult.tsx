@@ -2,8 +2,9 @@ import { useEffect, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { Pagination, Stub, Table } from '@app/components';
+import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import { Header } from '@app/styles/styled-components';
+import { PagePaperWrapper, Pagination, Table } from '@app/components';
 import {
   TokenTransaction,
   useGraphQlNftTransfers,
@@ -17,19 +18,19 @@ export type LastTransfersProps = {
   searchString?: string;
   pageSize?: number;
   accountId?: string;
-  hideButton: (val: boolean) => void;
+  setResultExist?: (val: boolean) => void;
 };
 
-export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
+export const NFTsTransfersSearchResult: VFC<LastTransfersProps> = ({
   accountId,
   pageSize = 5,
   searchString,
-  hideButton,
+  setResultExist,
 }) => {
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
   const prettifiedBlockSearchString =
-    searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
+    searchString !== '' && /^\d+-+\d/.test(searchString || '') ? searchString : undefined;
   const isMobile = deviceSize <= DeviceSize.sm;
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * pageSize;
@@ -45,28 +46,27 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
 
   useEffect(() => {
     if (
-      /[^$,-,.\d]/.test(searchString || '') ||
-      (nftTransfersCount === 0 && isNftTransfersFetching)
+      !isNftTransfersFetching &&
+      setResultExist &&
+      !!nftTransfersCount &&
+      prettifiedBlockSearchString
     ) {
-      hideButton(false);
+      setResultExist(true);
     }
-    hideButton(true);
-  }, [nftTransfersCount, isNftTransfersFetching, searchString, hideButton]);
+  }, [
+    nftTransfersCount,
+    isNftTransfersFetching,
+    setResultExist,
+    prettifiedBlockSearchString,
+  ]);
 
-  if (isNftTransfersFetching) {
-    return (
-      <SkeletonWrapper>
-        <Skeleton />
-      </SkeletonWrapper>
-    );
-  }
-
-  if (/[^$,-,.\d]/.test(searchString || '') || nftTransfersCount === 0) {
-    return <Stub />;
+  if (!prettifiedBlockSearchString || nftTransfersCount === 0) {
+    return null;
   }
 
   return (
-    <>
+    <Wrapper>
+      <StyledHeader size="2">NFTs transfers</StyledHeader>
       {!isMobile && (
         <TableWrapper>
           <Table
@@ -91,19 +91,26 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
         siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />
-    </>
+    </Wrapper>
   );
 };
 
-const SkeletonWrapper = styled.div`
-  padding: 0;
-  display: flex;
-  flex-grow: 1;
+const StyledHeader = styled(Header)`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
+  }
+`;
 
-  .unique-skeleton {
-    width: 100%;
-    min-height: 450px;
-    border-radius: var(--gap) !important;
+const Wrapper = styled(PagePaperWrapper)`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 767px) {
+    button.unique-button {
+      width: 100%;
+    }
   }
 `;
 

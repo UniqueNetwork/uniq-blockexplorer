@@ -7,10 +7,20 @@ import { getChainColor } from '@app/utils';
 import SearchComponent from '@app/components/SearchComponent';
 
 interface SearchHeaderProps {
+  searchModeOn: boolean;
+  setSearchModeOn: (value: boolean) => void;
+  setResultExist?: (value: boolean) => void;
   setSearchString: (searchString: string | undefined) => void;
+  searchString?: string;
 }
 
-export const SearchHeader: VFC<SearchHeaderProps> = ({ setSearchString }) => {
+export const SearchHeader: VFC<SearchHeaderProps> = ({
+  searchModeOn,
+  searchString,
+  setSearchString,
+  setResultExist,
+  setSearchModeOn,
+}) => {
   const { currentChain } = useApi();
   const networkColor = getChainColor(currentChain);
   const networkName =
@@ -20,12 +30,20 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({ setSearchString }) => {
 
   return (
     <Wrapper>
-      <H>
-        Block Explorer&nbsp;
-        <NetworkName networkColor={networkColor}>{networkName}</NetworkName>
-      </H>
+      {searchModeOn ? (
+        <H>
+          Search results&nbsp;"<SearchString>{searchString}</SearchString>"
+        </H>
+      ) : (
+        <H>
+          Block Explorer&nbsp;
+          <NetworkName networkColor={networkColor}>{networkName}</NetworkName>
+        </H>
+      )}
       <SearchComponent
         placeholder={'Extrinsic / collection / NFT / account'}
+        setSearchModeOn={setSearchModeOn}
+        setResultExist={setResultExist}
         onSearchChange={setSearchString}
       />
     </Wrapper>
@@ -65,4 +83,9 @@ const H = styled(Header1)`
 
 const NetworkName = styled.span<{ networkColor: string }>`
   color: var(${(props) => props.networkColor});
+`;
+
+const SearchString = styled.span`
+  font-family: Inter;
+  color: var(--primary-500);
 `;

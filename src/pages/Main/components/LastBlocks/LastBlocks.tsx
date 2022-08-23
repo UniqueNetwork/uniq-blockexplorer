@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { useGraphQlBlocks } from '@app/api/graphQL';
 import { PagePaperWrapper, Pagination, Stub, Table } from '@app/components';
 import { useApi } from '@app/hooks/useApi';
 import { HeaderWithDropdown } from '@app/pages/Main/components/HeaderWithDropdown';
+import { deviceWidth } from '@app/hooks';
+import { Header } from '@app/styles/styled-components';
 
 import { BlockComponentProps } from '../../types';
 import { getLastBlocksColumns } from './getLastBlocksColumns';
@@ -14,7 +16,12 @@ import { blocksWithTimeDifference } from './blocksWithTimeDifference';
 import { LastBlocksCardsList } from './LastBlocksCardsList';
 import { DeviceSize, useDeviceSize } from '../../../../hooks/useDeviceSize';
 
-export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) => {
+export const LastBlocks = ({
+  pageSize = 5,
+  searchModeOn,
+  searchString,
+  setResultExist,
+}: BlockComponentProps) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const deviceSize = useDeviceSize();
@@ -38,9 +45,35 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
 
   const nothingToShow = !prettifiedBlockSearchString && blockCount === 0;
 
+  useEffect(() => {
+    if (
+      searchModeOn &&
+      !isBlocksFetching &&
+      setResultExist &&
+      prettifiedBlockSearchString &&
+      blockCount !== 0
+    ) {
+      setResultExist(true);
+    }
+  }, [
+    blockCount,
+    isBlocksFetching,
+    prettifiedBlockSearchString,
+    searchModeOn,
+    setResultExist,
+  ]);
+
+  if (!prettifiedBlockSearchString && searchModeOn) {
+    return null;
+  }
+
   return (
     <Wrapper>
-      <HeaderWithDropdown title="Last blocks" />
+      {searchModeOn ? (
+        <StyledHeader size="2">Blocks</StyledHeader>
+      ) : (
+        <HeaderWithDropdown title="Last blocks" />
+      )}
       {nothingToShow && !isBlocksFetching && <Stub />}
       {isBlocksFetching && (
         <SkeletonWrapper>
@@ -66,7 +99,7 @@ export const LastBlocks = ({ pageSize = 5, searchString }: BlockComponentProps) 
         count={blockCount}
         currentPage={currentPage}
         pageSize={pageSize}
-        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />
       {false && (
@@ -100,6 +133,14 @@ const Wrapper = styled(PagePaperWrapper)`
     button.unique-button {
       width: 100%;
     }
+  }
+`;
+
+const StyledHeader = styled(Header)`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
   }
 `;
 
