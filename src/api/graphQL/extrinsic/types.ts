@@ -26,5 +26,6 @@ export interface ExtrinsicData {
   extrinsics: {
     data: Extrinsic[];
     count: number;
+    timestamp: number;
   };
 }
