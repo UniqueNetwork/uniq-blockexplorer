@@ -48,7 +48,9 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
         coverSrc={collection_cover}
       />
       <CollectionInfo>
-        <Heading size="4">{name}</Heading>
+        <CollectionNameWrapper>
+          <Heading size="4">{name}</Heading>
+        </CollectionNameWrapper>
         <CollectionProperties>
           <span>
             <img alt="collection id" src={fingerPrint} />
@@ -74,6 +76,14 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
   );
 };
 
+const CollectionNameWrapper = styled.div`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const CollectionCardLink = styled(Link)`
   background: var(--white-color);
   border: 1px solid var(--grey-200);
@@ -83,7 +93,6 @@ const CollectionCardLink = styled(Link)`
   align-items: center;
   flex-direction: column;
   column-gap: var(--gap);
-  height: 220px;
 
   &:hover {
     transform: translate(0, -5px);
@@ -102,26 +111,6 @@ const CollectionCardLink = styled(Link)`
       color: var(--primary-500);
     }
   }
-
-  @media (min-width: 1200px) and (max-width: 1679px) {
-    height: 246px;
-  }
-
-  @media (min-width: 992px) and (max-width: 1199px) {
-    height: 220px;
-  }
-
-  @media (min-width: 768px) and (max-width: 991px) {
-    height: 246px;
-  }
-
-  @media (min-width: 576px) and (max-width: 767px) {
-    height: 190px;
-  }
-
-  @media (max-width: 575px) {
-    height: 190px;
-  }
 `;
 
 const CollectionInfo = styled.div`
@@ -129,6 +118,7 @@ const CollectionInfo = styled.div`
   flex-direction: column;
   align-items: center;
   row-gap: 0;
+  width: calc(100% - (var(--gap) * 3));
   padding: calc(var(--gap) * 1.5);
   padding-top: 48px;
 
@@ -152,37 +142,5 @@ const CollectionProperties = styled.div`
 
   img {
     width: 13px;
-  }
-
-  @media (min-width: 1200px) and (max-width: 1679px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    span {
-      &:last-child {
-        grid-column-start: 1;
-        grid-column-end: 3;
-      }
-    }
-  }
-
-  @media (min-width: 992px) and (max-width: 1199px) {
-    display: flex;
-  }
-
-  @media (max-width: 991px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    span {
-      &:last-child {
-        grid-column-start: 1;
-        grid-column-end: 3;
-      }
-    }
-  }
-
-  @media (max-width: 767px) {
-    margin-bottom: 0;
   }
 `;

@@ -99,7 +99,7 @@ export const LastBlocks = ({
         count={blockCount}
         currentPage={currentPage}
         pageSize={pageSize}
-        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+        siblingCount={deviceSize <= DeviceSize.sm || deviceSize >= DeviceSize.xxl ? 1 : 2}
         onPageChange={setCurrentPage}
       />
       {false && (
