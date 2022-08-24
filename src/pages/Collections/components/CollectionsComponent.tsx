@@ -23,7 +23,7 @@ const CollectionsComponent = ({
 
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const offset = currentPage * pageSize;
+  const offset = (currentPage - 1) * pageSize;
 
   const filter = useMemo(() => {
     const accountId = queryParams.get('accountId');
