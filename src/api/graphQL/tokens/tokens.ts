@@ -178,6 +178,7 @@ export const useGraphQlToken = (collectionId: number, tokenId: number) => {
     isTokensFetching,
     timestamp: data?.tokens?.timestamp,
     token: data?.tokens?.data[0] || undefined,
+    tokensCount: data?.tokens?.count,
   };
 };
 

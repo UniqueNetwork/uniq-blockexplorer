@@ -66,18 +66,26 @@ export const Tokens: VFC<TokensProps> = ({
     [selectedSort.id],
   );
 
-  const { isTokensFetching, timestamp, tokens } = useGraphQlTokens({
+  const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter,
     offset: 0,
     orderBy,
     pageSize: tokensLimit,
     searchString,
   });
+  const [showButton, setShowButton] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (tokensCount > tokensLimit) {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
+  }, [tokensCount, tokensLimit, setShowButton]);
 
   useEffect(() => {
     if (searchModeOn && !isTokensFetching && setResultExist && !!tokens?.length) {
       setResultExist(true);
-      console.log('in tokens');
     }
   }, [tokens, isTokensFetching, searchModeOn, setResultExist]);
 
@@ -114,7 +122,7 @@ export const Tokens: VFC<TokensProps> = ({
           />
         ))}
       </TokensWrapper>
-      {tokens.length > tokensLimit && (
+      {showButton && (
         <Button
           iconRight={{
             color: 'white',

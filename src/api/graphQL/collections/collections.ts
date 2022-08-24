@@ -124,6 +124,7 @@ export const useGraphQlCollection = (collectionId: number) => {
     collection: data?.collections.data[0] || undefined,
     fetchCollectionsError,
     isCollectionFetching,
+    collectionsCount: data?.collections.count,
   };
 };
 

@@ -51,11 +51,12 @@ export const Collections: VFC<CollectionsProps> = ({
     return 4;
   }, [deviceSize]);
 
-  const { collections, isCollectionsFetching, timestamp } = useGraphQlCollections({
-    orderBy,
-    pageSize,
-    searchString,
-  });
+  const { collections, collectionsCount, isCollectionsFetching, timestamp } =
+    useGraphQlCollections({
+      orderBy,
+      pageSize,
+      searchString,
+    });
 
   useEffect(() => {
     if (
@@ -101,6 +102,15 @@ export const Collections: VFC<CollectionsProps> = ({
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
     navigate(navigateTo);
   }, [currentChain, navigate, searchString]);
+  const [showButton, setShowButton] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (collectionsCount > pageSize) {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
+  }, [collectionsCount, pageSize, setShowButton]);
 
   if (!collections.length) return null;
 
@@ -131,7 +141,7 @@ export const Collections: VFC<CollectionsProps> = ({
           ))}
         </CollectionsList>
       )}
-      {collections.length > pageSize && (
+      {showButton && (
         <Button
           iconRight={{
             color: 'white',

@@ -48,7 +48,9 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
         coverSrc={collection_cover}
       />
       <CollectionInfo>
-        <Heading size="4">{name}</Heading>
+        <CollectionNameWrapper>
+          <Heading size="4">{name}</Heading>
+        </CollectionNameWrapper>
         <CollectionProperties>
           <span>
             <img alt="collection id" src={fingerPrint} />
@@ -74,6 +76,14 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
   );
 };
 
+const CollectionNameWrapper = styled.div`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const CollectionCardLink = styled(Link)`
   background: var(--white-color);
   border: 1px solid var(--grey-200);
@@ -83,7 +93,6 @@ const CollectionCardLink = styled(Link)`
   align-items: center;
   flex-direction: column;
   column-gap: var(--gap);
-  height: 220px;
 
   &:hover {
     transform: translate(0, -5px);
@@ -101,26 +110,6 @@ const CollectionCardLink = styled(Link)`
     &:hover {
       color: var(--primary-500);
     }
-  }
-
-  @media (min-width: 1200px) and (max-width: 1679px) {
-    height: 246px;
-  }
-
-  @media (min-width: 992px) and (max-width: 1199px) {
-    height: 220px;
-  }
-
-  @media (min-width: 768px) and (max-width: 991px) {
-    height: 246px;
-  }
-
-  @media (min-width: 576px) and (max-width: 767px) {
-    height: 190px;
-  }
-
-  @media (max-width: 575px) {
-    height: 190px;
   }
 `;
 
