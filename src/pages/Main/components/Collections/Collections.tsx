@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
+import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
@@ -13,7 +13,6 @@ import {
 } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
-import LoadingComponent from '@app/components/LoadingComponent';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { CollectionCard } from './CollectionCard';
@@ -117,16 +116,21 @@ export const Collections: VFC<CollectionsProps> = ({
           title="Collections"
         />
       )}
-      <CollectionsList>
-        {isCollectionsFetching && <LoadingComponent />}
-        {collectionsWithTokenCover.map((collection) => (
-          <CollectionCard
-            key={`collection-${collection.collection_id}`}
-            timestamp={timestamp}
-            {...collection}
-          />
-        ))}
-      </CollectionsList>
+      {isCollectionsFetching ? (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
+      ) : (
+        <CollectionsList>
+          {collectionsWithTokenCover.map((collection) => (
+            <CollectionCard
+              key={`collection-${collection.collection_id}`}
+              timestamp={timestamp}
+              {...collection}
+            />
+          ))}
+        </CollectionsList>
+      )}
       {collections.length > pageSize && (
         <Button
           iconRight={{
@@ -142,6 +146,32 @@ export const Collections: VFC<CollectionsProps> = ({
     </Wrapper>
   );
 };
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 536px;
+    border-radius: var(--gap) !important;
+  }
+
+  @media ${deviceWidth.smallerThan.md} {
+    .unique-skeleton {
+      width: 100%;
+      min-height: 420px;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    .unique-skeleton {
+      width: 100%;
+      min-height: 820px;
+    }
+  }
+`;
 
 const Wrapper = styled(PagePaperWrapper)`
   @media (max-width: 767px) {

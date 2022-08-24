@@ -129,6 +129,7 @@ const CollectionInfo = styled.div`
   flex-direction: column;
   align-items: center;
   row-gap: 0;
+  width: calc(100% - (var(--gap) * 3));
   padding: calc(var(--gap) * 1.5);
   padding-top: 48px;
 
@@ -152,37 +153,5 @@ const CollectionProperties = styled.div`
 
   img {
     width: 13px;
-  }
-
-  @media (min-width: 1200px) and (max-width: 1679px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    span {
-      &:last-child {
-        grid-column-start: 1;
-        grid-column-end: 3;
-      }
-    }
-  }
-
-  @media (min-width: 992px) and (max-width: 1199px) {
-    display: flex;
-  }
-
-  @media (max-width: 991px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-
-    span {
-      &:last-child {
-        grid-column-start: 1;
-        grid-column-end: 3;
-      }
-    }
-  }
-
-  @media (max-width: 767px) {
-    margin-bottom: 0;
   }
 `;
