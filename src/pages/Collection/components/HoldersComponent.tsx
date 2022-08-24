@@ -109,7 +109,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
         count={holdersCount || 0}
         currentPage={currentPage}
         pageSize={pageSize}
-        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={onPageChange}
       />
     </HolderWrapper>

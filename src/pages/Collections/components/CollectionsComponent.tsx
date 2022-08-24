@@ -63,7 +63,7 @@ const CollectionsComponent = ({
           count={collectionsCount || 0}
           currentPage={currentPage}
           pageSize={pageSize}
-          siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
           onPageChange={setCurrentPage}
         />
       )}
