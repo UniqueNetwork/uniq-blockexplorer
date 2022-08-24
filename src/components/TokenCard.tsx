@@ -65,22 +65,6 @@ const TokenCard: FC<TokenCardProps> = ({
   );
 };
 
-const SkeletonWrapper = styled.div`
-  width: 100%;
-  border-radius: 8px 8px 0 0;
-
-  .unique-skeleton {
-    width: 100%;
-    border-radius: 8px 8px 0 0;
-
-    &:after {
-      content: '';
-      display: block;
-      padding-top: 100%;
-    }
-  }
-`;
-
 const TokenCardLink = styled(Link)`
   width: 100%;
   border: 1px solid var(--blue-gray-200);

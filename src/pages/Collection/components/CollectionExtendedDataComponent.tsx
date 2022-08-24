@@ -11,19 +11,16 @@ interface ExtendedDataComponentProps {
 const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
   collection,
 }) => {
-  const fields =
-    collection?.const_chain_schema?.nested.onChainMetaData.nested.NFTMeta.fields;
+  const fields = collection?.attributes_schema;
 
   return (
     <>
       <WrapperWithBorder>
         <Heading size="4">NFTs attributes</Heading>
         <TagsWrapper>
-          {Object.keys(fields || {})
-            .filter((key) => key !== 'ipfsJson')
-            .map((key) => (
-              <Tag key={key}>{key}</Tag>
-            ))}
+          {Object.keys(fields || {}).map((key) => (
+            <Tag key={key}>{fields?.[key].name._}</Tag>
+          ))}
         </TagsWrapper>
       </WrapperWithBorder>
       <WrapperWithBorder>

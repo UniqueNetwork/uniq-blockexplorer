@@ -7,23 +7,22 @@ const extrinsicQuery = gql`
     extrinsics(
       limit: $limit
       offset: $offset
-      where: { block_index: { _eq: $block_index } }
+      where: { block_number: { _eq: $block_index } }
     ) {
       data {
         amount
         block_index
         block_number
         fee
-        hash
-        success
-        timestamp
         from_owner
         from_owner_normalized
-        to_owner
-        to_owner_normalized
+        hash
         method
         section
         success
+        timestamp
+        to_owner
+        to_owner_normalized
       }
       count
       timestamp
@@ -43,5 +42,10 @@ export const useGraphQlExtrinsic = (blockIndex?: string) => {
     variables: { block_index: blockIndex || '', limit: 1, offset: 0 },
   });
 
-  return { extrinsic: data?.extrinsics.data[0], isExtrinsicFetching };
+  return {
+    count: data?.extrinsics.count,
+    extrinsic: data?.extrinsics.data[0],
+    isExtrinsicFetching,
+    timestamp: data?.extrinsics.timestamp,
+  };
 };

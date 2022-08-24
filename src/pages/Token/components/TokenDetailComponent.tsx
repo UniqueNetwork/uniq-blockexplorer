@@ -54,7 +54,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           <Text>{timestampFormat(createdOn)}</Text>
           <Text color="grey-500">Owner</Text>
           <OwnerWrapper>
-            <Avatar size="x-small" />
             <AccountLinkComponent noShort={deviceSize >= DeviceSize.lg} value={owner} />
           </OwnerWrapper>
         </TokenInfo>
@@ -192,6 +191,11 @@ const OwnerWrapper = styled.div`
   display: flex;
   align-items: center;
   column-gap: var(--gap);
+
+  svg {
+    height: calc(var(--gap) * 1.5);
+    width: calc(var(--gap) * 1.5);
+  }
 `;
 
 export default TokenDetailComponent;

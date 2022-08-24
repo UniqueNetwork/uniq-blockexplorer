@@ -4,7 +4,8 @@ import RCTable from 'rc-table';
 import styled from 'styled-components';
 
 import LoadingComponent from './LoadingComponent';
-import MobileTable from './MobileTable';
+import { MobileTable } from './MobileTable';
+import { DeviceSize, useDeviceSize } from '../hooks/useDeviceSize';
 
 interface TableProps<RecordType = DefaultRecordType> {
   hideMobile?: boolean;
@@ -15,20 +16,27 @@ interface TableProps<RecordType = DefaultRecordType> {
 }
 
 const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
+  const deviceSize = useDeviceSize();
+  const isMobile = deviceSize <= DeviceSize.sm;
+
   return (
     <TableWrapper>
-      <RCTable
-        columns={columns}
-        data={data || []}
-        emptyText={'No data'}
-        rowKey={rowKey}
-      />
-      <MobileTable
-        columns={columns}
-        data={!loading ? data : []}
-        loading={loading}
-        rowKey={rowKey}
-      />
+      {!isMobile && (
+        <RCTable
+          columns={columns}
+          data={data || []}
+          emptyText={'No data'}
+          rowKey={rowKey}
+        />
+      )}
+      {isMobile && (
+        <MobileTable
+          columns={columns}
+          data={!loading ? data : []}
+          loading={loading}
+          rowKey={rowKey}
+        />
+      )}
       {loading && <TableLoading />}
     </TableWrapper>
   );

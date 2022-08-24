@@ -47,27 +47,35 @@ const AccountPage = () => {
   if (!accountId) return null;
 
   return (
-    <PagePaper>
-      <AccountDetailComponent accountId={substrateAddress as string} />
-      <AssetsWrapper>
-        <Heading size={'2'}>Assets</Heading>
-        <Tabs
-          activeIndex={activeAssetsTabIndex}
-          labels={assetsTabs}
-          onClick={setActiveAssetsTabIndex}
-        />
-        <Tabs activeIndex={activeAssetsTabIndex}>
-          <CollectionsComponent
-            accountId={normalizeSubstrate(substrateAddress as string)}
-            key={'collections'}
+    <Wrapper className="account-page">
+      <PagePaper>
+        <AccountDetailComponent accountId={substrateAddress as string} />
+        <AssetsWrapper>
+          <Heading size="2">Assets</Heading>
+          <Tabs
+            activeIndex={activeAssetsTabIndex}
+            labels={assetsTabs}
+            onClick={setActiveAssetsTabIndex}
           />
-          <TokensComponent accountId={accountForTokensSearch as string} key={'tokens'} />
-        </Tabs>
-      </AssetsWrapper>
+          <Tabs activeIndex={activeAssetsTabIndex}>
+            <CollectionsComponent
+              accountId={normalizeSubstrate(substrateAddress as string)}
+              key="collections"
+            />
+            <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
+          </Tabs>
+        </AssetsWrapper>
+      </PagePaper>
       <LastTransfers accountId={substrateAddress} pageSize={10} />
-    </PagePaper>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: var(--gap);
+`;
 
 const AssetsWrapper = styled.div`
   padding-top: calc(var(--gap) * 1.5);

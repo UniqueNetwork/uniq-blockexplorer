@@ -1,4 +1,4 @@
-import { useCallback, useState, VFC } from 'react';
+import { useState, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';

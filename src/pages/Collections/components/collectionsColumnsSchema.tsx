@@ -33,7 +33,7 @@ export const getCollectionsColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 150,
   },
   {
     dataIndex: 'date_of_creation',

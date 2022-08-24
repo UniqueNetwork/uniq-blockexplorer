@@ -171,7 +171,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
         count={tokensCount || 0}
         currentPage={currentPage}
         pageSize={pageSize}
-        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />
     </>

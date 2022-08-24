@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Skeleton } from '@unique-nft/ui-kit';
+import styled from 'styled-components';
 
 import { CollectionSorting, useGraphQlCollections } from '@app/api';
 import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
@@ -45,21 +47,42 @@ const CollectionsComponent = ({
 
   return (
     <>
-      <Table
-        columns={getCollectionsColumns(currentChain.network, orderBy, setOrderBy)}
-        data={collections || []}
-        loading={isCollectionsFetching}
-        rowKey="collection_id"
-      />
-      <PaginationComponent
-        count={collectionsCount || 0}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
-        onPageChange={setCurrentPage}
-      />
+      {isCollectionsFetching && (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
+      )}
+      {!isCollectionsFetching && (
+        <Table
+          columns={getCollectionsColumns(currentChain.network, orderBy, setOrderBy)}
+          data={collections || []}
+          loading={isCollectionsFetching}
+          rowKey="collection_id"
+        />
+      )}
+      {!isCollectionsFetching && collectionsCount > 0 && (
+        <PaginationComponent
+          count={collectionsCount || 0}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </>
   );
 };
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 150px;
+    border-radius: var(--gap) !important;
+  }
+`;
 
 export default CollectionsComponent;

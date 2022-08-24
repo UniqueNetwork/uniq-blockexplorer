@@ -16,11 +16,10 @@ const accountQuery = gql`
         account_id
         account_id_normalized
         available_balance
-        balances
         block_height
         free_balance
         locked_balance
-        nonce
+        timestamp
       }
     }
   }
