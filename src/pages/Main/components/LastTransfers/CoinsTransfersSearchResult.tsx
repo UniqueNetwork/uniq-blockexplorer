@@ -1,15 +1,13 @@
 import { useEffect, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper, Pagination, Table } from '@app/components';
+import { PagePaperWrapper, Pagination, ScrollableTable } from '@app/components';
 import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
-import { LastTransfersCardsList } from './LastTransfersCardsList';
 
 export type LastTransfersProps = {
   searchString?: string;
@@ -28,7 +26,6 @@ export const CoinsTransfersSearchResult: VFC<LastTransfersProps> = ({
   const deviceSize = useDeviceSize();
   const prettifiedBlockSearchString =
     searchString !== '' && /^\d+-+\d/.test(searchString || '') ? searchString : undefined;
-  const isMobile = deviceSize <= DeviceSize.sm;
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * pageSize;
 
@@ -59,23 +56,14 @@ export const CoinsTransfersSearchResult: VFC<LastTransfersProps> = ({
   return (
     <Wrapper>
       <StyledHeader size="2">Coins transfers</StyledHeader>
-      {!isMobile && (
-        <TableWrapper>
-          <Table
-            columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
-            data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
-            loading={isTransfersFetching}
-            rowKey="block_index"
-          />
-        </TableWrapper>
-      )}
-      {isMobile && (
-        <LastTransfersCardsList
+      <TableWrapper>
+        <ScrollableTable
           columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
           data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
           loading={isTransfersFetching}
+          rowKey="block_index"
         />
-      )}
+      </TableWrapper>
       <Pagination
         count={transfersCount}
         currentPage={currentPage}
