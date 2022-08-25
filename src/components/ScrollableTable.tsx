@@ -4,7 +4,12 @@ import RCTable from 'rc-table';
 import styled from 'styled-components';
 
 import LoadingComponent from './LoadingComponent';
-import { DeviceSize, deviceWidth, useDeviceSize } from '../hooks/useDeviceSize';
+import {
+  DeviceSize,
+  DeviceSizes,
+  deviceWidth,
+  useDeviceSize,
+} from '../hooks/useDeviceSize';
 
 interface TableProps<RecordType = DefaultRecordType> {
   hideMobile?: boolean;

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import Table from '../../../components/Table';
+import { ScrollableTable } from '@app/components';
 
 interface TokensEventsComponentProps {
   events?: Event[];
@@ -39,7 +39,7 @@ const columns = [
 
 const TokenEventsComponent: FC<TokensEventsComponentProps> = ({ events, loading }) => {
   return (
-    <Table
+    <ScrollableTable
       columns={columns}
       data={!loading ? events : []}
       loading={loading}
