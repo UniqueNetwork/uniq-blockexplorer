@@ -22,7 +22,7 @@ export const getTransferNftColumns = (chainId?: string) => [
       </Link>
     ),
     title: 'NFT',
-    width: 150,
+    width: 160,
   },
   {
     dataIndex: 'time_difference',
@@ -64,14 +64,14 @@ export const getTransferNftColumns = (chainId?: string) => [
     key: 'owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'From',
-    width: 150,
+    width: 180,
   },
   {
     dataIndex: 'to_owner_normalized',
     key: 'to_owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'To',
-    width: 150,
+    width: 180,
   },
 ];
 

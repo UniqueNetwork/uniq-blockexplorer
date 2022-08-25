@@ -29,7 +29,6 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
   const deviceSize = useDeviceSize();
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
-  const isMobile = deviceSize <= DeviceSize.lg;
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * pageSize;
 
@@ -66,27 +65,14 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
 
   return (
     <>
-      {!isMobile && (
-        <TableWrapper>
-          <Table
-            columns={getTransferNftColumns(currentChain?.network)}
-            data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
-            loading={isNftTransfersFetching}
-            rowKey="block_index"
-          />
-        </TableWrapper>
-      )}
-      {isMobile && (
-        <TableWrapper>
-          <ScrollableTable
-            columns={getTransferNftColumns(currentChain?.network)}
-            data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
-            loading={isNftTransfersFetching}
-            rowKey="block_index"
-          />
-        </TableWrapper>
-      )}
-
+      <TableWrapper>
+        <ScrollableTable
+          columns={getTransferNftColumns(currentChain?.network)}
+          data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
+          loading={isNftTransfersFetching}
+          rowKey="block_index"
+        />
+      </TableWrapper>
       <Pagination
         count={nftTransfersCount}
         currentPage={currentPage}

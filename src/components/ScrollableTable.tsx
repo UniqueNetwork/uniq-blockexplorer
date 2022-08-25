@@ -14,9 +14,17 @@ interface TableProps<RecordType = DefaultRecordType> {
 }
 
 const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
+  const minTableWidth = columns?.reduce((accum, item) => {
+    return accum + Number(item.width);
+  }, 0);
+  const paddings = 48;
+  const margins = 64;
+  const minScreenWidthForTable = (minTableWidth || 500) + paddings + margins;
+  const scrollExist = window.innerWidth < minScreenWidthForTable;
+
   return (
     <ScrollWrapper>
-      <TableWrapper>
+      <TableWrapper minScreenWidthForTable={minScreenWidthForTable}>
         <RCTable
           columns={columns}
           data={data || []}
@@ -25,7 +33,7 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
         />
         {loading && <TableLoading />}
       </TableWrapper>
-      <Mute />
+      {scrollExist && <Mute />}
     </ScrollWrapper>
   );
 };
@@ -43,33 +51,18 @@ const Mute = styled.div`
   background: linear-gradient(270deg, #ffffff 10.61%, rgba(255, 255, 255, 0) 100%);
 `;
 
-const TableWrapper = styled.div`
+const TableWrapper = styled.div.attrs<{ minScreenWidthForTable: number }>((props) => ({
+  minScreenWidthForTable: props.minScreenWidthForTable,
+}))<{ minScreenWidthForTable: number }>`
   position: relative;
 
   .rc-table {
     margin-bottom: calc(var(--gap) * 1.5);
 
-    overflow: auto;
-
     table {
       width: 100%;
       border-spacing: 0;
       table-layout: fixed !important;
-      max-width: 1087px;
-      min-width: 1087px;
-      display: table;
-      overflow-x: auto;
-
-      tr > th:first-of-type,
-      tr > td:first-of-type {
-        position: sticky;
-        left: 0;
-        background-color: var(--blue-gray);
-      }
-
-      tr > td:first-of-type {
-        background-color: white;
-      }
     }
 
     &-thead {
@@ -103,6 +96,27 @@ const TableWrapper = styled.div`
         text-align: center;
         color: var(--grey);
         padding: var(--gap) 0 !important;
+      }
+    }
+  }
+
+  @media (max-width: ${(props) => props.minScreenWidthForTable}px) {
+    overflow: auto;
+
+    table {
+      min-width: ${(props) => props.minScreenWidthForTable}px;
+      display: table;
+      overflow-x: auto;
+
+      tr > th:first-of-type,
+      tr > td:first-of-type {
+        position: sticky;
+        left: 0;
+        background-color: var(--blue-gray);
+      }
+
+      tr > td:first-of-type {
+        background-color: white;
       }
     }
   }
