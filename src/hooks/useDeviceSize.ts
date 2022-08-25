@@ -11,6 +11,8 @@ export enum DeviceSize {
   xxl, // > 1680
 }
 
+export const DeviceBreakpoints = [479, 575, 767, 991, 1199, 1679, 1680];
+
 export const DeviceSizes = {
   xxs: '479px',
   xs: '575p',

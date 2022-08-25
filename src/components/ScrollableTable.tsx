@@ -4,7 +4,6 @@ import RCTable from 'rc-table';
 import styled from 'styled-components';
 
 import LoadingComponent from './LoadingComponent';
-import { DeviceSize, deviceWidth, useDeviceSize } from '../hooks/useDeviceSize';
 
 interface TableProps<RecordType = DefaultRecordType> {
   hideMobile?: boolean;
@@ -15,23 +14,18 @@ interface TableProps<RecordType = DefaultRecordType> {
 }
 
 const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
-  const deviceSize = useDeviceSize();
-  const scrollExist = deviceSize < DeviceSize.xl;
-
   return (
     <ScrollWrapper>
-      <TableWrapper2>
-        <TableWrapper>
-          <RCTable
-            columns={columns}
-            data={data || []}
-            emptyText={'No data'}
-            rowKey={rowKey}
-          />
-          {loading && <TableLoading />}
-        </TableWrapper>
-      </TableWrapper2>
-      {scrollExist && <Mute />}
+      <TableWrapper>
+        <RCTable
+          columns={columns}
+          data={data || []}
+          emptyText={'No data'}
+          rowKey={rowKey}
+        />
+        {loading && <TableLoading />}
+      </TableWrapper>
+      <Mute />
     </ScrollWrapper>
   );
 };
@@ -49,15 +43,18 @@ const Mute = styled.div`
   background: linear-gradient(270deg, #ffffff 10.61%, rgba(255, 255, 255, 0) 100%);
 `;
 
-const TableWrapper2 = styled.div`
-  && td {
-    padding: calc(var(--gap));
-  }
+const TableWrapper = styled.div`
+  position: relative;
 
-  @media ${deviceWidth.smallerThan.xl} {
+  .rc-table {
+    margin-bottom: calc(var(--gap) * 1.5);
+
     overflow: auto;
 
     table {
+      width: 100%;
+      border-spacing: 0;
+      table-layout: fixed !important;
       max-width: 1087px;
       min-width: 1087px;
       display: table;
@@ -73,20 +70,6 @@ const TableWrapper2 = styled.div`
       tr > td:first-of-type {
         background-color: white;
       }
-    }
-  }
-`;
-
-const TableWrapper = styled.div`
-  position: relative;
-
-  .rc-table {
-    margin-bottom: calc(var(--gap) * 1.5);
-
-    table {
-      width: 100%;
-      border-spacing: 0;
-      table-layout: fixed !important;
     }
 
     &-thead {
