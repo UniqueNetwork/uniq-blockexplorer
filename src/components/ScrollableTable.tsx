@@ -4,12 +4,6 @@ import RCTable from 'rc-table';
 import styled from 'styled-components';
 
 import LoadingComponent from './LoadingComponent';
-import {
-  DeviceSize,
-  DeviceSizes,
-  deviceWidth,
-  useDeviceSize,
-} from '../hooks/useDeviceSize';
 
 interface TableProps<RecordType = DefaultRecordType> {
   hideMobile?: boolean;
@@ -20,22 +14,25 @@ interface TableProps<RecordType = DefaultRecordType> {
 }
 
 const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
-  const deviceSize = useDeviceSize();
-  const scrollExist = deviceSize < DeviceSize.xl;
+  const minTableWidth = columns?.reduce((accum, item) => {
+    return accum + Number(item.width);
+  }, 0);
+  const paddings = columns!.length * 16 * 2;
+  const margins = columns!.length * 8;
+  const minScreenWidthForTable = (minTableWidth || 500) + paddings + margins;
+  const scrollExist = window.innerWidth < minScreenWidthForTable;
 
   return (
     <ScrollWrapper>
-      <TableWrapper2>
-        <TableWrapper>
-          <RCTable
-            columns={columns}
-            data={data || []}
-            emptyText={'No data'}
-            rowKey={rowKey}
-          />
-          {loading && <TableLoading />}
-        </TableWrapper>
-      </TableWrapper2>
+      <TableWrapper minScreenWidthForTable={minScreenWidthForTable}>
+        <RCTable
+          columns={columns}
+          data={data || []}
+          emptyText={'No data'}
+          rowKey={rowKey}
+        />
+        {loading && <TableLoading />}
+      </TableWrapper>
       {scrollExist && <Mute />}
     </ScrollWrapper>
   );
@@ -54,35 +51,9 @@ const Mute = styled.div`
   background: linear-gradient(270deg, #ffffff 10.61%, rgba(255, 255, 255, 0) 100%);
 `;
 
-const TableWrapper2 = styled.div`
-  && td {
-    padding: calc(var(--gap));
-  }
-
-  @media ${deviceWidth.smallerThan.xl} {
-    overflow: auto;
-
-    table {
-      max-width: 1087px;
-      min-width: 1087px;
-      display: table;
-      overflow-x: auto;
-
-      tr > th:first-of-type,
-      tr > td:first-of-type {
-        position: sticky;
-        left: 0;
-        background-color: var(--blue-gray);
-      }
-
-      tr > td:first-of-type {
-        background-color: white;
-      }
-    }
-  }
-`;
-
-const TableWrapper = styled.div`
+const TableWrapper = styled.div.attrs<{ minScreenWidthForTable: number }>((props) => ({
+  minScreenWidthForTable: props.minScreenWidthForTable,
+}))<{ minScreenWidthForTable: number }>`
   position: relative;
 
   .rc-table {
@@ -125,6 +96,27 @@ const TableWrapper = styled.div`
         text-align: center;
         color: var(--grey);
         padding: var(--gap) 0 !important;
+      }
+    }
+  }
+
+  @media (max-width: ${(props) => props.minScreenWidthForTable}px) {
+    overflow: auto;
+
+    table {
+      min-width: ${(props) => props.minScreenWidthForTable}px;
+      display: table;
+      overflow-x: auto;
+
+      tr > th:first-of-type,
+      tr > td:first-of-type {
+        position: sticky;
+        left: 0;
+        background-color: var(--blue-gray);
+      }
+
+      tr > td:first-of-type {
+        background-color: white;
       }
     }
   }

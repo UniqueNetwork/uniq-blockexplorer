@@ -65,12 +65,14 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
 
   return (
     <>
-      <ScrollableTable
-        columns={getTransferNftColumns(currentChain?.network)}
-        data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
-        loading={isNftTransfersFetching}
-        rowKey="block_index"
-      />
+      <TableWrapper>
+        <ScrollableTable
+          columns={getTransferNftColumns(currentChain?.network)}
+          data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
+          loading={isNftTransfersFetching}
+          rowKey="block_index"
+        />
+      </TableWrapper>
       <Pagination
         count={nftTransfersCount}
         currentPage={currentPage}
@@ -91,5 +93,11 @@ const SkeletonWrapper = styled.div`
     width: 100%;
     min-height: 450px;
     border-radius: var(--gap) !important;
+  }
+`;
+
+const TableWrapper = styled.div`
+  && td {
+    padding: calc(var(--gap));
   }
 `;
