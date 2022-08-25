@@ -13,12 +13,14 @@ interface TableProps<RecordType = DefaultRecordType> {
   rowKey?: string | GetRowKey<RecordType>;
 }
 
+const TABLE_GAP = 16;
+
 const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
   const minTableWidth = columns?.reduce((accum, item) => {
     return accum + Number(item.width);
   }, 0);
-  const paddings = columns!.length * 16 * 2;
-  const margins = columns!.length * 8;
+  const paddings = columns!.length * TABLE_GAP * 2;
+  const margins = columns!.length * (TABLE_GAP / 2);
   const minScreenWidthForTable = (minTableWidth || 500) + paddings + margins;
   const scrollExist = window.innerWidth < minScreenWidthForTable;
 
