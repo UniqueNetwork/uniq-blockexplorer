@@ -3,7 +3,7 @@ name: Deploy to Develop cluster
 on:
   push:
     branches:
-      - develop
+      - story/SCAN-363
   workflow_dispatch:
 
 jobs:
