@@ -1,10 +1,9 @@
 import { useEffect, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper, Pagination, Table } from '@app/components';
+import { PagePaperWrapper, Pagination, ScrollableTable } from '@app/components';
 import {
   TokenTransaction,
   useGraphQlNftTransfers,
@@ -12,7 +11,6 @@ import {
 import { getTransferNftColumns } from '@app/pages/Main/components/LastTransfers/getTransferNftColumns';
 
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
-import { LastNftTransfersCardsList } from './LastNftTransfersCardsList';
 
 export type LastTransfersProps = {
   searchString?: string;
@@ -31,7 +29,6 @@ export const NFTsTransfersSearchResult: VFC<LastTransfersProps> = ({
   const deviceSize = useDeviceSize();
   const prettifiedBlockSearchString =
     searchString !== '' && /^\d+-+\d/.test(searchString || '') ? searchString : undefined;
-  const isMobile = deviceSize <= DeviceSize.sm;
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * pageSize;
 
@@ -67,23 +64,14 @@ export const NFTsTransfersSearchResult: VFC<LastTransfersProps> = ({
   return (
     <Wrapper>
       <StyledHeader size="2">NFTs transfers</StyledHeader>
-      {!isMobile && (
-        <TableWrapper>
-          <Table
-            columns={getTransferNftColumns(currentChain?.network)}
-            data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
-            loading={isNftTransfersFetching}
-            rowKey="block_index"
-          />
-        </TableWrapper>
-      )}
-      {isMobile && (
-        <LastNftTransfersCardsList
+      <TableWrapper>
+        <ScrollableTable
           columns={getTransferNftColumns(currentChain?.network)}
           data={transfersWithTimeDifference<TokenTransaction>(nftTransfers, timestamp)}
           loading={isNftTransfersFetching}
+          rowKey="block_index"
         />
-      )}
+      </TableWrapper>
       <Pagination
         count={nftTransfersCount}
         currentPage={currentPage}

@@ -19,7 +19,7 @@ export const getLastBlocksColumns = (chainId: string) => [
       </Text>
     ),
     title: 'Age',
-    width: 186,
+    width: 130,
   },
   {
     dataIndex: 'total_extrinsics',

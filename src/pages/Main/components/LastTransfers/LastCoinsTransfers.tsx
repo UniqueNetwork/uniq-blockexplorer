@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { Pagination, Stub, Table } from '@app/components';
+import { Pagination, Stub, ScrollableTable } from '@app/components';
 import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
 import { transfersWithTimeDifference } from './transfersWithTimeDifference';
-import { LastTransfersCardsList } from './LastTransfersCardsList';
 
 export type LastTransfersProps = {
   searchString?: string;
@@ -27,7 +26,6 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   const deviceSize = useDeviceSize();
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
-  const isMobile = deviceSize <= DeviceSize.sm;
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * pageSize;
 
@@ -64,23 +62,14 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
 
   return (
     <>
-      {!isMobile && (
-        <TableWrapper>
-          <Table
-            columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
-            data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
-            loading={isTransfersFetching}
-            rowKey="block_index"
-          />
-        </TableWrapper>
-      )}
-      {isMobile && (
-        <LastTransfersCardsList
+      <TableWrapper>
+        <ScrollableTable
           columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
           data={transfersWithTimeDifference<Transfer>(transfers, timestamp)}
           loading={isTransfersFetching}
+          rowKey="block_index"
         />
-      )}
+      </TableWrapper>
       <Pagination
         count={transfersCount}
         currentPage={currentPage}

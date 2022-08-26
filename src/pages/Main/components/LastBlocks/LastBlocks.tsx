@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 import { useGraphQlBlocks } from '@app/api/graphQL';
-import { PagePaperWrapper, Pagination, Stub, Table } from '@app/components';
+import { PagePaperWrapper, Pagination, Stub, ScrollableTable } from '@app/components';
 import { useApi } from '@app/hooks/useApi';
 import { HeaderWithDropdown } from '@app/pages/Main/components/HeaderWithDropdown';
 import { deviceWidth } from '@app/hooks';
@@ -13,7 +13,6 @@ import { Header } from '@app/styles/styled-components';
 import { BlockComponentProps } from '../../types';
 import { getLastBlocksColumns } from './getLastBlocksColumns';
 import { blocksWithTimeDifference } from './blocksWithTimeDifference';
-import { LastBlocksCardsList } from './LastBlocksCardsList';
 import { DeviceSize, useDeviceSize } from '../../../../hooks/useDeviceSize';
 
 export const LastBlocks = ({
@@ -29,7 +28,6 @@ export const LastBlocks = ({
   const linkUrl = `/${currentChain.network}/last-blocks`;
   const prettifiedBlockSearchString =
     searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
-  const isMobile = deviceSize <= DeviceSize.sm;
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * pageSize;
 
@@ -80,19 +78,12 @@ export const LastBlocks = ({
           <Skeleton />
         </SkeletonWrapper>
       )}
-      {!isMobile && !isBlocksFetching && (
-        <Table
+      {!isBlocksFetching && (
+        <ScrollableTable
           columns={getLastBlocksColumns(currentChain.network)}
           data={blocksWithTimeDifference(blocks, timestamp)}
           loading={isBlocksFetching}
           rowKey={'block_number'}
-        />
-      )}
-      {isMobile && !isBlocksFetching && (
-        <LastBlocksCardsList
-          columns={getLastBlocksColumns(currentChain.network)}
-          data={!isBlocksFetching ? blocksWithTimeDifference(blocks, timestamp) : []}
-          loading={isBlocksFetching}
         />
       )}
       <Pagination
