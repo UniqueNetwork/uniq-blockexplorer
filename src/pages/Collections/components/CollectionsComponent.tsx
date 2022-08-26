@@ -5,10 +5,10 @@ import styled from 'styled-components';
 
 import { CollectionSorting, useGraphQlCollections } from '@app/api';
 import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
+import { ScrollableTable } from '@app/components';
 
 import { CollectionsComponentProps } from '../types';
 import PaginationComponent from '../../../components/Pagination';
-import Table from '../../../components/Table';
 import { getCollectionsColumns } from './collectionsColumnsSchema';
 
 const CollectionsComponent = ({
@@ -53,7 +53,7 @@ const CollectionsComponent = ({
         </SkeletonWrapper>
       )}
       {!isCollectionsFetching && (
-        <Table
+        <ScrollableTable
           columns={getCollectionsColumns(currentChain.network, orderBy, setOrderBy)}
           data={collections || []}
           loading={isCollectionsFetching}

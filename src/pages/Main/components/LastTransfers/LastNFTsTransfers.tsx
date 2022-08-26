@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { Pagination, Stub, ScrollableTable, Table } from '@app/components';
+import { Pagination, Stub, ScrollableTable } from '@app/components';
 import {
   TokenTransaction,
   useGraphQlNftTransfers,

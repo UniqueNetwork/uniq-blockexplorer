@@ -4,7 +4,7 @@ import { Text } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { timestampFormat } from '@app/utils';
-import { useDeviceSize, DeviceSize } from '@app/hooks';
+import { useDeviceSize, DeviceSize, DeviceSizes } from '@app/hooks';
 
 import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
@@ -103,9 +103,14 @@ const GeneralInfoWrapper = styled.div`
 const GeneralInfo = styled.div`
   display: flex;
   column-gap: var(--gap);
+
   div {
     display: flex;
     column-gap: calc(var(--gap) / 4);
+  }
+
+  @media (max-width: ${DeviceSizes.sm}) {
+    flex-wrap: wrap;
   }
 `;
 

@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { useDeviceSize, DeviceSize } from '@app/hooks';
+import { ScrollableTable } from '@app/components';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import Table from '../../../components/Table';
 import { Holder, holders as gqlHolders, HolderSorting } from '../../../api/graphQL';
 import PaginationComponent from '../../../components/Pagination';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
@@ -99,7 +99,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
 
   return (
     <HolderWrapper>
-      <Table
+      <ScrollableTable
         columns={getColumns(orderBy, onOrderChange)}
         data={holders}
         loading={isHoldersFetching}

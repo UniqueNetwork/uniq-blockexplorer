@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import Table from '../../../components/Table';
+import { ScrollableTable } from '@app/components';
 
 type Event = {
   id: string;
@@ -34,7 +34,7 @@ const CollectionEventsComponent: FC<CollectionEventsComponentProps> = ({
   loading,
 }) => {
   return (
-    <Table
+    <ScrollableTable
       columns={columns}
       data={!loading ? events : []}
       loading={loading}

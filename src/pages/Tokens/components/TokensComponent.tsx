@@ -6,7 +6,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
-import { Pagination, Search, Table } from '@app/components';
+import { Pagination, Search, ScrollableTable } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -151,7 +151,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
         </Controls>
       </TopBar>
       {view === ViewType.List ? (
-        <Table
+        <ScrollableTable
           columns={tokenColumns}
           data={tokens || []}
           loading={isTokensFetching}

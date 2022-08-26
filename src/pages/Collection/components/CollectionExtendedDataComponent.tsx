@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
+import { DeviceSizes } from '@app/hooks';
 
 interface ExtendedDataComponentProps {
   collection?: Collection;
@@ -61,6 +62,12 @@ const WrapperWithBorder = styled.div`
 const DataBlockWrapper = styled.div`
   display: grid;
   grid-template-columns: 296px 1fr;
+
+  @media (max-width: ${DeviceSizes.sm}) {
+    display: flex;
+    grid-column-gap: var(--gap);
+    flex-wrap: wrap;
+  }
 `;
 
 export default CollectionExtendedDataComponent;
