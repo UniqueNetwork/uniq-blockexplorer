@@ -1,4 +1,4 @@
-import { Icon, Select } from '@unique-nft/ui-kit';
+import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import React, { FC, useCallback, useMemo, useState } from 'react';
@@ -150,23 +150,30 @@ const TokensComponent: FC<TokensComponentProps> = ({
           </ViewButtons>
         </Controls>
       </TopBar>
-      {view === ViewType.List ? (
-        <ScrollableTable
-          columns={tokenColumns}
-          data={tokens || []}
-          loading={isTokensFetching}
-          rowKey={getRowKey}
-        />
+      {isTokensFetching ? (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
       ) : (
-        <div>
-          <TokensGrid
-            chainNetwork={currentChain.network}
-            timestamp={timestamp}
-            tokens={tokens || []}
-          />
-        </div>
+        <>
+          {view === ViewType.List ? (
+            <ScrollableTable
+              columns={tokenColumns}
+              data={tokens || []}
+              loading={isTokensFetching}
+              rowKey={getRowKey}
+            />
+          ) : (
+            <div>
+              <TokensGrid
+                chainNetwork={currentChain.network}
+                timestamp={timestamp}
+                tokens={tokens || []}
+              />
+            </div>
+          )}
+        </>
       )}
-
       <Pagination
         count={tokensCount || 0}
         currentPage={currentPage}
@@ -212,6 +219,18 @@ const ViewButton = styled.div`
   margin-right: 4px;
   &:last-child {
     margin-right: 0;
+  }
+`;
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 1200px;
+    border-radius: var(--gap) !important;
   }
 `;
 

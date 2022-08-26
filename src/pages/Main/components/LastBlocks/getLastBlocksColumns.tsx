@@ -31,7 +31,11 @@ export const getLastBlocksColumns = (chainId: string) => [
   {
     dataIndex: 'total_events',
     key: 'total_events',
-    render: (value: string) => <Link to={`/${chainId}/event/${value}`}>{value}</Link>,
+    render: (value: string) => (
+      <Text size="m" weight="light">
+        {value}
+      </Text>
+    ),
     title: 'Event',
     width: 80,
   },
