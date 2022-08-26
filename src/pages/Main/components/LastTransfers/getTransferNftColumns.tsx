@@ -16,7 +16,7 @@ export const getTransferNftColumns = (chainId?: string) => [
         to={`/${chainId ? chainId + '/' : ''}tokens/${row.collection_id}/${value}`}
       >
         <LinkInner>
-          <Picture alt={value.toString()} src={row.image} />
+          <Picture alt={value.toString()} src={row.image.fullUrl} />
           {row.token_prefix} #{value}
         </LinkInner>
       </Link>
@@ -38,11 +38,13 @@ export const getTransferNftColumns = (chainId?: string) => [
   {
     dataIndex: 'collection_name',
     key: 'collection_name',
-    render: (value: string) => (
+    render: (value: string, row: any) => (
       <CollectionWrapper>
-        <Text size="m" weight="light">
-          {value}
-        </Text>
+        <Link to={`/${chainId ? chainId + '/' : ''}collections/${row.collection_id}`}>
+          <Text color="primary-500" size="m" weight="light">
+            {value}
+          </Text>
+        </Link>
       </CollectionWrapper>
     ),
     title: 'Collection',
@@ -52,9 +54,7 @@ export const getTransferNftColumns = (chainId?: string) => [
     dataIndex: 'block_index',
     key: 'block_index',
     render: (value: string) => (
-      <Text size="m" weight="light">
-        {value}
-      </Text>
+      <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>
     ),
     title: 'Extrinsic ID',
     width: 150,

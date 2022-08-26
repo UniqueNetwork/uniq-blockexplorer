@@ -97,7 +97,14 @@ const SkeletonWrapper = styled.div`
 `;
 
 const TableWrapper = styled.div`
-  && td {
-    padding: calc(var(--gap));
+  .rc-table {
+    &-tbody {
+      tr {
+        height: 73px;
+      }
+    }
+    && td {
+      padding: calc(var(--gap));
+    }
   }
 `;
