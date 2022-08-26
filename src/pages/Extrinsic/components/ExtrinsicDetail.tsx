@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { useDeviceSize, DeviceSize } from '@app/hooks';
@@ -10,22 +9,19 @@ import {
   shortcutText,
   timestampFormat,
 } from '@app/utils';
+import { Extrinsic } from '@app/api';
 
-import { extrinsic as gqlExtrinsic } from '../../../api/graphQL';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import LoadingComponent from '../../../components/LoadingComponent';
 import ChainLogo from '../../../components/ChainLogo';
 
-const ExtrinsicDetail: FC = () => {
-  const { blockIndex } = useParams();
+interface ExtrinsicDetailProps {
+  blockIndex: string;
+  extrinsic: Extrinsic;
+  index: number;
+}
 
-  const { extrinsic, isExtrinsicFetching } = gqlExtrinsic.useGraphQlExtrinsic(blockIndex);
-
+const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ blockIndex, extrinsic, index }) => {
   const deviceSize = useDeviceSize();
-
-  if (!blockIndex) return null;
-
-  if (isExtrinsicFetching) return <LoadingComponent />;
 
   const {
     amount,
@@ -43,7 +39,7 @@ const ExtrinsicDetail: FC = () => {
   return (
     <ExtrinsicWrapper>
       <div>
-        <Heading>{`Extrinsic ${blockIndex}`}</Heading>
+        <Heading>{`Extrinsic ${index}`}</Heading>
         <ExtrinsicDataWrapper>
           <Text color="grey-500">Block</Text>
           <Text>{formatBlockNumber(blockNumber)}</Text>

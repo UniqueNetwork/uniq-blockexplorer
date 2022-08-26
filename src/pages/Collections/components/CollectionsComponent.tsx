@@ -80,7 +80,7 @@ const SkeletonWrapper = styled.div`
 
   .unique-skeleton {
     width: 100%;
-    min-height: 150px;
+    min-height: 1200px;
     border-radius: var(--gap) !important;
   }
 `;
