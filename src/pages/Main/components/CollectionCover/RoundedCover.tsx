@@ -29,6 +29,7 @@ const Wrapper = styled.div`
   top: calc(100% - 46px);
   left: calc(50% - 46px);
   overflow: hidden;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
 
   img {
     width: 88px;
