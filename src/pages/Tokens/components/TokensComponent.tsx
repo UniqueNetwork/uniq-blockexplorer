@@ -98,6 +98,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
       queryParams.set('search', value);
     }
 
+    setCurrentPage(1);
     setQueryParams(queryParams);
   };
 
