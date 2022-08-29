@@ -120,7 +120,11 @@ const TokensComponent: FC<TokensComponentProps> = ({
   return (
     <>
       <TopBar>
-        <Search placeholder="NFT / collection" onSearchChange={onSearchChange} />
+        <Search
+          placeholder="NFT / collection"
+          value={searchString}
+          onSearchChange={onSearchChange}
+        />
         <Controls>
           {view === ViewType.Grid && (
             <Select

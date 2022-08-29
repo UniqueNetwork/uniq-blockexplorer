@@ -9,6 +9,7 @@ import SearchComponent from '../../components/SearchComponent';
 
 const CollectionsPage: FC = () => {
   const [queryParams, setQueryParams] = useSearchParams();
+  const searchString = queryParams.get('search') || '';
 
   const onSearchChange = (value: string) => {
     if (!value) {
@@ -24,6 +25,7 @@ const CollectionsPage: FC = () => {
     <PagePaper>
       <SearchComponent
         placeholder="Collection / account"
+        value={searchString}
         onSearchChange={onSearchChange}
       />
       <div>

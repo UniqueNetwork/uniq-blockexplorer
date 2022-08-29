@@ -8,7 +8,6 @@ import SearchComponent from '@app/components/SearchComponent';
 
 interface SearchHeaderProps {
   searchModeOn: boolean;
-  setSearchModeOn: (value: boolean) => void;
   setResultExist?: (value: boolean) => void;
   setSearchString: (searchString: string | undefined) => void;
   searchString?: string;
@@ -19,7 +18,6 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
   searchString,
   setSearchString,
   setResultExist,
-  setSearchModeOn,
 }) => {
   const { currentChain } = useApi();
   const networkColor = getChainColor(currentChain);
@@ -42,8 +40,8 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
       )}
       <SearchComponent
         placeholder={'Extrinsic / collection / NFT / account'}
-        setSearchModeOn={setSearchModeOn}
         setResultExist={setResultExist}
+        value={searchString}
         onSearchChange={setSearchString}
       />
     </Wrapper>
