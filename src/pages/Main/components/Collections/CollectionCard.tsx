@@ -7,8 +7,6 @@ import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-// TODO - move fingerPrint and clock icon to the UI kit - fix bug with colors
-import fingerPrint from '@app/images/icons/fingerPrint.svg';
 import clock from '@app/images/icons/clock.svg';
 import { timeDifference } from '@app/utils';
 
@@ -53,7 +51,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
         </CollectionNameWrapper>
         <CollectionProperties>
           <span>
-            <img alt="collection id" src={fingerPrint} />
+            <IconText>ID</IconText>
             <Text size="s" weight="light">
               {collectionId.toString()}
             </Text>
@@ -143,4 +141,11 @@ const CollectionProperties = styled.div`
   img {
     width: 13px;
   }
+`;
+
+const IconText = styled.div`
+  color: var(--grey);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
 `;
