@@ -16,7 +16,10 @@ export const getTransferNftColumns = (chainId?: string) => [
         to={`/${chainId ? chainId + '/' : ''}tokens/${row.collection_id}/${value}`}
       >
         <LinkInner>
-          <Picture alt={value.toString()} src={row.image.fullUrl} />
+          <Picture
+            alt={value.toString()}
+            src={row.image ? row.image?.fullUrl : undefined}
+          />
           {row.token_prefix} #{value}
         </LinkInner>
       </Link>

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useSearchParams } from 'react-router-dom';
 
 import { PagePaperWrapper, Stub } from '@app/components';
 
@@ -15,9 +16,23 @@ import { CoinsTransfersSearchResult } from './components/LastTransfers/CoinsTran
 import { NFTsTransfersSearchResult } from './components/LastTransfers/NFTsTransfersSearchResult';
 
 const MainPage = () => {
-  const [searchString, setSearchString] = useState<string | undefined>();
   const [searchModeOn, setSearchModeOn] = useState<boolean>(false);
   const [resultsExist, setResultExist] = useState<boolean>(false);
+
+  const [searchParams] = useSearchParams();
+  const [searchString, setSearchString] = useState<string | undefined>(
+    searchParams.get('search') || '',
+  );
+
+  useEffect(() => {
+    setSearchModeOn(!!searchString && searchString !== '');
+  }, [searchString]);
+
+  useEffect(() => {
+    if (searchParams.get('search')) {
+      setSearchString(decodeURI(searchParams.get('search') as string));
+    } else setSearchString('');
+  }, [searchParams]);
 
   return (
     <Wrapper>
@@ -25,7 +40,6 @@ const MainPage = () => {
         searchModeOn={searchModeOn}
         searchString={searchString}
         setSearchString={setSearchString}
-        setSearchModeOn={setSearchModeOn}
         setResultExist={setResultExist}
       />
       {!searchModeOn && <TokenInformation />}
