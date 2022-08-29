@@ -12,8 +12,10 @@ import PaginationComponent from '../../../components/Pagination';
 import { getCollectionsColumns } from './collectionsColumnsSchema';
 
 const CollectionsComponent = ({
+  currentPage,
   pageSize = 20,
   orderBy: defaultOrderBy = { date_of_creation: 'desc' },
+  setCurrentPage,
 }: CollectionsComponentProps) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
@@ -22,7 +24,6 @@ const CollectionsComponent = ({
   const searchString = queryParams.get('search') || '';
 
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const offset = (currentPage - 1) * pageSize;
 
   const filter = useMemo(() => {
