@@ -7,7 +7,7 @@ const extrinsicQuery = gql`
     extrinsics(
       limit: $limit
       offset: $offset
-      where: { block_number: { _eq: $block_index } }
+      where: { block_index: { _eq: $block_index } }
     ) {
       data {
         amount
