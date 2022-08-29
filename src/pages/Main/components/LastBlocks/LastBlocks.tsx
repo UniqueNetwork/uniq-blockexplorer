@@ -61,7 +61,7 @@ export const LastBlocks = ({
     setResultExist,
   ]);
 
-  if (!prettifiedBlockSearchString && searchModeOn) {
+  if (blockCount === 0 && searchModeOn) {
     return null;
   }
 
