@@ -62,7 +62,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
         </GeneralInfoWrapper>
         <CreatedAccountWrapper>
           <div>
-            <Text color="grey-500">created on ${timestampFormat(createdOn)}</Text>
+            <Text color="grey-500">created on {timestampFormat(createdOn)}</Text>
           </div>
           <OwnerAccountWrapper>
             <AccountLinkComponent

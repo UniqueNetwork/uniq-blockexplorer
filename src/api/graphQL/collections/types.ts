@@ -42,7 +42,7 @@ export interface CollectionsVariables {
   limit: number;
   offset: number;
   where?: Record<string, unknown>;
-  orderBy?: Record<string, 'asc' | 'desc'>;
+  orderBy?: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>;
 }
 
 export interface CollectionsData {
@@ -54,7 +54,7 @@ export interface CollectionsData {
 }
 
 export type CollectionSorting = {
-  [P in keyof Collection]?: 'asc' | 'desc';
+  [P in keyof Collection]?: 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last';
 };
 
 export type useGraphQlCollectionsProps = {

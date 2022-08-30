@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
 import { account as gqlAccount } from '@app/api/graphQL';
-import { Avatar, LoadingComponent } from '@app/components';
+import { CoverContainer, IdentityIcon, LoadingComponent } from '@app/components';
 import { useDeviceSize, DeviceSize } from '@app/hooks';
 
 import { formatAmount, shortcutText } from '../../../utils/textUtils';
@@ -32,9 +32,9 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
 
   return (
     <AccountWrapper>
-      <div>
-        <Avatar size="large" value={accountAddress} />
-      </div>
+      <CoverContainer>
+        <IdentityIcon copyable address={accountAddress} size="72" />
+      </CoverContainer>
       <div>
         <Text size="l">Account name</Text>
         <h2>
