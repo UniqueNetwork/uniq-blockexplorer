@@ -195,6 +195,10 @@ const TopBar = styled.div`
   .unique-select .select-wrapper > svg {
     z-index: unset;
   }
+
+  > div:first-of-type {
+    margin-bottom: calc(var(--gap) * 1.5);
+  }
   @media (max-width: 767px) {
     margin-bottom: 24px;
   }
