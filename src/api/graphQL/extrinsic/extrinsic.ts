@@ -1,14 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 
-import { ExtrinsicData, ExtrinsicVariables } from './types';
+import { ExtrinsicData, ExtrinsicVariables, ExtrinsicWhereParams } from './types';
 
 const extrinsicQuery = gql`
-  query getExtrinsic($limit: Int, $offset: Int, $block_index: String!) {
-    extrinsics(
-      limit: $limit
-      offset: $offset
-      where: { block_index: { _eq: $block_index } }
-    ) {
+  query getExtrinsic($limit: Int, $offset: Int, $where: ExtrinsicWhereParams) {
+    extrinsics(limit: $limit, offset: $offset, where: $where) {
       data {
         amount
         block_index
@@ -32,14 +28,20 @@ const extrinsicQuery = gql`
 
 export { extrinsicQuery };
 
-export const useGraphQlExtrinsic = (blockIndex?: string, limit = 1) => {
+interface UseGraphQlExtrinsicProps {
+  blockIndex?: string;
+  limit: number;
+  where: ExtrinsicWhereParams;
+}
+
+export const useGraphQlExtrinsic = ({ limit, where }: UseGraphQlExtrinsicProps) => {
   const { data, loading: isExtrinsicFetching } = useQuery<
     ExtrinsicData,
     ExtrinsicVariables
   >(extrinsicQuery, {
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    variables: { block_index: blockIndex || '', limit, offset: 0 },
+    variables: { limit, offset: 0, where },
   });
 
   return {
