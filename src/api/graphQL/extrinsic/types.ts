@@ -1,7 +1,12 @@
+export interface ExtrinsicWhereParams {
+  block_index?: any;
+  block_number?: any;
+}
+
 export interface ExtrinsicVariables {
   limit: number;
   offset: number;
-  where: string;
+  where: ExtrinsicWhereParams;
 }
 
 export interface Extrinsic {

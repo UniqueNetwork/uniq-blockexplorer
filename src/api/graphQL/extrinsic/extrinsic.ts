@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 
-import { ExtrinsicData, ExtrinsicVariables } from './types';
+import { ExtrinsicData, ExtrinsicVariables, ExtrinsicWhereParams } from './types';
 
 const extrinsicQuery = gql`
   query getExtrinsic($limit: Int, $offset: Int, $where: ExtrinsicWhereParams) {
@@ -31,7 +31,7 @@ export { extrinsicQuery };
 interface UseGraphQlExtrinsicProps {
   blockIndex?: string;
   limit: number;
-  where: string;
+  where: ExtrinsicWhereParams;
 }
 
 export const useGraphQlExtrinsic = ({ limit, where }: UseGraphQlExtrinsicProps) => {
