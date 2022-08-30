@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { useGraphQlCollection } from '@app/api';
-import { useCheckImageExists } from '@app/hooks';
+import { useCheckImageExists, useScrollToTop } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { CoverContainer, IdentityIcon } from '@app/components';
 
@@ -18,6 +18,7 @@ import PagePaper from '../../components/PagePaper';
 const detailTabs = ['Basic data', 'Extended'];
 
 const CollectionPage: FC = () => {
+  useScrollToTop();
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
   const { collectionId } = useParams<{ collectionId: string }>();
   const { collection } = useGraphQlCollection(Number(collectionId));
@@ -37,10 +38,8 @@ const CollectionPage: FC = () => {
       <PagePaper>
         <CollectionTitle>
           {collectionId && (
-            <CoverContainer>
-              {imgSrc ? (
-                <img alt={`collection ${collectionId ?? ''} cover`} src={imgSrc} />
-              ) : (
+            <CoverContainer src={imgSrc}>
+              {!imgSrc && (
                 <IdentityIcon
                   address={`collection ${collectionId ?? ''} cover`}
                   size="84"
@@ -81,6 +80,7 @@ const CollectionTitle = styled.div`
   align-items: center;
   column-gap: var(--gap);
   margin-bottom: calc(var(--gap) * 2);
+
   h2 {
     margin-bottom: 0 !important;
     word-break: break-word;

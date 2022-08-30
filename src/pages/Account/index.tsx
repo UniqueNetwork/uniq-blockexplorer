@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Heading, Tabs } from '@unique-nft/ui-kit';
 
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
-import { useApi } from '@app/hooks';
+import { useApi, useScrollToTop } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { LastTransfers } from '@app/pages/Main/components';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -18,6 +18,7 @@ import PagePaper from '../../components/PagePaper';
 const assetsTabs = ['Collections', 'NFTs'];
 
 const AccountPage = () => {
+  useScrollToTop();
   const { accountId } = useParams();
   // assume that we got the substrate address
   let substrateAddress = accountId;

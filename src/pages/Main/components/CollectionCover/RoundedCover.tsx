@@ -9,17 +9,21 @@ interface RoundedCoverProps {
 }
 
 export const RoundedCover: VFC<RoundedCoverProps> = ({ collectionId, coverSrc }) => (
-  <Wrapper>
-    {coverSrc ? (
-      <img alt={`collection ${collectionId ?? ''} cover`} src={coverSrc} />
-    ) : (
+  <Wrapper src={coverSrc}>
+    {!coverSrc && (
       <IdentityIcon address={`collection ${collectionId ?? ''} cover`} size="84" />
     )}
   </Wrapper>
 );
 
-const Wrapper = styled.div`
+const Wrapper = styled.div.attrs<{ src?: string }>((props) => ({
+  src: props.src,
+}))<{ src?: string }>`
+  background-image: ${(props) => (props.src ? `url(${props.src})` : 'none')};
   background-color: white;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   border: 2px solid white;
   box-sizing: border-box;
   border-radius: 48px;
@@ -29,18 +33,7 @@ const Wrapper = styled.div`
   top: calc(100% - 46px);
   left: calc(50% - 46px);
   overflow: hidden;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
-
-  img {
-    width: 88px;
-    height: 88px;
-    position: absolute;
-
-    @media (max-width: 767px) {
-      width: 60px;
-      height: 60px;
-    }
-  }
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   @media (max-width: 767px) {
     width: 64px;
