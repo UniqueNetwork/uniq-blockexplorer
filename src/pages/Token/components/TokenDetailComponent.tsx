@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Token } from '@app/api';
-import { Avatar, LoadingComponent, Picture } from '@app/components';
-import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
+import { LoadingComponent, Picture } from '@app/components';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, timestampFormat } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
@@ -38,15 +37,13 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_prefix: prefix,
   } = token;
 
-  const imageUrl = useCheckImageExists(image.fullUrl);
-
   if (loading) return <LoadingComponent />;
 
   const attributesParsed = convertAttributesToView(attributes);
 
   return (
     <Wrapper>
-      <TokenPicture alt={`${prefix}-${id}`} src={imageUrl} />
+      <TokenPicture alt={`${prefix}-${id}`} src={image.fullUrl} />
       <div>
         <Heading size="2">{`${prefix} #${id}`}</Heading>
         <TokenInfo>
@@ -79,10 +76,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
             to={`/${currentChain.network}/collections/${collectionId}`}
             onClick={onCollectionClick}
           >
-            <Avatar
-              size="small"
-              src={getCoverURLFromCollection(token.collection_cover)}
-            />
+            <Picture alt={`token ${id}`} src={token.collection_cover} />
             <div>
               <Heading size="4">{name}</Heading>
               <div>
@@ -117,6 +111,7 @@ const TokenPicture = styled(Picture)`
   height: 536px;
   border-radius: 8px;
   overflow: hidden;
+
   svg {
     width: 100%;
   }
@@ -125,10 +120,12 @@ const TokenPicture = styled(Picture)`
     width: 326px;
     height: 326px;
   }
+
   @media (max-width: 768px) {
     width: 224px;
     height: 224px;
   }
+
   @media (max-width: 568px) {
     width: 100%;
     height: 100%;
@@ -143,6 +140,7 @@ const TokenInfo = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);
+
   span {
     display: flex;
     align-items: center;
@@ -176,14 +174,16 @@ const CollectionInfoWrapper = styled.div`
 const CollectionLink = styled(Link)`
   display: flex;
   column-gap: var(--gap);
+
   &:hover {
     text-decoration: none;
     h4 {
       color: var(--primary-500);
     }
   }
-  svg {
-    min-width: 40px;
+
+  .picture {
+    width: 40px;
   }
 `;
 

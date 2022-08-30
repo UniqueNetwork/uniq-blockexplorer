@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 export const useCheckImageExists = (imageSrc?: string | null) => {
   const [imgSrc, setImgSrc] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -9,9 +10,20 @@ export const useCheckImageExists = (imageSrc?: string | null) => {
     if (imageSrc) {
       const image = new Image();
 
-      image.onload = () => isMounted && setImgSrc(imageSrc);
+      image.onload = () => {
+        if (isMounted) {
+          setImgSrc(imageSrc);
+          setLoading(false);
+        }
+      };
+
+      image.onerror = () => {
+        setLoading(false);
+      };
 
       image.src = imageSrc;
+    } else {
+      setLoading(false);
     }
 
     return () => {
@@ -19,5 +31,8 @@ export const useCheckImageExists = (imageSrc?: string | null) => {
     };
   }, [imageSrc]);
 
-  return imgSrc;
+  return {
+    imgSrc,
+    loading,
+  };
 };

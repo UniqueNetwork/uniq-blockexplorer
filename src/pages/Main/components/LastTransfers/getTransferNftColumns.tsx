@@ -83,7 +83,7 @@ const LinkInner = styled.div`
   grid-column-gap: calc(var(--gap) / 2);
   align-items: center;
 
-  svg {
+  .picture {
     height: 40px;
     width: 40px;
   }
