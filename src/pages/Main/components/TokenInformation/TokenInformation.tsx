@@ -138,12 +138,30 @@ const SkeletonWrapper = styled(PagePaperWrapper)`
     }
   }
 
-  @media ${deviceWidth.smallerThan.sm} {
-    min-height: 316px;
-    max-height: 316px;
+  @media ${deviceWidth.smallerThan.md} {
+    min-height: 177px;
+    max-height: 177px;
 
     .unique-skeleton {
-      height: 316px !important;
+      height: 177px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    min-height: 269px;
+    max-height: 269px;
+
+    .unique-skeleton {
+      height: 269px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.xs} {
+    min-height: 287px;
+    max-height: 287px;
+
+    .unique-skeleton {
+      height: 287px !important;
     }
   }
 `;
