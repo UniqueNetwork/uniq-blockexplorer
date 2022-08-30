@@ -11,6 +11,7 @@ export const blocksWithTimeDifference = (
 
   return blocks.map((block: LastBlock) => ({
     ...block,
+    block_with_index: `${block.block_number}-${block.total_extrinsics}`,
     time_difference: timeDifference(block.timestamp, timestamp),
   }));
 };

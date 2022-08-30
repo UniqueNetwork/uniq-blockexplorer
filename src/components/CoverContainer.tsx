@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 
-export const CoverContainer = styled.div`
+export const CoverContainer = styled.div.attrs<{ src?: string }>((props) => ({
+  src: props.src,
+}))<{ src?: string }>`
+  background-image: ${(props) => (props.src ? `url(${props.src})` : 'none')};
   background-color: white;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   border: 2px solid white;
   box-sizing: border-box;
   border-radius: 48px;
