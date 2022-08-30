@@ -1,7 +1,8 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSearchParams } from 'react-router-dom';
 
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -20,7 +21,9 @@ const SearchComponent: FC<SearchComponentProps> = ({
   setResultExist,
   value,
 }) => {
-  const [searchString, setSearchString] = useState<string | undefined>(value);
+  const [queryParams, setQueryParams] = useSearchParams();
+  const searchString = queryParams.get('search') || '';
+  const [inputValue, setInputValue] = useState<string | undefined>(searchString);
   const { pathname } = useLocation();
 
   const { currentChain } = useApi();
@@ -28,8 +31,10 @@ const SearchComponent: FC<SearchComponentProps> = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    setSearchString(value);
-  }, [value]);
+    if (queryParams.get('search')) {
+      setInputValue(decodeURI(queryParams.get('search') as string));
+    } else setInputValue('');
+  }, [queryParams]);
 
   const onSearch = useCallback(() => {
     if (pathname.includes('tokens')) {
@@ -44,31 +49,36 @@ const SearchComponent: FC<SearchComponentProps> = ({
 
     // ethers address or substrate address
     if (
-      /0x[0-9A-Fa-f]{40}/g.test(searchString || '') ||
-      /^\w{48}\w*$/.test(searchString || '')
+      /0x[0-9A-Fa-f]{40}/g.test(inputValue || '') ||
+      /^\w{48}\w*$/.test(inputValue || '')
     ) {
-      navigate(`/${currentChain.network}/account/${searchString || ''}`);
+      navigate(`/${currentChain.network}/account/${inputValue || ''}`);
 
       return;
     }
 
     //temporary for search page
-    if (!!searchString && searchString !== '' && setResultExist) {
+    if (!!inputValue && inputValue !== '' && setResultExist) {
       setResultExist(false);
     }
-    if (searchString) {
-      navigate({
-        pathname: `/${currentChain.network}`,
-        search: `?${createSearchParams([['search', `${searchString}`]])}`,
-      });
+    if (inputValue) {
+      queryParams.set('search', inputValue);
     } else {
-      navigate({
-        pathname: `/${currentChain.network}`,
-      });
+      queryParams.delete('search');
     }
+    setQueryParams(queryParams);
 
-    onSearchChange(searchString ? searchString.trim() : searchString);
-  }, [currentChain.network, navigate, onSearchChange, pathname, searchString]);
+    onSearchChange(inputValue ? inputValue.trim() : inputValue);
+  }, [
+    pathname,
+    inputValue,
+    setResultExist,
+    setQueryParams,
+    queryParams,
+    onSearchChange,
+    navigate,
+    currentChain.network,
+  ]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {
@@ -79,9 +89,9 @@ const SearchComponent: FC<SearchComponentProps> = ({
 
   const onChangeSearchString = useCallback(
     (value: string | undefined) => {
-      setSearchString(value?.toString() || '');
+      setInputValue(value?.toString() || '');
     },
-    [setSearchString],
+    [setInputValue],
   );
 
   return (
@@ -89,7 +99,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
       <SearchInput
         iconLeft={{ name: 'magnify', size: 18 }}
         placeholder={placeholder}
-        value={searchString}
+        value={inputValue}
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}
       />

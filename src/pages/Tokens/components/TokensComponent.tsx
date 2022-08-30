@@ -1,7 +1,7 @@
 import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -49,7 +49,9 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
   const [queryParams, setQueryParams] = useSearchParams();
-  const searchString = queryParams.get('search') || '';
+  const [searchString, setSearchString] = useState<string | undefined>(
+    queryParams.get('search') || '',
+  );
   const { accountId, collectionId } = useParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
@@ -66,6 +68,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
+
+  useEffect(() => {
+    if (queryParams.get('search')) {
+      setSearchString(decodeURI(queryParams.get('search') as string));
+    } else setSearchString('');
+  }, [queryParams]);
 
   const selectFilter = useCallback(
     (selected) => {
@@ -92,14 +100,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
   }, [setView]);
 
   const onSearchChange = (value: string) => {
-    if (!value) {
-      queryParams.delete('search');
-    } else {
-      queryParams.set('search', value);
-    }
-
+    setSearchString(value);
     setCurrentPage(1);
-    setQueryParams(queryParams);
   };
 
   const tokenColumns = useMemo(() => {

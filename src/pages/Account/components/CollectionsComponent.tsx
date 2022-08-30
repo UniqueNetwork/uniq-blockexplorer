@@ -1,13 +1,14 @@
-import React, { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { useApi } from '@app/hooks';
 import { Collection, useGraphQlCollections } from '@app/api/graphQL';
+import { Search } from '@app/components';
 
 import CollectionCard from '../../../components/CollectionCard';
-import SearchComponent from '../../../components/SearchComponent';
 
 interface CollectionsComponentProps {
   accountId: string;
@@ -18,8 +19,10 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  // TODO - fix search for all pages and remove this
-  const [searchString, setSearchString] = useState<string | undefined>();
+  const [queryParams] = useSearchParams();
+  const [searchString, setSearchString] = useState<string | undefined>(
+    queryParams.get('search') || '',
+  );
 
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
@@ -33,11 +36,18 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
   };
 
+  useEffect(() => {
+    if (queryParams.get('search')) {
+      setSearchString(decodeURI(queryParams.get('search') as string));
+    } else setSearchString('');
+  }, [queryParams]);
+
   return (
     <>
       <ControlsWrapper>
-        <SearchComponent
+        <Search
           placeholder={'NFT / collection'}
+          value={searchString}
           onSearchChange={setSearchString}
         />
       </ControlsWrapper>
