@@ -11,10 +11,11 @@ const DEFAULT_EXTRINSIC_LIMIT = 10;
 
 const ExtrinsicPage = () => {
   const { blockIndex } = useParams();
-  const { extrinsics, isExtrinsicFetching } = gqlExtrinsic.useGraphQlExtrinsic(
+  const { extrinsics, isExtrinsicFetching } = gqlExtrinsic.useGraphQlExtrinsic({
     blockIndex,
-    DEFAULT_EXTRINSIC_LIMIT,
-  );
+    limit: DEFAULT_EXTRINSIC_LIMIT,
+    where: `where: { block_index: { _eq: ${blockIndex} } }`,
+  });
 
   if (!blockIndex) return null;
 

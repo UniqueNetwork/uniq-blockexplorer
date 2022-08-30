@@ -1,7 +1,7 @@
 export interface ExtrinsicVariables {
-  block_index: string;
   limit: number;
   offset: number;
+  where: string;
 }
 
 export interface Extrinsic {
