@@ -62,7 +62,7 @@ export const Tokens: VFC<TokensProps> = ({
     (): TokenSorting =>
       selectedSort.id === 'new'
         ? { date_of_creation: 'desc' }
-        : { transfers_count: 'desc' },
+        : { transfers_count: 'desc_nulls_last' },
     [selectedSort.id],
   );
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getImageURL, timestampTableFormat } from '@app/utils';
+import { timestampTableFormat } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import { Token, TokenSorting } from '../../../api/graphQL';

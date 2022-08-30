@@ -8,7 +8,7 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { useGraphQlCollection } from '@app/api';
 import { useCheckImageExists } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import { IdentityIcon } from '@app/components';
+import { CoverContainer, IdentityIcon } from '@app/components';
 
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
@@ -21,7 +21,7 @@ const CollectionPage: FC = () => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
   const { collectionId } = useParams<{ collectionId: string }>();
   const { collection } = useGraphQlCollection(Number(collectionId));
-  const imgSrc = useCheckImageExists(
+  const { imgSrc } = useCheckImageExists(
     getCoverURLFromCollection(collection?.collection_cover),
   );
 
@@ -84,36 +84,6 @@ const CollectionTitle = styled.div`
   h2 {
     margin-bottom: 0 !important;
     word-break: break-word;
-  }
-`;
-
-const CoverContainer = styled.div`
-  background-color: white;
-  border: 2px solid white;
-  box-sizing: border-box;
-  border-radius: 48px;
-  height: 88px;
-  width: 88px;
-  top: calc(100% - 46px);
-  left: calc(50% - 46px);
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-
-  svg {
-    width: 88px;
-    height: 88px;
-
-    @media (max-width: 767px) {
-      width: 60px;
-      height: 60px;
-    }
-  }
-
-  @media (max-width: 767px) {
-    width: 64px;
-    height: 64px;
-    top: calc(100% - 32px);
-    left: calc(50% - 32px);
   }
 `;
 
