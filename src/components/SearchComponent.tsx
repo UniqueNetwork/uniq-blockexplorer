@@ -1,6 +1,6 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { FC, useCallback, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useApi } from '@app/hooks';
@@ -11,11 +11,13 @@ interface SearchComponentProps {
   placeholder?: string;
   value?: string;
   onSearchChange(value: string | undefined): void;
+  setResultExist?: (value: boolean) => void;
 }
 
 const SearchComponent: FC<SearchComponentProps> = ({
   onSearchChange,
   placeholder,
+  setResultExist,
   value,
 }) => {
   const [searchString, setSearchString] = useState<string | undefined>(value);
@@ -24,6 +26,10 @@ const SearchComponent: FC<SearchComponentProps> = ({
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setSearchString(value);
+  }, [value]);
 
   const onSearch = useCallback(() => {
     if (pathname.includes('tokens')) {
@@ -46,10 +52,19 @@ const SearchComponent: FC<SearchComponentProps> = ({
       return;
     }
 
-    if (/^\d+-\d+$/.test(searchString || '')) {
-      navigate(`/${currentChain.network}/extrinsic/${searchString || ''}`);
-
-      return;
+    //temporary for search page
+    if (!!searchString && searchString !== '' && setResultExist) {
+      setResultExist(false);
+    }
+    if (searchString) {
+      navigate({
+        pathname: `/${currentChain.network}`,
+        search: `?${createSearchParams([['search', `${searchString}`]])}`,
+      });
+    } else {
+      navigate({
+        pathname: `/${currentChain.network}`,
+      });
     }
 
     onSearchChange(searchString ? searchString.trim() : searchString);

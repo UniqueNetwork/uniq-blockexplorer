@@ -1,11 +1,9 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
 import RCTable from 'rc-table';
 import styled from 'styled-components';
 
 import LoadingComponent from './LoadingComponent';
-import { MobileTable } from './MobileTable';
-import { DeviceSize, useDeviceSize } from '../hooks/useDeviceSize';
 
 interface TableProps<RecordType = DefaultRecordType> {
   hideMobile?: boolean;
@@ -15,34 +13,49 @@ interface TableProps<RecordType = DefaultRecordType> {
   rowKey?: string | GetRowKey<RecordType>;
 }
 
-const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
-  const deviceSize = useDeviceSize();
-  const isMobile = deviceSize <= DeviceSize.sm;
+const TABLE_GAP = 16;
+
+const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
+  const minTableWidth = columns?.reduce((accum, item) => {
+    return accum + Number(item.width);
+  }, 0);
+  const paddings = columns!.length * TABLE_GAP * 2;
+  const margins = columns!.length * (TABLE_GAP / 2);
+  const minScreenWidthForTable = (minTableWidth || 500) + paddings + margins;
+  const scrollExist = window.innerWidth < minScreenWidthForTable;
 
   return (
-    <TableWrapper>
-      {!isMobile && (
+    <ScrollWrapper>
+      <TableWrapper minScreenWidthForTable={minScreenWidthForTable}>
         <RCTable
           columns={columns}
           data={data || []}
           emptyText={'No data'}
           rowKey={rowKey}
         />
-      )}
-      {isMobile && (
-        <MobileTable
-          columns={columns}
-          data={!loading ? data : []}
-          loading={loading}
-          rowKey={rowKey}
-        />
-      )}
-      {loading && <TableLoading />}
-    </TableWrapper>
+        {loading && <TableLoading />}
+      </TableWrapper>
+      {scrollExist && <Mute />}
+    </ScrollWrapper>
   );
 };
 
-const TableWrapper = styled.div`
+const ScrollWrapper = styled.div`
+  position: relative;
+`;
+
+const Mute = styled.div`
+  position: absolute;
+  width: 48px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background: linear-gradient(270deg, #ffffff 10.61%, rgba(255, 255, 255, 0) 100%);
+`;
+
+const TableWrapper = styled.div.attrs<{ minScreenWidthForTable: number }>((props) => ({
+  minScreenWidthForTable: props.minScreenWidthForTable,
+}))<{ minScreenWidthForTable: number }>`
   position: relative;
 
   .rc-table {
@@ -89,9 +102,24 @@ const TableWrapper = styled.div`
     }
   }
 
-  @media (max-width: 767px) {
-    .rc-table {
-      display: none;
+  @media (max-width: ${(props) => props.minScreenWidthForTable}px) {
+    overflow: auto;
+
+    table {
+      min-width: ${(props) => props.minScreenWidthForTable}px;
+      display: table;
+      overflow-x: auto;
+
+      tr > th:first-of-type,
+      tr > td:first-of-type {
+        position: sticky;
+        left: 0;
+        background-color: var(--blue-gray);
+      }
+
+      tr > td:first-of-type {
+        background-color: white;
+      }
     }
   }
 `;
@@ -106,4 +134,4 @@ const TableLoading = styled(LoadingComponent)`
   background-color: rgba(255, 255, 255, 0.7);
 `;
 
-export default Table;
+export default ScrollableTable;

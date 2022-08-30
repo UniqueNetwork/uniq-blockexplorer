@@ -16,6 +16,7 @@ const collectionsQuery = gql`
   ) {
     collections(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
+        attributes_schema
         actions_count
         collection_cover
         collection_id
@@ -124,6 +125,7 @@ export const useGraphQlCollection = (collectionId: number) => {
     collection: data?.collections.data[0] || undefined,
     fetchCollectionsError,
     isCollectionFetching,
+    collectionsCount: data?.collections.count,
   };
 };
 

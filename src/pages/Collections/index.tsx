@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,6 +9,8 @@ import SearchComponent from '../../components/SearchComponent';
 
 const CollectionsPage: FC = () => {
   const [queryParams, setQueryParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const searchString = queryParams.get('search') || '';
 
   const onSearchChange = (value: string) => {
     if (!value) {
@@ -17,6 +19,7 @@ const CollectionsPage: FC = () => {
       queryParams.set('search', value);
     }
 
+    setCurrentPage(1);
     setQueryParams(queryParams);
   };
 
@@ -24,10 +27,11 @@ const CollectionsPage: FC = () => {
     <PagePaper>
       <SearchComponent
         placeholder="Collection / account"
+        value={searchString}
         onSearchChange={onSearchChange}
       />
       <div>
-        <CollectionsComponent />
+        <CollectionsComponent currentPage={currentPage} setCurrentPage={setCurrentPage} />
       </div>
     </PagePaper>
   );

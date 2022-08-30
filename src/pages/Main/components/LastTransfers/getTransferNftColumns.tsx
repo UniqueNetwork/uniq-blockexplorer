@@ -16,13 +16,16 @@ export const getTransferNftColumns = (chainId?: string) => [
         to={`/${chainId ? chainId + '/' : ''}tokens/${row.collection_id}/${value}`}
       >
         <LinkInner>
-          <Picture alt={value.toString()} src={row.image} />
+          <Picture
+            alt={value.toString()}
+            src={row.image ? row.image?.fullUrl : undefined}
+          />
           {row.token_prefix} #{value}
         </LinkInner>
       </Link>
     ),
     title: 'NFT',
-    width: 100,
+    width: 160,
   },
   {
     dataIndex: 'time_difference',
@@ -33,45 +36,45 @@ export const getTransferNftColumns = (chainId?: string) => [
       </Text>
     ),
     title: 'Age',
-    width: 80,
+    width: 150,
   },
   {
     dataIndex: 'collection_name',
     key: 'collection_name',
-    render: (value: string) => (
+    render: (value: string, row: any) => (
       <CollectionWrapper>
-        <Text size="m" weight="light">
-          {value}
-        </Text>
+        <Link to={`/${chainId ? chainId + '/' : ''}collections/${row.collection_id}`}>
+          <Text color="primary-500" size="m" weight="light">
+            {value}
+          </Text>
+        </Link>
       </CollectionWrapper>
     ),
     title: 'Collection',
-    width: 100,
+    width: 150,
   },
   {
     dataIndex: 'block_index',
     key: 'block_index',
     render: (value: string) => (
-      <Text size="m" weight="light">
-        {value}
-      </Text>
+      <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>
     ),
     title: 'Extrinsic ID',
-    width: 80,
+    width: 150,
   },
   {
     dataIndex: 'owner_normalized',
     key: 'owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'From',
-    width: 120,
+    width: 180,
   },
   {
     dataIndex: 'to_owner_normalized',
     key: 'to_owner_normalized',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'To',
-    width: 120,
+    width: 180,
   },
 ];
 
@@ -88,7 +91,7 @@ const LinkInner = styled.div`
 
 const CollectionWrapper = styled.div`
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

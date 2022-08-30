@@ -14,16 +14,15 @@ const extrinsicQuery = gql`
         block_index
         block_number
         fee
-        hash
-        success
-        timestamp
         from_owner
         from_owner_normalized
-        to_owner
-        to_owner_normalized
+        hash
         method
         section
         success
+        timestamp
+        to_owner
+        to_owner_normalized
       }
       count
       timestamp
@@ -33,15 +32,20 @@ const extrinsicQuery = gql`
 
 export { extrinsicQuery };
 
-export const useGraphQlExtrinsic = (blockIndex?: string) => {
+export const useGraphQlExtrinsic = (blockIndex?: string, limit = 1) => {
   const { data, loading: isExtrinsicFetching } = useQuery<
     ExtrinsicData,
     ExtrinsicVariables
   >(extrinsicQuery, {
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    variables: { block_index: blockIndex || '', limit: 1, offset: 0 },
+    variables: { block_index: blockIndex || '', limit, offset: 0 },
   });
 
-  return { extrinsic: data?.extrinsics.data[0], isExtrinsicFetching };
+  return {
+    count: data?.extrinsics.count,
+    extrinsics: data?.extrinsics.data,
+    isExtrinsicFetching,
+    timestamp: data?.extrinsics.timestamp,
+  };
 };

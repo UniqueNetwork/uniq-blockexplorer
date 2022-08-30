@@ -1,9 +1,10 @@
-import React, { useCallback, useState, useMemo, VFC } from 'react';
+import { useEffect, useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
+import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
 
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import { Header } from '@app/styles/styled-components';
 import { PagePaperWrapper } from '@app/components';
 import {
   CollectionSorting,
@@ -12,17 +13,22 @@ import {
 } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
-import LoadingComponent from '@app/components/LoadingComponent';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { CollectionCard } from './CollectionCard';
 import { collectionsOptions } from './collectionsOptions';
 
 interface CollectionsProps {
+  searchModeOn: boolean;
   searchString?: string;
+  setResultExist?: (val: boolean) => void;
 }
 
-export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
+export const Collections: VFC<CollectionsProps> = ({
+  searchModeOn,
+  searchString,
+  setResultExist,
+}) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
@@ -45,11 +51,23 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     return 4;
   }, [deviceSize]);
 
-  const { collections, isCollectionsFetching, timestamp } = useGraphQlCollections({
-    orderBy,
-    pageSize,
-    searchString,
-  });
+  const { collections, collectionsCount, isCollectionsFetching, timestamp } =
+    useGraphQlCollections({
+      orderBy,
+      pageSize,
+      searchString,
+    });
+
+  useEffect(() => {
+    if (
+      searchModeOn &&
+      !isCollectionsFetching &&
+      setResultExist &&
+      !!collections?.length
+    ) {
+      setResultExist(true);
+    }
+  }, [collections, isCollectionsFetching, setResultExist, searchModeOn]);
 
   const collectionIds = collections?.map((collection) => collection.collection_id);
   const filter = {
@@ -84,46 +102,100 @@ export const Collections: VFC<CollectionsProps> = ({ searchString }) => {
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
     navigate(navigateTo);
   }, [currentChain, navigate, searchString]);
+  const [showButton, setShowButton] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (collectionsCount > pageSize) {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
+  }, [collectionsCount, pageSize, setShowButton]);
 
   if (!collections.length) return null;
 
   return (
     <Wrapper>
-      <HeaderWithDropdown
-        options={collectionsOptions}
-        selectedSort={selectedSort}
-        setSelectedSort={setSelectedSort}
-        title="Collections"
-      />
-      <CollectionsList>
-        {isCollectionsFetching && <LoadingComponent />}
-        {collectionsWithTokenCover.map((collection) => (
-          <CollectionCard
-            key={`collection-${collection.collection_id}`}
-            timestamp={timestamp}
-            {...collection}
-          />
-        ))}
-      </CollectionsList>
-      <Button
-        iconRight={{
-          color: 'white',
-          name: 'arrow-right',
-          size: 10,
-        }}
-        role="primary"
-        title="See all"
-        onClick={onClick}
-      />
+      {searchModeOn ? (
+        <StyledHeader size="2">Collections</StyledHeader>
+      ) : (
+        <HeaderWithDropdown
+          options={collectionsOptions}
+          selectedSort={selectedSort}
+          setSelectedSort={setSelectedSort}
+          title="Collections"
+        />
+      )}
+      {isCollectionsFetching ? (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
+      ) : (
+        <CollectionsList>
+          {collectionsWithTokenCover.map((collection) => (
+            <CollectionCard
+              key={`collection-${collection.collection_id}`}
+              timestamp={timestamp}
+              {...collection}
+            />
+          ))}
+        </CollectionsList>
+      )}
+      {showButton && (
+        <Button
+          iconRight={{
+            color: 'white',
+            name: 'arrow-right',
+            size: 10,
+          }}
+          role="primary"
+          title="See all"
+          onClick={onClick}
+        />
+      )}
     </Wrapper>
   );
 };
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 536px;
+    border-radius: var(--gap) !important;
+  }
+
+  @media ${deviceWidth.smallerThan.md} {
+    .unique-skeleton {
+      width: 100%;
+      min-height: 420px;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    .unique-skeleton {
+      width: 100%;
+      min-height: 820px;
+    }
+  }
+`;
 
 const Wrapper = styled(PagePaperWrapper)`
   @media (max-width: 767px) {
     button.unique-button {
       width: 100%;
     }
+  }
+`;
+
+const StyledHeader = styled(Header)`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
   }
 `;
 

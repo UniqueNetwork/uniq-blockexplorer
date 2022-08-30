@@ -1,4 +1,4 @@
-import { Icon, Select } from '@unique-nft/ui-kit';
+import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import React, { FC, useCallback, useMemo, useState } from 'react';
@@ -6,7 +6,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
-import { Pagination, Search, Table } from '@app/components';
+import { Pagination, Search, ScrollableTable } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -98,6 +98,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
       queryParams.set('search', value);
     }
 
+    setCurrentPage(1);
     setQueryParams(queryParams);
   };
 
@@ -120,7 +121,11 @@ const TokensComponent: FC<TokensComponentProps> = ({
   return (
     <>
       <TopBar>
-        <Search placeholder="NFT / collection" onSearchChange={onSearchChange} />
+        <Search
+          placeholder="NFT / collection"
+          value={searchString}
+          onSearchChange={onSearchChange}
+        />
         <Controls>
           {view === ViewType.Grid && (
             <Select
@@ -150,28 +155,35 @@ const TokensComponent: FC<TokensComponentProps> = ({
           </ViewButtons>
         </Controls>
       </TopBar>
-      {view === ViewType.List ? (
-        <Table
-          columns={tokenColumns}
-          data={tokens || []}
-          loading={isTokensFetching}
-          rowKey={getRowKey}
-        />
+      {isTokensFetching ? (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
       ) : (
-        <div>
-          <TokensGrid
-            chainNetwork={currentChain.network}
-            timestamp={timestamp}
-            tokens={tokens || []}
-          />
-        </div>
+        <>
+          {view === ViewType.List ? (
+            <ScrollableTable
+              columns={tokenColumns}
+              data={tokens || []}
+              loading={isTokensFetching}
+              rowKey={getRowKey}
+            />
+          ) : (
+            <div>
+              <TokensGrid
+                chainNetwork={currentChain.network}
+                timestamp={timestamp}
+                tokens={tokens || []}
+              />
+            </div>
+          )}
+        </>
       )}
-
       <Pagination
         count={tokensCount || 0}
         currentPage={currentPage}
         pageSize={pageSize}
-        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />
     </>
@@ -212,6 +224,18 @@ const ViewButton = styled.div`
   margin-right: 4px;
   &:last-child {
     margin-right: 0;
+  }
+`;
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 1200px;
+    border-radius: var(--gap) !important;
   }
 `;
 

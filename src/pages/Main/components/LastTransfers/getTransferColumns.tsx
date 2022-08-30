@@ -12,7 +12,7 @@ export const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
       <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>
     ),
     title: 'Extrinsic ID',
-    width: 100,
+    width: 120,
   },
   {
     dataIndex: 'time_difference',
@@ -23,21 +23,21 @@ export const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
       </Text>
     ),
     title: 'Age',
-    width: 100,
+    width: 150,
   },
   {
     dataIndex: 'from_owner',
     key: 'from_owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'From',
-    width: 100,
+    width: 180,
   },
   {
     dataIndex: 'to_owner',
     key: 'to_owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'To',
-    width: 100,
+    width: 180,
   },
   /* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */
   {
@@ -49,6 +49,6 @@ export const getTransferColumns = (tokenSymbol: string, chainId?: string) => [
       } ${tokenSymbol}`}</Text>
     ),
     title: 'Amount',
-    width: 100,
+    width: 150,
   },
 ];

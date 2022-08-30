@@ -19,20 +19,24 @@ export const getLastBlocksColumns = (chainId: string) => [
       </Text>
     ),
     title: 'Age',
-    width: 150,
+    width: 130,
   },
   {
     dataIndex: 'total_extrinsics',
     key: 'total_extrinsics',
     render: (value: string) => <Link to={`/${chainId}/extrinsic/${value}`}>{value}</Link>,
     title: 'Extrinsic',
-    width: 100,
+    width: 80,
   },
   {
     dataIndex: 'total_events',
     key: 'total_events',
-    render: (value: string) => <Link to={`/${chainId}/event/${value}`}>{value}</Link>,
+    render: (value: string) => (
+      <Text size="m" weight="light">
+        {value}
+      </Text>
+    ),
     title: 'Event',
-    width: 100,
+    width: 80,
   },
 ];

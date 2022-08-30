@@ -1,16 +1,24 @@
 import { gql } from '@apollo/client';
 
 const getBlockQuery = gql`
-  query getBlockDetails($block_number: Int!) {
-    block(where: { block_number: { _eq: $block_number } }) {
+  query getBlockDetails($blockNumber: Float!) {
+    block(where: { block_number: { _eq: $blockNumber } }) {
       data {
+        block_hash
+        block_number
+        extrinsics_root
+        need_rescan
+        new_accounts
+        num_transfers
+        parent_hash
+        session_length
+        spec_name
+        spec_version
+        state_root
         timestamp
         total_events
-        spec_version
-        block_hash
-        parent_hash
-        extrinsics_root
-        state_root
+        total_extrinsics
+        total_issuance
       }
     }
   }
