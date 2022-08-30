@@ -2,8 +2,9 @@ import React, { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
+import { CollectionSorting } from '@app/api';
+
 import ArrowDownUp from './ArrowDownUp';
-import { CollectionSorting } from '../api/graphQL';
 
 interface TableSortableColumnProps {
   dataIndex: string;
@@ -19,8 +20,8 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
   title,
 }) => {
   const direction = useMemo(() => {
-    if (orderBy[dataIndex] === 'asc') return 'up';
-    if (orderBy[dataIndex] === 'desc') return 'down';
+    if (orderBy[dataIndex] === 'asc_nulls_last') return 'up';
+    if (orderBy[dataIndex] === 'desc_nulls_last') return 'down';
 
     return 'both';
   }, [orderBy, dataIndex]);
@@ -28,8 +29,8 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
   const onArrowsClick = useCallback(() => {
     let orderValue;
 
-    if (!orderBy[dataIndex]) orderValue = 'asc';
-    if (orderBy[dataIndex] === 'asc') orderValue = 'desc';
+    if (!orderBy[dataIndex]) orderValue = 'asc_nulls_last';
+    if (orderBy[dataIndex] === 'asc_nulls_last') orderValue = 'desc_nulls_last';
 
     onOrderChange({ [dataIndex]: orderValue });
   }, [orderBy, dataIndex, onOrderChange]);
