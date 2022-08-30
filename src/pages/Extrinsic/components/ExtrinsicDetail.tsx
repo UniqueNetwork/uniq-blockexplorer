@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
-import { useDeviceSize, DeviceSize } from '@app/hooks';
+import { useDeviceSize, DeviceSize, useScrollToTop } from '@app/hooks';
 import {
   formatAmount,
   formatBlockNumber,
@@ -21,6 +21,7 @@ interface ExtrinsicDetailProps {
 }
 
 const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ blockIndex, extrinsic, index }) => {
+  useScrollToTop();
   const deviceSize = useDeviceSize();
 
   const {

@@ -22,10 +22,12 @@ export const getLastBlocksColumns = (chainId: string) => [
     width: 130,
   },
   {
-    dataIndex: 'total_extrinsics',
-    key: 'total_extrinsics',
+    dataIndex: 'block_with_index',
+    key: 'block_with_index',
     render: (value: string) => (
-      <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>
+      <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value.split('-')?.[0]}`}>
+        {value.split('-')?.[1]}
+      </Link>
     ),
     title: 'Extrinsic',
     width: 80,

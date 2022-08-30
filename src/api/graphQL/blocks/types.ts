@@ -3,6 +3,7 @@ export interface LastBlock {
   block_number: number;
   total_events: number;
   total_extrinsics: number;
+  block_with_index?: string;
 }
 
 export interface LastBlockWithTimeDif extends LastBlock {
