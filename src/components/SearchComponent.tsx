@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
 
-import { useApi } from '@app/hooks';
+import { useApi, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
@@ -22,8 +22,8 @@ const SearchComponent: FC<SearchComponentProps> = ({
   value,
 }) => {
   const [queryParams, setQueryParams] = useSearchParams();
-  const searchString = queryParams.get('search') || '';
-  const [inputValue, setInputValue] = useState<string | undefined>(searchString);
+  const searchFromQuery = useSearchFromQuery();
+  const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
   const { pathname } = useLocation();
 
   const { currentChain } = useApi();
@@ -31,10 +31,8 @@ const SearchComponent: FC<SearchComponentProps> = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (queryParams.get('search')) {
-      setInputValue(decodeURI(queryParams.get('search') as string));
-    } else setInputValue('');
-  }, [queryParams]);
+    setInputValue(searchFromQuery);
+  }, [searchFromQuery]);
 
   const onSearch = useCallback(() => {
     if (pathname.includes('tokens')) {

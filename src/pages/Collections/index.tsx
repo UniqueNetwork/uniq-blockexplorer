@@ -1,24 +1,20 @@
 import { FC, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { PagePaperWrapper } from '@app/components';
+import { useSearchFromQuery } from '@app/hooks';
 
 import CollectionsComponent from './components/CollectionsComponent';
 import SearchComponent from '../../components/SearchComponent';
 
 const CollectionsPage: FC = () => {
-  const [queryParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchString, setSearchString] = useState<string | undefined>(
-    queryParams.get('search') || '',
-  );
+  const searchFromQuery = useSearchFromQuery();
+  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
 
   useEffect(() => {
-    if (queryParams.get('search')) {
-      setSearchString(decodeURI(queryParams.get('search') as string));
-    } else setSearchString('');
-  }, [queryParams]);
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery]);
 
   const onSearchChange = (value: string) => {
     setSearchString(value);

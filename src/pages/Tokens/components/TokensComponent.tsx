@@ -2,12 +2,12 @@ import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
 import { Pagination, Search, ScrollableTable } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
@@ -48,10 +48,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
-  const [queryParams, setQueryParams] = useSearchParams();
-  const [searchString, setSearchString] = useState<string | undefined>(
-    queryParams.get('search') || '',
-  );
+  const searchFromQuery = useSearchFromQuery();
+  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
   const { accountId, collectionId } = useParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
@@ -65,15 +63,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
     pageSize,
     searchString,
   });
+  useEffect(() => {
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery]);
 
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
-
-  useEffect(() => {
-    if (queryParams.get('search')) {
-      setSearchString(decodeURI(queryParams.get('search') as string));
-    } else setSearchString('');
-  }, [queryParams]);
 
   const selectFilter = useCallback(
     (selected) => {

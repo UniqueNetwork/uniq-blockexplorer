@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Skeleton } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
 import { CollectionSorting, useGraphQlCollections } from '@app/api';
-import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
+import { useDeviceSize, DeviceSize, useApi, useSearchFromQuery } from '@app/hooks';
 import { ScrollableTable } from '@app/components';
 
 import { CollectionsComponentProps } from '../types';
@@ -21,8 +21,7 @@ const CollectionsComponent = ({
   const { currentChain } = useApi();
 
   const [queryParams] = useSearchParams();
-  const searchString = queryParams.get('search') || '';
-
+  const searchString = useSearchFromQuery();
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const offset = (currentPage - 1) * pageSize;
 

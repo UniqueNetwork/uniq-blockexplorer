@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
-import { useApi } from '@app/hooks';
+import { useApi, useSearchFromQuery } from '@app/hooks';
 import { Collection, useGraphQlCollections } from '@app/api/graphQL';
 import { Search } from '@app/components';
 
@@ -19,10 +18,8 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [queryParams] = useSearchParams();
-  const [searchString, setSearchString] = useState<string | undefined>(
-    queryParams.get('search') || '',
-  );
+  const searchFromQuery = useSearchFromQuery();
+  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
 
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
@@ -37,10 +34,8 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   };
 
   useEffect(() => {
-    if (queryParams.get('search')) {
-      setSearchString(decodeURI(queryParams.get('search') as string));
-    } else setSearchString('');
-  }, [queryParams]);
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery]);
 
   return (
     <>
