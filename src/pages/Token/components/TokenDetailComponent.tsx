@@ -174,9 +174,12 @@ const CollectionInfoWrapper = styled.div`
 const CollectionLink = styled(Link)`
   display: flex;
   column-gap: var(--gap);
+  word-break: break-word;
+  overflow: hidden;
 
   &:hover {
     text-decoration: none;
+
     h4 {
       color: var(--primary-500);
     }
