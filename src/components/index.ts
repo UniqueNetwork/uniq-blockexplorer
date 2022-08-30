@@ -9,3 +9,4 @@ export { default as ScrollableTable } from './ScrollableTable';
 export { default as TokenCard } from './TokenCard';
 export { default as Stub } from './Stub';
 export * from './PagePaper';
+export * from './CoverContainer';

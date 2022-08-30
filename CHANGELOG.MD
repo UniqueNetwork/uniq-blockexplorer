@@ -1,3 +1,9 @@
+## Version 2.0.0
+
+- New main design
+- New search logic
+- Skeletons
+
 ## Version 1.2.9
 
 - Addresses normalization moved to backend.
