@@ -98,25 +98,29 @@ export const useGraphQlTokens = ({
     parseSearchString(searchString).str;
 
   const getWhere = (filter?: Record<string, unknown>, searchString?: string) => ({
-    _and: {
-      ...(filter || {}),
-      ...(searchString && searchByTokenPrefixAndId
-        ? {
-            token_id: { _eq: parseSearchString(searchString).num },
-            token_prefix: { _ilike: `%${parseSearchString(searchString).str}%` },
-          }
-        : {}),
-      ...(searchString
-        ? {
-            _or: [
-              ...getSearchQuery(searchString),
-              // Why is there an address search if the address never gets here?
-              { owner: { _eq: searchString } },
-              { owner_normalized: { _eq: searchString } },
-            ],
-          }
-        : {}),
-    },
+    _and: [
+      { ...(filter || {}) },
+      {
+        ...(searchString && searchByTokenPrefixAndId
+          ? {
+              token_id: { _eq: parseSearchString(searchString).num },
+              token_prefix: { _ilike: `%${parseSearchString(searchString).str}%` },
+            }
+          : {}),
+      },
+      {
+        ...(searchString
+          ? {
+              _or: [
+                ...getSearchQuery(searchString),
+                // Why is there an address search if the address never gets here?
+                { owner: { _eq: searchString } },
+                { owner_normalized: { _eq: searchString } },
+              ],
+            }
+          : {}),
+      },
+    ],
   });
 
   const where = getWhere(filter, searchString);

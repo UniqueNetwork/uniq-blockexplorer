@@ -1,13 +1,13 @@
 import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-import React, { FC, useCallback, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
 import { Pagination, Search, ScrollableTable } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
@@ -48,8 +48,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
-  const [queryParams, setQueryParams] = useSearchParams();
-  const searchString = queryParams.get('search') || '';
+  const searchFromQuery = useSearchFromQuery();
+  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
   const { accountId, collectionId } = useParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
@@ -63,6 +63,9 @@ const TokensComponent: FC<TokensComponentProps> = ({
     pageSize,
     searchString,
   });
+  useEffect(() => {
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery]);
 
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
@@ -92,14 +95,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
   }, [setView]);
 
   const onSearchChange = (value: string) => {
-    if (!value) {
-      queryParams.delete('search');
-    } else {
-      queryParams.set('search', value);
-    }
-
+    setSearchString(value);
     setCurrentPage(1);
-    setQueryParams(queryParams);
   };
 
   const tokenColumns = useMemo(() => {
@@ -197,6 +194,10 @@ const TopBar = styled.div`
   margin-bottom: calc(var(--gap) * 3);
   .unique-select .select-wrapper > svg {
     z-index: unset;
+  }
+
+  > div:first-of-type {
+    margin-bottom: calc(var(--gap) * 1.5);
   }
   @media (max-width: 767px) {
     margin-bottom: 24px;

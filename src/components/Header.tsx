@@ -1,8 +1,9 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
+import { useSearchParams } from 'react-router-dom';
 
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -17,10 +18,12 @@ const Header: FC = () => {
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
+  const [queryParams, setQueryParams] = useSearchParams();
 
   const onLogoClick = useCallback(() => {
     const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
-
+    queryParams.delete('search');
+    setQueryParams(queryParams);
     if (onTheMainPage) {
       window.location.reload();
     }

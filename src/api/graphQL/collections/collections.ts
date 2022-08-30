@@ -57,23 +57,25 @@ export const useGraphQlCollections = ({
 }: useGraphQlCollectionsProps) => {
   const getWhere = useCallback(
     (_filter?: Record<string, unknown>, searchString?: string) => ({
-      _and: {
-        ...(_filter || {}),
-        ...(searchString
-          ? {
-              _or: [
-                { name: { _ilike: `%${searchString}%` } },
-                { description: { _ilike: `%${searchString}%` } },
-                { owner: { _eq: searchString } },
-                { owner_normalized: { _eq: searchString } },
-                { token_prefix: { _ilike: `%${searchString}%` } },
-                ...(Number(searchString)
-                  ? [{ collection_id: { _eq: Number(searchString) } }]
-                  : []),
-              ],
-            }
-          : {}),
-      },
+      _and: [
+        { ...(_filter || {}) },
+        {
+          ...(searchString
+            ? {
+                _or: [
+                  { name: { _ilike: `%${searchString}%` } },
+                  { description: { _ilike: `%${searchString}%` } },
+                  { owner: { _eq: searchString } },
+                  { owner_normalized: { _eq: searchString } },
+                  { token_prefix: { _ilike: `%${searchString}%` } },
+                  ...(Number(searchString)
+                    ? [{ collection_id: { _eq: Number(searchString) } }]
+                    : []),
+                ],
+              }
+            : {}),
+        },
+      ],
     }),
     [],
   );
