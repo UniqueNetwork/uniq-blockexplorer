@@ -21,7 +21,7 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
 }) => {
   const direction = useMemo(() => {
     if (orderBy[dataIndex] === 'asc_nulls_first') return 'up';
-    if (orderBy[dataIndex] === 'desc_nulls_first') return 'down';
+    if (orderBy[dataIndex] === 'desc_nulls_last') return 'down';
 
     return 'both';
   }, [orderBy, dataIndex]);
@@ -30,14 +30,14 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
     let orderValue;
 
     if (!orderBy[dataIndex]) orderValue = 'asc_nulls_first';
-    if (orderBy[dataIndex] === 'asc_nulls_first') orderValue = 'desc_nulls_first';
+    if (orderBy[dataIndex] === 'asc_nulls_first') orderValue = 'desc_nulls_last';
 
     onOrderChange({ [dataIndex]: orderValue });
   }, [orderBy, dataIndex, onOrderChange]);
 
   return (
     <>
-      <ColumnTitleText color={'grey-500'}>{title}</ColumnTitleText>
+      <ColumnTitleText color="grey-500">{title}</ColumnTitleText>
       <StyledArrowDownUp direction={direction} onClick={onArrowsClick} />
     </>
   );
