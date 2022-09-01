@@ -1,6 +1,10 @@
 import '../support/commands';
 
 class MainPage {
+  collections = () => {
+    return cy.sr().find('[data-automation-id=collections]');
+  };
+
   desktopNavigation = () => {
     return cy.sr().find('[data-automation-id=desktop-menu]');
   };
@@ -9,14 +13,24 @@ class MainPage {
     return cy.sr().find('[data-automation-id=header]');
   };
 
-  headerExists = () => {
-    this.header().should('exist');
+  lastBlocks = () => {
+    return cy.sr().find('[data-automation-id=last-blocks]');
   };
 
-  desktopNavigationExists = () => {
-    this.desktopNavigation().should('exist');
-    this.desktopNavigation().find('a').contains('NFTs').should('exist');
-    this.desktopNavigation().find('a').contains('Collections').should('exist');
+  lastTransfers = () => {
+    return cy.sr().find('[data-automation-id=last-transfers]');
+  };
+
+  searchHeader = () => {
+    return cy.sr().find('[data-automation-id=search-header]');
+  };
+
+  tokenInformation = () => {
+    return cy.sr().find('[data-automation-id=token-information]');
+  };
+
+  tokens = () => {
+    return cy.sr().find('[data-automation-id=tokens]');
   };
 
   visitOpalMainPage = () => {

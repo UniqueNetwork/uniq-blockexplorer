@@ -69,7 +69,7 @@ export const LastBlocks = ({
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="last-blocks">
       {searchModeOn ? (
         <StyledHeader size="2">Blocks</StyledHeader>
       ) : (

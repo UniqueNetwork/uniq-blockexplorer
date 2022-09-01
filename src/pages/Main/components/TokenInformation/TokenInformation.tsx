@@ -36,7 +36,10 @@ export const TokenInformation: VFC = () => {
   }
 
   return (
-    <Wrapper chainLogo={getChainBackground(currentChain)}>
+    <Wrapper
+      chainLogo={getChainBackground(currentChain)}
+      data-automation-id="token-information"
+    >
       <TokenInfo>
         <TokenInfoHeader>
           Token information <Small>All time</Small>
