@@ -107,7 +107,7 @@ const GeneralInfo = styled.div`
     column-gap: calc(var(--gap) / 4);
   }
 
-  @media (max-width: ${DeviceSizes.smTop}) {
+  @media (max-width: ${DeviceSizes.sm}) {
     flex-wrap: wrap;
   }
 `;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Dropdown, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
-import { DeviceSizes, deviceWidth } from '@app/hooks';
+import { deviceWidth } from '@app/hooks';
 import { Icon } from '@app/components/Icon';
 import triangle from '@app/images/icons/triangle-down.svg';
 
@@ -77,7 +77,7 @@ const Wrapper = styled.div`
     }
   }
 
-  @media (min-width: ${DeviceSizes.mdBottom}) and (max-width: ${DeviceSizes.mdTop}) {
+  @media ${deviceWidth.biggerThan.sm} and ${deviceWidth.smallerThan.xl} {
     position: relative;
 
     .header-dropdown-link {
