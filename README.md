@@ -15,4 +15,4 @@ Configure your .env.local file to start local development. The .env-example can 
 
 1. Start project with `npm start`. Now it starts on localhost:3005 by default.
 2. Open new tab in command line and type `cypress open`.
-3. For ci can be used `cypress run`.
+3. For ci can be used `cypress run`. But cypress base url should be changed to staging url.
