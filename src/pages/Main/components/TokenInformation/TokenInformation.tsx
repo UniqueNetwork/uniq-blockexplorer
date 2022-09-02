@@ -36,7 +36,10 @@ export const TokenInformation: VFC = () => {
   }
 
   return (
-    <Wrapper chainLogo={getChainBackground(currentChain)}>
+    <Wrapper
+      chainLogo={getChainBackground(currentChain)}
+      data-automation-id="token-information"
+    >
       <TokenInfo>
         <TokenInfoHeader>
           Token information <Small>All time</Small>
@@ -54,7 +57,7 @@ export const TokenInformation: VFC = () => {
               <P>Total supply</P>
             </Cell>
           )}
-          {!!circulatingSupplyPercentage && (
+          {'circulating_supply' in statisticsMap && (
             <Cell>
               <BigAmount>
                 {circulatingSupplyPercentage}%{' '}
@@ -65,7 +68,7 @@ export const TokenInformation: VFC = () => {
               <P>Circulating supply</P>
             </Cell>
           )}
-          {!!lockedSupplyPercentage && (
+          {'locked_supply' in statisticsMap && (
             <Cell>
               <BigAmount>
                 {lockedSupplyPercentage}%{' '}
@@ -138,12 +141,30 @@ const SkeletonWrapper = styled(PagePaperWrapper)`
     }
   }
 
-  @media ${deviceWidth.smallerThan.sm} {
-    min-height: 316px;
-    max-height: 316px;
+  @media ${deviceWidth.smallerThan.md} {
+    min-height: 177px;
+    max-height: 177px;
 
     .unique-skeleton {
-      height: 316px !important;
+      height: 177px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.sm} {
+    min-height: 269px;
+    max-height: 269px;
+
+    .unique-skeleton {
+      height: 269px !important;
+    }
+  }
+
+  @media ${deviceWidth.smallerThan.xs} {
+    min-height: 287px;
+    max-height: 287px;
+
+    .unique-skeleton {
+      height: 287px !important;
     }
   }
 `;

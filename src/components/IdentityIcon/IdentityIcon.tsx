@@ -30,16 +30,18 @@ export const IdentityIcon: VFC<IdentityIconProps> = ({
   };
 
   return (
-    <Wrapper className={className} onClick={handleAddressCopy}>
+    <Wrapper copyable={copyable} className={className} onClick={handleAddressCopy}>
       <Jdenticon size={size} value={address} />
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div.attrs<{ copyable?: boolean }>((props) => ({
+  copyable: props.copyable,
+}))<{ copyable?: boolean }>`
   display: flex;
   align-items: center;
-  cursor: pointer;
+  cursor: ${(props) => (props.copyable ? 'pointer' : 'normal')};
 
   div {
     display: flex;

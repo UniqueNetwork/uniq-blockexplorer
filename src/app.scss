@@ -5,9 +5,19 @@ body {
   font-family: Inter;
 }
 
-.notification-alert {
-  position: fixed;
-  top: var(--gap);
+.notification-container {
+  .notification-alert {
+    position: fixed;
+    top: var(--gap);
+
+    @media (max-width: 1199px) {
+      max-width: 50% !important;
+    }
+
+    @media (max-width: 991px) {
+      max-width: calc(100% - calc(var(--gap) * 4)) !important;
+    }
+  }
 }
 
 .app-wrapper {

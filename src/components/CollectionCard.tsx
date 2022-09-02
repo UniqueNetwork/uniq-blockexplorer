@@ -8,6 +8,7 @@ import { useApi } from '@app/hooks';
 import { shortcutText } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { SimpleRoundedCover } from '@app/components/SimpleRoundedCover';
 
 import Avatar from './Avatar';
 import { UserEvents } from '../analytics/user_analytics';
@@ -38,7 +39,12 @@ const CollectionCard: FC<CollectionCardProps> = ({
       onClick={onCollectionsCardClick}
     >
       <CollectionCover>
-        <Avatar size="middle" src={getCoverURLFromCollection(collection_cover)} />
+        <SimpleRoundedCover
+          avatarSize="middle"
+          collectionId={collectionId.toString()}
+          coverImageUrl={collection_cover}
+          size={64}
+        />
       </CollectionCover>
       <CollectionInfo>
         <Heading size="4">{name}</Heading>

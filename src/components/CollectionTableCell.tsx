@@ -5,8 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-
-import Avatar from './Avatar';
+import { SimpleRoundedCover } from '@app/components/SimpleRoundedCover';
 
 interface CollectionTableCellProps {
   chainId: string;
@@ -34,7 +33,7 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
       to={`/${chainId}/collections/${collectionId}`}
       onClick={onCollectionClick}
     >
-      <Avatar size={'small'} src={coverImageUrl} />
+      <SimpleRoundedCover collectionId={collectionId} coverImageUrl={coverImageUrl} />
       <CollectionTitle>
         <Text color={'secondary-500'}>{collectionName}</Text>
         <Text color={'grey-500'} size={'xs'}>{`ID ${collectionId}`}</Text>
@@ -46,9 +45,12 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
 const CollectionLink = styled(Link)`
   display: flex;
   column-gap: calc(var(--gap) / 2);
+  align-items: center;
+
   svg {
     min-width: 40px;
   }
+
   &:hover {
     text-decoration: none;
   }
@@ -58,11 +60,14 @@ const CollectionTitle = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 100%;
+
   span {
     word-break: break-word;
   }
+
   &:hover {
     text-decoration: none;
+
     .unique-text[class*='size-m'] {
       color: var(--primary-500) !important;
     }

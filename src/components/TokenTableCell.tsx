@@ -1,16 +1,15 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
-import Avatar from './Avatar';
 import Picture from './Picture';
 
 interface TokenTableCellProps {
   chainId: string;
   tokenId: string;
   collectionId: number;
-  imageUrl?: string;
+  imageUrl: string | null;
   tokenPrefix: string;
 }
 

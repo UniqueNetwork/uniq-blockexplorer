@@ -1,8 +1,9 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
+import { useSearchParams } from 'react-router-dom';
 
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -17,10 +18,12 @@ const Header: FC = () => {
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
+  const [queryParams, setQueryParams] = useSearchParams();
 
   const onLogoClick = useCallback(() => {
     const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
-
+    queryParams.delete('search');
+    setQueryParams(queryParams);
     if (onTheMainPage) {
       window.location.reload();
     }
@@ -49,7 +52,7 @@ const Header: FC = () => {
 
   return (
     <>
-      <HeaderWrapper>
+      <HeaderWrapper data-automation-id="header">
         <HeaderNavWrapper>
           <Link
             to={`/${currentChain ? currentChain?.network + '/' : ''}`}
@@ -57,19 +60,22 @@ const Header: FC = () => {
           >
             <Logo alt="Logo" src="/logos/logo_product.svg" />
           </Link>
-          <HeaderNav>
+          <HeaderNav data-automation-id="desktop-menu">
             <Menu />
           </HeaderNav>
         </HeaderNavWrapper>
         <ChainsSelectWrapper>
           <ChainsSelect
-            options={Object.values(config.chains).map(({ network }) => ({
+            options={Object.values(config.chains).map(({ network, name }) => ({
               iconLeft: {
                 name: `chain-${network.toLowerCase()}`,
                 size: 16,
               },
               id: network,
-              title: network.charAt(0) + network.slice(1).toLowerCase(),
+              title:
+                network === 'UNIQUE'
+                  ? name
+                  : network.charAt(0) + network.slice(1).toLowerCase(),
             }))}
             value={currentChain?.network}
             onChange={onSelectChange}
@@ -136,11 +142,6 @@ const Logo = styled.img`
 const ChainsSelectWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
-`;
-
-const ChainsSelectLoader = styled(LoadingComponent)`
-  width: 32px;
-  position: relative;
 `;
 
 const ChainsSelect = styled(Select)`

@@ -2,8 +2,6 @@ import { gql, useQuery } from '@apollo/client';
 import { useCallback } from 'react';
 
 import { TransfersData, TransfersVariables, useGraphQlLastTransfersProps } from './types';
-// { timestamp: desc }
-// { amount: desc }
 
 const getLastTransfersQuery = gql`
   query getLastTransfers(
@@ -37,6 +35,7 @@ export const useGraphQlLastTransfers = ({
   orderBy,
   pageSize,
   searchString,
+  offset = 0,
 }: useGraphQlLastTransfersProps) => {
   const getWhere = useCallback(
     (searchString?: string) => ({
@@ -82,7 +81,7 @@ export const useGraphQlLastTransfers = ({
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
-      offset: 0,
+      offset,
       orderBy,
       where: getWhere(searchString),
     },

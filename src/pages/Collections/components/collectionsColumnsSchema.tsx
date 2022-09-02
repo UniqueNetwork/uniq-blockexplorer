@@ -27,13 +27,13 @@ export const getCollectionsColumns = (
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex={'collection_id'}
+        dataIndex="collection_id"
         orderBy={orderBy}
-        title={'Collection'}
+        title="Collection"
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 150,
   },
   {
     dataIndex: 'date_of_creation',
@@ -41,9 +41,9 @@ export const getCollectionsColumns = (
     render: timestampTableFormat,
     title: (
       <TableSortableColumnTitle
-        dataIndex={'date_of_creation'}
+        dataIndex="date_of_creation"
         orderBy={orderBy}
-        title={'Date'}
+        title="Date"
         onOrderChange={onOrderChange}
       />
     ),
@@ -61,9 +61,9 @@ export const getCollectionsColumns = (
     key: 'holders_count',
     title: (
       <TableSortableColumnTitle
-        dataIndex={'holders_count'}
+        dataIndex="holders_count"
         orderBy={orderBy}
-        title={'Holders'}
+        title="Holders"
         onOrderChange={onOrderChange}
       />
     ),

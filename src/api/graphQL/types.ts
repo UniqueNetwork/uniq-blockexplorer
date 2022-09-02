@@ -22,3 +22,15 @@ export type GQLWhereOpsString = {
   _like?: string;
   _neq?: string;
 };
+
+export type Sorting = Record<
+  string,
+  | string
+  | 'asc'
+  | 'desc'
+  | 'desc_nulls_last'
+  | 'asc_nulls_last'
+  | 'asc_nulls_first'
+  | 'desc_nulls_first'
+  | undefined
+>;

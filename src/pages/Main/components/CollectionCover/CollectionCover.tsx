@@ -18,7 +18,7 @@ export const CollectionCover: VFC<CollectionCoverProps> = ({
   collectionId,
   coverSrc,
 }) => {
-  const imgSrc = useCheckImageExists(getCoverURLFromCollection(coverSrc));
+  const { imgSrc } = useCheckImageExists(getCoverURLFromCollection(coverSrc));
   const color = useRandomColor();
   const collectionCoverColor = imgSrc ? 'transparent' : color;
 

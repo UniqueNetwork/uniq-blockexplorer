@@ -1,34 +1,44 @@
-import { FC } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { FC, useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+import { PagePaperWrapper } from '@app/components';
+import { useSearchFromQuery } from '@app/hooks';
 
 import CollectionsComponent from './components/CollectionsComponent';
 import SearchComponent from '../../components/SearchComponent';
-import PagePaper from '../../components/PagePaper';
 
 const CollectionsPage: FC = () => {
-  const [queryParams, setQueryParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const searchFromQuery = useSearchFromQuery();
+  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
+
+  useEffect(() => {
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery]);
 
   const onSearchChange = (value: string) => {
-    if (!value) {
-      queryParams.delete('search');
-    } else {
-      queryParams.set('search', value);
-    }
-
-    setQueryParams(queryParams);
+    setSearchString(value);
+    setCurrentPage(1);
   };
 
   return (
     <PagePaper>
       <SearchComponent
-        placeholder={'Сollection / account'}
+        placeholder="Collection / account"
+        value={searchString}
         onSearchChange={onSearchChange}
       />
       <div>
-        <CollectionsComponent />
+        <CollectionsComponent currentPage={currentPage} setCurrentPage={setCurrentPage} />
       </div>
     </PagePaper>
   );
 };
+
+const PagePaper = styled(PagePaperWrapper)`
+  > div:first-of-type {
+    margin-bottom: calc(var(--gap) * 3);
+  }
+`;
 
 export default CollectionsPage;

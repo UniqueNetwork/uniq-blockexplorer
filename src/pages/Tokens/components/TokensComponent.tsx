@@ -1,13 +1,13 @@
-import { Icon, Select } from '@unique-nft/ui-kit';
+import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-import React, { FC, useCallback, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
-import { Pagination, Search, Table } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { Pagination, Search, ScrollableTable } from '@app/components';
+import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
@@ -48,8 +48,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
 }) => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
-  const [queryParams, setQueryParams] = useSearchParams();
-  const searchString = queryParams.get('search') || '';
+  const searchFromQuery = useSearchFromQuery();
+  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
   const { accountId, collectionId } = useParams();
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
@@ -63,6 +63,9 @@ const TokensComponent: FC<TokensComponentProps> = ({
     pageSize,
     searchString,
   });
+  useEffect(() => {
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery]);
 
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
@@ -92,13 +95,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
   }, [setView]);
 
   const onSearchChange = (value: string) => {
-    if (!value) {
-      queryParams.delete('search');
-    } else {
-      queryParams.set('search', value);
-    }
-
-    setQueryParams(queryParams);
+    setSearchString(value);
+    setCurrentPage(1);
   };
 
   const tokenColumns = useMemo(() => {
@@ -120,14 +118,20 @@ const TokensComponent: FC<TokensComponentProps> = ({
   return (
     <>
       <TopBar>
-        <Search placeholder={'NFT / collection'} onSearchChange={onSearchChange} />
+        <Search
+          placeholder="NFT / collection"
+          value={searchString}
+          onSearchChange={onSearchChange}
+        />
         <Controls>
-          <Select
-            defaultValue={defaultOption}
-            options={OPTIONS}
-            value={selectOption?.id as string}
-            onChange={selectFilter}
-          />
+          {view === ViewType.Grid && (
+            <Select
+              defaultValue={defaultOption}
+              options={OPTIONS}
+              value={selectOption?.id as string}
+              onChange={selectFilter}
+            />
+          )}
           <ViewButtons>
             <ViewButton onClick={selectList}>
               <Icon
@@ -148,28 +152,35 @@ const TokensComponent: FC<TokensComponentProps> = ({
           </ViewButtons>
         </Controls>
       </TopBar>
-      {view === ViewType.List ? (
-        <Table
-          columns={tokenColumns}
-          data={tokens || []}
-          loading={isTokensFetching}
-          rowKey={getRowKey}
-        />
+      {isTokensFetching ? (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
       ) : (
-        <div>
-          <TokensGrid
-            chainNetwork={currentChain.network}
-            timestamp={timestamp}
-            tokens={tokens || []}
-          />
-        </div>
+        <>
+          {view === ViewType.List ? (
+            <ScrollableTable
+              columns={tokenColumns}
+              data={tokens || []}
+              loading={isTokensFetching}
+              rowKey={getRowKey}
+            />
+          ) : (
+            <div>
+              <TokensGrid
+                chainNetwork={currentChain.network}
+                timestamp={timestamp}
+                tokens={tokens || []}
+              />
+            </div>
+          )}
+        </>
       )}
-
       <Pagination
         count={tokensCount || 0}
         currentPage={currentPage}
         pageSize={pageSize}
-        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />
     </>
@@ -180,8 +191,13 @@ const TopBar = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-bottom: calc(var(--gap) * 3);
   .unique-select .select-wrapper > svg {
     z-index: unset;
+  }
+
+  > div:first-of-type {
+    margin-bottom: calc(var(--gap) * 1.5);
   }
   @media (max-width: 767px) {
     margin-bottom: 24px;
@@ -209,6 +225,18 @@ const ViewButton = styled.div`
   margin-right: 4px;
   &:last-child {
     margin-right: 0;
+  }
+`;
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 1200px;
+    border-radius: var(--gap) !important;
   }
 `;
 
