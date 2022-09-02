@@ -1,9 +1,11 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
-import { Dropdown, Icon, SelectOptionProps } from '@unique-nft/ui-kit';
+import { Dropdown, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
-import { deviceWidth } from '@app/hooks';
+import { DeviceSizes, deviceWidth } from '@app/hooks';
+import { Icon } from '@app/components/Icon';
+import triangle from '@app/images/icons/triangle-down.svg';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];
@@ -28,7 +30,7 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
       >
         <SelectedOption>
           {selectedSort.title}
-          <Icon name="triangle" size={12} />
+          <IconStyled path={triangle} />
         </SelectedOption>
       </Dropdown>
     )}
@@ -56,17 +58,6 @@ const Wrapper = styled.div`
     color: var(--primary-500);
     cursor: pointer;
 
-    .dropdown-wrapper {
-      .icon-triangle {
-        position: inherit;
-        margin-left: calc(var(--gap) / 2);
-
-        use {
-          fill: var(--primary-500);
-        }
-      }
-    }
-
     .dropdown-options {
       width: 142px;
 
@@ -86,7 +77,7 @@ const Wrapper = styled.div`
     }
   }
 
-  @media ${deviceWidth.biggerThan.sm} and ${deviceWidth.smallerThan.xl} {
+  @media (min-width: ${DeviceSizes.mdBottom}) and (max-width: ${DeviceSizes.mdTop}) {
     position: relative;
 
     .header-dropdown-link {
@@ -96,6 +87,10 @@ const Wrapper = styled.div`
       right: 0;
     }
   }
+`;
+
+const IconStyled = styled(Icon)`
+  margin-left: calc(var(--gap) / 2);
 `;
 
 const SelectedOption = styled.div`

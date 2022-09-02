@@ -84,7 +84,7 @@ const Wrapper = styled(PagePaperWrapper)`
   display: flex;
   flex-direction: column;
 
-  @media (max-width: ${DeviceSizes.sm}) {
+  @media (max-width: ${DeviceSizes.smTop}) {
     button.unique-button {
       width: 100%;
     }

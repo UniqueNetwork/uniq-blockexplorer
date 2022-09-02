@@ -12,16 +12,22 @@ export enum DeviceSize {
 }
 
 export const DeviceSizes = {
-  xxs: '479px',
-  xs: '575p',
-  sm: '767px',
-  md: '991px',
-  lg: '1199px',
-  xl: '1679px',
-  xxl: '1680',
+  xxsTop: '479px',
+  xsBottom: '480px',
+  xsTop: '575p',
+  smBottom: '576px',
+  smTop: '767px',
+  mdBottom: '768px',
+  mdTop: '991px',
+  lgBottom: '992px',
+  lgTop: '1199px',
+  xlBottom: '1200px',
+  xlTop: '1679px',
+  xxlBottom: '1680',
 };
 
 // for css @media queries
+// Deprecated: use DeviceSizes
 export const deviceWidth = {
   only: {
     xxs: '(max-width: 479px)',

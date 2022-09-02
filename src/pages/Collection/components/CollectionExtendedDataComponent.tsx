@@ -63,7 +63,7 @@ const DataBlockWrapper = styled.div`
   display: grid;
   grid-template-columns: 296px 1fr;
 
-  @media (max-width: ${DeviceSizes.sm}) {
+  @media (max-width: ${DeviceSizes.smTop}) {
     display: flex;
     grid-column-gap: var(--gap);
     flex-wrap: wrap;
