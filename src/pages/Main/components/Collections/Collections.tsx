@@ -38,8 +38,8 @@ export const Collections: VFC<CollectionsProps> = ({
   const orderBy = useMemo(
     (): CollectionSorting =>
       selectedSort.id === 'new'
-        ? { date_of_creation: 'desc' }
-        : { transfers_count: 'desc' },
+        ? { date_of_creation: 'desc_nulls_last' }
+        : { transfers_count: 'desc_nulls_last' },
     [selectedSort.id],
   );
 

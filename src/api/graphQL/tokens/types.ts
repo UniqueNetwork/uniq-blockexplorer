@@ -4,7 +4,7 @@ export interface TokensVariables {
   limit: number;
   offset: number;
   where?: Record<string, unknown>;
-  orderBy?: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>;
+  orderBy?: TokenSorting;
 }
 
 export interface Token {
@@ -34,7 +34,13 @@ export interface TokensData {
 }
 
 export type TokenSorting = {
-  [P in keyof Token]?: 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last';
+  [P in keyof Token]?:
+    | 'asc'
+    | 'desc'
+    | 'desc_nulls_last'
+    | 'asc_nulls_last'
+    | 'asc_nulls_first'
+    | 'desc_nulls_first';
 };
 
 export type useGraphQlTokensProps = {
@@ -44,12 +50,4 @@ export type useGraphQlTokensProps = {
   orderBy?: TokenSorting;
   collectionId?: string;
   searchString?: string;
-};
-
-export type FetchMoreTokensOptions = {
-  limit?: number;
-  offset?: number;
-  searchString?: string;
-  orderBy?: TokenSorting;
-  filter?: Record<string, unknown>;
 };

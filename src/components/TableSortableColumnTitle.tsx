@@ -2,15 +2,15 @@ import React, { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
-import { CollectionSorting } from '@app/api';
+import { Sorting } from '@app/api/graphQL/types';
 
 import ArrowDownUp from './ArrowDownUp';
 
 interface TableSortableColumnProps {
   dataIndex: string;
   title: string;
-  orderBy: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>;
-  onOrderChange(sorting: CollectionSorting): void;
+  orderBy: Sorting;
+  onOrderChange(sorting: Sorting): void;
 }
 
 const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
@@ -20,7 +20,7 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
   title,
 }) => {
   const direction = useMemo(() => {
-    if (orderBy[dataIndex] === 'asc_nulls_last') return 'up';
+    if (orderBy[dataIndex] === 'asc_nulls_first') return 'up';
     if (orderBy[dataIndex] === 'desc_nulls_last') return 'down';
 
     return 'both';
@@ -29,15 +29,15 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
   const onArrowsClick = useCallback(() => {
     let orderValue;
 
-    if (!orderBy[dataIndex]) orderValue = 'asc_nulls_last';
-    if (orderBy[dataIndex] === 'asc_nulls_last') orderValue = 'desc_nulls_last';
+    if (!orderBy[dataIndex]) orderValue = 'asc_nulls_first';
+    if (orderBy[dataIndex] === 'asc_nulls_first') orderValue = 'desc_nulls_last';
 
     onOrderChange({ [dataIndex]: orderValue });
   }, [orderBy, dataIndex, onOrderChange]);
 
   return (
     <>
-      <ColumnTitleText color={'grey-500'}>{title}</ColumnTitleText>
+      <ColumnTitleText color="grey-500">{title}</ColumnTitleText>
       <StyledArrowDownUp direction={direction} onClick={onArrowsClick} />
     </>
   );

@@ -1,3 +1,5 @@
+import { Sorting } from '@app/api/graphQL/types';
+
 export interface AttributeField {
   isArray: boolean;
   name: {
@@ -42,7 +44,7 @@ export interface CollectionsVariables {
   limit: number;
   offset: number;
   where?: Record<string, unknown>;
-  orderBy?: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>;
+  orderBy?: Sorting;
 }
 
 export interface CollectionsData {
@@ -54,7 +56,13 @@ export interface CollectionsData {
 }
 
 export type CollectionSorting = {
-  [P in keyof Collection]?: 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last';
+  [P in keyof Collection]?:
+    | 'asc'
+    | 'desc'
+    | 'desc_nulls_last'
+    | 'asc_nulls_last'
+    | 'asc_nulls_first'
+    | 'desc_nulls_first';
 };
 
 export type useGraphQlCollectionsProps = {
