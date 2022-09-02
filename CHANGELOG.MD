@@ -1,3 +1,7 @@
+## Version 2.0.1
+
+- fixed sorting bugs for null values
+
 ## Version 2.0.0
 
 - New main design
