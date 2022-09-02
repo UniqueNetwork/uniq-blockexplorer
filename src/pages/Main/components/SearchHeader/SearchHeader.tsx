@@ -27,7 +27,7 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
       : currentChain?.network.charAt(0) + currentChain?.network.slice(1).toLowerCase();
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="search-header">
       {searchModeOn ? (
         <H>
           Search results&nbsp;"<SearchString>{searchString}</SearchString>"

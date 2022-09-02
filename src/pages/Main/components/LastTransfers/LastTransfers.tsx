@@ -41,7 +41,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
   };
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="last-transfers">
       <HeaderWithDropdown
         options={lastTransferOptions}
         selectedSort={selectedSort}
