@@ -4,8 +4,10 @@ import { Dropdown, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
-import { Icon } from '@app/components/Icon';
+import { SVGIcon } from '@app/components/SVGIcon';
 import triangle from '@app/images/icons/triangle-down.svg';
+import * as IconComponents from '@app/images/icons/icons';
+import { IconType } from '@app/images/icons';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];
@@ -19,23 +21,43 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   selectedSort,
   setSelectedSort,
   title,
-}) => (
-  <Wrapper>
-    <StyledHeader size="2">{title}</StyledHeader>
-    {selectedSort && (
-      <Dropdown
-        options={options}
-        value={selectedSort.id as string}
-        onChange={setSelectedSort}
-      >
-        <SelectedOption>
-          {selectedSort.title}
-          <IconStyled path={triangle} />
-        </SelectedOption>
-      </Dropdown>
-    )}
-  </Wrapper>
-);
+}) => {
+  const icon: IconType = 'triangleIcon';
+  const Icon = icon && IconComponents['triangleIcon'];
+  return (
+    <Wrapper>
+      <StyledHeader size="2">{title}</StyledHeader>
+      {selectedSort && (
+        <Dropdown
+          options={options}
+          value={selectedSort.id as string}
+          onChange={setSelectedSort}
+        >
+          <SelectedOption>
+            {selectedSort.title}
+            {icon && (
+              <IconContainer>
+                <Icon />
+              </IconContainer>
+            )}
+            {/* <IconStyled path={triangle} /> */}
+          </SelectedOption>
+        </Dropdown>
+      )}
+    </Wrapper>
+  );
+};
+
+const IconContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0.75em;
+  color: var(--primary-500);
+  opacity: 0.5;
+
+  pointer-events: none;
+`;
 
 const StyledHeader = styled(Header)`
   @media ${deviceWidth.smallerThan.md} {
@@ -89,7 +111,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const IconStyled = styled(Icon)`
+const IconStyled = styled(SVGIcon)`
   margin-left: calc(var(--gap) / 2);
 `;
 

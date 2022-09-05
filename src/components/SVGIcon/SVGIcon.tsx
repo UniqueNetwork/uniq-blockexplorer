@@ -8,7 +8,7 @@ interface IComponentProps {
   className?: string;
 }
 
-export const Icon: FC<IComponentProps> = ({ path, className }: IComponentProps) => {
+export const SVGIcon: FC<IComponentProps> = ({ path, className }: IComponentProps) => {
   const icon = useGetIcon(path);
 
   return <IconStyled className={className} dangerouslySetInnerHTML={{ __html: icon }} />;
