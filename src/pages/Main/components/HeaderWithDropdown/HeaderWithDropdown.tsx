@@ -16,14 +16,16 @@ interface HeaderWithDropdownProps {
   title: string;
 }
 
+const icon: IconType = 'triangleIcon';
+
 export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   options,
   selectedSort,
   setSelectedSort,
   title,
 }) => {
-  const icon: IconType = 'triangleIcon';
-  const Icon = icon && IconComponents['triangleIcon'];
+  const Icon = icon && IconComponents[icon];
+
   return (
     <Wrapper>
       <StyledHeader size="2">{title}</StyledHeader>
@@ -55,7 +57,6 @@ const IconContainer = styled.div`
   left: 0.75em;
   color: var(--primary-500);
   opacity: 0.5;
-
   pointer-events: none;
 `;
 
