@@ -20,13 +20,13 @@ export const SVGIcon: FC<IComponentProps> = ({
   const Icon = IconComponents[name];
 
   return (
-    <IconStyled className={className} height={height} width={width}>
+    <IconWrapper className={className} height={height} width={width}>
       <Icon />
-    </IconStyled>
+    </IconWrapper>
   );
 };
 
-const IconStyled = styled.span.attrs<{ width: number; height: number }>((props) => ({
+const IconWrapper = styled.span.attrs<{ width: number; height: number }>((props) => ({
   width: props.width,
   height: props.height,
 }))<{ width: number; height: number }>`
