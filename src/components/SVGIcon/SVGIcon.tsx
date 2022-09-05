@@ -1,22 +1,41 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { useGetIcon } from './useGetIcon';
+import * as IconComponents from '@app/images/icons/icons';
+import { IconType } from '@app/images/icons';
 
 interface IComponentProps {
-  path: string;
+  name: IconType;
+  width: number;
+  height: number;
   className?: string;
 }
 
-export const SVGIcon: FC<IComponentProps> = ({ path, className }: IComponentProps) => {
-  const icon = useGetIcon(path);
+export const SVGIcon: FC<IComponentProps> = ({
+  name,
+  className,
+  height = 16,
+  width = 16,
+}: IComponentProps) => {
+  const Icon = IconComponents[name];
 
-  return <IconStyled className={className} dangerouslySetInnerHTML={{ __html: icon }} />;
+  return (
+    <IconStyled className={className} height={height} width={width}>
+      <Icon />
+    </IconStyled>
+  );
 };
 
-const IconStyled = styled.span`
+const IconStyled = styled.span.attrs<{ width: number; height: number }>((props) => ({
+  width: props.width,
+  height: props.height,
+}))<{ width: number; height: number }>`
+  display: flex;
+
   svg {
     fill: currentColor;
+    width: ${(props) => props.width}px;
+    height: ${(props) => props.height}px;
 
     path {
       fill: inherit;

@@ -4,10 +4,7 @@ import { Dropdown, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
-import { SVGIcon } from '@app/components/SVGIcon';
-import triangle from '@app/images/icons/triangle-down.svg';
 import * as IconComponents from '@app/images/icons/icons';
-import { IconType } from '@app/images/icons';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];
@@ -16,7 +13,7 @@ interface HeaderWithDropdownProps {
   title: string;
 }
 
-const icon: IconType = 'triangleIcon';
+const TriangleIcon = IconComponents['triangle'];
 
 export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   options,
@@ -24,8 +21,6 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   setSelectedSort,
   title,
 }) => {
-  const Icon = icon && IconComponents[icon];
-
   return (
     <Wrapper>
       <StyledHeader size="2">{title}</StyledHeader>
@@ -37,12 +32,9 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
         >
           <SelectedOption>
             {selectedSort.title}
-            {icon && (
-              <IconContainer>
-                <Icon />
-              </IconContainer>
-            )}
-            {/* <IconStyled path={triangle} /> */}
+            <IconContainer>
+              <TriangleIcon />
+            </IconContainer>
           </SelectedOption>
         </Dropdown>
       )}
@@ -51,13 +43,14 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
 };
 
 const IconContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0.75em;
-  color: var(--primary-500);
-  opacity: 0.5;
-  pointer-events: none;
+  margin-left: calc(var(--gap) / 2);
+  svg {
+    fill: currentColor;
+
+    path {
+      fill: inherit;
+    }
+  }
 `;
 
 const StyledHeader = styled(Header)`
@@ -112,11 +105,8 @@ const Wrapper = styled.div`
   }
 `;
 
-const IconStyled = styled(SVGIcon)`
-  margin-left: calc(var(--gap) / 2);
-`;
-
 const SelectedOption = styled.div`
+  display: flex;
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;
