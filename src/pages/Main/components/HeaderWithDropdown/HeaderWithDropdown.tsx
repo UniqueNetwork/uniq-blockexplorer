@@ -4,7 +4,7 @@ import { Dropdown, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
-import * as IconComponents from '@app/images/icons/icons';
+import { SVGIcon } from '@app/components/SVGIcon';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];
@@ -12,8 +12,6 @@ interface HeaderWithDropdownProps {
   setSelectedSort?: (option: SelectOptionProps) => void;
   title: string;
 }
-
-const TriangleIcon = IconComponents['triangle'];
 
 export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   options,
@@ -32,9 +30,7 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
         >
           <SelectedOption>
             {selectedSort.title}
-            <IconContainer>
-              <TriangleIcon />
-            </IconContainer>
+            <StyledSVGIcon height={16} name="triangle" width={16} />
           </SelectedOption>
         </Dropdown>
       )}
@@ -42,15 +38,8 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   );
 };
 
-const IconContainer = styled.div`
+const StyledSVGIcon = styled(SVGIcon)`
   margin-left: calc(var(--gap) / 2);
-  svg {
-    fill: currentColor;
-
-    path {
-      fill: inherit;
-    }
-  }
 `;
 
 const StyledHeader = styled(Header)`

@@ -31,6 +31,7 @@ const IconWrapper = styled.span.attrs<{ width: number; height: number }>((props)
   height: props.height,
 }))<{ width: number; height: number }>`
   display: flex;
+  align-items: center;
 
   svg {
     fill: currentColor;
