@@ -5,10 +5,9 @@ import styled from 'styled-components';
 
 import { CollectionSorting, useGraphQlCollections } from '@app/api';
 import { useDeviceSize, DeviceSize, useApi, useSearchFromQuery } from '@app/hooks';
-import { ScrollableTable } from '@app/components';
+import { Pagination, ScrollableTable } from '@app/components';
 
 import { CollectionsComponentProps } from '../types';
-import PaginationComponent from '../../../components/Pagination';
 import { getCollectionsColumns } from './collectionsColumnsSchema';
 
 const CollectionsComponent = ({
@@ -61,7 +60,7 @@ const CollectionsComponent = ({
         />
       )}
       {!isCollectionsFetching && collectionsCount > 0 && (
-        <PaginationComponent
+        <Pagination
           count={collectionsCount || 0}
           currentPage={currentPage}
           pageSize={pageSize}

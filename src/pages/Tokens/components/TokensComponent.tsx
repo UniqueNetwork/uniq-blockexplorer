@@ -1,18 +1,14 @@
-import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
-import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
+import { Skeleton } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
-import { Pagination, Search, ScrollableTable } from '@app/components';
+import { Token, useGraphQlTokens } from '@app/api';
+import { Pagination, ScrollableTable } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 
 import { TokensComponentProps } from '../types';
-import { DEFAULT_PAGE_SIZE, OPTIONS } from '../constants';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
 
@@ -43,19 +39,21 @@ const filter = ({
 };
 
 const TokensComponent: FC<TokensComponentProps> = ({
-  orderBy: defaultOrderBy = { date_of_creation: 'desc_nulls_last' },
-  pageSize = DEFAULT_PAGE_SIZE,
+  currentPage,
+  orderBy,
+  pageSize,
+  searchString,
+  setCurrentPage,
+  setSearchString,
+  setOrderBy,
+  view,
 }) => {
   const deviceSize = useDeviceSize();
-  const { currentChain } = useApi();
   const searchFromQuery = useSearchFromQuery();
-  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
+  const { currentChain } = useApi();
+
   const { accountId, collectionId } = useParams();
 
-  const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectOption, setSelectOption] = useState<SelectOptionProps>();
-  const [view, setView] = useState<ViewType>(ViewType.Grid);
   const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: filter({ accountId, collectionId }),
     offset: (currentPage - 1) * pageSize,
@@ -63,51 +61,14 @@ const TokensComponent: FC<TokensComponentProps> = ({
     pageSize,
     searchString,
   });
+
   useEffect(() => {
     setSearchString(searchFromQuery);
-  }, [searchFromQuery]);
-
-  const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
-  const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
-
-  const selectFilter = useCallback(
-    (selected) => {
-      const option = OPTIONS.find((item) => {
-        return item.id === selected.id;
-      });
-
-      if (option && option.sortField) {
-        setSelectOption(option);
-        setOrderBy({ [option.sortField]: option.sortDir });
-      }
-    },
-    [setSelectOption, setOrderBy],
-  );
-
-  const selectGrid = useCallback(() => {
-    logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
-    setView(ViewType.Grid);
-  }, [setView]);
-
-  const selectList = useCallback(() => {
-    logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
-    setView(ViewType.List);
-  }, [setView]);
-
-  const onSearchChange = (value: string) => {
-    setSearchString(value);
-    setCurrentPage(1);
-  };
+  }, [searchFromQuery, setSearchString]);
 
   const tokenColumns = useMemo(() => {
     return getTokensColumns(currentChain.network, orderBy, setOrderBy);
-  }, [currentChain.network, orderBy]);
-
-  const defaultOption =
-    OPTIONS.find(
-      (option) =>
-        option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
-    )?.id ?? '';
+  }, [currentChain.network, orderBy, setOrderBy]);
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>
@@ -116,42 +77,14 @@ const TokensComponent: FC<TokensComponentProps> = ({
   );
 
   return (
-    <>
-      <TopBar>
-        <Search
-          placeholder="NFT / collection"
-          value={searchString}
-          onSearchChange={onSearchChange}
-        />
-        <Controls>
-          {view === ViewType.Grid && (
-            <Select
-              defaultValue={defaultOption}
-              options={OPTIONS}
-              value={selectOption?.id as string}
-              onChange={selectFilter}
-            />
-          )}
-          <ViewButtons>
-            <ViewButton onClick={selectList}>
-              <Icon
-                file={
-                  view === ViewType.List ? '/static/list_active.svg' : '/static/list.svg'
-                }
-                size={32}
-              />
-            </ViewButton>
-            <ViewButton onClick={selectGrid}>
-              <Icon
-                file={
-                  view === ViewType.Grid ? '/static/grid_active.svg' : '/static/grid.svg'
-                }
-                size={32}
-              />
-            </ViewButton>
-          </ViewButtons>
-        </Controls>
-      </TopBar>
+    <Wrapper>
+      <Pagination
+        count={tokensCount || 0}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+        onPageChange={setCurrentPage}
+      />
       {isTokensFetching ? (
         <SkeletonWrapper>
           <Skeleton />
@@ -176,55 +109,13 @@ const TokensComponent: FC<TokensComponentProps> = ({
           )}
         </>
       )}
-      <Pagination
-        count={tokensCount || 0}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
-        onPageChange={setCurrentPage}
-      />
-    </>
+    </Wrapper>
   );
 };
 
-const TopBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-bottom: calc(var(--gap) * 3);
-  .unique-select .select-wrapper > svg {
-    z-index: unset;
-  }
-
-  > div:first-of-type {
-    margin-bottom: calc(var(--gap) * 1.5);
-  }
-  @media (max-width: 767px) {
-    margin-bottom: 24px;
-  }
-`;
-
-const Controls = styled.div`
-  display: flex;
-  justify-content: space-between;
-  @media (max-width: 767px) {
-    width: 100%;
-  }
-`;
-
-const ViewButtons = styled.div`
-  display: flex;
-  margin-left: 28px;
-`;
-
-const ViewButton = styled.div`
-  display: flex;
-  cursor: pointer;
-  height: 32px;
-  margin-top: 4px;
-  margin-right: 4px;
-  &:last-child {
-    margin-right: 0;
+const Wrapper = styled.div`
+  .pagination {
+    margin-bottom: calc(var(--gap) * 2.25);
   }
 `;
 

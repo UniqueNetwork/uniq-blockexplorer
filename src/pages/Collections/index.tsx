@@ -25,7 +25,6 @@ const CollectionsPage: FC = () => {
     <PagePaper>
       <SearchComponent
         placeholder="Collection / account"
-        value={searchString}
         onSearchChange={onSearchChange}
       />
       <div>

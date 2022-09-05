@@ -40,11 +40,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   return (
     <>
       <ControlsWrapper>
-        <Search
-          placeholder={'NFT / collection'}
-          value={searchString}
-          onSearchChange={setSearchString}
-        />
+        <Search placeholder="NFT / collection" onSearchChange={setSearchString} />
       </ControlsWrapper>
       <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
       <CollectionsWrapper>

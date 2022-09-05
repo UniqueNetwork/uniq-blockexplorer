@@ -39,9 +39,8 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
         </H>
       )}
       <SearchComponent
-        placeholder={'Extrinsic / collection / NFT / account'}
+        placeholder="Extrinsic / collection / NFT / account"
         setResultExist={setResultExist}
-        value={searchString}
         onSearchChange={setSearchString}
       />
     </Wrapper>

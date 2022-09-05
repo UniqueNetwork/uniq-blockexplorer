@@ -1,51 +1,39 @@
 import React, { useCallback } from 'react';
-import { Icon } from '@unique-nft/ui-kit';
+import { Icon, Select, SelectOptionProps } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
-import usePagination, { DOTS } from '../hooks/usePagination';
+import { usePagination, DOTS } from '@app/hooks';
+
+import { PageNumber } from './PageNumber';
 
 interface PaginationProps {
   count: number; // total number of elements in DB
-  pageSize?: number; // how many elements we present per single page
+  itemsName?: string;
+  pageSize: number; // how many elements we present per single page
   onPageChange: (page: number) => void; // fetch new page data
+  selectPageSize?: (pageSize: SelectOptionProps) => void;
   siblingCount?: number; // how many pages to show, the rest will be "..."
   currentPage?: number;
 }
 
-// TODO: can be string (when DOTS)
-const PageNumberComponent = (props: {
-  pageNumber: number | string;
-  currentPage: number;
-  onPageChanged: (newPage: number) => void;
-}) => {
-  const { currentPage, onPageChanged, pageNumber } = props;
+const OPTIONS: SelectOptionProps[] = [
+  {
+    id: 24,
+    title: '24',
+  },
+  {
+    id: 36,
+    title: '36',
+  },
+];
 
-  const onPagePillClick = useCallback(() => {
-    onPageChanged(pageNumber as number);
-  }, [onPageChanged, pageNumber]);
-
-  if (pageNumber === DOTS) {
-    return <li>...</li>;
-  }
-
-  // Render our Page Pills
-  return (
-    // highlight if selected
-    <li
-      className={pageNumber === currentPage ? 'active' : ''}
-      key={pageNumber}
-      onClick={onPagePillClick}
-    >
-      {pageNumber}
-    </li>
-  );
-};
-
-const PaginationComponent = ({
+export const Pagination = ({
   count,
   currentPage = 1,
+  itemsName,
   onPageChange,
-  pageSize = 10,
+  pageSize,
+  selectPageSize,
   siblingCount = 2,
 }: PaginationProps) => {
   const paginationRange = usePagination({
@@ -61,7 +49,7 @@ const PaginationComponent = ({
     (newPage: number) => {
       onPageChange(newPage);
     },
-    [pageSize, onPageChange],
+    [onPageChange],
   );
 
   const onNext = useCallback(() => {
@@ -75,19 +63,31 @@ const PaginationComponent = ({
   }, [currentPage, count, pageSize, onPageChanged]);
 
   return (
-    <PaginationWrapper>
-      <div>{count} items</div>
+    <PaginationWrapper className="pagination">
+      <div>
+        {count} {itemsName ?? 'items'}
+      </div>
+      {!!selectPageSize && (
+        <PageSize>
+          Results on the page
+          <Select
+            options={OPTIONS}
+            value={pageSize.toString()}
+            onChange={selectPageSize}
+          />
+        </PageSize>
+      )}
       {count > pageSize && (
         <PageNumbersWrapper>
-          <li key={'prev'} onClick={onPrevious}>
+          <li key="prev" onClick={onPrevious}>
             <Icon
               color={currentPage === 1 ? '#ABB6C1' : '#040B1D'}
-              name={'carret-right'}
+              name="carret-right"
               size={12}
             />
           </li>
           {paginationRange.map((pageNumber, index) => (
-            <PageNumberComponent
+            <PageNumber
               currentPage={currentPage}
               key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
               pageNumber={pageNumber}
@@ -95,10 +95,10 @@ const PaginationComponent = ({
             />
           ))}
           {/* TODO: disabled={currentPage === lastPage} */}
-          <li key={'next'} onClick={onNext}>
+          <li key="next" onClick={onNext}>
             <Icon
               color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'}
-              name={'carret-right'}
+              name="carret-right"
               size={12}
             />
           </li>
@@ -154,4 +154,6 @@ const PageNumbersWrapper = styled.ul`
   }
 `;
 
-export default PaginationComponent;
+const PageSize = styled.div``;
+
+export default Pagination;

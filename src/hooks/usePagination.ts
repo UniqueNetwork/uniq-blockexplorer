@@ -82,7 +82,7 @@ const getTotalPages = (
   return [1];
 };
 
-const usePagination = ({
+export const usePagination = ({
   currentPage = 1,
   pageSize,
   siblingCount = 1,
