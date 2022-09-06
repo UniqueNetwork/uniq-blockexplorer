@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Icon } from '@unique-nft/ui-kit';
+import { Icon, Select, Tabs } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { useScrollToTop, useSearchFromQuery } from '@app/hooks';
+import { useApi, useScrollToTop, useSearchFromQuery } from '@app/hooks';
 import { Search } from '@app/components';
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { logUserEvents } from '@app/utils';
@@ -15,9 +16,13 @@ import TokensComponent, { ViewType } from './components/TokensComponent';
 import { DEFAULT_PAGE_SIZE } from './constants';
 
 const defaultOrderBy: TokenSorting = { date_of_creation: 'desc_nulls_last' };
+const tabUrls = ['nfts', 'fractional'];
 
 const TokensPage: FC = () => {
   useScrollToTop();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentChain } = useApi();
   const searchFromQuery = useSearchFromQuery();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [view, setView] = useState<ViewType>(ViewType.Grid);
@@ -26,6 +31,11 @@ const TokensPage: FC = () => {
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
+  const basePath = `/${currentChain.network}/tokens`;
+
+  const currentTabIndex = tabUrls.findIndex((tab) =>
+    location.pathname.includes(`${basePath}/${tab}`),
+  );
 
   const defaultOption =
     OPTIONS.find(
@@ -62,20 +72,22 @@ const TokensPage: FC = () => {
     setView(ViewType.List);
   }, [setView]);
 
+  const handleClick = (tabIndex: number) => {
+    navigate(`${basePath}/${tabUrls[tabIndex]}`);
+  };
+
+  useEffect(() => {
+    if (location.pathname === basePath) {
+      navigate(tabUrls[0]);
+    }
+  }, [basePath, location.pathname, navigate]);
+
   return (
     <div className="tokens-page">
       <TopBar>
         <Title>NFTs</Title>
         <Search placeholder="NFT / collection" onSearchChange={onSearchChange} />
         <Controls>
-          {/* {view === ViewType.Grid && (
-            <Select
-              defaultValue={defaultOption}
-              options={OPTIONS}
-              value={selectOption?.id as string}
-              onChange={selectFilter}
-            />
-          )} */}
           <ViewButtons>
             <ViewButton onClick={selectList}>
               <Icon
@@ -97,6 +109,27 @@ const TokensPage: FC = () => {
         </Controls>
       </TopBar>
       <PagePaper>
+        <div className="tabs-header">
+          <Tabs
+            activeIndex={currentTabIndex}
+            labels={['NFTs', 'Coins']}
+            type="slim"
+            onClick={handleClick}
+          />
+          <Tabs activeIndex={currentTabIndex}>
+            <Select
+              defaultValue={defaultOption}
+              options={OPTIONS}
+              value={selectOption?.id as string}
+              onChange={selectFilter}
+            />
+            <></>
+          </Tabs>
+        </div>
+        <Tabs activeIndex={currentTabIndex}>
+          <Outlet />
+          <Outlet />
+        </Tabs>
         <TokensComponent
           currentPage={currentPage}
           orderBy={orderBy}
