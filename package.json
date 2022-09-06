@@ -105,6 +105,9 @@
     "eslint": "eslint src --fix",
     "stylelint": "stylelint '**/*.scss' --fix"
   },
+  "pre-push": [
+    "eslint"
+  ],
   "eslintConfig": {
     "extends": [
       "react-app",
