@@ -1,3 +1,7 @@
+## Version 2.0.3
+
+- [SCAN-119] bugfix for date is uploading
+
 ## Version 2.0.2
 
 - fetch more holders fix
