@@ -48,15 +48,16 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
 }) => {
   const [orderBy, setOrderBy] = useState<HolderSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const offset = (currentPage - 1) * pageSize;
 
   const deviceSize = useDeviceSize();
 
-  const { fetchMoreHolders, holders, holdersCount, isHoldersFetching } =
-    gqlHolders.useGraphQlHolders({
-      filter: { collection_id: { _eq: Number(collectionId) } },
-      orderBy: defaultOrderBy,
-      pageSize,
-    });
+  const { holders, holdersCount, isHoldersFetching } = gqlHolders.useGraphQlHolders({
+    filter: { collection_id: { _eq: Number(collectionId) } },
+    offset,
+    orderBy,
+    pageSize,
+  });
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>
@@ -64,37 +65,13 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
     [],
   );
 
-  const fetchHolders = useCallback(
-    (currentPage: number, orderBy: HolderSorting) => {
-      const offset = (currentPage - 1) * pageSize;
+  const onOrderChange = useCallback((_orderBy: HolderSorting) => {
+    setOrderBy(_orderBy);
+  }, []);
 
-      void fetchMoreHolders({
-        filter: { collection_id: { _eq: Number(collectionId) } },
-        limit: pageSize,
-        offset,
-        orderBy,
-      });
-    },
-    [collectionId, fetchMoreHolders, pageSize],
-  );
-
-  const onOrderChange = useCallback(
-    (_orderBy: HolderSorting) => {
-      setOrderBy(_orderBy);
-
-      fetchHolders(currentPage, _orderBy);
-    },
-    [currentPage, fetchHolders],
-  );
-
-  const onPageChange = useCallback(
-    (_currentPage: number) => {
-      setCurrentPage(_currentPage);
-
-      fetchHolders(_currentPage, orderBy);
-    },
-    [fetchHolders, orderBy],
-  );
+  const onPageChange = useCallback((_currentPage: number) => {
+    setCurrentPage(_currentPage);
+  }, []);
 
   return (
     <HolderWrapper>
