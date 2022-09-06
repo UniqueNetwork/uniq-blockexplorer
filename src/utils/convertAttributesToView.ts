@@ -14,7 +14,7 @@ export type AttributeValue = {
     | Array<LocalizedStringOrBoxedNumberWithDefault>;
   type: AttributeType;
   isArray: boolean;
-  rawValue: EncodedTokenAttributeValue;
+  rawValue: EncodedTokenAttributeValue | string | Array<string>;
   isEnum: boolean;
 };
 
