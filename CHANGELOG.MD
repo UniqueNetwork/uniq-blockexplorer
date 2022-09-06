@@ -1,3 +1,7 @@
+## Version 2.0.2
+
+- fetch more holders fix
+
 ## Version 2.0.1
 
 - fixed sorting bugs for null values
