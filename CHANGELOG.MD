@@ -1,3 +1,7 @@
+## Version 2.0.4
+
+- [SCAN-412] Fix card created date for collection/tokens view
+
 ## Version 2.0.3
 
 - [SCAN-119] bugfix for date is uploading
