@@ -21,7 +21,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
 
   const deviceSize = useDeviceSize();
 
-  const { isTokensFetching, tokens, tokensCount } = useGraphQlTokens({
+  const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: collectionId ? { collection_id: { _eq: Number(collectionId) } } : undefined,
     offset: 0,
     pageSize,
@@ -49,7 +49,11 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
         {tokens?.slice(0, tokensLimit).map((token) => (
-          <TokenCard key={`token-${token.collection_id}-${token.token_id}`} {...token} />
+          <TokenCard
+            key={`token-${token.collection_id}-${token.token_id}`}
+            timeNow={timestamp}
+            {...token}
+          />
         ))}
       </TokensWrapper>
       {tokensCount !== 0 && (
