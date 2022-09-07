@@ -9,7 +9,7 @@ import { Token } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
-import clock from '@app/images/icons/clock.svg';
+import { SVGIcon } from '@app/components/SVGIcon';
 
 type TokenCardProps = Token & { timeNow?: number };
 
@@ -55,7 +55,7 @@ const TokenCard: FC<TokenCardProps> = ({
           </TokenCollectionLink>
         </div>
         <TokenProperties>
-          <img alt="created" src={clock} />
+          <StyledSVGIcon height={16} name="clock" width={16} />
           <Text color="additional-dark" size="xs">
             {timeDifference(dateOfCreation, timeNow)}
           </Text>
@@ -64,6 +64,11 @@ const TokenCard: FC<TokenCardProps> = ({
     </TokenCardLink>
   );
 };
+
+const StyledSVGIcon = styled(SVGIcon)`
+  color: var(--blue-gray-400);
+  margin-right: 5px;
+`;
 
 const TokenCardLink = styled(Link)`
   width: 100%;
@@ -120,12 +125,6 @@ const TokenProperties = styled.div`
   display: flex;
   align-items: center;
   margin-top: calc(var(--gap) / 2);
-
-  img {
-    width: 13px;
-    height: 13px;
-    margin-right: 5px;
-  }
 `;
 
 export default TokenCard;
