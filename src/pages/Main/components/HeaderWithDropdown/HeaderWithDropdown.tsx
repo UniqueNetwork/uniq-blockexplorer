@@ -40,6 +40,10 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
 
 const StyledSVGIcon = styled(SVGIcon)`
   margin-left: calc(var(--gap) / 2);
+
+  svg path {
+    fill: var(--primary-500);
+  }
 `;
 
 const StyledHeader = styled(Header)`
