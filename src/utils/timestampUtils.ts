@@ -74,11 +74,18 @@ const timestampFormat = (timestamp: number | undefined) => {
   });
 };
 
-const timestampTableFormat = (timestamp: number) =>
-  new Date(timestamp * 1000)
+const timestampTableFormat = (timestamp: number) => {
+  const formatted = new Date(timestamp * 1000)
     .toLocaleString('en-GB', {
       hour12: false,
     })
     .replaceAll('/', '-');
+
+  if (formatted.includes('01-01-1970')) {
+    return 'date is uploading';
+  }
+
+  return formatted;
+};
 
 export { timeDifference, timestampFormat, timestampTableFormat };

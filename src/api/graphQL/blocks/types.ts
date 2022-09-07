@@ -30,9 +30,3 @@ export type useGraphQlBlocksProps = {
   offset?: number;
   searchString?: string;
 };
-
-export type FetchMoreBlocksOptions = {
-  limit?: number;
-  offset?: number;
-  searchString?: string;
-};

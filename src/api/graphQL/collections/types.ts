@@ -72,11 +72,3 @@ export type useGraphQlCollectionsProps = {
   filter?: Record<string, unknown>;
   searchString?: string;
 };
-
-export type FetchMoreCollectionsOptions = {
-  limit?: number;
-  offset?: number;
-  searchString?: string;
-  orderBy?: CollectionSorting;
-  filter?: Record<string, unknown>;
-};

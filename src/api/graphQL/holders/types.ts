@@ -26,14 +26,7 @@ export type HolderSorting = {
 export type useGraphQlHoldersProps = {
   pageSize: number;
   filter?: Record<string, unknown>;
+  offset: number;
   orderBy?: HolderSorting;
   collectionId?: string;
-};
-
-export type FetchMoreHoldersOptions = {
-  limit?: number;
-  offset?: number;
-  searchString?: string;
-  orderBy?: HolderSorting;
-  filter?: Record<string, unknown>;
 };
