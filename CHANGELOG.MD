@@ -1,3 +1,25 @@
+## Version 2.0.4
+
+- [SCAN-412] Fix card created date for collection/tokens view
+
+## Version 2.0.3
+
+- [SCAN-119] bugfix for date is uploading
+
+## Version 2.0.2
+
+- fetch more holders fix
+
+## Version 2.0.1
+
+- fixed sorting bugs for null values
+
+## Version 2.0.0
+
+- New main design
+- New search logic
+- Skeletons
+
 ## Version 1.2.9
 
 - Addresses normalization moved to backend.

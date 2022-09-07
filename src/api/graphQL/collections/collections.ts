@@ -16,6 +16,7 @@ const collectionsQuery = gql`
   ) {
     collections(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
+        attributes_schema
         actions_count
         collection_cover
         collection_id
@@ -49,29 +50,32 @@ const collectionsQuery = gql`
 
 export const useGraphQlCollections = ({
   filter,
+  offset = 0,
   orderBy,
   pageSize,
   searchString,
 }: useGraphQlCollectionsProps) => {
   const getWhere = useCallback(
     (_filter?: Record<string, unknown>, searchString?: string) => ({
-      _and: {
-        ...(_filter || {}),
-        ...(searchString
-          ? {
-              _or: [
-                { name: { _ilike: `%${searchString}%` } },
-                { description: { _ilike: `%${searchString}%` } },
-                { owner: { _eq: searchString } },
-                { owner_normalized: { _eq: searchString } },
-                { token_prefix: { _ilike: `%${searchString}%` } },
-                ...(Number(searchString)
-                  ? [{ collection_id: { _eq: Number(searchString) } }]
-                  : []),
-              ],
-            }
-          : {}),
-      },
+      _and: [
+        { ...(_filter || {}) },
+        {
+          ...(searchString
+            ? {
+                _or: [
+                  { name: { _ilike: `%${searchString}%` } },
+                  { description: { _ilike: `%${searchString}%` } },
+                  { owner: { _eq: searchString } },
+                  { owner_normalized: { _eq: searchString } },
+                  { token_prefix: { _ilike: `%${searchString}%` } },
+                  ...(Number(searchString)
+                    ? [{ collection_id: { _eq: Number(searchString) } }]
+                    : []),
+                ],
+              }
+            : {}),
+        },
+      ],
     }),
     [],
   );
@@ -87,9 +91,9 @@ export const useGraphQlCollections = ({
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
-      offset: 0,
+      offset,
       orderBy,
-      where: getWhere(filter, searchString),
+      where: getWhere(filter, searchString?.trim().toLowerCase()),
     },
   });
 
@@ -123,6 +127,7 @@ export const useGraphQlCollection = (collectionId: number) => {
     collection: data?.collections.data[0] || undefined,
     fetchCollectionsError,
     isCollectionFetching,
+    collectionsCount: data?.collections.count,
   };
 };
 

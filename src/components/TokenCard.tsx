@@ -32,7 +32,7 @@ const TokenCard: FC<TokenCardProps> = ({
     }
   }, []);
 
-  const imageUrl = useCheckImageExists(image.fullUrl);
+  const { imgSrc } = useCheckImageExists(image.fullUrl);
 
   return (
     <TokenCardLink
@@ -40,9 +40,9 @@ const TokenCard: FC<TokenCardProps> = ({
       onClick={onNFTCardClick}
     >
       {/* the picture has not exists */}
-      {!imageUrl && <TokenPicture alt={tokenId.toString()} src={imageUrl} />}
+      {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
-      {imageUrl && <TokenBackground imgUrl={imageUrl} />}
+      {imgSrc && <TokenBackground imgUrl={imgSrc} />}
       <TokenTitle>
         <Text color="primary-500" size="l">{`${prefix || ''} #${tokenId}`}</Text>
         <div>
@@ -64,22 +64,6 @@ const TokenCard: FC<TokenCardProps> = ({
     </TokenCardLink>
   );
 };
-
-const SkeletonWrapper = styled.div`
-  width: 100%;
-  border-radius: 8px 8px 0 0;
-
-  .unique-skeleton {
-    width: 100%;
-    border-radius: 8px 8px 0 0;
-
-    &:after {
-      content: '';
-      display: block;
-      padding-top: 100%;
-    }
-  }
-`;
 
 const TokenCardLink = styled(Link)`
   width: 100%;

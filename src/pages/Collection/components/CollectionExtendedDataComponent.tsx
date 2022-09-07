@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
+import { DeviceSizes } from '@app/hooks';
 
 interface ExtendedDataComponentProps {
   collection?: Collection;
@@ -11,19 +12,16 @@ interface ExtendedDataComponentProps {
 const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
   collection,
 }) => {
-  const fields =
-    collection?.const_chain_schema?.nested.onChainMetaData.nested.NFTMeta.fields;
+  const fields = collection?.attributes_schema;
 
   return (
     <>
       <WrapperWithBorder>
         <Heading size="4">NFTs attributes</Heading>
         <TagsWrapper>
-          {Object.keys(fields || {})
-            .filter((key) => key !== 'ipfsJson')
-            .map((key) => (
-              <Tag key={key}>{key}</Tag>
-            ))}
+          {Object.keys(fields || {}).map((key) => (
+            <Tag key={key}>{fields?.[key].name._}</Tag>
+          ))}
         </TagsWrapper>
       </WrapperWithBorder>
       <WrapperWithBorder>
@@ -64,6 +62,12 @@ const WrapperWithBorder = styled.div`
 const DataBlockWrapper = styled.div`
   display: grid;
   grid-template-columns: 296px 1fr;
+
+  @media (max-width: ${DeviceSizes.sm}) {
+    display: flex;
+    grid-column-gap: var(--gap);
+    flex-wrap: wrap;
+  }
 `;
 
 export default CollectionExtendedDataComponent;

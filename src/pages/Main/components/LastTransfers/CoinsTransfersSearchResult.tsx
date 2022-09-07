@@ -1,9 +1,9 @@
 import { useEffect, useState, VFC } from 'react';
 import styled from 'styled-components';
-import { Skeleton } from '@unique-nft/ui-kit';
 
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { Pagination, Stub, ScrollableTable } from '@app/components';
+import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import { Header } from '@app/styles/styled-components';
+import { PagePaperWrapper, Pagination, ScrollableTable } from '@app/components';
 import { useGraphQlLastTransfers, Transfer } from '@app/api';
 
 import { getTransferColumns } from './getTransferColumns';
@@ -13,19 +13,19 @@ export type LastTransfersProps = {
   searchString?: string;
   pageSize?: number;
   accountId?: string;
-  hideButton: (val: boolean) => void;
+  setResultExist?: (val: boolean) => void;
 };
 
-export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
+export const CoinsTransfersSearchResult: VFC<LastTransfersProps> = ({
   accountId,
   pageSize = 5,
   searchString,
-  hideButton,
+  setResultExist,
 }) => {
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
   const prettifiedBlockSearchString =
-    searchString !== '' && /[^$,.\d]/.test(searchString || '') ? undefined : searchString;
+    searchString !== '' && /^\d+-+\d/.test(searchString || '') ? searchString : undefined;
   const [currentPage, setCurrentPage] = useState(1);
   const offset = (currentPage - 1) * pageSize;
 
@@ -40,28 +40,22 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
 
   useEffect(() => {
     if (
-      /[^$,-,.\d]/.test(searchString || '') ||
-      (transfersCount === 0 && isTransfersFetching)
+      !isTransfersFetching &&
+      setResultExist &&
+      !!transfersCount &&
+      prettifiedBlockSearchString
     ) {
-      hideButton(false);
+      setResultExist(true);
     }
-    hideButton(true);
-  }, [transfersCount, isTransfersFetching, searchString, hideButton]);
+  }, [transfersCount, isTransfersFetching, setResultExist, prettifiedBlockSearchString]);
 
-  if (isTransfersFetching) {
-    return (
-      <SkeletonWrapper>
-        <Skeleton />
-      </SkeletonWrapper>
-    );
-  }
-
-  if (/[^$,-,.\d]/.test(searchString || '') || transfersCount === 0) {
-    return <Stub />;
+  if (!prettifiedBlockSearchString || transfersCount === 0) {
+    return null;
   }
 
   return (
-    <>
+    <Wrapper>
+      <StyledHeader size="2">Coins transfers</StyledHeader>
       <TableWrapper>
         <ScrollableTable
           columns={getTransferColumns(currentChain?.symbol, currentChain?.network)}
@@ -77,19 +71,26 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
         siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />
-    </>
+    </Wrapper>
   );
 };
 
-const SkeletonWrapper = styled.div`
-  padding: 0;
-  display: flex;
-  flex-grow: 1;
+const StyledHeader = styled(Header)`
+  @media ${deviceWidth.smallerThan.md} {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
+  }
+`;
 
-  .unique-skeleton {
-    width: 100%;
-    min-height: 450px;
-    border-radius: var(--gap) !important;
+const Wrapper = styled(PagePaperWrapper)`
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 767px) {
+    button.unique-button {
+      width: 100%;
+    }
   }
 `;
 

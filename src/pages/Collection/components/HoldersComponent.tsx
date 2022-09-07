@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { useDeviceSize, DeviceSize } from '@app/hooks';
+import { ScrollableTable } from '@app/components';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import Table from '../../../components/Table';
 import { Holder, holders as gqlHolders, HolderSorting } from '../../../api/graphQL';
 import PaginationComponent from '../../../components/Pagination';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
@@ -49,15 +49,16 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
 }) => {
   const [orderBy, setOrderBy] = useState<HolderSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const offset = (currentPage - 1) * pageSize;
 
   const deviceSize = useDeviceSize();
 
-  const { fetchMoreHolders, holders, holdersCount, isHoldersFetching } =
-    gqlHolders.useGraphQlHolders({
-      filter: { collection_id: { _eq: Number(collectionId) } },
-      orderBy: defaultOrderBy,
-      pageSize,
-    });
+  const { holders, holdersCount, isHoldersFetching } = gqlHolders.useGraphQlHolders({
+    filter: { collection_id: { _eq: Number(collectionId) } },
+    offset,
+    orderBy,
+    pageSize,
+  });
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>
@@ -65,41 +66,17 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
     [],
   );
 
-  const fetchHolders = useCallback(
-    (currentPage: number, orderBy: HolderSorting) => {
-      const offset = (currentPage - 1) * pageSize;
+  const onOrderChange = useCallback((_orderBy: HolderSorting) => {
+    setOrderBy(_orderBy);
+  }, []);
 
-      void fetchMoreHolders({
-        filter: { collection_id: { _eq: Number(collectionId) } },
-        limit: pageSize,
-        offset,
-        orderBy,
-      });
-    },
-    [collectionId, fetchMoreHolders, pageSize],
-  );
-
-  const onOrderChange = useCallback(
-    (_orderBy: HolderSorting) => {
-      setOrderBy(_orderBy);
-
-      fetchHolders(currentPage, _orderBy);
-    },
-    [currentPage, fetchHolders],
-  );
-
-  const onPageChange = useCallback(
-    (_currentPage: number) => {
-      setCurrentPage(_currentPage);
-
-      fetchHolders(_currentPage, orderBy);
-    },
-    [fetchHolders, orderBy],
-  );
+  const onPageChange = useCallback((_currentPage: number) => {
+    setCurrentPage(_currentPage);
+  }, []);
 
   return (
     <HolderWrapper>
-      <Table
+      <ScrollableTable
         columns={getColumns(orderBy, onOrderChange)}
         data={holders}
         loading={isHoldersFetching}
@@ -109,7 +86,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
         count={holdersCount || 0}
         currentPage={currentPage}
         pageSize={pageSize}
-        siblingCount={deviceSize === DeviceSize.sm ? 1 : 2}
+        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={onPageChange}
       />
     </HolderWrapper>

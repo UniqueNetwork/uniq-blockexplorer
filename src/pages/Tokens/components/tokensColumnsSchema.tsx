@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getImageURL, timestampTableFormat } from '@app/utils';
+import { timestampTableFormat } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import { Token, TokenSorting } from '../../../api/graphQL';
@@ -28,9 +28,9 @@ export const getTokensColumns = (
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex={'token_id'}
+        dataIndex="token_id"
         orderBy={orderBy}
-        title={'Item'}
+        title="Item"
         onOrderChange={onOrderChange}
       />
     ),
@@ -49,9 +49,9 @@ export const getTokensColumns = (
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex={'collection_id'}
+        dataIndex="collection_id"
         orderBy={orderBy}
-        title={'Collection'}
+        title="Collection"
         onOrderChange={onOrderChange}
       />
     ),
@@ -63,9 +63,9 @@ export const getTokensColumns = (
     render: timestampTableFormat,
     title: (
       <TableSortableColumnTitle
-        dataIndex={'date_of_creation'}
+        dataIndex="date_of_creation"
         orderBy={orderBy}
-        title={'Date'}
+        title="Date"
         onOrderChange={onOrderChange}
       />
     ),

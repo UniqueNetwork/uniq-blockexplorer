@@ -1,29 +1,24 @@
 import { gql, useQuery } from '@apollo/client';
 
-import { ExtrinsicData, ExtrinsicVariables } from './types';
+import { ExtrinsicData, ExtrinsicVariables, ExtrinsicWhereParams } from './types';
 
 const extrinsicQuery = gql`
-  query getExtrinsic($limit: Int, $offset: Int, $block_index: String!) {
-    extrinsics(
-      limit: $limit
-      offset: $offset
-      where: { block_index: { _eq: $block_index } }
-    ) {
+  query getExtrinsic($limit: Int, $offset: Int, $where: ExtrinsicWhereParams) {
+    extrinsics(limit: $limit, offset: $offset, where: $where) {
       data {
         amount
         block_index
         block_number
         fee
-        hash
-        success
-        timestamp
         from_owner
         from_owner_normalized
-        to_owner
-        to_owner_normalized
+        hash
         method
         section
         success
+        timestamp
+        to_owner
+        to_owner_normalized
       }
       count
       timestamp
@@ -33,15 +28,26 @@ const extrinsicQuery = gql`
 
 export { extrinsicQuery };
 
-export const useGraphQlExtrinsic = (blockIndex?: string) => {
+interface UseGraphQlExtrinsicProps {
+  blockIndex?: string;
+  limit: number;
+  where: ExtrinsicWhereParams;
+}
+
+export const useGraphQlExtrinsic = ({ limit, where }: UseGraphQlExtrinsicProps) => {
   const { data, loading: isExtrinsicFetching } = useQuery<
     ExtrinsicData,
     ExtrinsicVariables
   >(extrinsicQuery, {
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    variables: { block_index: blockIndex || '', limit: 1, offset: 0 },
+    variables: { limit, offset: 0, where },
   });
 
-  return { extrinsic: data?.extrinsics.data[0], isExtrinsicFetching };
+  return {
+    count: data?.extrinsics.count,
+    extrinsics: data?.extrinsics.data,
+    isExtrinsicFetching,
+    timestamp: data?.extrinsics.timestamp,
+  };
 };

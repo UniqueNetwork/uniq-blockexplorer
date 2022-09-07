@@ -1,22 +1,6 @@
-import { VFC } from 'react';
 import styled from 'styled-components';
 
-import { IdentityIcon } from '@app/components';
-
-interface RoundedCoverProps {
-  collectionId: number;
-  coverSrc: string | undefined;
-}
-
-export const RoundedCover: VFC<RoundedCoverProps> = ({ collectionId, coverSrc }) => (
-  <Wrapper src={coverSrc}>
-    {!coverSrc && (
-      <IdentityIcon address={`collection ${collectionId ?? ''} cover`} size="84" />
-    )}
-  </Wrapper>
-);
-
-const Wrapper = styled.div.attrs<{ src?: string }>((props) => ({
+export const CoverContainer = styled.div.attrs<{ src?: string }>((props) => ({
   src: props.src,
 }))<{ src?: string }>`
   background-image: ${(props) => (props.src ? `url(${props.src})` : 'none')};
@@ -29,11 +13,20 @@ const Wrapper = styled.div.attrs<{ src?: string }>((props) => ({
   border-radius: 48px;
   height: 88px;
   width: 88px;
-  position: absolute;
   top: calc(100% - 46px);
   left: calc(50% - 46px);
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  svg {
+    width: 88px;
+    height: 88px;
+
+    @media (max-width: 767px) {
+      width: 60px;
+      height: 60px;
+    }
+  }
 
   @media (max-width: 767px) {
     width: 64px;

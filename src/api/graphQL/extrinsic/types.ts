@@ -1,7 +1,12 @@
+export interface ExtrinsicWhereParams {
+  block_index?: any;
+  block_number?: any;
+}
+
 export interface ExtrinsicVariables {
-  block_index: string;
   limit: number;
   offset: number;
+  where: ExtrinsicWhereParams;
 }
 
 export interface Extrinsic {
@@ -26,5 +31,6 @@ export interface ExtrinsicData {
   extrinsics: {
     data: Extrinsic[];
     count: number;
+    timestamp: number;
   };
 }

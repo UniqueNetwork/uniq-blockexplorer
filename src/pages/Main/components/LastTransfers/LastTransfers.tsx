@@ -1,9 +1,9 @@
-import { useCallback, useState, VFC } from 'react';
+import { useState, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
 
-import { useApi } from '@app/hooks';
+import { DeviceSizes, useApi } from '@app/hooks';
 import { PagePaperWrapper } from '@app/components';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
@@ -64,7 +64,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
           searchString={searchString}
         />
       )}
-      {contentExist && (
+      {false && (
         <ButtonWrapper
           iconRight={{
             color: '#fff',
@@ -84,11 +84,7 @@ const Wrapper = styled(PagePaperWrapper)`
   display: flex;
   flex-direction: column;
 
-  td {
-    line-height: 57px;
-  }
-
-  @media (max-width: 767px) {
+  @media (max-width: ${DeviceSizes.sm}) {
     button.unique-button {
       width: 100%;
     }

@@ -14,6 +14,7 @@ export interface UseGraphQlNftTransfersProps {
   accountId?: string;
   orderBy?: { [name: string]: 'asc' | 'desc' };
   searchString?: string;
+  offset?: number;
 }
 
 export interface UseGraphQlNftTransfersResult {
@@ -29,6 +30,7 @@ export const useGraphQlNftTransfers = ({
   pageSize,
   orderBy,
   searchString,
+  offset = 0,
 }: UseGraphQlNftTransfersProps): UseGraphQlNftTransfersResult => {
   const getWhere = useCallback(
     (searchString?: string) => ({
@@ -70,7 +72,7 @@ export const useGraphQlNftTransfers = ({
     notifyOnNetworkStatusChange: true,
     variables: {
       limit: pageSize,
-      offset: 0,
+      offset,
       orderBy,
       where: getWhere(searchString),
     },
