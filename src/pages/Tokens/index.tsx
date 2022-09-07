@@ -1,21 +1,20 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import ReactTooltip from 'react-tooltip';
 import { Icon, Select, Tabs } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import { useApi, useScrollToTop, useSearchFromQuery } from '@app/hooks';
-import { Search } from '@app/components';
-import { OPTIONS } from '@app/pages/Tokens/constants';
+import { useApi, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
+import { NFTs } from '@app/pages/Tokens/NFTs';
 
+import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
 import PagePaper from '../../components/PagePaper';
-import TokensComponent, { ViewType } from './components/TokensComponent';
-import { DEFAULT_PAGE_SIZE } from './constants';
-
-const defaultOrderBy: TokenSorting = { date_of_creation: 'desc_nulls_last' };
+import { ViewType } from './components/TokensComponent';
 const tabUrls = ['nfts', 'fractional'];
 
 const TokensPage: FC = () => {
@@ -23,12 +22,14 @@ const TokensPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { currentChain } = useApi();
-  const searchFromQuery = useSearchFromQuery();
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const [selectOption, setSelectOption] = useState<SelectOptionProps>();
-  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
+  const [pageSize, setPageSize] = useState<SelectOptionProps>({
+    id: DEFAULT_PAGE_SIZE,
+    title: DEFAULT_PAGE_SIZE.toString(),
+  });
+
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
   const basePath = `/${currentChain.network}/tokens`;
@@ -42,11 +43,6 @@ const TokensPage: FC = () => {
       (option) =>
         option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
     )?.id ?? '';
-
-  const onSearchChange = (value: string) => {
-    setSearchString(value);
-    setCurrentPage(1);
-  };
 
   const selectFilter = useCallback(
     (selected) => {
@@ -77,7 +73,7 @@ const TokensPage: FC = () => {
   };
 
   useEffect(() => {
-    if (location.pathname === basePath) {
+    if (location.pathname === basePath || location.pathname === `${basePath}/`) {
       navigate(tabUrls[0]);
     }
   }, [basePath, location.pathname, navigate]);
@@ -86,64 +82,87 @@ const TokensPage: FC = () => {
     <div className="tokens-page">
       <TopBar>
         <Title>NFTs</Title>
-        <Search placeholder="NFT / collection" onSearchChange={onSearchChange} />
-        <Controls>
-          <ViewButtons>
-            <ViewButton onClick={selectList}>
-              <Icon
-                file={
-                  view === ViewType.List ? '/static/list_active.svg' : '/static/list.svg'
-                }
-                size={32}
-              />
-            </ViewButton>
-            <ViewButton onClick={selectGrid}>
-              <Icon
-                file={
-                  view === ViewType.Grid ? '/static/grid_active.svg' : '/static/grid.svg'
-                }
-                size={32}
-              />
-            </ViewButton>
-          </ViewButtons>
-        </Controls>
       </TopBar>
       <PagePaper>
-        <div className="tabs-header">
+        <TabsHeader>
           <Tabs
             activeIndex={currentTabIndex}
-            labels={['NFTs', 'Coins']}
+            disabledIndexes={[1]}
+            labels={tabUrls}
             type="slim"
             onClick={handleClick}
           />
+          <Tooltip>
+            <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
+            <ReactTooltip id="sadFace" effect="solid">
+              <span>Coming soon</span>
+            </ReactTooltip>
+          </Tooltip>
           <Tabs activeIndex={currentTabIndex}>
-            <Select
-              defaultValue={defaultOption}
-              options={OPTIONS}
-              value={selectOption?.id as string}
-              onChange={selectFilter}
-            />
+            <RightTabMenu>
+              <Select
+                defaultValue={defaultOption}
+                options={OPTIONS}
+                value={selectOption?.id as string}
+                onChange={selectFilter}
+              />
+              <Controls>
+                <ViewButtons>
+                  <ViewButton onClick={selectList}>
+                    <Icon
+                      file={
+                        view === ViewType.List
+                          ? '/static/list_active.svg'
+                          : '/static/list.svg'
+                      }
+                      size={32}
+                    />
+                  </ViewButton>
+                  <ViewButton onClick={selectGrid}>
+                    <Icon
+                      file={
+                        view === ViewType.Grid
+                          ? '/static/grid_active.svg'
+                          : '/static/grid.svg'
+                      }
+                      size={32}
+                    />
+                  </ViewButton>
+                </ViewButtons>
+              </Controls>
+            </RightTabMenu>
             <></>
           </Tabs>
-        </div>
-        <Tabs activeIndex={currentTabIndex}>
-          <Outlet />
-          <Outlet />
-        </Tabs>
-        <TokensComponent
-          currentPage={currentPage}
-          orderBy={orderBy}
-          pageSize={DEFAULT_PAGE_SIZE}
-          searchString={searchString}
-          setCurrentPage={setCurrentPage}
-          setSearchString={setSearchString}
-          setOrderBy={setOrderBy}
-          view={view}
-        />
+          <Tabs activeIndex={currentTabIndex}>
+            <Outlet />
+            <Outlet />
+          </Tabs>
+        </TabsHeader>
+        <Routes>
+          <Route
+            element={
+              <NFTs
+                orderBy={orderBy}
+                setOrderBy={setOrderBy}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+                view={view}
+              />
+            }
+            path="nfts"
+          />
+          <Route element={<div>fractional coming soon</div>} path="fractional" />
+        </Routes>
       </PagePaper>
     </div>
   );
 };
+
+const Tooltip = styled.div`
+  position: absolute;
+  top: 16px;
+  left: 200px;
+`;
 
 const TopBar = styled.div`
   display: grid;
@@ -164,6 +183,43 @@ const Title = styled.h2`
   font-weight: bold;
   font-size: 36px;
   line-height: 48px;
+`;
+
+const TabsHeader = styled.div`
+  position: relative;
+  margin-bottom: calc(var(--gap) * 1.5);
+
+  .unique-tabs-labels {
+    .tab-label {
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 28px;
+      text-transform: capitalize;
+      height: 28px;
+      padding-top: 14px;
+      padding-bottom: 30px;
+
+      &.active {
+        color: var(--link-color);
+      }
+
+      &.disabled {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .unique-tabs-contents {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+`;
+
+const RightTabMenu = styled.div`
+  display: flex;
+  align-items: center;
+  grid-column-gap: 44px;
 `;
 
 const Controls = styled.div`

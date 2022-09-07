@@ -44,6 +44,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   pageSize,
   searchString,
   setCurrentPage,
+  selectPageSize,
   setSearchString,
   setOrderBy,
   view,
@@ -51,14 +52,14 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const deviceSize = useDeviceSize();
   const searchFromQuery = useSearchFromQuery();
   const { currentChain } = useApi();
-
   const { accountId, collectionId } = useParams();
+  const pageSizeId = pageSize.id as number;
 
   const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: filter({ accountId, collectionId }),
-    offset: (currentPage - 1) * pageSize,
+    offset: (currentPage - 1) * pageSizeId,
     orderBy,
-    pageSize,
+    pageSize: pageSizeId,
     searchString,
   });
 
@@ -78,13 +79,17 @@ const TokensComponent: FC<TokensComponentProps> = ({
 
   return (
     <Wrapper>
-      <Pagination
-        count={tokensCount || 0}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
-        onPageChange={setCurrentPage}
-      />
+      <TopPaginationContainer>
+        <Pagination
+          count={tokensCount || 0}
+          currentPage={currentPage}
+          itemsName="NFTs"
+          pageSize={pageSizeId}
+          selectPageSize={selectPageSize}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          onPageChange={setCurrentPage}
+        />
+      </TopPaginationContainer>
       {isTokensFetching ? (
         <SkeletonWrapper>
           <Skeleton />
@@ -109,13 +114,32 @@ const TokensComponent: FC<TokensComponentProps> = ({
           )}
         </>
       )}
+      <BottomPaginationContainer>
+        <Pagination
+          count={tokensCount || 0}
+          currentPage={currentPage}
+          itemsName="NFTs"
+          pageSize={pageSizeId}
+          selectPageSize={selectPageSize}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          onPageChange={setCurrentPage}
+        />
+      </BottomPaginationContainer>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div``;
+
+const TopPaginationContainer = styled.div`
   .pagination {
     margin-bottom: calc(var(--gap) * 2.25);
+  }
+`;
+
+const BottomPaginationContainer = styled.div`
+  .pagination {
+    margin-top: calc(var(--gap) * 2.25);
   }
 `;
 

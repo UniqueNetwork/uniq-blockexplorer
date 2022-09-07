@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Icon, Select, SelectOptionProps } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
 import { usePagination, DOTS } from '@app/hooks';
+import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
 
 import { PageNumber } from './PageNumber';
 
@@ -32,16 +33,22 @@ export const Pagination = ({
   currentPage = 1,
   itemsName,
   onPageChange,
-  pageSize,
+  // pageSize as defaultPageSize,
   selectPageSize,
   siblingCount = 2,
 }: PaginationProps) => {
+  const [pageSize, setPageSize] = useState<SelectOptionProps>({
+    id: DEFAULT_PAGE_SIZE,
+    title: DEFAULT_PAGE_SIZE.toString(),
+  });
+
   const paginationRange = usePagination({
     currentPage,
-    pageSize,
+    pageSize: 20,
     siblingCount,
     total: count,
   });
+
   const lastPage =
     (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null;
 
@@ -53,31 +60,37 @@ export const Pagination = ({
   );
 
   const onNext = useCallback(() => {
-    if (currentPage === lastPage || count < pageSize) return;
+    if (currentPage === lastPage || count < 20) return;
     onPageChanged(currentPage + 1);
   }, [currentPage, lastPage, count, pageSize, onPageChanged]);
 
   const onPrevious = useCallback(() => {
-    if (currentPage < 2 || count < pageSize) return;
+    if (currentPage < 2 || count < 20) return;
     onPageChanged(currentPage - 1);
   }, [currentPage, count, pageSize, onPageChanged]);
+
+  const changePageSize = useCallback((selected) => {
+    setPageSize(selected);
+  }, []);
+
+  console.log('pageSize', pageSize);
 
   return (
     <PaginationWrapper className="pagination">
       <div>
         {count} {itemsName ?? 'items'}
       </div>
-      {!!selectPageSize && (
+      {!!setPageSize && (
         <PageSize>
           Results on the page
           <Select
             options={OPTIONS}
-            value={pageSize.toString()}
-            onChange={selectPageSize}
+            value={pageSize?.id as string}
+            onChange={changePageSize}
           />
         </PageSize>
       )}
-      {count > pageSize && (
+      {count > 20 && (
         <PageNumbersWrapper>
           <li key="prev" onClick={onPrevious}>
             <Icon
@@ -97,7 +110,7 @@ export const Pagination = ({
           {/* TODO: disabled={currentPage === lastPage} */}
           <li key="next" onClick={onNext}>
             <Icon
-              color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'}
+              color={currentPage === lastPage || count < 20 ? '#ABB6C1' : '#040B1D'}
               name="carret-right"
               size={12}
             />

@@ -40,11 +40,11 @@ ReactDOM.render(
               <Route index element={<Collections />} />
               <Route element={<Collection />} path=":collectionId" />
             </Route>
-            <Route path="tokens">
-              <Route index element={<Tokens />} />
-              <Route element={<Tokens />} path="nfts" />
-              <Route element={<Tokens />} path="fractional" />
-              <Route element={<Tokens />} path=":collectionId" />
+            <Route path="tokens" element={<Tokens />}>
+              <Route path="fractional" />
+              <Route path="nfts" />
+            </Route>
+            <Route path="nfts">
               <Route element={<Token />} path=":collectionId/:tokenId" />
             </Route>
           </Route>

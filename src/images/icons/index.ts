@@ -1,1 +1,1 @@
-export { default as RemoveThis } from './removeThis.svg';
+export { default as Question } from './question.svg';
