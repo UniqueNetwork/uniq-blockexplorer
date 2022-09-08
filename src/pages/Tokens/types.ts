@@ -9,7 +9,7 @@ export interface TokensComponentProps {
   pageSize: SelectOptionProps;
   searchString?: string;
   setCurrentPage: (currentPage: number) => void;
-  selectPageSize: (pageSize: SelectOptionProps) => void;
+  setPageSize: (pageSize: SelectOptionProps) => void;
   setSearchString: (searchString: string | undefined) => void;
   setOrderBy: (orderBy: TokenSorting) => void;
   view: ViewType;

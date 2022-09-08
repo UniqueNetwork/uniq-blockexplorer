@@ -44,7 +44,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   pageSize,
   searchString,
   setCurrentPage,
-  selectPageSize,
+  setPageSize,
   setSearchString,
   setOrderBy,
   view,
@@ -53,13 +53,13 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const searchFromQuery = useSearchFromQuery();
   const { currentChain } = useApi();
   const { accountId, collectionId } = useParams();
-  const pageSizeId = pageSize.id as number;
+  const pageSizeNumber = pageSize.id as number;
 
   const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: filter({ accountId, collectionId }),
-    offset: (currentPage - 1) * pageSizeId,
+    offset: (currentPage - 1) * pageSizeNumber,
     orderBy,
-    pageSize: pageSizeId,
+    pageSize: pageSizeNumber,
     searchString,
   });
 
@@ -84,8 +84,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
           count={tokensCount || 0}
           currentPage={currentPage}
           itemsName="NFTs"
-          pageSize={pageSizeId}
-          selectPageSize={selectPageSize}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
           onPageChange={setCurrentPage}
         />
@@ -119,8 +119,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
           count={tokensCount || 0}
           currentPage={currentPage}
           itemsName="NFTs"
-          pageSize={pageSizeId}
-          selectPageSize={selectPageSize}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
           onPageChange={setCurrentPage}
         />
@@ -129,11 +129,33 @@ const TokensComponent: FC<TokensComponentProps> = ({
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  .pagination {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    .count-with-page-size {
+      display: flex;
+      align-items: center;
+      grid-column-gap: calc(var(--gap) * 2.5);
+
+      .page-size {
+        display: flex;
+        grid-column-gap: calc(var(--gap) / 2);
+        align-items: center;
+
+        .unique-select {
+          width: 72px;
+        }
+      }
+    }
+  }
+`;
 
 const TopPaginationContainer = styled.div`
   .pagination {
-    margin-bottom: calc(var(--gap) * 2.25);
+    margin-bottom: calc(var(--gap) * 2);
   }
 `;
 

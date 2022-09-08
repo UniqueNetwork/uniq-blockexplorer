@@ -4,6 +4,7 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { useDeviceSize, DeviceSize } from '@app/hooks';
 import { Pagination, ScrollableTable } from '@app/components';
+import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import { Holder, holders as gqlHolders, HolderSorting } from '../../../api/graphQL';
@@ -43,7 +44,7 @@ const getColumns = (
 
 const HoldersComponent: FC<HoldersComponentProps> = ({
   collectionId,
-  pageSize = 10,
+  pageSize = DEFAULT_PAGE_SIZE,
   defaultOrderBy = { count: 'desc' },
 }) => {
   const [orderBy, setOrderBy] = useState<HolderSorting>(defaultOrderBy);
@@ -84,7 +85,7 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
       <Pagination
         count={holdersCount || 0}
         currentPage={currentPage}
-        pageSize={pageSize}
+        pageSize={{ id: pageSize }}
         siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={onPageChange}
       />

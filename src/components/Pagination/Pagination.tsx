@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Icon, Select, SelectOptionProps } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
@@ -10,9 +10,9 @@ import { PageNumber } from './PageNumber';
 interface PaginationProps {
   count: number; // total number of elements in DB
   itemsName?: string;
-  pageSize: number; // how many elements we present per single page
+  pageSize: SelectOptionProps; // how many elements we present per single page
   onPageChange: (page: number) => void; // fetch new page data
-  selectPageSize?: (pageSize: SelectOptionProps) => void;
+  setPageSize?: (pageSize: SelectOptionProps) => void;
   siblingCount?: number; // how many pages to show, the rest will be "..."
   currentPage?: number;
 }
@@ -33,18 +33,14 @@ export const Pagination = ({
   currentPage = 1,
   itemsName,
   onPageChange,
-  // pageSize as defaultPageSize,
-  selectPageSize,
+  pageSize,
+  setPageSize,
   siblingCount = 2,
 }: PaginationProps) => {
-  const [pageSize, setPageSize] = useState<SelectOptionProps>({
-    id: DEFAULT_PAGE_SIZE,
-    title: DEFAULT_PAGE_SIZE.toString(),
-  });
-
+  const pageSizeNumber = (pageSize?.id as number) || DEFAULT_PAGE_SIZE;
   const paginationRange = usePagination({
     currentPage,
-    pageSize: 20,
+    pageSize: pageSizeNumber,
     siblingCount,
     total: count,
   });
@@ -60,37 +56,40 @@ export const Pagination = ({
   );
 
   const onNext = useCallback(() => {
-    if (currentPage === lastPage || count < 20) return;
+    if (currentPage === lastPage || count < pageSizeNumber) return;
     onPageChanged(currentPage + 1);
-  }, [currentPage, lastPage, count, pageSize, onPageChanged]);
+  }, [currentPage, lastPage, count, pageSizeNumber, onPageChanged]);
 
   const onPrevious = useCallback(() => {
-    if (currentPage < 2 || count < 20) return;
+    if (currentPage < 2 || count < pageSizeNumber) return;
     onPageChanged(currentPage - 1);
-  }, [currentPage, count, pageSize, onPageChanged]);
+  }, [currentPage, count, pageSizeNumber, onPageChanged]);
 
-  const changePageSize = useCallback((selected) => {
-    setPageSize(selected);
-  }, []);
-
-  console.log('pageSize', pageSize);
+  const changePageSize = useCallback(
+    (selected) => {
+      setPageSize && setPageSize(selected);
+    },
+    [setPageSize],
+  );
 
   return (
     <PaginationWrapper className="pagination">
-      <div>
-        {count} {itemsName ?? 'items'}
+      <div className="count-with-page-size">
+        <div>
+          {count} {itemsName ?? 'items'}
+        </div>
+        {!!setPageSize && (
+          <PageSize className="page-size">
+            Results on the page
+            <Select
+              options={OPTIONS}
+              value={pageSize?.id as string}
+              onChange={changePageSize}
+            />
+          </PageSize>
+        )}
       </div>
-      {!!setPageSize && (
-        <PageSize>
-          Results on the page
-          <Select
-            options={OPTIONS}
-            value={pageSize?.id as string}
-            onChange={changePageSize}
-          />
-        </PageSize>
-      )}
-      {count > 20 && (
+      {count > pageSizeNumber && (
         <PageNumbersWrapper>
           <li key="prev" onClick={onPrevious}>
             <Icon
@@ -110,7 +109,9 @@ export const Pagination = ({
           {/* TODO: disabled={currentPage === lastPage} */}
           <li key="next" onClick={onNext}>
             <Icon
-              color={currentPage === lastPage || count < 20 ? '#ABB6C1' : '#040B1D'}
+              color={
+                currentPage === lastPage || count < pageSizeNumber ? '#ABB6C1' : '#040B1D'
+              }
               name="carret-right"
               size={12}
             />

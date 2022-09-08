@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
-import { Icon, Select, Tabs } from '@unique-nft/ui-kit';
+import { Tabs } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
@@ -10,11 +10,13 @@ import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
-import { NFTs } from '@app/pages/Tokens/NFTs';
 
+import { NFTs } from './NFTs';
+import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
 import PagePaper from '../../components/PagePaper';
 import { ViewType } from './components/TokensComponent';
+
 const tabUrls = ['nfts', 'fractional'];
 
 const TokensPage: FC = () => {
@@ -99,38 +101,14 @@ const TokensPage: FC = () => {
             </ReactTooltip>
           </Tooltip>
           <Tabs activeIndex={currentTabIndex}>
-            <RightTabMenu>
-              <Select
-                defaultValue={defaultOption}
-                options={OPTIONS}
-                value={selectOption?.id as string}
-                onChange={selectFilter}
-              />
-              <Controls>
-                <ViewButtons>
-                  <ViewButton onClick={selectList}>
-                    <Icon
-                      file={
-                        view === ViewType.List
-                          ? '/static/list_active.svg'
-                          : '/static/list.svg'
-                      }
-                      size={32}
-                    />
-                  </ViewButton>
-                  <ViewButton onClick={selectGrid}>
-                    <Icon
-                      file={
-                        view === ViewType.Grid
-                          ? '/static/grid_active.svg'
-                          : '/static/grid.svg'
-                      }
-                      size={32}
-                    />
-                  </ViewButton>
-                </ViewButtons>
-              </Controls>
-            </RightTabMenu>
+            <RightMenu
+              defaultOption={defaultOption}
+              selectFilter={selectFilter}
+              selectGrid={selectGrid}
+              selectList={selectList}
+              selectOption={selectOption}
+              view={view}
+            />
             <></>
           </Tabs>
           <Tabs activeIndex={currentTabIndex}>
@@ -214,32 +192,6 @@ const TabsHeader = styled.div`
     right: 0;
     top: 0;
   }
-`;
-
-const RightTabMenu = styled.div`
-  display: flex;
-  align-items: center;
-  grid-column-gap: 44px;
-`;
-
-const Controls = styled.div`
-  display: flex;
-  justify-content: space-between;
-
-  @media (max-width: 767px) {
-    width: 100%;
-  }
-`;
-
-const ViewButtons = styled.div`
-  display: flex;
-  grid-column-gap: calc(var(--gap) / 2);
-`;
-
-const ViewButton = styled.div`
-  display: flex;
-  cursor: pointer;
-  height: 32px;
 `;
 
 export default TokensPage;
