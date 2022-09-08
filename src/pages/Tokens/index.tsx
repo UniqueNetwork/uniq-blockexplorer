@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import { Tabs } from '@unique-nft/ui-kit';
@@ -46,29 +46,26 @@ const TokensPage: FC = () => {
         option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
     )?.id ?? '';
 
-  const selectFilter = useCallback(
-    (selected) => {
-      const option = OPTIONS.find((item) => {
-        return item.id === selected.id;
-      });
+  const selectFilter = (selected: SelectOptionProps) => {
+    const option = OPTIONS.find((item) => {
+      return item.id === selected.id;
+    });
 
-      if (option && option.sortField) {
-        setSelectOption(option);
-        setOrderBy({ [option.sortField]: option.sortDir });
-      }
-    },
-    [setSelectOption, setOrderBy],
-  );
+    if (option && option.sortField) {
+      setSelectOption(option);
+      setOrderBy({ [option.sortField]: option.sortDir });
+    }
+  };
 
-  const selectGrid = useCallback(() => {
+  const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
     setView(ViewType.Grid);
-  }, [setView]);
+  };
 
-  const selectList = useCallback(() => {
+  const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
     setView(ViewType.List);
-  }, [setView]);
+  };
 
   const handleClick = (tabIndex: number) => {
     navigate(`${basePath}/${tabUrls[tabIndex]}`);

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { FC } from 'react';
 import { Icon, Select, SelectOptionProps } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
@@ -28,7 +28,7 @@ const OPTIONS: SelectOptionProps[] = [
   },
 ];
 
-export const Pagination = ({
+export const Pagination: FC<PaginationProps> = ({
   count,
   currentPage = 1,
   itemsName,
@@ -36,7 +36,7 @@ export const Pagination = ({
   pageSize,
   setPageSize,
   siblingCount = 2,
-}: PaginationProps) => {
+}) => {
   const pageSizeNumber = (pageSize?.id as number) || DEFAULT_PAGE_SIZE;
   const paginationRange = usePagination({
     currentPage,
@@ -48,29 +48,23 @@ export const Pagination = ({
   const lastPage =
     (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null;
 
-  const onPageChanged = useCallback(
-    (newPage: number) => {
-      onPageChange(newPage);
-    },
-    [onPageChange],
-  );
+  const onPageChanged = (newPage: number) => {
+    onPageChange(newPage);
+  };
 
-  const onNext = useCallback(() => {
+  const onNext = () => {
     if (currentPage === lastPage || count < pageSizeNumber) return;
     onPageChanged(currentPage + 1);
-  }, [currentPage, lastPage, count, pageSizeNumber, onPageChanged]);
+  };
 
-  const onPrevious = useCallback(() => {
+  const onPrevious = () => {
     if (currentPage < 2 || count < pageSizeNumber) return;
     onPageChanged(currentPage - 1);
-  }, [currentPage, count, pageSizeNumber, onPageChanged]);
+  };
 
-  const changePageSize = useCallback(
-    (selected) => {
-      setPageSize && setPageSize(selected);
-    },
-    [setPageSize],
-  );
+  const changePageSize = (selected: SelectOptionProps) => {
+    setPageSize && setPageSize(selected);
+  };
 
   return (
     <PaginationWrapper className="pagination">

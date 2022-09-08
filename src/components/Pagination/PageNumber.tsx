@@ -1,17 +1,19 @@
-import React, { useCallback } from 'react';
+import { FC } from 'react';
 
 import { DOTS } from '@app/hooks';
 
-export const PageNumber = (props: {
+interface PageNumberProps {
   pageNumber: number | string;
   currentPage: number;
   onPageChanged: (newPage: number) => void;
-}) => {
+}
+
+export const PageNumber: FC<PageNumberProps> = (props) => {
   const { currentPage, onPageChanged, pageNumber } = props;
 
-  const onPagePillClick = useCallback(() => {
+  const onPagePillClick = () => {
     onPageChanged(pageNumber as number);
-  }, [onPageChanged, pageNumber]);
+  };
 
   if (pageNumber === DOTS) {
     return <li>...</li>;
