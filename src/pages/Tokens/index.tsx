@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import classNames from 'classnames';
 import ReactTooltip from 'react-tooltip';
-import { Tabs } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
-import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import { useApi, useScrollToTop } from '@app/hooks';
+import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
@@ -25,7 +25,7 @@ const TokensPage: FC = () => {
   const location = useLocation();
   const { currentChain } = useApi();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
-  const [selectOption, setSelectOption] = useState<SelectOptionProps>();
+  const [sort, selectSort] = useState<SelectOptionProps>();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
     id: DEFAULT_PAGE_SIZE,
@@ -40,7 +40,7 @@ const TokensPage: FC = () => {
     location.pathname.includes(`${basePath}/${tab}`),
   );
 
-  const defaultOption =
+  const defaultSort =
     OPTIONS.find(
       (option) =>
         option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
@@ -52,7 +52,7 @@ const TokensPage: FC = () => {
     });
 
     if (option && option.sortField) {
-      setSelectOption(option);
+      selectSort(option);
       setOrderBy({ [option.sortField]: option.sortDir });
     }
   };
@@ -83,35 +83,41 @@ const TokensPage: FC = () => {
         <Title>NFTs</Title>
       </TopBar>
       <PagePaper>
+        {/* TODO Move this to a separate local tabs component */}
         <TabsHeader>
-          <Tabs
-            activeIndex={currentTabIndex}
-            disabledIndexes={[1]}
-            labels={tabUrls}
-            type="slim"
-            onClick={handleClick}
-          />
-          <Tooltip>
-            <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
-            <ReactTooltip id="sadFace" effect="solid">
-              <span>Coming soon</span>
-            </ReactTooltip>
-          </Tooltip>
-          <Tabs activeIndex={currentTabIndex}>
+          <Tabs>
+            <Tab
+              className={classNames({
+                active: currentTabIndex === 0,
+              })}
+              onClick={() => handleClick(0)}
+            >
+              {tabUrls[0]}
+            </Tab>
+            <Tab
+              className={classNames({
+                active: currentTabIndex === 1,
+                disabled: true,
+              })}
+            >
+              {tabUrls[1]}
+              <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
+              <ReactTooltip id="sadFace" effect="solid">
+                <span>Coming soon</span>
+              </ReactTooltip>
+            </Tab>
+          </Tabs>
+          {currentTabIndex === 0 && (
             <RightMenu
-              defaultOption={defaultOption}
-              selectFilter={selectFilter}
+              defaultSort={defaultSort}
+              key="top-right-menu"
+              selectSort={selectFilter}
               selectGrid={selectGrid}
               selectList={selectList}
-              selectOption={selectOption}
+              sort={sort}
               view={view}
             />
-            <></>
-          </Tabs>
-          <Tabs activeIndex={currentTabIndex}>
-            <Outlet />
-            <Outlet />
-          </Tabs>
+          )}
         </TabsHeader>
         <Routes>
           <Route
@@ -133,10 +139,31 @@ const TokensPage: FC = () => {
   );
 };
 
-const Tooltip = styled.div`
-  position: absolute;
-  top: 16px;
-  left: 200px;
+const Tabs = styled.div`
+  display: flex;
+  border-bottom: 1px solid var(--grey-300);
+`;
+
+const Tab = styled.div`
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  text-transform: capitalize;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  grid-column-gap: calc(var(--gap) / 4);
+  padding: calc(var(--gap) / 2) var(--gap) calc(var(--gap) * 2) var(--gap);
+  cursor: pointer;
+
+  &.active {
+    color: var(--link-color);
+    border-bottom: 2px solid var(--link-color);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const TopBar = styled.div`
@@ -149,7 +176,7 @@ const TopBar = styled.div`
     z-index: unset;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: ${DeviceSizes.sm}) {
     margin-bottom: 24px;
   }
 `;
@@ -164,30 +191,28 @@ const TabsHeader = styled.div`
   position: relative;
   margin-bottom: calc(var(--gap) * 1.5);
 
-  .unique-tabs-labels {
-    .tab-label {
-      font-weight: 700;
-      font-size: 20px;
-      line-height: 28px;
-      text-transform: capitalize;
-      height: 28px;
-      padding-top: 14px;
-      padding-bottom: 30px;
-
-      &.active {
-        color: var(--link-color);
-      }
-
-      &.disabled {
-        cursor: not-allowed;
-      }
-    }
+  @media (max-width: ${DeviceSizes.sm}) {
+    margin-bottom: 0;
   }
 
-  .unique-tabs-contents {
+  .right-tab-menu {
     position: absolute;
     right: 0;
-    top: 0;
+    top: var(--gap);
+
+    @media (max-width: ${DeviceSizes.sm}) {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      grid-column-gap: var(--gap);
+      position: relative;
+      right: 0;
+      top: 0;
+      padding: var(--gap) 0;
+
+      .unique-select {
+        width: auto;
+      }
+    }
   }
 `;
 

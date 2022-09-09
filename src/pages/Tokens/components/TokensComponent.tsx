@@ -6,7 +6,13 @@ import styled from 'styled-components';
 
 import { Token, useGraphQlTokens } from '@app/api';
 import { Pagination, ScrollableTable } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
+import {
+  DeviceSize,
+  DeviceSizes,
+  useApi,
+  useDeviceSize,
+  useSearchFromQuery,
+} from '@app/hooks';
 
 import { TokensComponentProps } from '../types';
 import { getTokensColumns } from './tokensColumnsSchema';
@@ -146,6 +152,10 @@ const Wrapper = styled.div`
         .unique-select {
           width: 72px;
         }
+      }
+
+      @media (max-width: ${DeviceSizes.sm}) {
+        grid-column-gap: var(--gap);
       }
     }
   }

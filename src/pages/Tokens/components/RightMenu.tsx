@@ -5,33 +5,36 @@ import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
+import { DeviceSizes } from '@app/hooks';
 
 interface RightMenuProps {
-  defaultOption: string;
-  selectFilter: (selected: SelectOptionProps) => void;
+  defaultSort: string;
+  selectSort: (selected: SelectOptionProps) => void;
   selectGrid: () => void;
   selectList: () => void;
-  selectOption?: SelectOptionProps;
+  sort?: SelectOptionProps;
   view: ViewType;
 }
 
 export const RightMenu: FC<RightMenuProps> = ({
-  defaultOption,
-  selectFilter,
+  defaultSort,
+  selectSort,
   selectGrid,
   selectList,
-  selectOption,
+  sort,
   view,
 }) => {
   return (
-    <RightTabMenu>
-      <Select
-        defaultValue={defaultOption}
-        options={OPTIONS}
-        value={selectOption?.id as string}
-        onChange={selectFilter}
-      />
-      <Controls>
+    <RightTabMenu className="right-tab-menu">
+      {view === ViewType.Grid && (
+        <Select
+          defaultValue={defaultSort}
+          options={OPTIONS}
+          value={sort?.id as string}
+          onChange={selectSort}
+        />
+      )}
+      <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>
             <Icon
@@ -65,7 +68,7 @@ const Controls = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media (max-width: 767px) {
+  @media (max-width: ${DeviceSizes.sm}) {
     width: 100%;
   }
 `;
