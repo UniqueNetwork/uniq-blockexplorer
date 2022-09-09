@@ -92,7 +92,7 @@ export const LastBlocks = ({
       <Pagination
         count={blockCount}
         currentPage={currentPage}
-        pageSize={pageSize}
+        pageSize={{ id: pageSize }}
         siblingCount={deviceSize <= DeviceSize.sm || deviceSize >= DeviceSize.xxl ? 1 : 2}
         onPageChange={setCurrentPage}
       />

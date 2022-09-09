@@ -36,7 +36,7 @@ const TokenCard: FC<TokenCardProps> = ({
 
   return (
     <TokenCardLink
-      to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
+      to={`/${currentChain.network}/nfts/${collectionId}/${tokenId}`}
       onClick={onNFTCardClick}
     >
       {/* the picture has not exists */}
