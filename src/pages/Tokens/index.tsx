@@ -80,7 +80,7 @@ const TokensPage: FC = () => {
   return (
     <div className="tokens-page">
       <TopBar>
-        <Title>NFTs</Title>
+        <Title>Tokens</Title>
       </TopBar>
       <PagePaper>
         {/* TODO Move this to a separate local tabs component */}
