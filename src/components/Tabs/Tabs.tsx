@@ -1,64 +1,40 @@
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode } from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DeviceSizes } from '@app/hooks';
 
 interface TabsProps {
   additionalContent?: ReactNode | ReactNode[];
-  basePath: string;
   content: ReactNode[];
-  tabsClassNames: string[];
-  tabUrls: string[];
+  currentTabIndex: number;
+  setCurrentTabIndex: (currentTabIndex: number) => void;
+  tabsClassNames?: string[];
 }
 
 export const Tabs: FC<TabsProps> = ({
   additionalContent,
-  basePath,
   content,
+  currentTabIndex,
+  setCurrentTabIndex,
   tabsClassNames,
-  tabUrls,
-}) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const currentTabIndex = tabUrls.findIndex((tab: string) =>
-    location.pathname.includes(`${basePath}/${tab}`),
-  );
-
-  const handleClick = (tabIndex: number) => {
-    if (tabsClassNames[tabIndex] === 'disabled') {
-      return;
-    }
-
-    navigate(`${basePath}/${tabUrls[tabIndex]}`);
-  };
-
-  useEffect(() => {
-    if (location.pathname === basePath || location.pathname === `${basePath}/`) {
-      navigate(tabUrls[0]);
-    }
-  }, [basePath, location.pathname, navigate]);
-
-  return (
-    <TabsHeader>
-      <TabsList>
-        {tabUrls.map((tab, index: number) => (
-          <Tab
-            className={classNames(tabsClassNames[index], {
-              active: currentTabIndex === index,
-            })}
-            onClick={() => handleClick(index)}
-          >
-            {content[index]}
-          </Tab>
-        ))}
-      </TabsList>
-      {!!additionalContent && additionalContent}
-    </TabsHeader>
-  );
-};
+}) => (
+  <TabsHeader className="router-tabs">
+    <TabsList>
+      {content.map((contentItem: ReactNode, index: number) => (
+        <Tab
+          className={classNames(tabsClassNames?.[index], {
+            active: currentTabIndex === index,
+          })}
+          onClick={() => setCurrentTabIndex(index)}
+        >
+          {contentItem}
+        </Tab>
+      ))}
+    </TabsList>
+    {!!additionalContent && additionalContent}
+  </TabsHeader>
+);
 
 const TabsHeader = styled.div`
   position: relative;

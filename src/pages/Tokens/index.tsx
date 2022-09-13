@@ -1,15 +1,15 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
-import { Tabs } from '@app/components';
+import { RouterTabs } from '@app/components';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
@@ -21,6 +21,7 @@ const tabUrls = ['nfts', 'fractional'];
 const TokensPage: FC = () => {
   useScrollToTop();
   const location = useLocation();
+  const navigate = useNavigate();
   const { currentChain } = useApi();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const [sort, selectSort] = useState<SelectOptionProps>();
@@ -65,13 +66,19 @@ const TokensPage: FC = () => {
     setView(ViewType.List);
   };
 
+  useEffect(() => {
+    if (location.pathname === basePath || location.pathname === `${basePath}/`) {
+      navigate(tabUrls[0]);
+    }
+  }, [basePath, location.pathname, navigate, tabUrls]);
+
   return (
     <div className="tokens-page">
       <TopBar>
         <Title>Tokens</Title>
       </TopBar>
       <PagePaper>
-        <Tabs
+        <RouterTabs
           additionalContent={[
             <>
               {currentTabIndex === 0 && (

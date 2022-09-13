@@ -7,6 +7,7 @@ export { default as Stub } from './Stub';
 
 export * from './CoverContainer';
 export * from './IdentityIcon';
+export * from './RouterTabs';
 export * from './PagePaper';
 export * from './Pagination';
 export * from './Tabs';
