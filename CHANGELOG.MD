@@ -2,6 +2,14 @@
 
 - New NFTs page
 
+## Version 2.0.6
+
+- remove fields from BlockDetails query (session_length, total_issuance, need_rescan)
+
+## Version 2.0.5
+
+- ReactFlow 
+
 ## Version 2.0.4
 
 - [SCAN-412] Fix card created date for collection/tokens view
