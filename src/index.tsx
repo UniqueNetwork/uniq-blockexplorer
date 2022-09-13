@@ -28,22 +28,24 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route element={<App />} path={'/'}>
+        <Route element={<App />} path="/">
           <Route index element={<Navigate to={`/${defaultChain.network}/`} />} />
-          <Route path={':chainId/'}>
+          <Route path=":chainId">
             <Route index element={<Main />} />
-            <Route element={<Block />} path={'block/:blockIndex'} />
-            <Route element={<Account />} path={'account/:accountId'} />
-            <Route element={<Extrinsic />} path={'extrinsic/:blockIndex'} />
-            <Route element={<Block />} path={'block/:blockIndex'} />
-            <Route path={'collections/'}>
+            <Route element={<Block />} path="block/:blockIndex" />
+            <Route element={<Account />} path="account/:accountId" />
+            <Route element={<Extrinsic />} path="extrinsic/:blockIndex" />
+            <Route element={<Block />} path="block/:blockIndex" />
+            <Route path="collections">
               <Route index element={<Collections />} />
-              <Route element={<Collection />} path={':collectionId'} />
+              <Route element={<Collection />} path=":collectionId" />
             </Route>
-            <Route path={'tokens/'}>
-              <Route index element={<Tokens />} />
-              <Route element={<Tokens />} path={':collectionId'} />
-              <Route element={<Token />} path={':collectionId/:tokenId'} />
+            <Route path="tokens" element={<Tokens />}>
+              <Route path="fractional" />
+              <Route path="nfts" />
+            </Route>
+            <Route path="nfts">
+              <Route element={<Token />} path=":collectionId/:tokenId" />
             </Route>
           </Route>
         </Route>

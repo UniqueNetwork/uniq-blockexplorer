@@ -119,6 +119,7 @@ const TableWrapper = styled.div.attrs<{ minScreenWidthForTable: number }>((props
 
       tr > td:first-of-type {
         background-color: white;
+        z-index: 1;
       }
     }
   }

@@ -69,7 +69,7 @@ export const LastBlocks = ({
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="last-blocks">
       {searchModeOn ? (
         <StyledHeader size="2">Blocks</StyledHeader>
       ) : (
@@ -92,7 +92,7 @@ export const LastBlocks = ({
       <Pagination
         count={blockCount}
         currentPage={currentPage}
-        pageSize={pageSize}
+        pageSize={{ id: pageSize }}
         siblingCount={deviceSize <= DeviceSize.sm || deviceSize >= DeviceSize.xxl ? 1 : 2}
         onPageChange={setCurrentPage}
       />

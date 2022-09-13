@@ -67,7 +67,7 @@ export const CoinsTransfersSearchResult: VFC<LastTransfersProps> = ({
       <Pagination
         count={transfersCount}
         currentPage={currentPage}
-        pageSize={pageSize}
+        pageSize={{ id: pageSize }}
         siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />

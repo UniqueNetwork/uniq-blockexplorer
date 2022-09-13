@@ -76,7 +76,7 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
       <Pagination
         count={nftTransfersCount}
         currentPage={currentPage}
-        pageSize={pageSize}
+        pageSize={{ id: pageSize }}
         siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />
