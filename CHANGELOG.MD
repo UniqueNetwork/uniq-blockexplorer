@@ -1,6 +1,6 @@
-## Version 2.1.0
+## Version 2.0.6
 
-- New NFT Page 
+- remove fields from BlockDetails query (session_length, total_issuance, need_rescan)
 
 ## Version 2.0.5
 
