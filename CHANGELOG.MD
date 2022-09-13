@@ -1,3 +1,7 @@
+## Version 2.1.0
+
+- New NFT Page 
+
 ## Version 2.0.5
 
 - ReactFlow 
