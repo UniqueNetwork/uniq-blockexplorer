@@ -84,8 +84,8 @@ export const Tokens: VFC<TokensProps> = ({
   }, [tokensCount, tokensLimit, setShowButton]);
 
   useEffect(() => {
-    if (searchModeOn && !isTokensFetching && setResultExist && !!tokens?.length) {
-      setResultExist(true);
+    if (searchModeOn && !isTokensFetching && setResultExist) {
+      setResultExist(!!tokens?.length);
     }
   }, [tokens, isTokensFetching, searchModeOn, setResultExist]);
 
