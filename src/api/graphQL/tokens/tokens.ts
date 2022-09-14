@@ -72,6 +72,7 @@ const getSingleSearchQuery = (searchString: string): Record<string, unknown>[] =
 
 const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
   if (!searchString.includes(',')) return getSingleSearchQuery(searchString);
+
   const splitSearch = searchString.trim().split(',');
 
   return splitSearch

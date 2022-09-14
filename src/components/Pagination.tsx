@@ -66,11 +66,13 @@ const PaginationComponent = ({
 
   const onNext = useCallback(() => {
     if (currentPage === lastPage || count < pageSize) return;
+
     onPageChanged(currentPage + 1);
   }, [currentPage, lastPage, count, pageSize, onPageChanged]);
 
   const onPrevious = useCallback(() => {
     if (currentPage < 2 || count < pageSize) return;
+
     onPageChanged(currentPage - 1);
   }, [currentPage, count, pageSize, onPageChanged]);
 

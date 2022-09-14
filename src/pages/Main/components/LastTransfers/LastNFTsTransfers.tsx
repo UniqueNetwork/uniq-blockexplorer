@@ -48,6 +48,7 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
     ) {
       hideButton(false);
     }
+
     hideButton(true);
   }, [nftTransfersCount, isNftTransfersFetching, searchString, hideButton]);
 

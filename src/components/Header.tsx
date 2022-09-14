@@ -24,6 +24,7 @@ const Header: FC = () => {
     const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
     queryParams.delete('search');
     setQueryParams(queryParams);
+
     if (onTheMainPage) {
       window.location.reload();
     }

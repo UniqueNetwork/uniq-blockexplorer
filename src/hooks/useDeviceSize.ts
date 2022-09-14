@@ -71,10 +71,15 @@ export const useDeviceSize = (): DeviceSize => {
 
   return useMemo(() => {
     if (windowWidth && windowWidth < 480) return DeviceSize.xxs;
+
     if (windowWidth && windowWidth < 576) return DeviceSize.xs;
+
     if (windowWidth && windowWidth < 768) return DeviceSize.sm;
+
     if (windowWidth && windowWidth < 992) return DeviceSize.md;
+
     if (windowWidth && windowWidth < 1200) return DeviceSize.lg;
+
     if (windowWidth && windowWidth < 1680) return DeviceSize.xl;
 
     return DeviceSize.xxl;

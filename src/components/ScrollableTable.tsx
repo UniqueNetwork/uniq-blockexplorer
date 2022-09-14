@@ -37,6 +37,7 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
     const tableWrapper = document.getElementById('tableWrapper');
     function handlerScroll() {
       setScrollEnded(false);
+
       if (tableWrapper && tableContent) {
         const scrollLeft = tableWrapper.scrollLeft;
         const scrollableContent = tableWrapper.scrollWidth;
@@ -45,6 +46,7 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
         if (scrollableContent === accessibleWidth + scrollLeft) {
           setScrollEnded(true);
         }
+
         setOffsetExist(!!scrollLeft);
       }
     }
