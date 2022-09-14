@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
 import RCTable from 'rc-table';
 import styled from 'styled-components';
@@ -16,6 +16,7 @@ interface TableProps<RecordType = DefaultRecordType> {
 const TABLE_GAP = 16;
 
 const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
+  //for sticky first column
   const minTableWidth = columns?.reduce((accum, item) => {
     return accum + Number(item.width);
   }, 0);
@@ -23,25 +24,72 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
   const margins = columns!.length * (TABLE_GAP / 2);
   const minScreenWidthForTable = (minTableWidth || 500) + paddings + margins;
   const scrollExist = window.innerWidth < minScreenWidthForTable;
+  const tableRef = useRef();
+
+  // for shadow by first column
+  // todo: (https://cryptousetech.atlassian.net/browse/SCAN-431) to get away from using 'getElementsByTagName' in favor of 'ref'
+  const widthOfFirstColumn = document?.getElementsByTagName('th')[0]?.clientWidth;
+
+  // for muted strip at the end of the table
+  const [scrollEnded, setScrollEnded] = useState<boolean>(false);
+  const [offsetExist, setOffsetExist] = useState<boolean>(false);
+
+  useEffect(() => {
+    const tableContent = document.getElementById('tableContent');
+    const tableWrapper = document.getElementById('tableWrapper');
+    function handlerScroll() {
+      setScrollEnded(false);
+
+      if (tableWrapper && tableContent) {
+        const scrollLeft = tableWrapper.scrollLeft;
+        const scrollableContent = tableWrapper.scrollWidth;
+        const accessibleWidth = tableContent.getClientRects()[0].width;
+
+        if (scrollableContent === accessibleWidth + scrollLeft) {
+          setScrollEnded(true);
+        }
+
+        setOffsetExist(!!scrollLeft);
+      }
+    }
+    tableWrapper?.addEventListener('scroll', handlerScroll);
+
+    return () => {
+      tableWrapper?.removeEventListener('scroll', handlerScroll);
+    };
+  }, []);
 
   return (
     <ScrollWrapper>
-      <TableWrapper minScreenWidthForTable={minScreenWidthForTable}>
+      <TableWrapper id="tableWrapper" minScreenWidthForTable={minScreenWidthForTable}>
         <RCTable
           columns={columns}
           data={data || []}
+          id="tableContent"
           emptyText={'No data'}
           rowKey={rowKey}
         />
         {loading && <TableLoading />}
       </TableWrapper>
-      {scrollExist && <Mute />}
+      {scrollExist && offsetExist && <ShadowForScroll width={widthOfFirstColumn} />}
+      {scrollExist && !scrollEnded && <Mute />}
     </ScrollWrapper>
   );
 };
 
 const ScrollWrapper = styled.div`
   position: relative;
+`;
+
+const ShadowForScroll = styled.div.attrs<{ width: number }>((props) => ({
+  width: props.width,
+}))<{ width: number }>`
+  position: absolute;
+  width: ${(props) => props.width}px;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.08);
 `;
 
 const Mute = styled.div`
@@ -119,6 +167,7 @@ const TableWrapper = styled.div.attrs<{ minScreenWidthForTable: number }>((props
 
       tr > td:first-of-type {
         background-color: white;
+        z-index: 1;
       }
     }
   }

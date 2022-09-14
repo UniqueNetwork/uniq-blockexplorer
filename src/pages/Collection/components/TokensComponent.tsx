@@ -29,7 +29,9 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
 
   const tokensLimit = useMemo(() => {
     if (deviceSize === DeviceSize.xs || deviceSize === DeviceSize.xxs) return 10;
+
     if (deviceSize === DeviceSize.sm) return 12;
+
     if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.md) return 16;
 
     return 10;

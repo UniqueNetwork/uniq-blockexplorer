@@ -60,6 +60,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
     } else {
       queryParams.delete('search');
     }
+
     setQueryParams(queryParams);
 
     onSearchChange(inputValue ? inputValue.trim() : inputValue);
