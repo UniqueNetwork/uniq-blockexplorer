@@ -48,18 +48,9 @@ export const LastBlocks = ({
       searchModeOn &&
       !isBlocksFetching &&
       setResultExist &&
-      prettifiedBlockSearchString &&
-      blockCount !== 0
+      prettifiedBlockSearchString
     ) {
-      setResultExist(true);
-    } else if (
-      searchModeOn &&
-      !isBlocksFetching &&
-      setResultExist &&
-      prettifiedBlockSearchString &&
-      blockCount === 0
-    ) {
-      setResultExist(false);
+      setResultExist(blockCount !== 0);
     }
   }, [
     blockCount,

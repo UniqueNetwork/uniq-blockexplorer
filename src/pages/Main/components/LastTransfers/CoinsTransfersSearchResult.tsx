@@ -39,20 +39,8 @@ export const CoinsTransfersSearchResult: VFC<LastTransfersProps> = ({
     });
 
   useEffect(() => {
-    if (
-      !isTransfersFetching &&
-      setResultExist &&
-      !!transfersCount &&
-      prettifiedBlockSearchString
-    ) {
-      setResultExist(true);
-    } else if (
-      !isTransfersFetching &&
-      setResultExist &&
-      !transfersCount &&
-      prettifiedBlockSearchString
-    ) {
-      setResultExist(false);
+    if (!isTransfersFetching && setResultExist && prettifiedBlockSearchString) {
+      setResultExist(!!transfersCount);
     }
   }, [transfersCount, isTransfersFetching, setResultExist, prettifiedBlockSearchString]);
 

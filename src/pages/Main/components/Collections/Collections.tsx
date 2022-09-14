@@ -59,20 +59,8 @@ export const Collections: VFC<CollectionsProps> = ({
     });
 
   useEffect(() => {
-    if (
-      searchModeOn &&
-      !isCollectionsFetching &&
-      setResultExist &&
-      !!collections?.length
-    ) {
-      setResultExist(true);
-    } else if (
-      searchModeOn &&
-      !isCollectionsFetching &&
-      setResultExist &&
-      !collections?.length
-    ) {
-      setResultExist(false);
+    if (searchModeOn && !isCollectionsFetching && setResultExist) {
+      setResultExist(!!collections?.length);
     }
   }, [collections, isCollectionsFetching, setResultExist, searchModeOn]);
 
