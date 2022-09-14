@@ -1,17 +1,16 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
-import Avatar from './Avatar';
 import Picture from './Picture';
 
 interface TokenTableCellProps {
-  chainId: string
-  tokenId: string
-  collectionId: number
-  imageUrl?: string
-  tokenPrefix: string
+  chainId: string;
+  tokenId: string;
+  collectionId: number;
+  imageUrl: string | null;
+  tokenPrefix: string;
 }
 
 const TokenTableCell: FC<TokenTableCellProps> = ({
@@ -19,16 +18,11 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   collectionId,
   imageUrl,
   tokenId,
-  tokenPrefix
+  tokenPrefix,
 }) => {
   return (
-    <TokenLink
-      to={`/${chainId}/tokens/${collectionId}/${tokenId}`}
-    >
-      <TokenPicture
-        alt={`${tokenPrefix} #${tokenId}`}
-        src={imageUrl}
-      />
+    <TokenLink to={`/${chainId}/tokens/${collectionId}/${tokenId}`}>
+      <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} />
       <TokenTitle>
         <Text color={'secondary-500'}>{`${tokenPrefix} #${tokenId}`}</Text>
       </TokenTitle>
@@ -60,7 +54,7 @@ const TokenTitle = styled.div`
   color: black !important;
   &:hover {
     text-decoration: none;
-    .unique-text[class*=size-m] {
+    .unique-text[class*='size-m'] {
       color: var(--primary-500) !important;
     }
   }

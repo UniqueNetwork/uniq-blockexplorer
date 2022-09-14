@@ -5,38 +5,26 @@ const Footer: FC = () => {
   return (
     <FooterWrapper>
       <div className={'app-footer__info'}>
-        <div>Powered by <a href='https://unique.network/'>Unique Network</a> — the NFT chain built for Polkadot and Kusama.</div>
+        <div>
+          Powered by <a href="https://unique.network/">Unique Network</a> — the NFT chain
+          built for Polkadot and Kusama.
+        </div>
       </div>
       <SocialLinks>
-        <a href='https://t.me/Uniquechain'>
-          <img
-            alt='telegram'
-            src='/logos/telegram.svg'
-          />
+        <a href="https://t.me/Uniquechain">
+          <img alt="telegram" src="/logos/telegram.svg" />
         </a>
-        <a href='https://twitter.com/Unique_NFTchain'>
-          <img
-            alt='twitter'
-            src='/logos/twitter.svg'
-          />
+        <a href="https://twitter.com/Unique_NFTchain">
+          <img alt="twitter" src="/logos/twitter.svg" />
         </a>
-        <a href='https://discord.gg/jHVdZhsakC'>
-          <img
-            alt='discord'
-            src='/logos/discord.svg'
-          />
+        <a href="https://discord.gg/jHVdZhsakC">
+          <img alt="discord" src="/logos/discord.svg" />
         </a>
-        <a href='https://github.com/UniqueNetwork'>
-          <img
-            alt='github'
-            src='/logos/github.svg'
-          />
+        <a href="https://github.com/UniqueNetwork">
+          <img alt="github" src="/logos/github.svg" />
         </a>
-        <a href='https://app.subsocial.network/@uniquenetwork-nft'>
-          <img
-            alt='subsocial'
-            src='/logos/subsocial.svg'
-          />
+        <a href="https://app.subsocial.network/@uniquenetwork-nft">
+          <img alt="subsocial" src="/logos/subsocial.svg" />
         </a>
       </SocialLinks>
     </FooterWrapper>

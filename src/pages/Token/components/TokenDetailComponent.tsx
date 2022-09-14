@@ -2,19 +2,19 @@ import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Heading, Text } from '@unique-nft/ui-kit';
-import { Token } from '@app/api';
-import { Avatar, LoadingComponent, Picture } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { getImageURL, timestampFormat } from '@app/utils';
 
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { Token } from '@app/api';
+import { LoadingComponent, Picture } from '@app/components';
+import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { convertAttributesToView, timestampFormat } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
+import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+
 interface TokenDetailComponentProps {
-  token?: Token
-  loading?: boolean
+  token: Token;
+  loading?: boolean;
 }
 
 const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token }) => {
@@ -25,68 +25,62 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     logUserEvents(UserEvents.Click.COLLECTION_FROM_NFT_CARD);
   }, []);
 
-  if (!token) {
-    return null;
-  }
-
   const {
+    attributes,
     collection_description: description,
     collection_id: collectionId,
     collection_name: name,
-    data,
     date_of_creation: createdOn,
-    image_path: imagePath,
+    image,
     owner,
     token_id: id,
-    token_prefix: prefix
+    token_prefix: prefix,
   } = token;
-
-  const imageUrl = getImageURL(imagePath);
 
   if (loading) return <LoadingComponent />;
 
+  const attributesParsed = convertAttributesToView(attributes);
+
   return (
     <Wrapper>
-      <TokenPicture
-        alt={`${prefix}-${id}`}
-        src={imageUrl}
-      />
+      <TokenPicture alt={`${prefix}-${id}`} src={image.fullUrl} />
       <div>
-        <Heading size={'2'}>{`${prefix} #${id}`}</Heading>
+        <Heading size="2">{`${prefix} #${id}`}</Heading>
         <TokenInfo>
-          <Text color={'grey-500'}>Created on</Text>
+          <Text color="grey-500">Created on</Text>
           <Text>{timestampFormat(createdOn)}</Text>
-          <Text color={'grey-500'}>Owner</Text>
+          <Text color="grey-500">Owner</Text>
           <OwnerWrapper>
-            <Avatar size={'x-small'} />
-            <AccountLinkComponent
-              noShort={deviceSize >= DeviceSize.lg}
-              value={owner}
-            />
+            <AccountLinkComponent noShort={deviceSize >= DeviceSize.lg} value={owner} />
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
-          <Heading size={'4'}>Attributes</Heading>
+          <Heading size="4">Attributes</Heading>
           <div>
-            {Object.keys(data).filter((key) => key !== 'ipfsJson').map((key) => (<div key={`attribute-${key}`}><Text color={'grey-500'}>{key}</Text>
-              <TagsWrapper>
-                {Array.isArray(data[key]) && (data[key] as string[]).map((item, index) => <Tag key={`item-${item}-${index}`}>{item}</Tag>)}
-                {typeof data[key] === 'string' && <Tag>{data[key]}</Tag>}
-              </TagsWrapper>
-            </div>)
-            )}
+            {attributesParsed.map((attr) => (
+              <div key={`attribute-${attr.name}`}>
+                <Text color="grey-500">{attr.name}</Text>
+                <TagsWrapper>
+                  {Array.isArray(attr.value) &&
+                    attr.value.map((item: string, index: number) => (
+                      <Tag key={`item-${item}-${index}`}>{item}</Tag>
+                    ))}
+                  {typeof attr.value === 'string' && <Tag>{attr.value}</Tag>}
+                </TagsWrapper>
+              </div>
+            ))}
           </div>
         </TokenAttributes>
         <CollectionInfoWrapper>
-          <CollectionLink onClick={onCollectionClick} to={`/${currentChain.network}/collections/${collectionId}`}>
-            <Avatar
-              size={'small'}
-              src={getCoverURLFromCollection(token)}
-            />
+          <CollectionLink
+            to={`/${currentChain.network}/collections/${collectionId}`}
+            onClick={onCollectionClick}
+          >
+            <Picture alt={`token ${id}`} src={token.collection_cover} />
             <div>
-              <Heading size={'4'}>{name}</Heading>
+              <Heading size="4">{name}</Heading>
               <div>
-                <Text color={'grey-500'}>{description || ''}</Text>
+                <Text color="grey-500">{description || ''}</Text>
               </div>
             </div>
           </CollectionLink>
@@ -101,17 +95,15 @@ const Wrapper = styled.div`
   grid-template-columns: 536px 1fr;
   grid-column-gap: var(--gap);
 
-
-  @media(max-width: 1024px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 326px 1fr;
   }
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     grid-template-columns: 224px 1fr;
   }
-  @media(max-width: 568px) {
+  @media (max-width: 568px) {
     grid-template-columns: 1fr;
   }
-  
 `;
 
 const TokenPicture = styled(Picture)`
@@ -119,19 +111,22 @@ const TokenPicture = styled(Picture)`
   height: 536px;
   border-radius: 8px;
   overflow: hidden;
+
   svg {
     width: 100%;
   }
-  
-  @media(max-width: 1024px) {
+
+  @media (max-width: 1024px) {
     width: 326px;
     height: 326px;
   }
-  @media(max-width: 768px) {
+
+  @media (max-width: 768px) {
     width: 224px;
     height: 224px;
   }
-  @media(max-width: 568px) {
+
+  @media (max-width: 568px) {
     width: 100%;
     height: 100%;
   }
@@ -145,6 +140,7 @@ const TokenInfo = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);
+
   span {
     display: flex;
     align-items: center;
@@ -178,21 +174,31 @@ const CollectionInfoWrapper = styled.div`
 const CollectionLink = styled(Link)`
   display: flex;
   column-gap: var(--gap);
+  word-break: break-word;
+  overflow: hidden;
+
   &:hover {
     text-decoration: none;
+
     h4 {
       color: var(--primary-500);
     }
   }
-  svg {
-    min-width: 40px;
-  }  
+
+  .picture {
+    width: 40px;
+  }
 `;
 
 const OwnerWrapper = styled.div`
   display: flex;
   align-items: center;
   column-gap: var(--gap);
+
+  svg {
+    height: calc(var(--gap) * 1.5);
+    width: calc(var(--gap) * 1.5);
+  }
 `;
 
 export default TokenDetailComponent;

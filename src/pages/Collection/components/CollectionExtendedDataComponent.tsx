@@ -1,31 +1,35 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
+
 import { Collection } from '@app/api';
+import { DeviceSizes } from '@app/hooks';
 
 interface ExtendedDataComponentProps {
-  collection?: Collection
+  collection?: Collection;
 }
 
-const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({ collection }) => {
-  const fields = collection?.const_chain_schema?.nested.onChainMetaData.nested.NFTMeta.fields;
+const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
+  collection,
+}) => {
+  const fields = collection?.attributes_schema;
 
   return (
     <>
       <WrapperWithBorder>
-        <Heading size='4'>NFTs attributes</Heading>
+        <Heading size="4">NFTs attributes</Heading>
         <TagsWrapper>
-          {Object.keys(fields || {}).filter((key) => key !== 'ipfsJson').map((key) => (
-            <Tag key={key}>{key}</Tag>
+          {Object.keys(fields || {}).map((key) => (
+            <Tag key={key}>{fields?.[key].name._}</Tag>
           ))}
         </TagsWrapper>
       </WrapperWithBorder>
       <WrapperWithBorder>
-        <Heading size='4'>Data schema</Heading>
+        <Heading size="4">Data schema</Heading>
         <DataBlockWrapper>
-          <Text color='grey-500'>Schema version</Text>
+          <Text color="grey-500">Schema version</Text>
           <Text>{collection?.schema_version || ''}</Text>
-          <Text color='grey-500'>Offchain schema   </Text>
+          <Text color="grey-500">Offchain schema </Text>
           <Text>{collection?.offchain_schema || ''}</Text>
         </DataBlockWrapper>
       </WrapperWithBorder>
@@ -48,7 +52,7 @@ const Tag = styled.div`
 const WrapperWithBorder = styled.div`
   padding: calc(var(--gap) * 1.5) 0;
   border-bottom: 1px dashed var(--border-color);
-  
+
   &:first-child {
     border-top: 1px dashed var(--border-color);
     margin-top: var(--gap);
@@ -58,6 +62,12 @@ const WrapperWithBorder = styled.div`
 const DataBlockWrapper = styled.div`
   display: grid;
   grid-template-columns: 296px 1fr;
+
+  @media (max-width: ${DeviceSizes.sm}) {
+    display: flex;
+    grid-column-gap: var(--gap);
+    flex-wrap: wrap;
+  }
 `;
 
 export default CollectionExtendedDataComponent;

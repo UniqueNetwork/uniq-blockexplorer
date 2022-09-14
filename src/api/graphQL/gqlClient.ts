@@ -1,9 +1,10 @@
 import { ApolloClient, HttpLink, NormalizedCacheObject } from '@apollo/client';
+
 import { getApolloClient } from './apolloClient';
 
 export interface IGqlClient {
-  client: ApolloClient<NormalizedCacheObject>
-  changeEndpoint(endpoint: string): void
+  client: ApolloClient<NormalizedCacheObject>;
+  changeEndpoint(endpoint: string): void;
 }
 
 export class GqlClient implements IGqlClient {

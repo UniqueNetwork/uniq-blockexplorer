@@ -1,13 +1,15 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
+
 import { account as gqlAccount } from '@app/api/graphQL';
-import { Avatar, LoadingComponent } from '@app/components';
+import { CoverContainer, IdentityIcon, LoadingComponent } from '@app/components';
+import { useDeviceSize, DeviceSize } from '@app/hooks';
+
 import { formatAmount, shortcutText } from '../../../utils/textUtils';
-import { useApi, useDeviceSize, DeviceSize } from '@app/hooks';
 
 interface AccountProps {
-  accountId: string
+  accountId: string;
 }
 
 const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
@@ -22,7 +24,7 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
     account_id_normalized: accountNormalized,
     available_balance: availableBalance = 'unavailable',
     free_balance: freeBalance = 'unavailable',
-    locked_balance: lockedBalance = 'unavailable'
+    locked_balance: lockedBalance = 'unavailable',
   } = account || {};
 
   const { tokenSymbol = '' } = {};
@@ -30,27 +32,24 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
 
   return (
     <AccountWrapper>
+      <CoverContainer>
+        <IdentityIcon copyable address={accountAddress} size="72" />
+      </CoverContainer>
       <div>
-        <Avatar
-          size='large'
-          value={accountAddress}
-        />
-      </div>
-      <div>
-        <Text size={'l'}>Account name</Text>
+        <Text size="l">Account name</Text>
         <h2>
-          {deviceSize <= DeviceSize.md
-            ? shortcutText(accountAddress)
-            : accountAddress}
+          {deviceSize <= DeviceSize.lg ? shortcutText(accountAddress) : accountAddress}
         </h2>
       </div>
-      <Text color={'grey-500'}>
-          Balance
-      </Text>
+      <Text color="grey-500">Balance</Text>
       <BalanceWrapper>
         <Text>{`${formatAmount(freeBalance)} ${tokenSymbol} (total) `}</Text>
-        <Text color={'grey-500'}>{`${formatAmount(lockedBalance)} ${tokenSymbol} (locked) `}</Text>
-        <Text color={'grey-500'}>{`${formatAmount(availableBalance)} ${tokenSymbol} (transferable)`}</Text>
+        <Text color="grey-500">{`${formatAmount(
+          lockedBalance,
+        )} ${tokenSymbol} (locked) `}</Text>
+        <Text color="grey-500">{`${formatAmount(
+          availableBalance,
+        )} ${tokenSymbol} (transferable)`}</Text>
       </BalanceWrapper>
     </AccountWrapper>
   );
@@ -64,7 +63,6 @@ const AccountWrapper = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);
 
-  
   @media (max-width: 767px) {
     grid-row-gap: 0;
     div:not(:first-child) {

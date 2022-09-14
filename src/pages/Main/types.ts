@@ -1,10 +1,12 @@
 export type BlockComponentProps = {
-  searchString?: string
-  pageSize?: number
-}
+  searchModeOn: boolean;
+  searchString?: string;
+  pageSize?: number;
+  setResultExist?: (val: boolean) => void;
+};
 
 export type LastTransfersComponentProps = {
-  searchString?: string
-  pageSize?: number
-  accountId?: string
-}
+  searchString?: string;
+  pageSize?: number;
+  accountId?: string;
+};

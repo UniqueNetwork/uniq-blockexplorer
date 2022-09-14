@@ -1,15 +1,16 @@
-import { gql, useApolloClient, useQuery } from '@apollo/client';
-import { useCallback, useEffect } from 'react';
-import { LastBlocksData, LastBlocksVariables, FetchMoreBlocksOptions, useGraphQlBlocksProps } from './types';
+import { gql, useQuery } from '@apollo/client';
+import { useCallback } from 'react';
+
+import { LastBlocksData, LastBlocksVariables, useGraphQlBlocksProps } from './types';
 
 const getLatestBlocksQuery = gql`
-  query GetLatestBlocks($limit: Int, $offset: Int, $order_by: BlockOrderByParams, $where: BlockWhereParams) {
-    block(
-      limit: $limit
-      offset: $offset
-      order_by: $order_by
-      where: $where
-    ) {
+  query GetLatestBlocks(
+    $limit: Int
+    $offset: Int
+    $order_by: BlockOrderByParams
+    $where: BlockWhereParams
+  ) {
+    block(limit: $limit, offset: $offset, order_by: $order_by, where: $where) {
       data {
         block_number
         total_events
@@ -22,58 +23,48 @@ const getLatestBlocksQuery = gql`
   }
 `;
 
-export const useGraphQlBlocks = ({ pageSize }: useGraphQlBlocksProps) => {
-  const client = useApolloClient();
+export const useGraphQlBlocks = ({
+  offset = 0,
+  pageSize,
+  searchString,
+}: useGraphQlBlocksProps) => {
+  const getWhere = useCallback(
+    (searchString?: string) =>
+      searchString && searchString?.length > 0
+        ? {
+            _or: [
+              {
+                block_number: { _eq: Number(searchString) },
+              },
+            ],
+          }
+        : {},
+    [],
+  );
 
   const {
     data,
     error: fetchBlocksError,
-    fetchMore,
-    loading: isBlocksFetching
+    loading: isBlocksFetching,
   } = useQuery<LastBlocksData, LastBlocksVariables>(getLatestBlocksQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
-    variables: { limit: pageSize, offset: 0, order_by: { block_number: 'desc' } }
-  });
-
-  useEffect(() => {
-    fetchMore({})
-      .catch((errMsg) => {
-        throw new Error(errMsg);
-      });
-  }, [client.link, fetchMore]);
-
-  const fetchMoreBlocks = useCallback(
-    ({ limit = pageSize, offset, searchString }: FetchMoreBlocksOptions) => {
-      return fetchMore({
-        variables: {
-          limit,
-          offset,
-          where:
-            (searchString &&
-              searchString.length > 0 && {
-              _or: [
-                {
-                  block_number: { _eq: Number(searchString) }
-                }
-              ]
-            }) ||
-            undefined
-        }
-      });
+    variables: {
+      limit: pageSize,
+      offset,
+      order_by: { block_number: 'desc' },
+      where: getWhere(searchString),
     },
-    [fetchMore, pageSize]
-  );
+  });
 
   return {
     blockCount: data?.block?.count || 0,
     blocks: data?.block?.data,
     fetchBlocksError,
-    fetchMoreBlocks,
     isBlocksFetching,
-    timestamp: data?.block?.timestamp
+    timestamp: data?.block?.timestamp,
   };
 };
 

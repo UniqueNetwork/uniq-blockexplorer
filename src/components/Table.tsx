@@ -3,32 +3,33 @@ import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface
 import RCTable from 'rc-table';
 import styled from 'styled-components';
 
-import useDeviceSize, { DeviceSize } from '../hooks/useDeviceSize';
 import LoadingComponent from './LoadingComponent';
-import MobileTable from './MobileTable';
+import { MobileTable } from './MobileTable';
+import { DeviceSize, useDeviceSize } from '../hooks/useDeviceSize';
 
 interface TableProps<RecordType = DefaultRecordType> {
-  columns?: ColumnType<RecordType>[]
-  data?: RecordType[]
-  loading?: boolean
-  rowKey?: string | GetRowKey<RecordType>
+  hideMobile?: boolean;
+  columns?: ColumnType<RecordType>[];
+  data?: RecordType[];
+  loading?: boolean;
+  rowKey?: string | GetRowKey<RecordType>;
 }
 
 const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
   const deviceSize = useDeviceSize();
+  const isMobile = deviceSize <= DeviceSize.sm;
 
   return (
     <TableWrapper>
-      {deviceSize > DeviceSize.sm && (<>
+      {!isMobile && (
         <RCTable
           columns={columns}
           data={data || []}
           emptyText={'No data'}
           rowKey={rowKey}
         />
-        {loading && <TableLoading />}
-      </>)}
-      {deviceSize <= DeviceSize.sm && (
+      )}
+      {isMobile && (
         <MobileTable
           columns={columns}
           data={!loading ? data : []}
@@ -36,42 +37,49 @@ const Table: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
           rowKey={rowKey}
         />
       )}
+      {loading && <TableLoading />}
     </TableWrapper>
   );
 };
 
 const TableWrapper = styled.div`
   position: relative;
+
   .rc-table {
     margin-bottom: calc(var(--gap) * 1.5);
+
     table {
       width: 100%;
-      border-spacing: 0px;
+      border-spacing: 0;
       table-layout: fixed !important;
     }
+
     &-thead {
       tr {
         background-color: var(--blue-gray);
-
       }
+
       th {
         padding: calc(var(--gap) / 2) var(--gap);
         text-align: left;
         color: var(--grey);
         font-size: 16px;
         font-weight: 500;
-
       }
     }
+
     &-tbody {
       td {
         padding: calc(var(--gap) / 2) var(--gap);
         text-align: left;
         font-size: 16px;
-        border-bottom: 1px dashed #D2D3D6;
+        border-bottom: 1px solid #d2d3d6;
         color: var(--grey-600);
+        overflow: hidden;
+        word-break: break-word;
       }
     }
+
     &-placeholder {
       td {
         text-align: center;

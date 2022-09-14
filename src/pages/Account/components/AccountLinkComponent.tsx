@@ -1,15 +1,18 @@
 import { FC, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
+
 import { shortcutText } from '@app/utils';
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { IdentityIcon } from '@app/components';
 
 interface AccountLinkProps {
-  value: string
-  size?: 'xs' | 's' | 'm' | 'l'
-  noShort?: boolean
+  value: string;
+  size?: 'xs' | 's' | 'm' | 'l';
+  noShort?: boolean;
 }
 
 const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value }) => {
@@ -41,18 +44,21 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
   if (value === accountId) return <>{shortcut}</>;
 
   return (
-    <Link
-      onClick={onAccountClick}
-      to={`/${currentChain?.network}/account/${value}`}
-    >
-      <Text
-        color={'primary-600'}
-        size={size}
-      >
-        {shortcut}
-      </Text>
-    </Link>
+    <Wrapper>
+      <IdentityIcon copyable address={value} />
+      <Link to={`/${currentChain?.network}/account/${value}`} onClick={onAccountClick}>
+        <Text color={'primary-500'} size={size}>
+          {shortcut}
+        </Text>
+      </Link>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  grid-column-gap: calc(var(--gap) / 4);
+`;
 
 export default AccountLinkComponent;

@@ -2,16 +2,18 @@ import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
+
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
 import { shortcutText } from '@app/utils';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { logUserEvents } from '@app/utils/logUserEvents';
+import { SimpleRoundedCover } from '@app/components/SimpleRoundedCover';
 
 import Avatar from './Avatar';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { UserEvents } from '../analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 
-type CollectionCardProps = Collection
+type CollectionCardProps = Collection;
 
 const CollectionCard: FC<CollectionCardProps> = ({
   collection_cover,
@@ -19,7 +21,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
   name,
   owner,
   token_prefix: tokenPrefix,
-  tokens_count: tokensCount
+  tokens_count: tokensCount,
 }) => {
   const { currentChain } = useApi();
 
@@ -33,46 +35,44 @@ const CollectionCard: FC<CollectionCardProps> = ({
 
   return (
     <CollectionCardLink
-      onClick={onCollectionsCardClick}
       to={`/${currentChain.network}/collections/${collectionId}`}
+      onClick={onCollectionsCardClick}
     >
       <CollectionCover>
-        <Avatar
-          size={'middle'}
-          src={getCoverURLFromCollection({ collection_cover } as Collection)}
+        <SimpleRoundedCover
+          avatarSize="middle"
+          collectionId={collectionId.toString()}
+          coverImageUrl={collection_cover}
+          size={64}
         />
       </CollectionCover>
       <CollectionInfo>
-        <Heading size={'4'}>{name}</Heading>
+        <Heading size="4">{name}</Heading>
         <CollectionProperties>
           <span>
-            <Text
-              color={'grey-500'}
-              size={'s'}
-            >ID:</Text>
-            <Text size={'s'}>{collectionId.toString()}</Text>
+            <Text color="grey-500" size="s">
+              ID:
+            </Text>
+            <Text size="s">{collectionId.toString()}</Text>
           </span>
           <span>
-            <Text
-              color={'grey-500'}
-              size={'s'}
-            >Symbol:</Text>
-            <Text size={'s'}>{tokenPrefix}</Text>
+            <Text color="grey-500" size="s">
+              Symbol:
+            </Text>
+            <Text size="s">{tokenPrefix}</Text>
           </span>
           <span>
-            <Text
-              color={'grey-500'}
-              size={'s'}
-            >Items:</Text>
-            <Text size={'s'}>{tokensCount?.toString() || '0'}</Text>
+            <Text color="grey-500" size="s">
+              Items:
+            </Text>
+            <Text size="s">{tokensCount?.toString() || '0'}</Text>
           </span>
         </CollectionProperties>
         <div>
-          <Text
-            color={'grey-500'}
-            size={'s'}
-          >Owner: </Text>
-          <Text size={'s'}>{shortcutText(owner)}</Text>
+          <Text color="grey-500" size="s">
+            Owner:{' '}
+          </Text>
+          <Text size="s">{shortcutText(owner)}</Text>
         </div>
       </CollectionInfo>
     </CollectionCardLink>
@@ -81,7 +81,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
 
 const CollectionCardLink = styled(Link)`
   background: var(--white-color);
-  border: 1px solid #DFE0E2;
+  border: 1px solid #dfe0e2;
   border-radius: var(--bradius);
   box-sizing: border-box;
   padding: calc(var(--gap) * 1.5) calc(var(--gap) * 1.5);
@@ -91,16 +91,17 @@ const CollectionCardLink = styled(Link)`
   &:hover {
     text-decoration: none;
   }
-  
+
   h4 {
     overflow: hidden;
     word-break: break-word;
     max-height: 3rem;
+
     &:hover {
       color: var(--primary-500);
     }
   }
-  
+
   @media (max-width: 767px) {
     border: none;
     padding: 0;

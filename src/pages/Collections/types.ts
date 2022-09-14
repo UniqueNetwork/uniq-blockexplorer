@@ -1,7 +1,8 @@
-import { CollectionSorting } from '../../api/graphQL/';
+import { CollectionSorting } from '@app/api';
 
 export type CollectionsComponentProps = {
-  searchString?: string
-  pageSize?: number
-  orderBy?: CollectionSorting
-}
+  currentPage: number;
+  pageSize?: number;
+  orderBy?: CollectionSorting;
+  setCurrentPage: (page: number) => void;
+};

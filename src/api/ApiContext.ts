@@ -1,4 +1,3 @@
-import { ApiPromise } from '@polkadot/api';
 import { Context, Consumer, Provider, createContext } from 'react';
 
 export type TChainNetwork = 'QUARTZ' | 'UNIQUE' | 'KUSAMA' | 'POLKADOT' | 'OPAL';
@@ -8,13 +7,16 @@ export type Chain = {
   name: string;
   gqlEndpoint: string;
   rpcEndpoint: string;
-}
+  symbol: string;
+};
 
 export type ApiContextProps = {
   currentChain: Chain;
-}
+};
 
-const ApiContext: Context<ApiContextProps> = createContext({} as unknown as ApiContextProps);
+const ApiContext: Context<ApiContextProps> = createContext(
+  {} as unknown as ApiContextProps,
+);
 const ApiConsumer: Consumer<ApiContextProps> = ApiContext.Consumer;
 const ApiProvider: Provider<ApiContextProps> = ApiContext.Provider;
 

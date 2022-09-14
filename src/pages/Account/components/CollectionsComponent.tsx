@@ -1,16 +1,16 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
-import { useApi } from '@app/hooks';
+import { useApi, useSearchFromQuery } from '@app/hooks';
+import { Collection, useGraphQlCollections } from '@app/api/graphQL';
+import { Search } from '@app/components';
 
-import { Collection, collections as gqlCollection } from '../../../api/graphQL';
 import CollectionCard from '../../../components/CollectionCard';
-import SearchComponent from '../../../components/SearchComponent';
 
 interface CollectionsComponentProps {
-  accountId: string
+  accountId: string;
 }
 
 const pageSize = 6;
@@ -18,62 +18,56 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
+  const searchFromQuery = useSearchFromQuery();
+  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
 
-  const { collections, collectionsCount, fetchMoreCollections } =
-    gqlCollection.useGraphQlCollections({
-      filter: {
-        _or: [
-          { owner: { _eq: accountId } },
-          { owner_normalized: { _eq: accountId } }
-        ]
-      },
-      pageSize
-    });
+  const { collections, collectionsCount } = useGraphQlCollections({
+    filter: {
+      _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
+    },
+    pageSize,
+    searchString,
+  });
 
-  const onClickSeeMore = useCallback(() => {
+  const onClickSeeMore = () => {
     navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
-  }, [currentChain.network, navigate, accountId]);
+  };
 
-  const onSearch = useCallback((searchString: string) => {
-    void fetchMoreCollections({
-      filter: {
-        _or: [
-          { owner: { _eq: accountId } },
-          { owner_normalized: { _eq: accountId } }
-        ]
-      },
-      searchString
-    });
-  }, [accountId, fetchMoreCollections]);
+  useEffect(() => {
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery]);
 
-  return (<>
-    <ControlsWrapper>
-      <SearchComponent
-        onSearchChange={onSearch}
-        placeholder={'NFT / collection'}
-      />
-    </ControlsWrapper>
-    <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
-    <CollectionsWrapper>
-      {collections?.map &&
+  return (
+    <>
+      <ControlsWrapper>
+        <Search
+          placeholder={'NFT / collection'}
+          value={searchString}
+          onSearchChange={setSearchString}
+        />
+      </ControlsWrapper>
+      <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
+      <CollectionsWrapper>
+        {collections?.map &&
           collections.map((collection: Collection) => (
             <CollectionCard
               key={`collection-${collection.collection_id}`}
               {...collection}
             />
           ))}
-    </CollectionsWrapper>
-    <Button
-      iconRight={{
-        color: '#fff',
-        name: 'arrow-right',
-        size: 12
-      }}
-      onClick={onClickSeeMore}
-      role='primary'
-      title={'See all'}
-    />
-  </>);
+      </CollectionsWrapper>
+      <Button
+        iconRight={{
+          color: '#fff',
+          name: 'arrow-right',
+          size: 12,
+        }}
+        role="primary"
+        title={'See all'}
+        onClick={onClickSeeMore}
+      />
+    </>
+  );
 };
 
 const ControlsWrapper = styled.div`
@@ -96,11 +90,7 @@ const CollectionsWrapper = styled.div`
   position: relative;
   margin-bottom: calc(var(--gap) * 1.5);
 
-  @media (max-width: 1919px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 1279px) {
+  @media (max-width: 1199px) {
     grid-template-columns: 1fr;
   }
 

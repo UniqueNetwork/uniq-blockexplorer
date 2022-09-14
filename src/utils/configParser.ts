@@ -7,16 +7,20 @@ export const defaultChainKey = 'block-explorer_chain';
 const findNetworkParamByName = (
   config: Record<string, string | undefined>,
   network: string,
-  name: string
+  name: string,
 ): string => {
-  const envKey = Object.keys(config).find((key) => key.includes(`NET_${network}_${name}`));
+  const envKey = Object.keys(config).find((key) =>
+    key.includes(`NET_${network}_${name}`),
+  );
 
   if (envKey) return config[envKey] || '';
 
   return '';
 };
 
-export const getNetworkList = (config: Record<string, string | undefined>): TChainNetwork[] => {
+export const getNetworkList = (
+  config: Record<string, string | undefined>,
+): TChainNetwork[] => {
   return Object.keys(config).reduce<TChainNetwork[]>((acc, key) => {
     if (!key.includes('NET_') || key.includes('NET_DEFAULT')) return acc;
 
@@ -53,19 +57,22 @@ export const getDefaultChain = (config: Record<string, string | undefined>) => {
 
 export const getNetworkParams = (
   config: Record<string, string | undefined>,
-  network: TChainNetwork
+  network: TChainNetwork,
 ): Chain => {
   const chain: Chain = {
     gqlEndpoint: findNetworkParamByName(config, network, 'API'),
     name: findNetworkParamByName(config, network, 'NAME'),
     network,
-    rpcEndpoint: findNetworkParamByName(config, network, 'RPC')
+    rpcEndpoint: findNetworkParamByName(config, network, 'RPC'),
+    symbol: findNetworkParamByName(config, network, 'SYMBOL'),
   };
 
   return chain;
 };
 
-export const getChainList = (config: Record<string, string | undefined>): Record<string, Chain> => {
+export const getChainList = (
+  config: Record<string, string | undefined>,
+): Record<string, Chain> => {
   return getNetworkList(config).reduce<Record<string, Chain>>((acc, network) => {
     acc[network] = getNetworkParams(config, network);
 

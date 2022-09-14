@@ -7,7 +7,7 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
     currentDate.getUTCDate(),
     currentDate.getUTCHours(),
     currentDate.getUTCMinutes(),
-    currentDate.getUTCSeconds()
+    currentDate.getUTCSeconds(),
   );
   const currentUtcTime = sinceWhen || currentUtcDate.getTime() / 1000;
 
@@ -51,6 +51,9 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
   }
 
   if (amount < 1 && timeType === 'second') return 'Less than a second ago';
+  // shrink 'second' and 'minute' to 'sec' and 'min'
+  if (timeType === 'second' || timeType === 'minute')
+    return `${amount} ${timeType.substr(0, 3)} ago`;
 
   return `${amount} ${timeType}${amount >= 2 ? 's' : ''} ago`;
 };
@@ -67,12 +70,22 @@ const timestampFormat = (timestamp: number | undefined) => {
     second: 'numeric',
     timeZone: 'GMT',
     timeZoneName: 'short',
-    year: 'numeric'
+    year: 'numeric',
   });
 };
 
-const timestampTableFormat = (timestamp: number) => new Date(timestamp * 1000).toLocaleString('en-GB', {
-  hour12: false
-}).replaceAll('/', '-');
+const timestampTableFormat = (timestamp: number) => {
+  const formatted = new Date(timestamp * 1000)
+    .toLocaleString('en-GB', {
+      hour12: false,
+    })
+    .replaceAll('/', '-');
+
+  if (formatted.includes('01-01-1970')) {
+    return 'date is uploading';
+  }
+
+  return formatted;
+};
 
 export { timeDifference, timestampFormat, timestampTableFormat };

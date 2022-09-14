@@ -1,30 +1,28 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Icon } from '@unique-nft/ui-kit';
-import usePagination, { DOTS } from '../hooks/usePagination';
 import styled from 'styled-components';
 
+import usePagination, { DOTS } from '../hooks/usePagination';
+
 interface PaginationProps {
-  count: number // total number of elements in DB
-  pageSize?: number // how many elements we present per single page
-  onPageChange: (page: number) => void // fetch new page data
-  siblingCount?: number // how many pages to show, the rest will be "..."
-  currentPage?: number
+  count: number; // total number of elements in DB
+  pageSize?: number; // how many elements we present per single page
+  onPageChange: (page: number) => void; // fetch new page data
+  siblingCount?: number; // how many pages to show, the rest will be "..."
+  currentPage?: number;
 }
 
 // TODO: can be string (when DOTS)
 const PageNumberComponent = (props: {
-  pageNumber: number | string
-  currentPage: number
-  onPageChanged: (newPage: number) => void
+  pageNumber: number | string;
+  currentPage: number;
+  onPageChanged: (newPage: number) => void;
 }) => {
   const { currentPage, onPageChanged, pageNumber } = props;
 
-  const onPagePillClick = useCallback(
-    () => {
-      onPageChanged(pageNumber as number);
-    },
-    [onPageChanged, pageNumber]
-  );
+  const onPagePillClick = useCallback(() => {
+    onPageChanged(pageNumber as number);
+  }, [onPageChanged, pageNumber]);
 
   if (pageNumber === DOTS) {
     return <li>...</li>;
@@ -48,20 +46,23 @@ const PaginationComponent = ({
   currentPage = 1,
   onPageChange,
   pageSize = 10,
-  siblingCount = 2
+  siblingCount = 2,
 }: PaginationProps) => {
   const paginationRange = usePagination({
     currentPage,
     pageSize,
     siblingCount,
-    total: count
+    total: count,
   });
   const lastPage =
     (paginationRange?.length > 1 && paginationRange[paginationRange.length - 1]) || null;
 
-  const onPageChanged = useCallback((newPage: number) => {
-    onPageChange(newPage);
-  }, [pageSize, onPageChange]);
+  const onPageChanged = useCallback(
+    (newPage: number) => {
+      onPageChange(newPage);
+    },
+    [pageSize, onPageChange],
+  );
 
   const onNext = useCallback(() => {
     if (currentPage === lastPage || count < pageSize) return;
@@ -78,10 +79,7 @@ const PaginationComponent = ({
       <div>{count} items</div>
       {count > pageSize && (
         <PageNumbersWrapper>
-          <li
-            key={'prev'}
-            onClick={onPrevious}
-          >
+          <li key={'prev'} onClick={onPrevious}>
             <Icon
               color={currentPage === 1 ? '#ABB6C1' : '#040B1D'}
               name={'carret-right'}
@@ -92,15 +90,12 @@ const PaginationComponent = ({
             <PageNumberComponent
               currentPage={currentPage}
               key={pageNumber === DOTS ? `${DOTS}_${index}` : pageNumber}
-              onPageChanged={onPageChanged}
               pageNumber={pageNumber}
+              onPageChanged={onPageChanged}
             />
           ))}
           {/* TODO: disabled={currentPage === lastPage} */}
-          <li
-            key={'next'}
-            onClick={onNext}
-          >
+          <li key={'next'} onClick={onNext}>
             <Icon
               color={currentPage === lastPage || count < pageSize ? '#ABB6C1' : '#040B1D'}
               name={'carret-right'}
@@ -131,7 +126,8 @@ const PageNumbersWrapper = styled.ul`
   padding: 0;
   display: flex;
 
-  li:last-child, li:first-child {
+  li:last-child,
+  li:first-child {
     padding: 0 0;
     display: flex;
     align-items: center;

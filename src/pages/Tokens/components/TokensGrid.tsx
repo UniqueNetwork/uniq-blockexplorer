@@ -1,13 +1,9 @@
-import { Text } from '@unique-nft/ui-kit';
-import { FC, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { FC } from 'react';
 import styled from 'styled-components';
-import { Token } from '@app/api';
-import { getImageURL, timeDifference } from '@app/utils';
 
-import Picture from '../../../components/Picture';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
+import { Token } from '@app/api';
+import { TokenCard } from '@app/components';
+import { deviceWidth } from '@app/hooks';
 
 interface TokensGridProps {
   chainNetwork: string;
@@ -15,82 +11,45 @@ interface TokensGridProps {
   tokens: Token[];
 }
 
-const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => {
-  // user analytics
-  const onTokenClick = useCallback(() => {
-    const path = window.location.pathname;
-
-    if (path.includes('tokens')) { logUserEvents(UserEvents.Click.OPEN_NFT_CARD_FROM_NFTS_PAGE); }
-  }, []);
-
-  return <TokenGallery>{tokens.map((token) => {
-    return (
-      <TokenLink
-        key={`token-${token.collection_id}-${token.token_id}`}
-        onClick={onTokenClick}
-        to={`/${chainNetwork}/tokens/${token.collection_id}/${token.token_id}`}
-      >
-        <TokenPicture
-          alt={`${token.token_prefix} #${token.token_id}`}
-          src={getImageURL((token).image_path)}
+const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => (
+  <TokenGallery>
+    {tokens.map((token) => {
+      return (
+        <TokenCard
+          key={`token-${token.collection_id}-${token.token_id}`}
+          {...token}
+          timeNow={timestamp}
         />
-        <Text
-          color={'secondary-500'}
-          size='l'
-          weight='regular'
-        >{`${token.token_prefix} #${token.token_id}`}</Text>
-        <TokenCollectionLink
-          to={`/${chainNetwork}/collections/${token.collection_id}`}
-        >{`${token.token_prefix} [id ${token.collection_id}]`}</TokenCollectionLink>
-        <TokenDate
-          color={'grey-500'}
-          size='xs'
-        >
-          {`${timeDifference(token.date_of_creation, timestamp)}`}
-        </TokenDate>
-      </TokenLink>
-    );
-  })}</TokenGallery>;
-};
+      );
+    })}
+  </TokenGallery>
+);
 
 const TokenGallery = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  grid-gap: 80px;
-  margin-bottom: 60px;
-  justify-items: center;
-  align-items: stretch;
- 
-  @media (max-width: 767px) {
-    grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
-    grid-gap: 32px;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: calc(var(--gap) * 1.5);
+  grid-row-gap: calc(var(--gap) * 1.5);
+  margin-bottom: calc(var(--gap) * 1.5);
+
+  @media ${deviceWidth.biggerThan.xl} {
+    grid-template-columns: repeat(6, 1fr);
   }
-`;
 
-const TokenLink = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  &:hover {
-    text-decoration: none;
+  @media ${deviceWidth.smallerThan.xxl} {
+    grid-template-columns: repeat(4, 1fr);
   }
-`;
 
-const TokenDate = styled(Text)`
-  margin-top: 8px;
-`;
+  @media ${deviceWidth.smallerThan.lg} {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-const TokenCollectionLink = styled(Link)`
-`;
+  @media ${deviceWidth.smallerThan.sm} {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-const TokenPicture = styled(Picture)`
-  height: 380px;
-  width: 380px;
-  border-radius: var(--bradius);
-  margin-bottom: 8px;
-  
-  @media (max-width: 767px) {
-    height: 288px;
-    width: 288px;
+  @media ${deviceWidth.smallerThan.xs} {
+    grid-template-columns: 1fr;
   }
 `;
 

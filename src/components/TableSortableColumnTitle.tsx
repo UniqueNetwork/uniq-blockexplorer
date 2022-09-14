@@ -2,20 +2,26 @@ import React, { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
+import { Sorting } from '@app/api/graphQL/types';
+
 import ArrowDownUp from './ArrowDownUp';
-import { CollectionSorting } from '../api/graphQL';
 
 interface TableSortableColumnProps {
-  dataIndex: string
+  dataIndex: string;
   title: string;
-  orderBy: Record<string, 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last'>
-  onOrderChange(sorting: CollectionSorting): void
+  orderBy: Sorting;
+  onOrderChange(sorting: Sorting): void;
 }
 
-const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({ dataIndex, onOrderChange, orderBy, title }) => {
+const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
+  dataIndex,
+  onOrderChange,
+  orderBy,
+  title,
+}) => {
   const direction = useMemo(() => {
-    if (orderBy[dataIndex] === 'asc') return 'up';
-    if (orderBy[dataIndex] === 'desc') return 'down';
+    if (orderBy[dataIndex] === 'asc_nulls_first') return 'up';
+    if (orderBy[dataIndex] === 'desc_nulls_last') return 'down';
 
     return 'both';
   }, [orderBy, dataIndex]);
@@ -23,19 +29,16 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({ dataIndex, onO
   const onArrowsClick = useCallback(() => {
     let orderValue;
 
-    if (!orderBy[dataIndex]) orderValue = 'asc';
-    if (orderBy[dataIndex] === 'asc') orderValue = 'desc';
+    if (!orderBy[dataIndex]) orderValue = 'asc_nulls_first';
+    if (orderBy[dataIndex] === 'asc_nulls_first') orderValue = 'desc_nulls_last';
 
     onOrderChange({ [dataIndex]: orderValue });
   }, [orderBy, dataIndex, onOrderChange]);
 
   return (
     <>
-      <ColumnTitleText color={'grey-500'}>{title}</ColumnTitleText>
-      <StyledArrowDownUp
-        direction={direction}
-        onClick={onArrowsClick}
-      />
+      <ColumnTitleText color="grey-500">{title}</ColumnTitleText>
+      <StyledArrowDownUp direction={direction} onClick={onArrowsClick} />
     </>
   );
 };
@@ -45,7 +48,7 @@ const ColumnTitleText = styled(Text)`
 `;
 
 const StyledArrowDownUp = styled(ArrowDownUp)`
-  @media(max-width: 1023px) {
+  @media (max-width: 1023px) {
     display: none;
   }
 `;

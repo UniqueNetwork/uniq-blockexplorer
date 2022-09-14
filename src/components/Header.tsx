@@ -1,21 +1,33 @@
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { Select } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
+import { useSearchParams } from 'react-router-dom';
+
 import { useApi } from '@app/hooks';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
-import Menu from './Menu';
+import { Menu } from './Menu';
 import LoadingComponent from './LoadingComponent';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
+  const [queryParams, setQueryParams] = useSearchParams();
+
+  const onLogoClick = useCallback(() => {
+    const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
+    queryParams.delete('search');
+    setQueryParams(queryParams);
+    if (onTheMainPage) {
+      window.location.reload();
+    }
+  }, [currentChain?.network]);
 
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
@@ -32,41 +44,46 @@ const Header: FC = () => {
         }
 
         navigate(`${option.id as string}/`);
-        location.reload();
+        window.location.reload();
       }
     },
-    [navigate]
+    [navigate],
   );
 
   return (
-    <HeaderWrapper>
-      <HeaderNavWrapper>
-        <MobileMenu />
-        <Link to={`/${currentChain ? currentChain?.network + '/' : ''}`}>
-          <Logo
-            alt='Logo'
-            src='/logos/unique.svg'
+    <>
+      <HeaderWrapper>
+        <HeaderNavWrapper>
+          <Link
+            to={`/${currentChain ? currentChain?.network + '/' : ''}`}
+            onClick={onLogoClick}
+          >
+            <Logo alt="Logo" src="/logos/logo_product.svg" />
+          </Link>
+          <HeaderNav>
+            <Menu />
+          </HeaderNav>
+        </HeaderNavWrapper>
+        <ChainsSelectWrapper>
+          <ChainsSelect
+            options={Object.values(config.chains).map(({ network, name }) => ({
+              iconLeft: {
+                name: `chain-${network.toLowerCase()}`,
+                size: 16,
+              },
+              id: network,
+              title:
+                network === 'UNIQUE'
+                  ? name
+                  : network.charAt(0) + network.slice(1).toLowerCase(),
+            }))}
+            value={currentChain?.network}
+            onChange={onSelectChange}
           />
-        </Link>
-        <HeaderNav>
-          <Menu />
-        </HeaderNav>
-      </HeaderNavWrapper>
-      <ChainsSelectWrapper>
-        <ChainsSelect
-          onChange={onSelectChange}
-          options={Object.values(config.chains).map(({ name, network }) => ({
-            iconLeft: {
-              name: `chain-${network.toLowerCase()}`,
-              size: 16
-            },
-            id: network,
-            title: name
-          }))}
-          value={currentChain?.network}
-        />
-      </ChainsSelectWrapper>
-    </HeaderWrapper>
+        </ChainsSelectWrapper>
+      </HeaderWrapper>
+      <MobileMenu />
+    </>
   );
 };
 
@@ -93,18 +110,25 @@ const HeaderNav = styled.nav`
   column-gap: calc(var(--gap) * 1.5);
   align-items: center;
   a {
-    color: var(--primary-500);
-    font-weight: 500;
-  }
-  .active {
     color: var(--dark);
-    cursor: default;
-    text-decoration: underline;
+    font-weight: 500;
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
+      color: var(--primary-500);
     }
   }
-  @media (max-width: 1024px) {
+  .active {
+    color: var(--primary-500);
+    cursor: default;
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
+    span {
+      color: var(--primary-500);
+    }
+  }
+  @media (max-width: 991px) {
     display: none;
   }
 `;
@@ -140,22 +164,23 @@ const ChainsSelect = styled(Select)`
       border-radius: 8px;
     }
   }
-  
-  @media (max-width: 568px) {
+
+  @media (max-width: 450px) {
     width: auto;
     position: static;
-    
+
     .select-wrapper {
       position: static;
       display: flex;
       .select-value {
         font-size: 0;
         width: 50px;
-        svg, img {
+        svg,
+        img {
           margin-right: 0 !important;
         }
       }
-      .icon-triangle {     
+      .icon-triangle {
         top: auto;
         right: 18px;
       }
@@ -169,7 +194,8 @@ const ChainsSelect = styled(Select)`
         height: calc(100vh - 80px);
         background-color: var(--white-color);
         padding: calc(var(--gap) * 1.5) var(--gap);
-        box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset, 0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
+        box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
+          0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
       }
     }
   }

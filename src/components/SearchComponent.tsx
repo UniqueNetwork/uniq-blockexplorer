@@ -1,90 +1,117 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { FC, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useApi } from '../hooks/useApi';
+import { useSearchParams } from 'react-router-dom';
+
+import { useApi, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface SearchComponentProps {
-  placeholder?: string
-  value?: string
-  onSearchChange(value: string | undefined): void
+  placeholder?: string;
+  value?: string;
+  onSearchChange(value: string | undefined): void;
+  setResultExist?: (value: boolean) => void;
 }
 
-const SearchComponent: FC<SearchComponentProps> = ({ onSearchChange, placeholder, value }) => {
-  const [searchString, setSearchString] = useState<string | undefined>(value);
+const SearchComponent: FC<SearchComponentProps> = ({
+  onSearchChange,
+  placeholder,
+  setResultExist,
+  value,
+}) => {
+  const [queryParams, setQueryParams] = useSearchParams();
+  const searchFromQuery = useSearchFromQuery();
+  const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
+  const { pathname } = useLocation();
 
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
 
-  const onSearch = useCallback(() => {
-    // user analytics
-    const path = window.location.pathname;
+  useEffect(() => {
+    setInputValue(searchFromQuery);
+  }, [searchFromQuery]);
 
-    if (path.includes('tokens')) {
+  const onSearch = useCallback(() => {
+    if (pathname.includes('tokens')) {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_NFTS_PAGE);
-    } else if (path.includes('collections')) {
+    } else if (pathname.includes('collections')) {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_COLLECTIONS_PAGE);
-    } else if (path.includes('account')) {
+    } else if (pathname.includes('account')) {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_ACCOUNT_PAGE);
     } else {
       logUserEvents(UserEvents.Click.SEARCH_BUTTON_ON_MAIN_PAGE);
     }
 
     // ethers address or substrate address
-    if ((/0x[0-9A-Fa-f]{40}/g).test(searchString as string) || (/^\w{48}\w*$/.test(searchString || ''))) {
-      navigate(`/${currentChain.network}/account/${searchString || ''}`);
+    if (
+      /0x[0-9A-Fa-f]{40}/g.test(inputValue || '') ||
+      /^\w{48}\w*$/.test(inputValue || '')
+    ) {
+      navigate(`/${currentChain.network}/account/${inputValue || ''}`);
 
       return;
     }
 
-    if (/^\d+-\d+$/.test(searchString || '')) {
-      navigate(`/${currentChain.network}/extrinsic/${searchString || ''}`);
-
-      return;
+    //temporary for search page
+    if (!!inputValue && inputValue !== '' && setResultExist) {
+      setResultExist(false);
     }
+    if (inputValue) {
+      queryParams.set('search', inputValue);
+    } else {
+      queryParams.delete('search');
+    }
+    setQueryParams(queryParams);
 
-    onSearchChange(searchString);
-  }, [currentChain.network, navigate, onSearchChange, searchString]);
+    onSearchChange(inputValue ? inputValue.trim() : inputValue);
+  }, [
+    pathname,
+    inputValue,
+    setResultExist,
+    setQueryParams,
+    queryParams,
+    onSearchChange,
+    navigate,
+    currentChain.network,
+  ]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {
       if (key === 'Enter') return onSearch();
     },
-    [onSearch]
+    [onSearch],
   );
 
-  const onChangeSearchString = useCallback((value: string | undefined) => {
-    setSearchString(value?.toString() || '');
-  }, [setSearchString]);
+  const onChangeSearchString = useCallback(
+    (value: string | undefined) => {
+      setInputValue(value?.toString() || '');
+    },
+    [setInputValue],
+  );
 
   return (
     <SearchWrapper>
       <SearchInput
         iconLeft={{ name: 'magnify', size: 18 }}
+        placeholder={placeholder}
+        value={inputValue}
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}
-        placeholder={placeholder}
-        value={searchString}
       />
-      <Button
-        onClick={onSearch}
-        role={'primary'}
-        title='Search'
-      />
+      <Button role={'primary'} title="Search" onClick={onSearch} />
     </SearchWrapper>
   );
 };
 
 const SearchWrapper = styled.div`
   display: flex;
-  margin-bottom: calc(var(--gap) * 2);
-  width: 50%;
+
   @media (max-width: 767px) {
-    margin-bottom: 24px;
     width: 100%;
+
     button.unique-button {
       display: none;
     }
@@ -93,9 +120,9 @@ const SearchWrapper = styled.div`
 
 const SearchInput = styled(InputText)`
   box-sizing: border-box;
-  max-width: 612px;
-  width: 100%;
+  width: 418px;
   margin-right: calc(var(--gap) / 2);
+  background-color: var(--white-color);
 
   @media (max-width: 767px) {
     width: 100%;

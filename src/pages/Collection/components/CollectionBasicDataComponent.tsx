@@ -4,18 +4,20 @@ import { Text } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { timestampFormat } from '@app/utils';
+import { useDeviceSize, DeviceSize, DeviceSizes } from '@app/hooks';
 
-import Avatar from '../../../components/Avatar';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 import TokensComponent from './TokensComponent';
-import useDeviceSize, { DeviceSize } from '../../../hooks/useDeviceSize';
 
 interface BasicDataComponentProps {
-  collectionId: string
-  collection?: Collection
+  collectionId: string;
+  collection?: Collection;
 }
 
-const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection, collectionId }) => {
+const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
+  collection,
+  collectionId,
+}) => {
   const {
     collection_id: id,
     date_of_creation: createdOn,
@@ -23,7 +25,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
     holders_count: holders,
     owner,
     token_prefix: prefix,
-    tokens_count: tokensCount
+    tokens_count: tokensCount,
   } = collection || {};
 
   const deviceSize = useDeviceSize();
@@ -34,49 +36,44 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection,
         <GeneralInfoWrapper>
           <GeneralInfo>
             <div>
-              <Text color={'grey-500'}>ID:</Text>
-              <Text color={'black'}>{id?.toString() || ''}</Text>
+              <Text color="grey-500">ID:</Text>
+              <Text color="black">{id?.toString() || ''}</Text>
             </div>
             <div>
-              <Text color={'grey-500'}>Items:</Text>
-              <Text color={'black'}>{tokensCount?.toString() || '0'}</Text>
+              <Text color="grey-500">Items:</Text>
+              <Text color="black">{tokensCount?.toString() || '0'}</Text>
             </div>
             <div>
-              <Text color={'grey-500'}>Symbol:</Text>
-              <Text color={'black'}>{prefix?.toString() || ''}</Text>
+              <Text color="grey-500">Symbol:</Text>
+              <Text color="black">{prefix?.toString() || ''}</Text>
             </div>
             <div>
-              <Text color={'grey-500'}>Holders:</Text>
-              <Text color={'black'}>{holders?.toString() || '0'}</Text>
+              <Text color="grey-500">Holders:</Text>
+              <Text color="black">{holders?.toString() || '0'}</Text>
             </div>
             <div>
-              <Text color={'grey-500'}>Minting:</Text>
-              <Text color={'black'}>{'yes'}</Text>
+              <Text color="grey-500">Minting:</Text>
+              <Text color="black">yes</Text>
             </div>
           </GeneralInfo>
           <DescriptionWrapper>
-            <Text color={'grey-500'}>{description || ''}</Text>
+            <Text color="grey-500">{description || ''}</Text>
           </DescriptionWrapper>
         </GeneralInfoWrapper>
         <CreatedAccountWrapper>
           <div>
-            <Text color={'grey-500'}>{`created on ${timestampFormat(createdOn)}`}</Text>
+            <Text color="grey-500">created on {timestampFormat(createdOn)}</Text>
           </div>
           <OwnerAccountWrapper>
-            <Avatar
-              size={'x-small'}
-            />
             <AccountLinkComponent
-              noShort={deviceSize >= DeviceSize.lg}
+              noShort={deviceSize >= DeviceSize.xl}
               value={owner || ''}
             />
           </OwnerAccountWrapper>
         </CreatedAccountWrapper>
       </PropertiesWrapper>
       <div>
-        <TokensComponent
-          collectionId={collectionId}
-        />
+        <TokensComponent collectionId={collectionId} />
       </div>
     </>
   );
@@ -90,7 +87,7 @@ const PropertiesWrapper = styled.div`
   justify-content: space-between;
   margin-bottom: 10px;
 
-  @media(max-width: 767px) {
+  @media (max-width: 767px) {
     flex-direction: column;
   }
 `;
@@ -104,9 +101,14 @@ const GeneralInfoWrapper = styled.div`
 const GeneralInfo = styled.div`
   display: flex;
   column-gap: var(--gap);
+
   div {
     display: flex;
     column-gap: calc(var(--gap) / 4);
+  }
+
+  @media (max-width: ${DeviceSizes.sm}) {
+    flex-wrap: wrap;
   }
 `;
 
@@ -121,7 +123,7 @@ const CreatedAccountWrapper = styled.div`
   row-gap: calc(var(--gap) / 2);
   flex-direction: column;
 
-  @media(max-width: 767px) {
+  @media (max-width: 767px) {
     align-items: flex-start;
   }
 `;
@@ -131,6 +133,11 @@ const OwnerAccountWrapper = styled.div`
   align-items: center;
   column-gap: var(--gap);
   margin-bottom: calc(var(--gap) * 2.5);
+
+  svg {
+    height: 24px;
+    width: 24px;
+  }
 `;
 
 export default CollectionBasicDataComponent;

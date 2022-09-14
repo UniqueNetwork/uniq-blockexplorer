@@ -2,23 +2,25 @@ import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
-import { useApi } from '@app/hooks';
-import { getImageURL, shortcutText } from '@app/utils';
-import { Token } from '@app/api';
 
-import Picture from './Picture';
+import { useApi, useCheckImageExists } from '@app/hooks';
+import { timeDifference } from '@app/utils';
+import { Token } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { Picture } from '@app/components';
+import clock from '@app/images/icons/clock.svg';
 
-type TokenCardProps = Token;
+type TokenCardProps = Token & { timeNow?: number };
 
 const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
-  image_path: imagePath,
-  owner,
+  date_of_creation: dateOfCreation,
+  image,
+  timeNow,
   token_id: tokenId,
-  token_prefix: prefix
+  token_prefix: prefix,
 }) => {
   const { currentChain } = useApi();
   // user analytics
@@ -30,32 +32,33 @@ const TokenCard: FC<TokenCardProps> = ({
     }
   }, []);
 
-  const imageUrl = getImageURL(imagePath);
+  const { imgSrc } = useCheckImageExists(image.fullUrl);
 
   return (
     <TokenCardLink
-      onClick={onNFTCardClick}
       to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
+      onClick={onNFTCardClick}
     >
-      <TokenPicture
-        alt={tokenId.toString()}
-        src={imageUrl}
-      />
+      {/* the picture has not exists */}
+      {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
+      {/* the picture has loaded */}
+      {imgSrc && <TokenBackground imgUrl={imgSrc} />}
       <TokenTitle>
-        <Text>{`${prefix || ''} #${tokenId}`}</Text>
+        <Text color="primary-500" size="l">{`${prefix || ''} #${tokenId}`}</Text>
         <div>
-          <Link to={`/${currentChain ? currentChain?.network + '/' : ''}collections/${collectionId}`}>{name} [ID {collectionId}]</Link>
+          <TokenCollectionLink
+            to={`/${
+              currentChain ? currentChain?.network + '/' : ''
+            }collections/${collectionId}`}
+          >
+            {name} [ID {collectionId}]
+          </TokenCollectionLink>
         </div>
         <TokenProperties>
-          <Text
-            color='grey-500'
-            size='xs'
-          >
-            Owner: </Text>
-          <Text
-            color='grey-500'
-            size='xs'
-          >{shortcutText(owner)}</Text>
+          <img alt="created" src={clock} />
+          <Text color="additional-dark" size="xs">
+            {timeDifference(dateOfCreation, timeNow)}
+          </Text>
         </TokenProperties>
       </TokenTitle>
     </TokenCardLink>
@@ -63,7 +66,12 @@ const TokenCard: FC<TokenCardProps> = ({
 };
 
 const TokenCardLink = styled(Link)`
+  width: 100%;
+  border: 1px solid var(--blue-gray-200);
+  border-radius: calc(var(--bradius) * 2);
   transition: 50ms;
+  overflow: hidden;
+
   &:hover {
     transform: translate(0, -5px);
     text-decoration: none;
@@ -71,25 +79,53 @@ const TokenCardLink = styled(Link)`
 `;
 
 const TokenPicture = styled(Picture)`
-  width: auto;
-  height: auto;
   overflow: hidden;
-  border-radius: 8px;
-  svg, img {
-    width: 100%
+  border-radius: 8px 8px 0 0;
+
+  svg {
+    width: 100%;
+  }
+`;
+
+const TokenCollectionLink = styled(Link)`
+  color: var(--primary-500);
+  font-size: 12px;
+  line-height: 18px;
+`;
+
+const TokenBackground = styled.div<{ imgUrl: string }>`
+  width: 100%;
+  background-image: url(${(props) => props.imgUrl});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 8px 8px 0 0;
+
+  &:after {
+    content: '';
+    display: block;
+    padding-top: 100%;
   }
 `;
 
 const TokenTitle = styled.div`
-  margin-top: calc(var(--gap) / 2);
-  
+  margin: var(--gap);
+
   a {
     word-break: break-word;
   }
 `;
 
 const TokenProperties = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: calc(var(--gap) / 2);
+
+  img {
+    width: 13px;
+    height: 13px;
+    margin-right: 5px;
+  }
 `;
 
 export default TokenCard;

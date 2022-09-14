@@ -1,6 +1,8 @@
-import { TChainNetwork } from '@app/api/ApiContext';
-import { encodeAddress, blake2AsHex } from '@polkadot/util-crypto';
 import { Buffer } from 'buffer';
+
+import { encodeAddress, blake2AsHex } from '@polkadot/util-crypto';
+
+import { TChainNetwork } from '@app/api/ApiContext';
 
 export type TAddressFormat = TChainNetwork | 'normalized';
 
@@ -12,7 +14,7 @@ export function getMirrorFromEthersToSubstrate(h160Addr: string, format: TAddres
     POLKADOT: 0,
     QUARTZ: 255,
     UNIQUE: 7391,
-    normalized: 42
+    normalized: 42,
   };
   const prefix = getPrefixForFormat[format];
   const addressBytes = Buffer.from(h160Addr.slice(2), 'hex');

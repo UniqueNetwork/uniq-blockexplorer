@@ -2,21 +2,23 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Heading, Tabs } from '@unique-nft/ui-kit';
+
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
-import { useApi } from '@app/hooks';
+import { useApi, useScrollToTop } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
+import { LastTransfers } from '@app/pages/Main/components';
+import { UserEvents } from '@app/analytics/user_analytics';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 import AccountDetailComponent from './components/AccountDetailComponent';
-import LastTransfersComponent from '../Main/components/LastTransfersComponent';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 
 const assetsTabs = ['Collections', 'NFTs'];
 
 const AccountPage = () => {
+  useScrollToTop();
   const { accountId } = useParams();
   // assume that we got the substrate address
   let substrateAddress = accountId;
@@ -26,8 +28,11 @@ const AccountPage = () => {
   const { currentChain } = useApi();
 
   // if we get an ether address
-  if ((/0x[0-9A-Fa-f]{40}/g).test(accountId as string)) {
-    const substrateMirror = getMirrorFromEthersToSubstrate(accountId as string, currentChain.network);
+  if (/0x[0-9A-Fa-f]{40}/g.test(accountId as string)) {
+    const substrateMirror = getMirrorFromEthersToSubstrate(
+      accountId as string,
+      currentChain.network,
+    );
 
     substrateAddress = substrateMirror;
     accountForTokensSearch = accountId?.toLowerCase();
@@ -43,35 +48,35 @@ const AccountPage = () => {
   if (!accountId) return null;
 
   return (
-    <PagePaper>
-      <AccountDetailComponent accountId={substrateAddress as string} />
-      <AssetsWrapper>
-        <Heading size={'2'}>Assets</Heading>
-        <Tabs
-          activeIndex={activeAssetsTabIndex}
-          labels={assetsTabs}
-          onClick={setActiveAssetsTabIndex}
-        />
-        <Tabs
-          activeIndex={activeAssetsTabIndex}
-        >
-          <CollectionsComponent
-            accountId={normalizeSubstrate(substrateAddress as string)}
-            key={'collections'}
+    <Wrapper className="account-page">
+      <PagePaper>
+        <AccountDetailComponent accountId={substrateAddress as string} />
+        <AssetsWrapper>
+          <Heading size="2">Assets</Heading>
+          <Tabs
+            activeIndex={activeAssetsTabIndex}
+            labels={assetsTabs}
+            onClick={setActiveAssetsTabIndex}
           />
-          <TokensComponent
-            accountId={accountForTokensSearch as string}
-            key={'tokens'}
-          />
-        </Tabs>
-      </AssetsWrapper>
-      <LastTransfersComponent
-        accountId={substrateAddress}
-        pageSize={10}
-      />
-    </PagePaper>
+          <Tabs activeIndex={activeAssetsTabIndex}>
+            <CollectionsComponent
+              accountId={normalizeSubstrate(substrateAddress as string)}
+              key="collections"
+            />
+            <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
+          </Tabs>
+        </AssetsWrapper>
+      </PagePaper>
+      <LastTransfers accountId={substrateAddress} pageSize={10} />
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: var(--gap);
+`;
 
 const AssetsWrapper = styled.div`
   padding-top: calc(var(--gap) * 1.5);

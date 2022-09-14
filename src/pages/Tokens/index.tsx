@@ -1,14 +1,17 @@
 import React, { FC } from 'react';
-import PagePaper from '../../components/PagePaper';
-import TokensComponent from './components/TokensComponent';
 import styled from 'styled-components';
 
+import { useScrollToTop } from '@app/hooks';
+
+import PagePaper from '../../components/PagePaper';
+import TokensComponent from './components/TokensComponent';
+
 const TokensPage: FC = () => {
+  useScrollToTop();
+
   return (
     <>
-      <Title>
-        NFTs
-      </Title>
+      <Title>NFTs</Title>
       <PagePaper>
         <TokensComponent />
       </PagePaper>
