@@ -86,6 +86,8 @@ export const Tokens: VFC<TokensProps> = ({
   useEffect(() => {
     if (searchModeOn && !isTokensFetching && setResultExist && !!tokens?.length) {
       setResultExist(true);
+    } else if (searchModeOn && !isTokensFetching && setResultExist && !tokens?.length) {
+      setResultExist(false);
     }
   }, [tokens, isTokensFetching, searchModeOn, setResultExist]);
 

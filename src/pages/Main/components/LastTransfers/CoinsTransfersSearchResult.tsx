@@ -46,6 +46,13 @@ export const CoinsTransfersSearchResult: VFC<LastTransfersProps> = ({
       prettifiedBlockSearchString
     ) {
       setResultExist(true);
+    } else if (
+      !isTransfersFetching &&
+      setResultExist &&
+      !transfersCount &&
+      prettifiedBlockSearchString
+    ) {
+      setResultExist(false);
     }
   }, [transfersCount, isTransfersFetching, setResultExist, prettifiedBlockSearchString]);
 

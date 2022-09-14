@@ -66,6 +66,13 @@ export const Collections: VFC<CollectionsProps> = ({
       !!collections?.length
     ) {
       setResultExist(true);
+    } else if (
+      searchModeOn &&
+      !isCollectionsFetching &&
+      setResultExist &&
+      !collections?.length
+    ) {
+      setResultExist(false);
     }
   }, [collections, isCollectionsFetching, setResultExist, searchModeOn]);
 
@@ -112,7 +119,7 @@ export const Collections: VFC<CollectionsProps> = ({
     }
   }, [collectionsCount, pageSize, setShowButton]);
 
-  if (!collections.length) return null;
+  if (!isCollectionsFetching && !collections.length) return null;
 
   return (
     <Wrapper>
