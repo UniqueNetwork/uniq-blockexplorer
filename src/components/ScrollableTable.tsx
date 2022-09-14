@@ -61,11 +61,7 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
 
   return (
     <ScrollWrapper>
-      <TableWrapper
-        id="tableWrapper"
-        minScreenWidthForTable={minScreenWidthForTable}
-        ref={tableRef}
-      >
+      <TableWrapper id="tableWrapper" minScreenWidthForTable={minScreenWidthForTable}>
         <RCTable
           columns={columns}
           data={data || []}
