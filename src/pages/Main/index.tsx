@@ -23,28 +23,21 @@ const MainPage = () => {
   const [transfersNftsExist, setTransfersNftsExist] = useState<boolean>(false);
   const [transfersCoinsExist, setTransfersCoinsExist] = useState<boolean>(false);
   const [blocksExist, setBlocksExist] = useState<boolean>(false);
+  const isResultExist =
+    tokensExist ||
+    collectionsExist ||
+    transfersNftsExist ||
+    transfersCoinsExist ||
+    blocksExist;
 
   const [searchParams] = useSearchParams();
   const [searchString, setSearchString] = useState<string | undefined>(
     searchParams.get('search') || '',
   );
+
   useEffect(() => {
-    if (
-      tokensExist ||
-      collectionsExist ||
-      transfersNftsExist ||
-      transfersCoinsExist ||
-      blocksExist
-    ) {
-      setResultExist(true);
-    } else setResultExist(false);
-  }, [
-    tokensExist,
-    collectionsExist,
-    transfersNftsExist,
-    transfersCoinsExist,
-    blocksExist,
-  ]);
+    setResultExist(isResultExist);
+  }, [isResultExist]);
 
   useEffect(() => {
     setSearchModeOn(!!searchString && searchString !== '');
