@@ -59,13 +59,8 @@ export const Collections: VFC<CollectionsProps> = ({
     });
 
   useEffect(() => {
-    if (
-      searchModeOn &&
-      !isCollectionsFetching &&
-      setResultExist &&
-      !!collections?.length
-    ) {
-      setResultExist(true);
+    if (searchModeOn && !isCollectionsFetching && setResultExist) {
+      setResultExist(!!collections?.length);
     }
   }, [collections, isCollectionsFetching, setResultExist, searchModeOn]);
 
@@ -112,7 +107,7 @@ export const Collections: VFC<CollectionsProps> = ({
     }
   }, [collectionsCount, pageSize, setShowButton]);
 
-  if (!collections.length) return null;
+  if (!isCollectionsFetching && !collections.length) return null;
 
   return (
     <Wrapper data-automation-id="collections">

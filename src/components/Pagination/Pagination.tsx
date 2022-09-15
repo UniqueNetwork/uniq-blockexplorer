@@ -55,11 +55,13 @@ export const Pagination: FC<PaginationProps> = ({
 
   const onNext = () => {
     if (currentPage === lastPage || count < pageSizeNumber) return;
+
     onPageChanged(currentPage + 1);
   };
 
   const onPrevious = () => {
     if (currentPage < 2 || count < pageSizeNumber) return;
+
     onPageChanged(currentPage - 1);
   };
 
