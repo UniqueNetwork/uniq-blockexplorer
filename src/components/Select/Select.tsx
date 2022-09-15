@@ -92,6 +92,7 @@ export const Select = ({
 
   const handleOptionSelect = (option: SelectOptionProps) => {
     setDropped(false);
+
     if (multi) onChange?.([...selectedMulti, option]);
     else onChange?.(option);
   };
@@ -115,6 +116,7 @@ export const Select = ({
           option[optionKey as keyof SelectOptionProps] ===
           item[optionKey as keyof SelectOptionProps],
       );
+
     return (
       option[optionKey as keyof SelectOptionProps] ===
       selected?.[optionKey as keyof SelectOptionProps]
