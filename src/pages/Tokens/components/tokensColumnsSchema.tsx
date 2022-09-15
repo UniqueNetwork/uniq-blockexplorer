@@ -37,6 +37,20 @@ export const getTokensColumns = (
     width: 100,
   },
   {
+    dataIndex: 'date_of_creation',
+    key: 'date_of_creation',
+    render: timestampTableFormat,
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="date_of_creation"
+        orderBy={orderBy}
+        title="Created"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 100,
+  },
+  {
     dataIndex: 'collection_id',
     key: 'collection_id',
     render: (value: string, item: unknown) => (
@@ -58,14 +72,14 @@ export const getTokensColumns = (
     width: 100,
   },
   {
-    dataIndex: 'date_of_creation',
-    key: 'date_of_creation',
+    dataIndex: 'transfers_count',
+    key: 'transfers_count',
     render: timestampTableFormat,
     title: (
       <TableSortableColumnTitle
-        dataIndex="date_of_creation"
+        dataIndex="transfers_count"
         orderBy={orderBy}
-        title="Date"
+        title="Transfers"
         onOrderChange={onOrderChange}
       />
     ),

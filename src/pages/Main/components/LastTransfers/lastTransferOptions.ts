@@ -1,4 +1,4 @@
-import { SelectOptionProps } from '@unique-nft/ui-kit';
+import { SelectOptionProps } from '@app/components';
 
 export const SELECTED_BLOCK_COIN = 'Coins';
 export const SELECTED_BLOCK_NFT = 'NFTs';

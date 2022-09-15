@@ -1,8 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import classNames from 'classnames';
 import ReactTooltip from 'react-tooltip';
-import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
@@ -10,6 +8,7 @@ import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
+import { RouterTabs, SelectOptionProps } from '@app/components';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
@@ -18,13 +17,13 @@ import PagePaper from '../../components/PagePaper';
 import { ViewType } from './components/TokensComponent';
 
 const tabUrls = ['nfts', 'fractional'];
-
 const TokensPage: FC = () => {
   useScrollToTop();
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const { currentChain } = useApi();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
+  const [tokensCount, setTokensCount] = useState<number>();
   const [sort, selectSort] = useState<SelectOptionProps>();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
@@ -41,9 +40,10 @@ const TokensPage: FC = () => {
   );
 
   const defaultSort =
-    OPTIONS.find(
-      (option) =>
-        option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
+    OPTIONS.find((option) =>
+      sort
+        ? option.sortDir === sort.sortDir
+        : option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
     )?.id ?? '';
 
   const selectFilter = (selected: SelectOptionProps) => {
@@ -67,15 +67,13 @@ const TokensPage: FC = () => {
     setView(ViewType.List);
   };
 
-  const handleClick = (tabIndex: number) => {
-    navigate(`${basePath}/${tabUrls[tabIndex]}`);
-  };
-
   useEffect(() => {
     if (location.pathname === basePath || location.pathname === `${basePath}/`) {
       navigate(tabUrls[0]);
     }
   }, [basePath, location.pathname, navigate]);
+
+  console.log('sort', sort, 'orderBy', orderBy);
 
   return (
     <div className="tokens-page">
@@ -83,42 +81,39 @@ const TokensPage: FC = () => {
         <Title>Tokens</Title>
       </TopBar>
       <PagePaper>
-        {/* TODO Move this to a separate local tabs component */}
-        <TabsHeader>
-          <Tabs>
-            <Tab
-              className={classNames({
-                active: currentTabIndex === 0,
-              })}
-              onClick={() => handleClick(0)}
-            >
+        <RouterTabs
+          additionalContent={[
+            <>
+              {currentTabIndex === 0 && (
+                <RightMenu
+                  defaultSort={defaultSort}
+                  key="top-right-menu"
+                  selectSort={selectFilter}
+                  selectGrid={selectGrid}
+                  selectList={selectList}
+                  sort={sort}
+                  view={view}
+                />
+              )}
+            </>,
+          ]}
+          basePath={basePath}
+          content={[
+            <div className="flex-column">
               {tabUrls[0]}
-            </Tab>
-            <Tab
-              className={classNames({
-                active: currentTabIndex === 1,
-                disabled: true,
-              })}
-            >
+              <small>{tokensCount} items</small>
+            </div>,
+            <div className="flex-row">
               {tabUrls[1]}
               <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
               <ReactTooltip id="sadFace" effect="solid">
                 <span>Coming soon</span>
               </ReactTooltip>
-            </Tab>
-          </Tabs>
-          {currentTabIndex === 0 && (
-            <RightMenu
-              defaultSort={defaultSort}
-              key="top-right-menu"
-              selectSort={selectFilter}
-              selectGrid={selectGrid}
-              selectList={selectList}
-              sort={sort}
-              view={view}
-            />
-          )}
-        </TabsHeader>
+            </div>,
+          ]}
+          tabsClassNames={['', 'disabled']}
+          tabUrls={tabUrls}
+        />
         <Routes>
           <Route
             element={
@@ -127,6 +122,7 @@ const TokensPage: FC = () => {
                 setOrderBy={setOrderBy}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
+                setTokensCount={setTokensCount}
                 view={view}
               />
             }
@@ -138,33 +134,6 @@ const TokensPage: FC = () => {
     </div>
   );
 };
-
-const Tabs = styled.div`
-  display: flex;
-  border-bottom: 1px solid var(--grey-300);
-`;
-
-const Tab = styled.div`
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 28px;
-  text-transform: capitalize;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  grid-column-gap: calc(var(--gap) / 4);
-  padding: calc(var(--gap) / 2) var(--gap) calc(var(--gap) * 2) var(--gap);
-  cursor: pointer;
-
-  &.active {
-    color: var(--link-color);
-    border-bottom: 2px solid var(--link-color);
-  }
-
-  &.disabled {
-    cursor: not-allowed;
-  }
-`;
 
 const TopBar = styled.div`
   display: grid;
@@ -185,35 +154,6 @@ const Title = styled.h2`
   font-weight: bold;
   font-size: 36px;
   line-height: 48px;
-`;
-
-const TabsHeader = styled.div`
-  position: relative;
-  margin-bottom: calc(var(--gap) * 1.5);
-
-  @media (max-width: ${DeviceSizes.sm}) {
-    margin-bottom: 0;
-  }
-
-  .right-tab-menu {
-    position: absolute;
-    right: 0;
-    top: var(--gap);
-
-    @media (max-width: ${DeviceSizes.sm}) {
-      display: grid;
-      grid-template-columns: 1fr 72px;
-      grid-column-gap: var(--gap);
-      position: relative;
-      right: 0;
-      top: 0;
-      padding: var(--gap) 0;
-
-      .unique-select {
-        width: auto;
-      }
-    }
-  }
 `;
 
 export default TokensPage;

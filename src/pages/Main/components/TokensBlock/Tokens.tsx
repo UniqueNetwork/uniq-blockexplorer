@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
+import { Button, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper, TokenCard } from '@app/components';
+import { PagePaperWrapper, SelectOptionProps, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { TokenSorting, useGraphQlTokens } from '@app/api/graphQL';
