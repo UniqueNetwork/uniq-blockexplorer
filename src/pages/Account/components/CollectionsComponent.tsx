@@ -36,6 +36,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   useEffect(() => {
     setSearchString(searchFromQuery);
   }, [searchFromQuery]);
+  const showButton = collectionsCount > pageSize;
 
   return (
     <>
@@ -56,16 +57,18 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
             />
           ))}
       </CollectionsWrapper>
-      <Button
-        iconRight={{
-          color: '#fff',
-          name: 'arrow-right',
-          size: 12,
-        }}
-        role="primary"
-        title={'See all'}
-        onClick={onClickSeeMore}
-      />
+      {showButton && (
+        <Button
+          iconRight={{
+            color: '#fff',
+            name: 'arrow-right',
+            size: 12,
+          }}
+          role="primary"
+          title={'See all'}
+          onClick={onClickSeeMore}
+        />
+      )}
     </>
   );
 };

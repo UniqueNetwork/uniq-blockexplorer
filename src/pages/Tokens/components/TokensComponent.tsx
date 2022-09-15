@@ -2,7 +2,7 @@ import { Icon, Select, Skeleton } from '@unique-nft/ui-kit';
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
@@ -25,8 +25,8 @@ const filter = ({
   accountId,
   collectionId,
 }: {
-  accountId?: string;
-  collectionId?: string;
+  accountId: string | null;
+  collectionId: string | null;
 }) => {
   let _filter = {};
 
@@ -50,7 +50,9 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const { currentChain } = useApi();
   const searchFromQuery = useSearchFromQuery();
   const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
-  const { accountId, collectionId } = useParams();
+  const [queryParams] = useSearchParams();
+  const accountId = queryParams.get('accountId');
+  const collectionId = queryParams.get('collectionId');
 
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [currentPage, setCurrentPage] = useState<number>(1);

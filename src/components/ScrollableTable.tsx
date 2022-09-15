@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
 import RCTable from 'rc-table';
 import styled from 'styled-components';
@@ -24,7 +24,6 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
   const margins = columns!.length * (TABLE_GAP / 2);
   const minScreenWidthForTable = (minTableWidth || 500) + paddings + margins;
   const scrollExist = window.innerWidth < minScreenWidthForTable;
-  const tableRef = useRef();
 
   // for shadow by first column
   // todo: (https://cryptousetech.atlassian.net/browse/SCAN-431) to get away from using 'getElementsByTagName' in favor of 'ref'
