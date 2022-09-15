@@ -1,6 +1,6 @@
 import { FC, useCallback } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
 import { useApi, useCheckImageExists } from '@app/hooks';
@@ -22,6 +22,7 @@ const TokenCard: FC<TokenCardProps> = ({
   token_id: tokenId,
   token_prefix: prefix,
 }) => {
+  const navigate = useNavigate();
   const { currentChain } = useApi();
   // user analytics
   const onNFTCardClick = useCallback(() => {
@@ -30,15 +31,14 @@ const TokenCard: FC<TokenCardProps> = ({
     if (path.includes('collections')) {
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
-  }, []);
+
+    navigate(`/${currentChain.network}/nfts/${collectionId}/${tokenId}`);
+  }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
   return (
-    <TokenCardLink
-      to={`/${currentChain.network}/nfts/${collectionId}/${tokenId}`}
-      onClick={onNFTCardClick}
-    >
+    <TokenCardLink onClick={onNFTCardClick}>
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -70,7 +70,8 @@ const StyledSVGIcon = styled(SVGIcon)`
   margin-right: 5px;
 `;
 
-const TokenCardLink = styled(Link)`
+const TokenCardLink = styled.div`
+  cursor: pointer;
   width: 100%;
   border: 1px solid var(--blue-gray-200);
   border-radius: calc(var(--bradius) * 2);

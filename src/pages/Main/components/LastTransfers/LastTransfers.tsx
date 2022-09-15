@@ -1,10 +1,10 @@
 import { useState, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, SelectOptionProps } from '@unique-nft/ui-kit';
+import { Button } from '@unique-nft/ui-kit';
 
 import { DeviceSizes, useApi } from '@app/hooks';
-import { PagePaperWrapper } from '@app/components';
+import { PagePaperWrapper, SelectOptionProps } from '@app/components';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import {

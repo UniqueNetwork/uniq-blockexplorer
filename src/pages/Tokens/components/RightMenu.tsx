@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
-import { Icon, Select } from '@unique-nft/ui-kit';
+import { Icon } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
-import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 import { DeviceSizes } from '@app/hooks';
+import { Select, SelectOptionProps } from '@app/components';
 
 interface RightMenuProps {
   defaultSort: string;
@@ -26,14 +26,12 @@ export const RightMenu: FC<RightMenuProps> = ({
 }) => {
   return (
     <RightTabMenu className="right-tab-menu">
-      {view === ViewType.Grid && (
-        <Select
-          defaultValue={defaultSort}
-          options={OPTIONS}
-          value={sort?.id as string}
-          onChange={selectSort}
-        />
-      )}
+      <Select
+        defaultValue={defaultSort}
+        options={OPTIONS}
+        value={sort?.id as string}
+        onChange={selectSort}
+      />
       <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>

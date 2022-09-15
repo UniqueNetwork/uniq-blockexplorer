@@ -1,4 +1,4 @@
-import { Heading, Tabs } from '@unique-nft/ui-kit';
+import { Heading } from '@unique-nft/ui-kit';
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,7 +8,7 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { useGraphQlCollection } from '@app/api';
 import { useCheckImageExists, useScrollToTop } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import { CoverContainer, IdentityIcon } from '@app/components';
+import { CoverContainer, IdentityIcon, Tabs } from '@app/components';
 
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
@@ -50,18 +50,20 @@ const CollectionPage: FC = () => {
           <Heading size="2">{collection?.name || ''}</Heading>
         </CollectionTitle>
         <Tabs
-          activeIndex={activeDetailTabIndex}
-          labels={detailTabs}
-          onClick={setActiveDetailTabIndex}
+          content={detailTabs}
+          currentTabIndex={activeDetailTabIndex}
+          setCurrentTabIndex={setActiveDetailTabIndex}
         />
-        <Tabs activeIndex={activeDetailTabIndex}>
+        {activeDetailTabIndex === 0 && (
           <CollectionBasicDataComponent
             collection={collection}
             collectionId={collectionId || ''}
             key="collections"
           />
+        )}
+        {activeDetailTabIndex === 1 && (
           <CollectionExtendedDataComponent collection={collection} key="tokens" />
-        </Tabs>
+        )}
       </PagePaper>
       {activeDetailTabIndex === 0 && (
         <PagePaper>

@@ -1,18 +1,18 @@
 import { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { Select } from '@unique-nft/ui-kit';
-import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { useSearchParams } from 'react-router-dom';
 
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { Select, SelectOptionProps } from '@app/components';
+import { capitalizeFirstLetter } from '@app/components/utils';
+import { IconType } from '@app/images/icons';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
 import { Menu } from './Menu';
-import LoadingComponent from './LoadingComponent';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
@@ -28,7 +28,7 @@ const Header: FC = () => {
     if (onTheMainPage) {
       window.location.reload();
     }
-  }, [currentChain?.network]);
+  }, [currentChain?.network, queryParams, setQueryParams]);
 
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
@@ -69,14 +69,12 @@ const Header: FC = () => {
           <ChainsSelect
             options={Object.values(config.chains).map(({ network, name }) => ({
               iconLeft: {
-                name: `chain-${network.toLowerCase()}`,
-                size: 16,
+                name: `chain${capitalizeFirstLetter(network)}` as IconType,
+                height: 16,
+                width: 16,
               },
               id: network,
-              title:
-                network === 'UNIQUE'
-                  ? name
-                  : network.charAt(0) + network.slice(1).toLowerCase(),
+              title: network === 'UNIQUE' ? name : capitalizeFirstLetter(network),
             }))}
             value={currentChain?.network}
             onChange={onSelectChange}
@@ -110,25 +108,37 @@ const HeaderNav = styled.nav`
   display: flex;
   column-gap: calc(var(--gap) * 1.5);
   align-items: center;
+
   a {
-    color: var(--dark);
-    font-weight: 500;
-    &:hover {
-      text-decoration: none;
-      color: var(--primary-500);
-    }
-  }
-  .active {
     color: var(--primary-500);
-    cursor: default;
-    text-decoration: none;
-    &:hover {
-      text-decoration: none;
-    }
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+
     span {
       color: var(--primary-500);
     }
+
+    &:hover {
+      text-decoration: none;
+      color: var(--primary-500);
+    }
+
+    &.active {
+      color: var(--dark);
+      cursor: default;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      span {
+        color: var(--dark);
+      }
+    }
   }
+
   @media (max-width: 991px) {
     display: none;
   }

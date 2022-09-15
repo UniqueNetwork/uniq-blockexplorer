@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { Heading, Tabs } from '@unique-nft/ui-kit';
+import { Heading } from '@unique-nft/ui-kit';
 
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi, useScrollToTop } from '@app/hooks';
+import { Tabs } from '@app/components';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { LastTransfers } from '@app/pages/Main/components';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -15,17 +16,15 @@ import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
 import PagePaper from '../../components/PagePaper';
 
-const assetsTabs = ['Collections', 'NFTs'];
-
 const AccountPage = () => {
   useScrollToTop();
   const { accountId } = useParams();
+  const { currentChain } = useApi();
   // assume that we got the substrate address
   let substrateAddress = accountId;
   let accountForTokensSearch = accountId;
 
   const [activeAssetsTabIndex, setActiveAssetsTabIndex] = useState<number>(0);
-  const { currentChain } = useApi();
 
   // if we get an ether address
   if (/0x[0-9A-Fa-f]{40}/g.test(accountId as string)) {
@@ -54,17 +53,19 @@ const AccountPage = () => {
         <AssetsWrapper>
           <Heading size="2">Assets</Heading>
           <Tabs
-            activeIndex={activeAssetsTabIndex}
-            labels={assetsTabs}
-            onClick={setActiveAssetsTabIndex}
+            content={['collections', 'tokens']}
+            currentTabIndex={activeAssetsTabIndex}
+            setCurrentTabIndex={setActiveAssetsTabIndex}
           />
-          <Tabs activeIndex={activeAssetsTabIndex}>
+          {activeAssetsTabIndex === 0 && (
             <CollectionsComponent
               accountId={normalizeSubstrate(substrateAddress as string)}
               key="collections"
             />
+          )}
+          {activeAssetsTabIndex === 1 && (
             <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
-          </Tabs>
+          )}
         </AssetsWrapper>
       </PagePaper>
       <LastTransfers accountId={substrateAddress} pageSize={10} />
