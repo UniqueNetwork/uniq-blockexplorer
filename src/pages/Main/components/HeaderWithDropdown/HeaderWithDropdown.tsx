@@ -1,10 +1,9 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
-import { Dropdown, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
-import { SVGIcon } from '@app/components/SVGIcon';
+import { Dropdown, SVGIcon, SelectOptionProps } from '@app/components';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];
@@ -100,6 +99,7 @@ const Wrapper = styled.div`
 
 const SelectedOption = styled.div`
   display: flex;
+
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

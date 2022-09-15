@@ -49,13 +49,11 @@ const TokensComponent: FC<TokensComponentProps> = ({
   orderBy,
   pageSize,
   searchString,
-  setCurrentPage,
-  setPageSize,
   setSearchString,
   setOrderBy,
+  setTokensCount,
   view,
 }) => {
-  const deviceSize = useDeviceSize();
   const searchFromQuery = useSearchFromQuery();
   const { currentChain } = useApi();
   const { accountId, collectionId } = useParams();
@@ -69,10 +67,6 @@ const TokensComponent: FC<TokensComponentProps> = ({
     searchString,
   });
 
-  useEffect(() => {
-    setSearchString(searchFromQuery);
-  }, [searchFromQuery, setSearchString]);
-
   const tokenColumns = getTokensColumns(currentChain.network, orderBy, setOrderBy);
 
   const getRowKey = useMemo(
@@ -81,19 +75,16 @@ const TokensComponent: FC<TokensComponentProps> = ({
     [],
   );
 
+  useEffect(() => {
+    setSearchString(searchFromQuery);
+  }, [searchFromQuery, setSearchString]);
+
+  useEffect(() => {
+    setTokensCount(tokensCount);
+  }, [tokensCount]);
+
   return (
     <Wrapper>
-      <TopPaginationContainer>
-        <Pagination
-          count={tokensCount || 0}
-          currentPage={currentPage}
-          itemsName="NFTs"
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
-          onPageChange={setCurrentPage}
-        />
-      </TopPaginationContainer>
       {isTokensFetching ? (
         <SkeletonWrapper>
           <Skeleton />
@@ -118,17 +109,6 @@ const TokensComponent: FC<TokensComponentProps> = ({
           )}
         </>
       )}
-      <BottomPaginationContainer>
-        <Pagination
-          count={tokensCount || 0}
-          currentPage={currentPage}
-          itemsName="NFTs"
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
-          onPageChange={setCurrentPage}
-        />
-      </BottomPaginationContainer>
     </Wrapper>
   );
 };

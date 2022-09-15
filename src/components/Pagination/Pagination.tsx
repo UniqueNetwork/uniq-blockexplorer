@@ -1,9 +1,10 @@
 import { FC } from 'react';
-import { Icon, Select, SelectOptionProps } from '@unique-nft/ui-kit';
+import { Icon } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
 import { usePagination, DOTS } from '@app/hooks';
 import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
+import { Select, SelectOptionProps } from '@app/components';
 
 import { PageNumber } from './PageNumber';
 

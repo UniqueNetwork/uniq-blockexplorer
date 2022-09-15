@@ -1,4 +1,12 @@
-export { default as triangle } from './triangleDown.svg';
+export { default as arrowDown } from './arrow-down.svg';
+export { default as arrowUp } from './accow-up.svg';
+export { default as chainPolkadot } from './chain-polkadot.svg';
+export { default as chainKusama } from './chain-kusama.svg';
+export { default as chainUnique } from './chain-unique.svg';
+export { default as chainQuartz } from './chain-quartz.svg';
+export { default as chainOpal } from './chain-opal.svg';
 export { default as clock } from './clock.svg';
-export { default as magnifier } from './magnifier.svg';
+export { default as close } from './close.svg';
 export { default as emptyImage } from './emptyImage.svg';
+export { default as magnifier } from './magnifier.svg';
+export { default as triangle } from './triangle.svg';

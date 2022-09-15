@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
-import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
@@ -9,7 +8,7 @@ import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
-import { RouterTabs } from '@app/components';
+import { RouterTabs, SelectOptionProps } from '@app/components';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
@@ -24,6 +23,7 @@ const TokensPage: FC = () => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
+  const [tokensCount, setTokensCount] = useState<number>();
   const [sort, selectSort] = useState<SelectOptionProps>();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
@@ -40,9 +40,10 @@ const TokensPage: FC = () => {
   );
 
   const defaultSort =
-    OPTIONS.find(
-      (option) =>
-        option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
+    OPTIONS.find((option) =>
+      sort
+        ? option.sortDir === sort.sortDir
+        : option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
     )?.id ?? '';
 
   const selectFilter = (selected: SelectOptionProps) => {
@@ -70,7 +71,9 @@ const TokensPage: FC = () => {
     if (location.pathname === basePath || location.pathname === `${basePath}/`) {
       navigate(tabUrls[0]);
     }
-  }, [basePath, location.pathname, navigate, tabUrls]);
+  }, [basePath, location.pathname, navigate]);
+
+  console.log('sort', sort, 'orderBy', orderBy);
 
   return (
     <div className="tokens-page">
@@ -96,14 +99,17 @@ const TokensPage: FC = () => {
           ]}
           basePath={basePath}
           content={[
-            <>{tabUrls[0]}</>,
-            <>
+            <div className="flex-column">
+              {tabUrls[0]}
+              <small>{tokensCount} items</small>
+            </div>,
+            <div className="flex-row">
               {tabUrls[1]}
               <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
               <ReactTooltip id="sadFace" effect="solid">
                 <span>Coming soon</span>
               </ReactTooltip>
-            </>,
+            </div>,
           ]}
           tabsClassNames={['', 'disabled']}
           tabUrls={tabUrls}
@@ -116,6 +122,7 @@ const TokensPage: FC = () => {
                 setOrderBy={setOrderBy}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
+                setTokensCount={setTokensCount}
                 view={view}
               />
             }

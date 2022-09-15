@@ -30,7 +30,7 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
         <RCTable
           columns={columns}
           data={data || []}
-          emptyText={'No data'}
+          emptyText="No data"
           rowKey={rowKey}
         />
         {loading && <TableLoading />}

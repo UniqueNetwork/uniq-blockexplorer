@@ -26,6 +26,7 @@ export const Tabs: FC<TabsProps> = ({
           className={classNames(tabsClassNames?.[index], {
             active: currentTabIndex === index,
           })}
+          key={`tab-${index}`}
           onClick={() => setCurrentTabIndex(index)}
         >
           {contentItem}
@@ -76,11 +77,26 @@ const Tab = styled.div`
   line-height: 28px;
   text-transform: capitalize;
   height: 40px;
-  display: flex;
-  align-items: center;
-  grid-column-gap: calc(var(--gap) / 4);
   padding: calc(var(--gap) / 2) var(--gap) calc(var(--gap) * 2) var(--gap);
   cursor: pointer;
+
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-column-gap: calc(var(--gap) / 4);
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    grid-column-gap: calc(var(--gap) / 4);
+  }
+
+  small {
+    font-size: 12px;
+  }
 
   &.active {
     color: var(--link-color);
@@ -88,6 +104,7 @@ const Tab = styled.div`
   }
 
   &.disabled {
+    color: var(--grey-300);
     cursor: not-allowed;
   }
 `;

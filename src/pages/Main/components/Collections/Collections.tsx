@@ -1,11 +1,11 @@
 import { useEffect, useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
+import { Button, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper } from '@app/components';
+import { PagePaperWrapper, SelectOptionProps } from '@app/components';
 import {
   CollectionSorting,
   useGraphQlCollections,
