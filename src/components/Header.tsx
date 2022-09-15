@@ -53,7 +53,7 @@ const Header: FC = () => {
 
   return (
     <>
-      <HeaderWrapper>
+      <HeaderWrapper data-automation-id="header">
         <HeaderNavWrapper>
           <Link
             to={`/${currentChain ? currentChain?.network + '/' : ''}`}
@@ -61,7 +61,7 @@ const Header: FC = () => {
           >
             <Logo alt="Logo" src="/logos/logo_product.svg" />
           </Link>
-          <HeaderNav>
+          <HeaderNav data-automation-id="desktop-menu">
             <Menu />
           </HeaderNav>
         </HeaderNavWrapper>
@@ -143,11 +143,6 @@ const Logo = styled.img`
 const ChainsSelectWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
-`;
-
-const ChainsSelectLoader = styled(LoadingComponent)`
-  width: 32px;
-  position: relative;
 `;
 
 const ChainsSelect = styled(Select)`

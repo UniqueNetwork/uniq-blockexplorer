@@ -1,3 +1,7 @@
+## Version 2.1.0
+
+- New NFTs page
+
 ## Version 2.0.7
 
 - scrollableTable: added shadow, fixed muted stripe

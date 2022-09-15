@@ -1,11 +1,18 @@
 import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
 
-import { TokenSorting } from '../../api/graphQL';
+import { TokenSorting } from '@app/api';
+import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 
 export interface TokensComponentProps {
-  orderBy?: TokenSorting;
-  pageSize?: number;
+  currentPage: number;
+  orderBy: TokenSorting;
+  pageSize: SelectOptionProps;
   searchString?: string;
+  setCurrentPage: (currentPage: number) => void;
+  setPageSize: (pageSize: SelectOptionProps) => void;
+  setSearchString: (searchString: string | undefined) => void;
+  setOrderBy: (orderBy: TokenSorting) => void;
+  view: ViewType;
 }
 
 export interface IconProps {

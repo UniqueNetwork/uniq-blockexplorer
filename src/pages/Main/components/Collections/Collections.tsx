@@ -110,7 +110,7 @@ export const Collections: VFC<CollectionsProps> = ({
   if (!isCollectionsFetching && !collections.length) return null;
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="collections">
       {searchModeOn ? (
         <StyledHeader size="2">Collections</StyledHeader>
       ) : (

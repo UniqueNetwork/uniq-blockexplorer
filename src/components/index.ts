@@ -1,7 +1,6 @@
 export { default as Avatar } from './Avatar';
 export * from './IdentityIcon';
 export { default as LoadingComponent } from './LoadingComponent';
-export { default as Pagination } from './Pagination';
 export { default as Picture } from './Picture';
 export { default as Search } from './SearchComponent';
 export { default as Table } from './Table';
@@ -9,4 +8,5 @@ export { default as ScrollableTable } from './ScrollableTable';
 export { default as TokenCard } from './TokenCard';
 export { default as Stub } from './Stub';
 export * from './PagePaper';
+export * from './Pagination';
 export * from './CoverContainer';

@@ -23,7 +23,7 @@ const MobileMenu: FC = () => {
   }, [location, setIsOpen]);
 
   return (
-    <MobileMenuWrapper>
+    <MobileMenuWrapper data-automation-id="mobile-menu">
       <MobileMenuIcon isOpen={isOpen} onClick={onMenuClick} />
       {isOpen && (
         <MobileMenuNav>

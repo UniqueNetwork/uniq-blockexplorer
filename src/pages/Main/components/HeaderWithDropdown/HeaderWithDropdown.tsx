@@ -1,9 +1,10 @@
 import { VFC } from 'react';
 import styled from 'styled-components';
-import { Dropdown, Icon, SelectOptionProps } from '@unique-nft/ui-kit';
+import { Dropdown, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
+import { SVGIcon } from '@app/components/SVGIcon';
 
 interface HeaderWithDropdownProps {
   options?: SelectOptionProps[];
@@ -17,23 +18,33 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   selectedSort,
   setSelectedSort,
   title,
-}) => (
-  <Wrapper>
-    <StyledHeader size="2">{title}</StyledHeader>
-    {selectedSort && (
-      <Dropdown
-        options={options}
-        value={selectedSort.id as string}
-        onChange={setSelectedSort}
-      >
-        <SelectedOption>
-          {selectedSort.title}
-          <Icon name="triangle" size={12} />
-        </SelectedOption>
-      </Dropdown>
-    )}
-  </Wrapper>
-);
+}) => {
+  return (
+    <Wrapper>
+      <StyledHeader size="2">{title}</StyledHeader>
+      {selectedSort && (
+        <Dropdown
+          options={options}
+          value={selectedSort.id as string}
+          onChange={setSelectedSort}
+        >
+          <SelectedOption>
+            {selectedSort.title}
+            <StyledSVGIcon height={16} name="triangle" width={16} />
+          </SelectedOption>
+        </Dropdown>
+      )}
+    </Wrapper>
+  );
+};
+
+const StyledSVGIcon = styled(SVGIcon)`
+  margin-left: calc(var(--gap) / 2);
+
+  svg path {
+    fill: var(--primary-500);
+  }
+`;
 
 const StyledHeader = styled(Header)`
   @media ${deviceWidth.smallerThan.md} {
@@ -55,17 +66,6 @@ const Wrapper = styled.div`
     line-height: 42px;
     color: var(--primary-500);
     cursor: pointer;
-
-    .dropdown-wrapper {
-      .icon-triangle {
-        position: inherit;
-        margin-left: calc(var(--gap) / 2);
-
-        use {
-          fill: var(--primary-500);
-        }
-      }
-    }
 
     .dropdown-options {
       width: 142px;
@@ -99,6 +99,7 @@ const Wrapper = styled.div`
 `;
 
 const SelectedOption = styled.div`
+  display: flex;
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

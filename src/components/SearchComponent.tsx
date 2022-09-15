@@ -10,7 +10,6 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface SearchComponentProps {
   placeholder?: string;
-  value?: string;
   onSearchChange(value: string | undefined): void;
   setResultExist?: (value: boolean) => void;
 }
@@ -19,7 +18,6 @@ const SearchComponent: FC<SearchComponentProps> = ({
   onSearchChange,
   placeholder,
   setResultExist,
-  value,
 }) => {
   const [queryParams, setQueryParams] = useSearchParams();
   const searchFromQuery = useSearchFromQuery();
@@ -105,6 +103,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
 
 const SearchWrapper = styled.div`
   display: flex;
+  height: 40px;
 
   @media (max-width: 767px) {
     width: 100%;
@@ -117,7 +116,7 @@ const SearchWrapper = styled.div`
 
 const SearchInput = styled(InputText)`
   box-sizing: border-box;
-  width: 418px;
+  width: 450px;
   margin-right: calc(var(--gap) / 2);
   background-color: var(--white-color);
 

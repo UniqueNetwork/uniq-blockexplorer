@@ -102,7 +102,7 @@ export const Tokens: VFC<TokensProps> = ({
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="tokens">
       {searchModeOn ? (
         <StyledHeader size="2">Tokens</StyledHeader>
       ) : (
