@@ -19,6 +19,7 @@ const Menu: FC = () => {
       } else if (path.includes('collections')) {
         return 'COLLECTIONS';
       }
+
       return 'MAIN';
     };
 
