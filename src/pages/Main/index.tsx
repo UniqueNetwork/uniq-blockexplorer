@@ -18,11 +18,26 @@ import { NFTsTransfersSearchResult } from './components/LastTransfers/NFTsTransf
 const MainPage = () => {
   const [searchModeOn, setSearchModeOn] = useState<boolean>(false);
   const [resultsExist, setResultExist] = useState<boolean>(false);
+  const [tokensExist, setTokensExist] = useState<boolean>(false);
+  const [collectionsExist, setCollectionsExist] = useState<boolean>(false);
+  const [transfersNftsExist, setTransfersNftsExist] = useState<boolean>(false);
+  const [transfersCoinsExist, setTransfersCoinsExist] = useState<boolean>(false);
+  const [blocksExist, setBlocksExist] = useState<boolean>(false);
+  const isResultExist =
+    tokensExist ||
+    collectionsExist ||
+    transfersNftsExist ||
+    transfersCoinsExist ||
+    blocksExist;
 
   const [searchParams] = useSearchParams();
   const [searchString, setSearchString] = useState<string | undefined>(
     searchParams.get('search') || '',
   );
+
+  useEffect(() => {
+    setResultExist(isResultExist);
+  }, [isResultExist]);
 
   useEffect(() => {
     setSearchModeOn(!!searchString && searchString !== '');
@@ -46,38 +61,34 @@ const MainPage = () => {
       <Tokens
         searchModeOn={searchModeOn}
         searchString={searchString}
-        setResultExist={setResultExist}
+        setResultExist={setTokensExist}
       />
       {searchModeOn ? (
         <>
           <CoinsTransfersSearchResult
             searchString={searchString}
-            setResultExist={setResultExist}
+            setResultExist={setTransfersCoinsExist}
           />
           <NFTsTransfersSearchResult
             searchString={searchString}
-            setResultExist={setResultExist}
+            setResultExist={setTransfersNftsExist}
           />
           <LastBlocks
             searchModeOn={searchModeOn}
             searchString={searchString}
-            setResultExist={setResultExist}
+            setResultExist={setBlocksExist}
           />
         </>
       ) : (
         <Main2BlocksWrapper>
           {!searchModeOn && <LastTransfers searchString={searchString} />}
-          <LastBlocks
-            searchModeOn={searchModeOn}
-            searchString={searchString}
-            setResultExist={setResultExist}
-          />
+          <LastBlocks searchModeOn={searchModeOn} searchString={searchString} />
         </Main2BlocksWrapper>
       )}
       <Collections
         searchModeOn={searchModeOn}
         searchString={searchString}
-        setResultExist={setResultExist}
+        setResultExist={setCollectionsExist}
       />
       {!resultsExist && searchModeOn && (
         <StubWrapper>

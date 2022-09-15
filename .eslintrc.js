@@ -45,6 +45,11 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
+    'padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: '*', next: 'if' },
+      { blankLine: 'always', prev: 'if', next: '*' },
+    ],
     'prettier/prettier': ['error', { tabWidth: 2 }],
     'react/jsx-sort-props': [
       'error',

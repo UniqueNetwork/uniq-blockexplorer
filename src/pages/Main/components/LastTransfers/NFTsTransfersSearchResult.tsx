@@ -42,13 +42,8 @@ export const NFTsTransfersSearchResult: VFC<LastTransfersProps> = ({
     });
 
   useEffect(() => {
-    if (
-      !isNftTransfersFetching &&
-      setResultExist &&
-      !!nftTransfersCount &&
-      prettifiedBlockSearchString
-    ) {
-      setResultExist(true);
+    if (!isNftTransfersFetching && setResultExist && prettifiedBlockSearchString) {
+      setResultExist(!!nftTransfersCount);
     }
   }, [
     nftTransfersCount,
