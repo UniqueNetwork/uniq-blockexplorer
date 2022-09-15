@@ -5,15 +5,15 @@ import styled from 'styled-components';
 
 import { CollectionSorting, useGraphQlCollections } from '@app/api';
 import { useDeviceSize, DeviceSize, useApi, useSearchFromQuery } from '@app/hooks';
-import { ScrollableTable } from '@app/components';
+import { Pagination, ScrollableTable } from '@app/components';
+import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
 
 import { CollectionsComponentProps } from '../types';
-import PaginationComponent from '../../../components/Pagination';
 import { getCollectionsColumns } from './collectionsColumnsSchema';
 
 const CollectionsComponent = ({
   currentPage,
-  pageSize = 20,
+  pageSize = DEFAULT_PAGE_SIZE,
   orderBy: defaultOrderBy = { date_of_creation: 'desc' },
   setCurrentPage,
 }: CollectionsComponentProps) => {
@@ -61,10 +61,10 @@ const CollectionsComponent = ({
         />
       )}
       {!isCollectionsFetching && collectionsCount > 0 && (
-        <PaginationComponent
+        <Pagination
           count={collectionsCount || 0}
           currentPage={currentPage}
-          pageSize={pageSize}
+          pageSize={{ id: pageSize }}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
           onPageChange={setCurrentPage}
         />

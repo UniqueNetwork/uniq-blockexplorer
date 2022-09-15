@@ -50,7 +50,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
   return (
     <>
       <ControlsWrapper>
-        <Search placeholder={'NFT / collection'} onSearchChange={setSearchString} />
+        <Search placeholder="NFT / collection" onSearchChange={setSearchString} />
       </ControlsWrapper>
       <ItemsCountWrapper>{tokensCount || 0} items</ItemsCountWrapper>
       <TokensWrapper>

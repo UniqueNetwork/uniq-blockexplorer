@@ -2,12 +2,12 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
 
-import magnifier from '@app/images/icons/magnifier.svg';
+import { SVGIcon } from '@app/components/SVGIcon';
 
 const Stub: FC = () => {
   return (
     <StubWrapper>
-      <img alt="created" src={magnifier} />
+      <StyledSVGIcon height={80} name="magnifier" width={80} />
       <Text color="blue-grey-500" size="m">
         Nothing found
       </Text>
@@ -21,10 +21,10 @@ const StubWrapper = styled.div`
   flex-grow: 1;
   align-items: center;
   justify-content: center;
-  img {
-    height: 80px;
-    margin-bottom: var(--gap);
-  }
+`;
+
+const StyledSVGIcon = styled(SVGIcon)`
+  margin-bottom: var(--gap);
 `;
 
 export default Stub;

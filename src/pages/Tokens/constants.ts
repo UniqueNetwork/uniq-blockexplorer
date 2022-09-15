@@ -1,3 +1,5 @@
+import { TokenSorting } from '@app/api';
+
 import { TokensSelectOption } from './types';
 
 export const OPTIONS: TokensSelectOption[] = [
@@ -30,5 +32,7 @@ export const OPTIONS: TokensSelectOption[] = [
     title: 'Collection id',
   },
 ];
+
+export const defaultOrderBy: TokenSorting = { date_of_creation: 'desc_nulls_last' };
 
 export const DEFAULT_PAGE_SIZE = 24;
