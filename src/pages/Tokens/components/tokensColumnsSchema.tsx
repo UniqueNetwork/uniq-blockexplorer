@@ -74,7 +74,7 @@ export const getTokensColumns = (
   {
     dataIndex: 'transfers_count',
     key: 'transfers_count',
-    render: timestampTableFormat,
+    render: (value: string, item: unknown) => <>{value}</>,
     title: (
       <TableSortableColumnTitle
         dataIndex="transfers_count"
