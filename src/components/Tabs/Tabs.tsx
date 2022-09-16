@@ -48,7 +48,7 @@ const TabsHeader = styled.div`
   .right-tab-menu {
     position: absolute;
     right: 0;
-    top: var(--gap);
+    top: 10px;
 
     @media (max-width: ${DeviceSizes.sm}) {
       display: grid;
@@ -77,8 +77,10 @@ const Tab = styled.div`
   line-height: 28px;
   text-transform: capitalize;
   height: 40px;
-  padding: calc(var(--gap) / 2) var(--gap) calc(var(--gap) * 2) var(--gap);
+  padding: calc(var(--gap) / 2) var(--gap) calc(var(--gap) * 1.5) var(--gap);
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
   .flex-column {
     display: flex;

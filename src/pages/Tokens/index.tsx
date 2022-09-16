@@ -17,13 +17,13 @@ import PagePaper from '../../components/PagePaper';
 import { ViewType } from './components/TokensComponent';
 
 const tabUrls = ['nfts', 'fractional'];
+
 const TokensPage: FC = () => {
   useScrollToTop();
   const location = useLocation();
   const navigate = useNavigate();
   const { currentChain } = useApi();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
-  const [tokensCount, setTokensCount] = useState<number>();
   const [sort, selectSort] = useState<SelectOptionProps>();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
@@ -73,8 +73,6 @@ const TokensPage: FC = () => {
     }
   }, [basePath, location.pathname, navigate]);
 
-  console.log('sort', sort, 'orderBy', orderBy);
-
   return (
     <div className="tokens-page">
       <TopBar>
@@ -99,10 +97,7 @@ const TokensPage: FC = () => {
           ]}
           basePath={basePath}
           content={[
-            <div className="flex-column">
-              {tabUrls[0]}
-              <small>{tokensCount} items</small>
-            </div>,
+            <div className="flex-column">{tabUrls[0]}</div>,
             <div className="flex-row">
               {tabUrls[1]}
               <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
@@ -122,7 +117,6 @@ const TokensPage: FC = () => {
                 setOrderBy={setOrderBy}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
-                setTokensCount={setTokensCount}
                 view={view}
               />
             }

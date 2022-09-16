@@ -11,7 +11,6 @@ interface NFTsProps {
   setOrderBy: (orderBy: TokenSorting) => void;
   pageSize: SelectOptionProps;
   setPageSize: (pageSize: SelectOptionProps) => void;
-  setTokensCount: (tokensCount: number) => void;
   view: ViewType;
 }
 
@@ -20,7 +19,6 @@ export const NFTs: FC<NFTsProps> = ({
   setOrderBy,
   pageSize,
   setPageSize,
-  setTokensCount,
   view,
 }) => {
   const searchFromQuery = useSearchFromQuery();
@@ -37,7 +35,6 @@ export const NFTs: FC<NFTsProps> = ({
       setCurrentPage={setCurrentPage}
       setSearchString={setSearchString}
       setOrderBy={setOrderBy}
-      setTokensCount={setTokensCount}
       view={view}
     />
   );
