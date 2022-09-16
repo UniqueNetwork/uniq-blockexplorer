@@ -13,5 +13,8 @@ export const useSearchFromQuery = () => {
     } else setSearchString('');
   }, [queryParams]);
 
-  return searchString;
+  return {
+    searchString,
+    setSearchString,
+  };
 };

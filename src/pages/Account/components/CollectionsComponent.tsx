@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
@@ -18,8 +18,7 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const searchFromQuery = useSearchFromQuery();
-  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
+  const { searchString, setSearchString } = useSearchFromQuery();
 
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
@@ -32,10 +31,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const onClickSeeMore = () => {
     navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
   };
-
-  useEffect(() => {
-    setSearchString(searchFromQuery);
-  }, [searchFromQuery]);
 
   return (
     <>

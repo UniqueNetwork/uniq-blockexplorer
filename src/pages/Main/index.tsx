@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
 
 import { PagePaperWrapper, Stub } from '@app/components';
+import { useSearchFromQuery } from '@app/hooks';
 
 import {
   Collections,
@@ -16,6 +17,7 @@ import { CoinsTransfersSearchResult } from './components/LastTransfers/CoinsTran
 import { NFTsTransfersSearchResult } from './components/LastTransfers/NFTsTransfersSearchResult';
 
 const MainPage = () => {
+  const { searchString, setSearchString } = useSearchFromQuery();
   const [searchModeOn, setSearchModeOn] = useState<boolean>(false);
   const [resultsExist, setResultExist] = useState<boolean>(false);
   const [tokensExist, setTokensExist] = useState<boolean>(false);
@@ -31,9 +33,6 @@ const MainPage = () => {
     blocksExist;
 
   const [searchParams] = useSearchParams();
-  const [searchString, setSearchString] = useState<string | undefined>(
-    searchParams.get('search') || '',
-  );
 
   useEffect(() => {
     setResultExist(isResultExist);

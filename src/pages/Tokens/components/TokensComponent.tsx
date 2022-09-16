@@ -67,7 +67,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   view,
 }) => {
   const deviceSize = useDeviceSize();
-  const searchFromQuery = useSearchFromQuery();
+  const { searchString: searchFromQuery } = useSearchFromQuery();
   const { currentChain } = useApi();
 
   const { accountId, collectionId } = useParams();

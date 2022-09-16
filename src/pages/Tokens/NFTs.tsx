@@ -21,7 +21,7 @@ export const NFTs: FC<NFTsProps> = ({
   setPageSize,
   view,
 }) => {
-  const searchFromQuery = useSearchFromQuery();
+  const { searchString: searchFromQuery } = useSearchFromQuery();
   const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
   const [currentPage, setCurrentPage] = useState<number>(1);
 

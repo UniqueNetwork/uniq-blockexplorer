@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { PagePaperWrapper } from '@app/components';
@@ -9,12 +9,7 @@ import SearchComponent from '../../components/SearchComponent';
 
 const CollectionsPage: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const searchFromQuery = useSearchFromQuery();
-  const [, setSearchString] = useState<string | undefined>(searchFromQuery);
-
-  useEffect(() => {
-    setSearchString(searchFromQuery);
-  }, [searchFromQuery]);
+  const { setSearchString } = useSearchFromQuery();
 
   const onSearchChange = (value: string) => {
     setSearchString(value);

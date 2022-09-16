@@ -1,14 +1,15 @@
-import { FC, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 
-import { useApi } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Select, SelectOptionProps } from '@app/components';
 import { capitalizeFirstLetter } from '@app/components/utils';
 import { IconType } from '@app/images/icons';
+import SearchComponent from '@app/components/SearchComponent';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
@@ -16,19 +17,25 @@ import { Menu } from './Menu';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
-
+  const deviceSize = useDeviceSize();
+  const location = useLocation();
   const navigate = useNavigate();
   const [queryParams, setQueryParams] = useSearchParams();
+  const isDesktop = deviceSize > DeviceSize.md;
+  const { searchString, setSearchString } = useSearchFromQuery();
+  const isNotMainPage =
+    location.pathname !== `/${currentChain.network}/` &&
+    location.pathname !== `/${currentChain.network}`;
+  const canShowSearch = isDesktop && isNotMainPage;
 
   const onLogoClick = useCallback(() => {
-    const onTheMainPage = window.location.pathname === `/${currentChain?.network}/`;
     queryParams.delete('search');
     setQueryParams(queryParams);
 
-    if (onTheMainPage) {
+    if (!isNotMainPage) {
       window.location.reload();
     }
-  }, [currentChain?.network, queryParams, setQueryParams]);
+  }, [isNotMainPage, queryParams, setQueryParams]);
 
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
@@ -65,6 +72,12 @@ const Header: FC = () => {
             <Menu />
           </HeaderNav>
         </HeaderNavWrapper>
+        {canShowSearch && (
+          <SearchComponent
+            placeholder="Extrinsic / collection / NFT / account"
+            onSearchChange={setSearchString}
+          />
+        )}
         <ChainsSelectWrapper>
           <ChainsSelect
             options={Object.values(config.chains).map(({ network, name }) => ({

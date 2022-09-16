@@ -21,7 +21,7 @@ const CollectionsComponent = ({
   const { currentChain } = useApi();
 
   const [queryParams] = useSearchParams();
-  const searchString = useSearchFromQuery();
+  const { searchString } = useSearchFromQuery();
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const offset = (currentPage - 1) * pageSize;
 

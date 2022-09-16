@@ -1,5 +1,5 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
@@ -9,28 +9,25 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface SearchComponentProps {
+  hideSearchButton?: boolean;
   placeholder?: string;
   onSearchChange(value: string | undefined): void;
   setResultExist?: (value: boolean) => void;
 }
 
 const SearchComponent: FC<SearchComponentProps> = ({
+  hideSearchButton,
   onSearchChange,
   placeholder,
   setResultExist,
 }) => {
   const [queryParams, setQueryParams] = useSearchParams();
-  const searchFromQuery = useSearchFromQuery();
-  const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
+  const { searchString, setSearchString } = useSearchFromQuery();
   const { pathname } = useLocation();
 
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setInputValue(searchFromQuery);
-  }, [searchFromQuery]);
 
   const onSearch = useCallback(() => {
     if (pathname.includes('tokens')) {
@@ -45,26 +42,26 @@ const SearchComponent: FC<SearchComponentProps> = ({
 
     // ethers address or substrate address
     if (
-      /0x[0-9A-Fa-f]{40}/g.test(inputValue || '') ||
-      /^\w{48}\w*$/.test(inputValue || '')
+      /0x[0-9A-Fa-f]{40}/g.test(searchString || '') ||
+      /^\w{48}\w*$/.test(searchString || '')
     ) {
-      navigate(`/${currentChain.network}/account/${inputValue || ''}`);
+      navigate(`/${currentChain.network}/account/${searchString || ''}`);
 
       return;
     }
 
-    if (inputValue) {
-      queryParams.set('search', inputValue);
+    if (searchString) {
+      queryParams.set('search', searchString);
     } else {
       queryParams.delete('search');
     }
 
     setQueryParams(queryParams);
 
-    onSearchChange(inputValue ? inputValue.trim() : inputValue);
+    onSearchChange(searchString ? searchString.trim() : searchString);
   }, [
     pathname,
-    inputValue,
+    searchString,
     setResultExist,
     setQueryParams,
     queryParams,
@@ -82,9 +79,9 @@ const SearchComponent: FC<SearchComponentProps> = ({
 
   const onChangeSearchString = useCallback(
     (value: string | undefined) => {
-      setInputValue(value?.toString() || '');
+      setSearchString(value?.toString() || '');
     },
-    [setInputValue],
+    [setSearchString],
   );
 
   return (
@@ -92,11 +89,11 @@ const SearchComponent: FC<SearchComponentProps> = ({
       <SearchInput
         iconLeft={{ name: 'magnify', size: 18 }}
         placeholder={placeholder}
-        value={inputValue}
+        value={searchString}
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}
       />
-      <Button role={'primary'} title="Search" onClick={onSearch} />
+      {hideSearchButton && <Button role="primary" title="Search" onClick={onSearch} />}
     </SearchWrapper>
   );
 };
