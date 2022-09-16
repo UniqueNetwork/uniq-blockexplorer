@@ -37,7 +37,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
 
   return (
     <CollectionCardLink
-      to={`/${currentChain.network}/collections/${collectionId}`}
+      to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
       onClick={onCollectionsCardClick}
     >
       <CollectionCover

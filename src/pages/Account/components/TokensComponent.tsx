@@ -45,7 +45,9 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
   const showButton = tokensCount > pageSize;
 
   const onClickSeeMore = useCallback(() => {
-    navigate(`/${currentChain.network}/tokens/?accountId=${accountId}`);
+    navigate(
+      `/${currentChain.network.toLowerCase()}/tokens/nfts/?accountId=${accountId}`,
+    );
   }, [currentChain.network, navigate, accountId]);
 
   return (

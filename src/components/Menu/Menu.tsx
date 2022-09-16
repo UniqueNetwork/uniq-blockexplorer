@@ -29,13 +29,15 @@ const Menu: FC = () => {
   return (
     <>
       <NavLink
-        to={`/${currentChain ? currentChain?.network + '/' : ''}tokens`}
+        to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}tokens`}
         onClick={onMenuClick('NFTS')}
       >
         NFTs
       </NavLink>
       <NavLink
-        to={`/${currentChain ? currentChain?.network + '/' : ''}collections`}
+        to={`/${
+          currentChain ? currentChain?.network.toLowerCase() + '/' : ''
+        }collections`}
         onClick={onMenuClick('COLLECTIONS')}
       >
         Collections
