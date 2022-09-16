@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { Icon } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 import { DeviceSizes } from '@app/hooks';
-import { Select, SelectOptionProps } from '@app/components';
+import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 
 interface RightMenuProps {
   defaultSort: string;
@@ -35,19 +34,19 @@ export const RightMenu: FC<RightMenuProps> = ({
       <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>
-            <Icon
-              file={
-                view === ViewType.List ? '/static/list_active.svg' : '/static/list.svg'
-              }
-              size={32}
+            <SVGIcon
+              color={view === ViewType.List ? 'var(--link-color)' : ''}
+              name="list"
+              width={32}
+              height={32}
             />
           </ViewButton>
           <ViewButton onClick={selectGrid}>
-            <Icon
-              file={
-                view === ViewType.Grid ? '/static/grid_active.svg' : '/static/grid.svg'
-              }
-              size={32}
+            <SVGIcon
+              color={view === ViewType.Grid ? 'var(--link-color)' : ''}
+              name="grid"
+              width={32}
+              height={32}
             />
           </ViewButton>
         </ViewButtons>

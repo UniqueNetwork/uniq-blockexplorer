@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Token } from '@app/api';
 import { TokenCard } from '@app/components';
-import { deviceWidth } from '@app/hooks';
+import { deviceWidth, useScrollToTop } from '@app/hooks';
 
 interface TokensGridProps {
   chainNetwork: string;
@@ -11,19 +11,21 @@ interface TokensGridProps {
   tokens: Token[];
 }
 
-const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => (
-  <TokenGallery>
-    {tokens.map((token) => {
-      return (
+const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => {
+  useScrollToTop();
+
+  return (
+    <TokenGallery>
+      {tokens.map((token) => (
         <TokenCard
           key={`token-${token.collection_id}-${token.token_id}`}
           {...token}
           timeNow={timestamp}
         />
-      );
-    })}
-  </TokenGallery>
-);
+      ))}
+    </TokenGallery>
+  );
+};
 
 const TokenGallery = styled.div`
   display: grid;

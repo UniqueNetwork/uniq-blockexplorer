@@ -8,5 +8,7 @@ export { default as chainOpal } from './chain-opal.svg';
 export { default as clock } from './clock.svg';
 export { default as close } from './close.svg';
 export { default as emptyImage } from './emptyImage.svg';
+export { default as grid } from './grid.svg';
+export { default as list } from './list.svg';
 export { default as magnifier } from './magnifier.svg';
 export { default as triangle } from './triangle.svg';
