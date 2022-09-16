@@ -48,7 +48,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
       /0x[0-9A-Fa-f]{40}/g.test(inputValue || '') ||
       /^\w{48}\w*$/.test(inputValue || '')
     ) {
-      navigate(`/${currentChain.network}/account/${inputValue || ''}`);
+      navigate(`/${currentChain.network.toLowerCase()}/account/${inputValue || ''}`);
 
       return;
     }
