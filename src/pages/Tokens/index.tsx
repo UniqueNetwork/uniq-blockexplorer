@@ -17,6 +17,7 @@ import PagePaper from '../../components/PagePaper';
 import { ViewType } from './components/TokensComponent';
 
 const tabUrls = ['nfts', 'fractional'];
+
 const TokensPage: FC = () => {
   useScrollToTop();
   const location = useLocation();
@@ -71,8 +72,6 @@ const TokensPage: FC = () => {
       navigate(tabUrls[0]);
     }
   }, [basePath, location.pathname, navigate]);
-
-  console.log('sort', sort, 'orderBy', orderBy);
 
   return (
     <div className="tokens-page">
