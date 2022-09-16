@@ -2,6 +2,8 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
 
+import { DeviceSizes } from '@app/hooks';
+
 import MobileMenuIcon from './MobileMenuIcon';
 import { Menu } from './Menu';
 
@@ -37,7 +39,7 @@ const MobileMenu: FC = () => {
 const MobileMenuWrapper = styled.div`
   display: none;
 
-  @media (max-width: 991px) {
+  @media (max-width: ${DeviceSizes.lg}) {
     display: block;
     margin-left: 16px;
   }

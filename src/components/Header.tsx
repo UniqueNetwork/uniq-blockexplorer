@@ -3,7 +3,13 @@ import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 
-import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
+import {
+  DeviceSize,
+  DeviceSizes,
+  useApi,
+  useDeviceSize,
+  useSearchFromQuery,
+} from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Select, SelectOptionProps } from '@app/components';
@@ -22,7 +28,7 @@ const Header: FC = () => {
   const navigate = useNavigate();
   const [queryParams, setQueryParams] = useSearchParams();
   const isDesktop = deviceSize > DeviceSize.md;
-  const { searchString, setSearchString } = useSearchFromQuery();
+  const { setSearchString } = useSearchFromQuery();
   const isNotMainPage =
     location.pathname !== `/${currentChain.network}/` &&
     location.pathname !== `/${currentChain.network}`;
@@ -60,7 +66,7 @@ const Header: FC = () => {
 
   return (
     <>
-      <HeaderWrapper data-automation-id="header">
+      <HeaderWrapper canShowSearch={canShowSearch} data-automation-id="header">
         <HeaderNavWrapper>
           <Link
             to={`/${currentChain ? currentChain?.network + '/' : ''}`}
@@ -73,10 +79,7 @@ const Header: FC = () => {
           </HeaderNav>
         </HeaderNavWrapper>
         {canShowSearch && (
-          <SearchComponent
-            placeholder="Extrinsic / collection / NFT / account"
-            onSearchChange={setSearchString}
-          />
+          <SearchComponent placeholder="Global search" onSearchChange={setSearchString} />
         )}
         <ChainsSelectWrapper>
           <ChainsSelect
@@ -99,19 +102,35 @@ const Header: FC = () => {
   );
 };
 
-const HeaderWrapper = styled.div`
-  display: flex;
+const HeaderWrapper = styled.div.attrs<{ canShowSearch?: boolean }>((props) => ({
+  canShowSearch: props.canShowSearch,
+}))<{ canShowSearch?: boolean }>`
+  display: grid;
+  grid-template-columns: ${(props) =>
+    props.canShowSearch ? '1fr 676px 180px' : '1fr 180px'};
   column-gap: var(--gap);
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  .global-search {
+    .unique-input-text {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: ${DeviceSizes.xl}) {
+    grid-template-columns: ${(props) =>
+      props.canShowSearch ? '1fr 302px 180px' : '1fr 180px'};
+  }
 `;
 
 const HeaderNavWrapper = styled.div`
   display: flex;
   column-gap: calc(var(--gap) * 2.5);
   align-items: center;
-  @media (max-width: 767px) {
+
+  @media (max-width: ${DeviceSizes.sm}) {
     column-gap: calc(var(--gap));
   }
 `;
@@ -152,7 +171,7 @@ const HeaderNav = styled.nav`
     }
   }
 
-  @media (max-width: 991px) {
+  @media (max-width: ${DeviceSizes.lg}) {
     display: none;
   }
 `;
@@ -172,12 +191,16 @@ const ChainsSelect = styled(Select)`
   .select-wrapper {
     .icon-triangle {
       z-index: auto;
-      margin: 21px;
     }
+
     .select-value {
       border-radius: 8px;
-      padding: var(--gap);
+
+      > {
+        display: none;
+      }
     }
+
     .select-dropdown {
       top: 54px;
       border-radius: 8px;

@@ -19,7 +19,6 @@ const SearchComponent: FC<SearchComponentProps> = ({
   hideSearchButton,
   onSearchChange,
   placeholder,
-  setResultExist,
 }) => {
   const [queryParams, setQueryParams] = useSearchParams();
   const { searchString, setSearchString } = useSearchFromQuery();
@@ -62,7 +61,6 @@ const SearchComponent: FC<SearchComponentProps> = ({
   }, [
     pathname,
     searchString,
-    setResultExist,
     setQueryParams,
     queryParams,
     onSearchChange,
@@ -85,7 +83,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
   );
 
   return (
-    <SearchWrapper>
+    <SearchWrapper className="global-search">
       <SearchInput
         iconLeft={{ name: 'magnify', size: 18 }}
         placeholder={placeholder}
