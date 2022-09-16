@@ -55,22 +55,18 @@ const SearchComponent: FC<SearchComponentProps> = ({
       return;
     }
 
-    //temporary for search page
-    if (!!inputValue && inputValue !== '' && setResultExist) {
-      setResultExist(false);
-    }
     if (inputValue) {
       queryParams.set('search', inputValue);
     } else {
       queryParams.delete('search');
     }
+
     setQueryParams(queryParams);
 
     onSearchChange(inputValue ? inputValue.trim() : inputValue);
   }, [
     pathname,
     inputValue,
-    setResultExist,
     setQueryParams,
     queryParams,
     onSearchChange,

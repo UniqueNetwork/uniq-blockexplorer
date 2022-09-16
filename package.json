@@ -12,7 +12,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jdenticon": "^2.2.0",
-    "@unique-nft/sdk": "^0.4.25",
+    "@unique-nft/api": "^0.1.13",
     "@unique-nft/ui-kit": "^0.0.31",
     "amplitude-js": "^8.18.5",
     "babel-jest": "^27.4.2",

@@ -45,6 +45,7 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
     ) {
       hideButton(false);
     }
+
     hideButton(true);
   }, [transfersCount, isTransfersFetching, searchString, hideButton]);
 

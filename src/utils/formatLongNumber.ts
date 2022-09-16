@@ -13,7 +13,9 @@ export const formatLongNumber = (number = 0): string => {
 
   // truncate decimal if greater than 4
   if (countDecimal(number) > 3) {
-    return number.toFixed(4);
+    const stringNum = number.toString();
+    const truncateNum = stringNum.slice(0, stringNum.indexOf('.') + 5);
+    return Number(truncateNum) === 0 ? number.toExponential() : truncateNum;
   }
 
   return number.toString();
