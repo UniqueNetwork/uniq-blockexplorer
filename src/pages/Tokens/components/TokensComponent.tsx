@@ -4,8 +4,8 @@ import { FC, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Token, useGraphQlTokens } from '@app/api';
-import { Pagination, ScrollableTable } from '@app/components';
+import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
+import { Pagination, ScrollableTable, SelectOptionProps } from '@app/components';
 import {
   DeviceSize,
   DeviceSizes,
@@ -14,7 +14,6 @@ import {
   useSearchFromQuery,
 } from '@app/hooks';
 
-import { TokensComponentProps } from '../types';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
 
@@ -44,18 +43,33 @@ const filter = ({
   return _filter;
 };
 
+interface TokensComponentProps {
+  currentPage: number;
+  orderBy: TokenSorting;
+  pageSize: SelectOptionProps;
+  searchString?: string;
+  setCurrentPage: (currentPage: number) => void;
+  setPageSize: (pageSize: SelectOptionProps) => void;
+  setSearchString: (searchString: string | undefined) => void;
+  setOrderBy: (orderBy: TokenSorting) => void;
+  view: ViewType;
+}
+
 const TokensComponent: FC<TokensComponentProps> = ({
   currentPage,
   orderBy,
   pageSize,
   searchString,
+  setCurrentPage,
+  setPageSize,
   setSearchString,
   setOrderBy,
-  setTokensCount,
   view,
 }) => {
+  const deviceSize = useDeviceSize();
   const searchFromQuery = useSearchFromQuery();
   const { currentChain } = useApi();
+
   const { accountId, collectionId } = useParams();
   const pageSizeNumber = pageSize.id as number;
 
@@ -79,12 +93,19 @@ const TokensComponent: FC<TokensComponentProps> = ({
     setSearchString(searchFromQuery);
   }, [searchFromQuery, setSearchString]);
 
-  useEffect(() => {
-    setTokensCount(tokensCount);
-  }, [tokensCount]);
-
   return (
     <Wrapper>
+      <TopPaginationContainer>
+        <Pagination
+          count={tokensCount || 0}
+          currentPage={currentPage}
+          itemsName="NFTs"
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          onPageChange={setCurrentPage}
+        />
+      </TopPaginationContainer>
       {isTokensFetching ? (
         <SkeletonWrapper>
           <Skeleton />
@@ -109,6 +130,17 @@ const TokensComponent: FC<TokensComponentProps> = ({
           )}
         </>
       )}
+      <BottomPaginationContainer>
+        <Pagination
+          count={tokensCount || 0}
+          currentPage={currentPage}
+          itemsName="NFTs"
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          onPageChange={setCurrentPage}
+        />
+      </BottomPaginationContainer>
     </Wrapper>
   );
 };
