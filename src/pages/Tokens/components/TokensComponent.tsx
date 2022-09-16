@@ -1,4 +1,5 @@
 import { Skeleton } from '@unique-nft/ui-kit';
+import InfiniteScroll from 'react-infinite-scroller';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
@@ -49,9 +50,11 @@ const TokensComponent: FC<TokensComponentProps> = ({
   orderBy,
   pageSize,
   searchString,
+  setCurrentPage,
+  setPageSize,
+  setTokensCount,
   setSearchString,
   setOrderBy,
-  setTokensCount,
   view,
 }) => {
   const searchFromQuery = useSearchFromQuery();
@@ -59,13 +62,14 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const { accountId, collectionId } = useParams();
   const pageSizeNumber = pageSize.id as number;
 
-  const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
-    filter: filter({ accountId, collectionId }),
-    offset: (currentPage - 1) * pageSizeNumber,
-    orderBy,
-    pageSize: pageSizeNumber,
-    searchString,
-  });
+  const { fetchMore, isTokensFetching, timestamp, tokens, tokensCount } =
+    useGraphQlTokens({
+      filter: filter({ accountId, collectionId }),
+      offset: (currentPage - 1) * pageSizeNumber,
+      orderBy,
+      pageSize: pageSizeNumber,
+      searchString,
+    });
 
   const tokenColumns = getTokensColumns(currentChain.network, orderBy, setOrderBy);
 
@@ -79,13 +83,42 @@ const TokensComponent: FC<TokensComponentProps> = ({
     setSearchString(searchFromQuery);
   }, [searchFromQuery, setSearchString]);
 
+  // TODO - delete this and get count from additional request on the index page
   useEffect(() => {
     setTokensCount(tokensCount);
   }, [tokensCount]);
 
   return (
     <Wrapper>
-      {isTokensFetching ? (
+      <InfiniteScroll
+        useWindow
+        pageStart={0}
+        loadMore={() => fetchMore()}
+        hasMore={tokens ? tokens.length < tokensCount : false}
+        loader={
+          <SkeletonWrapper>
+            <Skeleton />
+          </SkeletonWrapper>
+        }
+      >
+        {view === ViewType.List ? (
+          <ScrollableTable
+            columns={tokenColumns}
+            data={tokens || []}
+            loading={isTokensFetching}
+            rowKey={getRowKey}
+          />
+        ) : (
+          <div>
+            <TokensGrid
+              chainNetwork={currentChain.network}
+              timestamp={timestamp}
+              tokens={tokens || []}
+            />
+          </div>
+        )}
+      </InfiniteScroll>
+      {/* {isTokensFetching ? (
         <SkeletonWrapper>
           <Skeleton />
         </SkeletonWrapper>
@@ -108,7 +141,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
             </div>
           )}
         </>
-      )}
+      )} */}
     </Wrapper>
   );
 };
@@ -160,7 +193,7 @@ const SkeletonWrapper = styled.div`
 
   .unique-skeleton {
     width: 100%;
-    min-height: 1200px;
+    min-height: 100px;
     border-radius: var(--gap) !important;
   }
 `;

@@ -74,6 +74,7 @@ export const Dropdown = ({
 
   const handleMouseClick = () => {
     if (disabled) return;
+
     setDropped(!dropped);
     onOpenChange?.(!dropped);
   };

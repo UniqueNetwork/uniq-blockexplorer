@@ -128,6 +128,7 @@ export const useGraphQlTokens = ({
 
   const {
     data,
+    fetchMore,
     error: fetchTokensError,
     loading: isTokensFetching,
   } = useQuery<TokensData, TokensVariables>(tokensQuery, {
@@ -143,9 +144,31 @@ export const useGraphQlTokens = ({
     },
   });
 
+  const fetchMoreTokens = async () => {
+    await fetchMore({
+      variables: {
+        limit: pageSize,
+        offset,
+        orderBy,
+        where,
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => {
+        const newEntries = fetchMoreResult.tokens.data;
+        return {
+          tokens: {
+            count: fetchMoreResult.tokens.count,
+            data: [...previousResult.tokens.data, ...newEntries],
+            timestamp: fetchMoreResult.tokens.timestamp,
+          },
+        };
+      },
+    });
+  };
+
   return useMemo(
     () => ({
       fetchTokensError,
+      fetchMore: fetchMoreTokens,
       isTokensFetching,
       timestamp: data?.tokens?.timestamp,
       tokens: data?.tokens?.data,
@@ -155,6 +178,7 @@ export const useGraphQlTokens = ({
       data?.tokens?.count,
       data?.tokens?.data,
       data?.tokens?.timestamp,
+      fetchMore,
       fetchTokensError,
       isTokensFetching,
     ],
