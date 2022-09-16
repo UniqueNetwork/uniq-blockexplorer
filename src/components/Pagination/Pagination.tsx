@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Icon } from '@unique-nft/ui-kit';
 import styled from 'styled-components';
 
-import { usePagination, DOTS } from '@app/hooks';
+import { usePagination, DOTS, DeviceSizes } from '@app/hooks';
 import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
 import { Select, SelectOptionProps } from '@app/components';
 
@@ -125,9 +125,8 @@ const PaginationWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  @media (max-width: 767px) {
+  @media (max-width: ${DeviceSizes.sm}) {
     flex-direction: column;
-    align-items: flex-start !important;
     row-gap: calc(var(--gap) * 1.5);
   }
 `;
