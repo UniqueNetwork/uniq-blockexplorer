@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
@@ -14,7 +14,7 @@ interface TokensComponentProps {
   pageSize?: number;
 }
 
-const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 }) => {
+const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState<string>();
@@ -42,6 +42,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
     pageSize,
     searchString,
   });
+  const showButton = tokensCount > pageSize;
 
   const onClickSeeMore = useCallback(() => {
     navigate(`/${currentChain.network}/tokens/?accountId=${accountId}`);
@@ -62,16 +63,18 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
             />
           ))}
       </TokensWrapper>
-      <Button
-        iconRight={{
-          color: '#fff',
-          name: 'arrow-right',
-          size: 12,
-        }}
-        role="primary"
-        title={'See all'}
-        onClick={onClickSeeMore}
-      />
+      {showButton && (
+        <Button
+          iconRight={{
+            color: '#fff',
+            name: 'arrow-right',
+            size: 12,
+          }}
+          role="primary"
+          title={'See all'}
+          onClick={onClickSeeMore}
+        />
+      )}
     </>
   );
 };
@@ -90,7 +93,7 @@ const ItemsCountWrapper = styled.div`
 
 const TokensWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-column-gap: calc(var(--gap) * 1.5);
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);

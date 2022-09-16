@@ -65,7 +65,6 @@ const SearchComponent: FC<SearchComponentProps> = ({
   }, [
     pathname,
     inputValue,
-    setResultExist,
     setQueryParams,
     queryParams,
     onSearchChange,
