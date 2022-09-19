@@ -73,7 +73,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         </TokenAttributes>
         <CollectionInfoWrapper>
           <CollectionLink
-            to={`/${currentChain.network}/collections/${collectionId}`}
+            to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
             onClick={onCollectionClick}
           >
             <Picture alt={`token ${id}`} src={token.collection_cover} />

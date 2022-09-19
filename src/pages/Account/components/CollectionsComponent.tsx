@@ -29,7 +29,9 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   });
 
   const onClickSeeMore = () => {
-    navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
+    navigate(
+      `/${currentChain.network.toLowerCase()}/collections/?accountId=${accountId}`,
+    );
   };
 
   const showButton = collectionsCount > pageSize;

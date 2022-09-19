@@ -29,7 +29,10 @@ ReactDOM.render(
     <Router>
       <Routes>
         <Route element={<App />} path="/">
-          <Route index element={<Navigate to={`/${defaultChain.network}/`} />} />
+          <Route
+            index
+            element={<Navigate to={`/${defaultChain.network.toLowerCase()}/`} />}
+          />
           <Route path=":chainId">
             <Route index element={<Main />} />
             <Route element={<Block />} path="block/:blockIndex" />

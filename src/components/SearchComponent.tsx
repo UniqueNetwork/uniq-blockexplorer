@@ -45,6 +45,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
       /^\w{48}\w*$/.test(searchString || '')
     ) {
       navigate(`/${currentChain.network}/account/${searchString || ''}`);
+      navigate(`/${currentChain.network.toLowerCase()}/account/${searchString || ''}`);
 
       return;
     }

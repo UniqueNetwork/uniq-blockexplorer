@@ -57,7 +57,7 @@ const Header: FC = () => {
           logUserEvents(UserEvents.Click.CHOOSE_A_NETWORK_BUTTON_FROM_MAIN_PAGE);
         }
 
-        navigate(`${option.id as string}/`);
+        navigate(`${(option.id as string).toLowerCase()}/`);
         window.location.reload();
       }
     },
@@ -69,7 +69,7 @@ const Header: FC = () => {
       <HeaderWrapper canShowSearch={canShowSearch} data-automation-id="header">
         <HeaderNavWrapper>
           <Link
-            to={`/${currentChain ? currentChain?.network + '/' : ''}`}
+            to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}`}
             onClick={onLogoClick}
           >
             <Logo alt="Logo" src="/logos/logo_product.svg" />

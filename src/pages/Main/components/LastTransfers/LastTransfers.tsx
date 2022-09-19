@@ -32,7 +32,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
     lastTransferOptions[1],
   );
   const [contentExist, setContentExist] = useState<boolean>(false);
-  const linkUrl = `/${currentChain.network}/last-transfers`;
+  const linkUrl = `/${currentChain.network.toLowerCase()}/last-transfers`;
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
   const showCoins = selectedSort.id === SELECTED_BLOCK_COIN;
 
