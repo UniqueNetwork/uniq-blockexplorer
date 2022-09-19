@@ -1,6 +1,6 @@
-import { SelectOptionProps } from '@app/components';
+import { DropdownOptionProps } from '@app/components';
 
-export const collectionsOptions: SelectOptionProps[] = [
+export const collectionsOptions: DropdownOptionProps[] = [
   {
     id: 'new',
     title: 'New',

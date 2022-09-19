@@ -1,14 +1,14 @@
-import { VFC } from 'react';
+import { isValidElement, ReactNode, VFC } from 'react';
 import styled from 'styled-components';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
-import { Dropdown, SVGIcon, SelectOptionProps } from '@app/components';
+import { Dropdown, SVGIcon, DropdownOptionProps, SVGIconProps } from '@app/components';
 
 interface HeaderWithDropdownProps {
-  options?: SelectOptionProps[];
-  selectedSort?: SelectOptionProps;
-  setSelectedSort?: (option: SelectOptionProps) => void;
+  options?: DropdownOptionProps[];
+  selectedSort?: DropdownOptionProps;
+  setSelectedSort?: (option: DropdownOptionProps) => void;
   title: string;
 }
 
@@ -18,11 +18,24 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   setSelectedSort,
   title,
 }) => {
+  const optionRender = (option: DropdownOptionProps) => {
+    if (option.iconRight && isValidElement(option.iconRight)) {
+      return (
+        <>
+          {option.title}
+          {option.iconRight}
+        </>
+      );
+    }
+
+    return undefined;
+  };
   return (
     <Wrapper>
       <StyledHeader size="2">{title}</StyledHeader>
       {selectedSort && (
         <Dropdown
+          optionRender={optionRender}
           options={options}
           value={selectedSort.id as string}
           onChange={setSelectedSort}

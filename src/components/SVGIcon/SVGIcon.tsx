@@ -18,11 +18,18 @@ export const SVGIcon: FC<SVGIconProps> = ({
   color,
   height = 16,
   width = 16,
+  ...props
 }: SVGIconProps) => {
   const Icon = IconComponents[name];
 
   return (
-    <IconWrapper className={className} color={color} height={height} width={width}>
+    <IconWrapper
+      className={className}
+      color={color}
+      height={height}
+      width={width}
+      {...props}
+    >
       <Icon />
     </IconWrapper>
   );
