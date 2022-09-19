@@ -45,7 +45,6 @@ export const Dropdown = ({
   const selected = options?.find(
     (option) => option[optionKey as keyof DropdownOptionProps] === value,
   );
-  console.log('optionRender', optionRender);
 
   const [dropped, setDropped] = useState<boolean>(!!open);
 
