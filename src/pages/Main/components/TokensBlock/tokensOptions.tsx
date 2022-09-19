@@ -10,6 +10,6 @@ export const tokensOptions: DropdownOptionProps[] = [
   {
     id: 'top',
     title: 'Top',
-    iconRight: IconWithTooltip({}),
+    iconRight: <IconWithTooltip />,
   },
 ];
