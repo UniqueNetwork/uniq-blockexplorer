@@ -5,7 +5,7 @@ import { Button, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper, SelectOptionProps } from '@app/components';
+import { PagePaperWrapper, DropdownOptionProps } from '@app/components';
 import {
   CollectionSorting,
   useGraphQlCollections,
@@ -31,7 +31,7 @@ export const Collections: VFC<CollectionsProps> = ({
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
     collectionsOptions[0],
   );
 

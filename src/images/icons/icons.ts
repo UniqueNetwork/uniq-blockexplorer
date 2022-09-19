@@ -12,3 +12,4 @@ export { default as grid } from './grid.svg';
 export { default as list } from './list.svg';
 export { default as magnifier } from './magnifier.svg';
 export { default as triangle } from './triangle.svg';
+export { default as question } from './question.svg';
