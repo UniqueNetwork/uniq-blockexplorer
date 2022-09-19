@@ -2,9 +2,9 @@ import ReactTooltip from 'react-tooltip';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { DropdownOptionProps, SVGIcon } from '@app/components';
+import { SVGIcon } from '@app/components';
 
-const IconWithTooltip: FC = () => {
+export const IconWithTooltip: FC = () => {
   return (
     <>
       <SVGIconStyled
@@ -23,15 +23,3 @@ const IconWithTooltip: FC = () => {
 const SVGIconStyled = styled(SVGIcon)`
   margin-left: 4px;
 `;
-
-export const tokensOptions: DropdownOptionProps[] = [
-  {
-    id: 'new',
-    title: 'New',
-  },
-  {
-    id: 'top',
-    title: 'Top',
-    iconRight: IconWithTooltip({}),
-  },
-];
