@@ -85,7 +85,7 @@ export const Collections: VFC<CollectionsProps> = ({
   }));
 
   const onClick = useCallback(() => {
-    const linkUrl = `/${currentChain.network}/collections`;
+    const linkUrl = `/${currentChain.network.toLowerCase()}/collections`;
     const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
 
     if (searchString) {

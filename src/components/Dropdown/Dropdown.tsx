@@ -217,7 +217,7 @@ const Wrapper = styled.div`
       &.selected {
         background-color: var(--color-primary-100);
         color: var(--color-primary-500);
-      }
+s      }
     }
   }
 `;

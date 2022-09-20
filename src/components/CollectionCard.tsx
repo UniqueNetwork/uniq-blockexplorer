@@ -35,7 +35,7 @@ const CollectionCard: FC<CollectionCardProps> = ({
 
   return (
     <CollectionCardLink
-      to={`/${currentChain.network}/collections/${collectionId}`}
+      to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
       onClick={onCollectionsCardClick}
     >
       <CollectionCover>

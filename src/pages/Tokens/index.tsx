@@ -33,7 +33,7 @@ const TokensPage: FC = () => {
 
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
-  const basePath = `/${currentChain.network}/tokens`;
+  const basePath = `/${currentChain.network.toLowerCase()}/tokens`;
 
   const currentTabIndex = tabUrls.findIndex((tab) =>
     location.pathname.includes(`${basePath}/${tab}`),

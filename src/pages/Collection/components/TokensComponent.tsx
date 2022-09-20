@@ -39,7 +39,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
 
   const onButtonClick = useCallback(() => {
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_COLLECTION_PAGE);
-    navigate(`/${currentChain.network}/tokens/${collectionId || ''}`);
+    navigate(`/${currentChain.network.toLowerCase()}/tokens/${collectionId || ''}`);
   }, [currentChain, navigate, collectionId]);
 
   return (
