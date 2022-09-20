@@ -9,7 +9,7 @@ import {
   Collections,
   LastBlocks,
   LastTransfers,
-  SearchHeader,
+  MainHeader,
   TokenInformation,
   Tokens,
 } from './components';
@@ -46,16 +46,11 @@ const MainPage = () => {
     if (searchParams.get('search')) {
       setSearchString(decodeURI(searchParams.get('search') as string));
     } else setSearchString('');
-  }, [searchParams]);
+  }, [searchParams, setSearchString]);
 
   return (
     <Wrapper>
-      <SearchHeader
-        searchModeOn={searchModeOn}
-        searchString={searchString}
-        setSearchString={setSearchString}
-        setResultExist={setResultExist}
-      />
+      <MainHeader searchModeOn={searchModeOn} searchString={searchString} />
       {!searchModeOn && <TokenInformation />}
       <Tokens
         searchModeOn={searchModeOn}

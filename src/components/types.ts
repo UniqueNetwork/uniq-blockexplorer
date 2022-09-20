@@ -10,6 +10,11 @@ export type ComponentType =
 
 export type DimentionType = 'small' | 'middle' | 'large';
 
+export enum ViewType {
+  Grid = 'Grid',
+  List = 'List',
+}
+
 export interface ComponentProps {
   autoFocus?: boolean;
   className?: string;

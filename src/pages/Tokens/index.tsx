@@ -8,13 +8,12 @@ import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
-import { RouterTabs, SelectOptionProps } from '@app/components';
+import { RouterTabs, SelectOptionProps, ViewType } from '@app/components';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
 import PagePaper from '../../components/PagePaper';
-import { ViewType } from './components/TokensComponent';
 
 const tabUrls = ['nfts', 'fractional'];
 

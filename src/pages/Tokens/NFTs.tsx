@@ -2,9 +2,9 @@ import { FC, useState } from 'react';
 
 import { useSearchFromQuery } from '@app/hooks';
 import { TokenSorting } from '@app/api';
-import { SelectOptionProps } from '@app/components';
+import { SelectOptionProps, ViewType } from '@app/components';
 
-import TokensComponent, { ViewType } from './components/TokensComponent';
+import TokensComponent from './components/TokensComponent';
 
 interface NFTsProps {
   orderBy: TokenSorting;

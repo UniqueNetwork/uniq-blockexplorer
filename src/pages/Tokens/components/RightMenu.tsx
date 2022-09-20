@@ -2,9 +2,8 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
-import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 import { DeviceSizes } from '@app/hooks';
-import { Select, SelectOptionProps, SVGIcon } from '@app/components';
+import { Select, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
 
 interface RightMenuProps {
   defaultSort: string;

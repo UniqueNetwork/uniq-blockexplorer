@@ -207,13 +207,10 @@ const ChainsSelect = styled(Select)`
     }
   }
 
-  @media (max-width: 450px) {
-    width: auto;
-    position: static;
-
+  @media (max-width: ${DeviceSizes.xxl}) {
     .select-wrapper {
-      position: static;
       display: flex;
+
       .select-value {
         font-size: 0;
         width: 50px;

@@ -5,7 +5,12 @@ import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
-import { Pagination, ScrollableTable, SelectOptionProps } from '@app/components';
+import {
+  Pagination,
+  ScrollableTable,
+  SelectOptionProps,
+  ViewType,
+} from '@app/components';
 import {
   DeviceSize,
   DeviceSizes,
@@ -16,11 +21,6 @@ import {
 
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
-
-export enum ViewType {
-  Grid = 'Grid',
-  List = 'List',
-}
 
 const filter = ({
   accountId,

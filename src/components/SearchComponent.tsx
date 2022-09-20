@@ -7,6 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useApi, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { SVGIcon } from '@app/components/SVGIcon';
 
 interface SearchComponentProps {
   hideSearchButton?: boolean;
@@ -83,6 +84,12 @@ const SearchComponent: FC<SearchComponentProps> = ({
     [setSearchString],
   );
 
+  const clearSearch = () => {
+    setSearchString(undefined);
+    queryParams.delete('search');
+    setQueryParams(queryParams);
+  };
+
   return (
     <SearchWrapper className="global-search">
       <SearchInput
@@ -92,6 +99,11 @@ const SearchComponent: FC<SearchComponentProps> = ({
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}
       />
+      {!!searchString && (
+        <ClearSearch onClick={clearSearch}>
+          <SVGIcon name="close" width={8} height={8} />
+        </ClearSearch>
+      )}
       {hideSearchButton && <Button role="primary" title="Search" onClick={onSearch} />}
     </SearchWrapper>
   );
@@ -100,6 +112,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
 const SearchWrapper = styled.div`
   display: flex;
   height: 40px;
+  position: relative;
 
   @media (max-width: 767px) {
     width: 100%;
@@ -120,6 +133,13 @@ const SearchInput = styled(InputText)`
     width: 100%;
     margin-right: 0;
   }
+`;
+
+const ClearSearch = styled.div`
+  position: absolute;
+  cursor: pointer;
+  right: 20px;
+  top: 16px;
 `;
 
 export default SearchComponent;
