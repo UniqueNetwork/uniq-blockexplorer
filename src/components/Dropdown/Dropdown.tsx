@@ -81,7 +81,7 @@ export const Dropdown = ({
 
   return (
     <Wrapper
-      className={classNames('unique-dropdown', className, {
+      className={classNames('skan-dropdown', className, {
         touch: isTouch,
       })}
       id={id}
@@ -151,74 +151,72 @@ export const Dropdown = ({
 };
 
 const Wrapper = styled.div`
-  .unique-dropdown {
-    font-family: var(--prop-font-family);
-    font-size: var(--prop-font-size);
-    font-weight: var(--prop-font-weight);
-    position: relative;
+  font-family: var(--prop-font-family);
+  font-size: var(--prop-font-size);
+  font-weight: var(--prop-font-weight);
+  position: relative;
 
-    &.touch {
-      width: 100%;
-      .dropdown-wrapper {
-        width: fit-content;
-      }
-      .dropdown-options {
-        box-shadow: none;
-      }
-    }
-
+  &.touch {
+    width: 100%;
     .dropdown-wrapper {
-      position: relative;
-      width: 100%;
-      float: right;
+      width: fit-content;
+    }
+    .dropdown-options {
+      box-shadow: none;
+    }
+  }
 
-      .icon-triangle {
-        position: absolute;
-        right: var(--prop-gap);
-        top: 50%;
-        margin-top: -4px;
-      }
-      &.dropped .icon-triangle {
-        transform: rotate(180deg);
-      }
+  .dropdown-wrapper {
+    position: relative;
+    width: 100%;
+    float: right;
+
+    .icon-triangle {
+      position: absolute;
+      right: var(--prop-gap);
+      top: 50%;
+      margin-top: -4px;
+    }
+    &.dropped .icon-triangle {
+      transform: rotate(180deg);
+    }
+  }
+
+  .dropdown-options {
+    background-color: var(--color-additional-light);
+    border-radius: var(--prop-border-radius);
+    padding: 8px;
+    position: absolute;
+    min-width: calc(100% - 16px);
+    left: 0;
+    top: calc(100% + 4px);
+    z-index: 9;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+
+    &.right {
+      left: unset;
+      right: 0;
     }
 
-    .dropdown-options {
-      background-color: var(--color-additional-light);
-      border-radius: var(--prop-border-radius);
-      padding: 8px;
-      position: absolute;
+    .dropdown-option {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      min-height: 32px;
+      line-height: 32px;
+      padding: 0 8px;
+      position: relative;
       min-width: calc(100% - 16px);
-      left: 0;
-      top: calc(100% + 4px);
-      z-index: 2;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+      white-space: nowrap;
 
-      &.right {
-        left: unset;
-        right: 0;
+      &:not(:last-child) {
+        margin-bottom: 3px;
       }
 
-      .dropdown-option {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        min-height: 32px;
-        line-height: 32px;
-        padding: 0 8px;
-        position: relative;
-        min-width: calc(100% - 16px);
-        white-space: nowrap;
-
-        &:not(:last-child) {
-          margin-bottom: 3px;
-        }
-
-        &:hover,
-        &.selected {
-          background-color: var(--color-primary-100);
-          color: var(--color-primary-500);
-        }
+      &:hover,
+      &.selected {
+        background-color: var(--color-primary-100);
+        color: var(--color-primary-500);
       }
     }
   }
