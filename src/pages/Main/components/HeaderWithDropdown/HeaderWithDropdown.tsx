@@ -1,9 +1,9 @@
-import { isValidElement, ReactNode, VFC } from 'react';
+import { isValidElement, VFC } from 'react';
 import styled from 'styled-components';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
-import { Dropdown, SVGIcon, DropdownOptionProps, SVGIconProps } from '@app/components';
+import { Dropdown, SVGIcon, DropdownOptionProps } from '@app/components';
 
 interface HeaderWithDropdownProps {
   options?: DropdownOptionProps[];
@@ -71,7 +71,7 @@ const Wrapper = styled.div`
   grid-column-gap: calc(var(--gap) / 2);
   margin-bottom: calc(var(--gap) * 2);
 
-  .unique-dropdown {
+  .skan-dropdown {
     font-style: normal;
     font-weight: 700;
     font-size: 28px;

@@ -1,5 +1,7 @@
 import { DropdownOptionProps } from '@app/components';
 
+import { IconWithTooltip } from './IconWithTooltip';
+
 export const collectionsOptions: DropdownOptionProps[] = [
   {
     id: 'new',
@@ -8,5 +10,6 @@ export const collectionsOptions: DropdownOptionProps[] = [
   {
     id: 'top',
     title: 'Top',
+    iconRight: <IconWithTooltip />,
   },
 ];
