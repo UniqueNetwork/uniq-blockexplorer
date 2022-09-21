@@ -27,11 +27,10 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
       logUserEvents(UserEvents.Click.ON_COLLECTION_IN_TABLE_ON_COLLECTIONS_PAGE);
     }
   }, []);
-  console.log('chainId', chainId);
 
   return (
     <CollectionLink
-      to={`/${chainId}/collections/${collectionId}`}
+      to={`/${chainId.toLowerCase()}/collections/${collectionId}`}
       onClick={onCollectionClick}
     >
       <SimpleRoundedCover collectionId={collectionId} coverImageUrl={coverImageUrl} />
