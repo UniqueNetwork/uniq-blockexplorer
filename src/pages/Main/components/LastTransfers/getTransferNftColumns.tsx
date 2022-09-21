@@ -13,7 +13,7 @@ export const getTransferNftColumns = (chainId?: string) => [
     render: (value: string, row: any) => (
       <Link
         className="token-transfer-cell"
-        to={`/${chainId ? chainId.toLowerCase() + '/' : ''}tokens/${
+        to={`/${chainId ? chainId.toLowerCase() + '/' : ''}nfts/${
           row.collection_id
         }/${value}`}
       >
