@@ -97,9 +97,9 @@ const TokensPage: FC = () => {
           ]}
           basePath={basePath}
           content={[
-            <div className="flex-column">{tabUrls[0]}</div>,
+            <div className="flex-column">NFTs</div>,
             <div className="flex-row">
-              {tabUrls[1]}
+              Fractional
               <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
               <ReactTooltip id="sadFace" effect="solid">
                 <span>Coming soon</span>

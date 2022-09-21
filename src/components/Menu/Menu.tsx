@@ -32,7 +32,7 @@ const Menu: FC = () => {
         to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}tokens`}
         onClick={onMenuClick('NFTS')}
       >
-        NFTs
+        Tokens
       </NavLink>
       <NavLink
         to={`/${
