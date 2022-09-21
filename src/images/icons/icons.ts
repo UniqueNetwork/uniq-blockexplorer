@@ -15,3 +15,5 @@ export { default as magnifier } from './magnifier.svg';
 export { default as mark } from './mark.svg';
 export { default as search } from './search.svg';
 export { default as triangle } from './triangle.svg';
+export { default as viewGrid } from './view-grid.svg';
+export { default as viewTable } from './view-table.svg';

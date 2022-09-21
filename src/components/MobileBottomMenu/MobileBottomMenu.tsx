@@ -25,7 +25,7 @@ export const MobileBottomMenu: FC<MobileBottomMenuProps> = () => {
         <ButtonItem className="mobile-bottom-menu__view" onClick={toggleView}>
           <SVGIcon
             color="white"
-            name={view === ViewType.List ? 'list' : 'grid'}
+            name={view === ViewType.List ? 'viewTable' : 'viewGrid'}
             width={32}
             height={32}
           />
@@ -42,13 +42,19 @@ const Wrapper = styled.div`
   position: fixed;
   bottom: calc(var(--gap) * 2);
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const Buttons = styled.div`
-  background-color: var(--link-color);
+  background-color: var(--primary-500);
   border-radius: 16px;
   display: flex;
+  padding: 20px;
+  grid-column-gap: calc(var(--gap) * 2);
 `;
 const ButtonItem = styled.div`
+  cursor: pointer;
   position: relative;
   width: 32px;
 `;
