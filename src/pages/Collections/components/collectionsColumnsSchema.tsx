@@ -74,7 +74,7 @@ export const getCollectionsColumns = (
     key: 'tokens_count',
     render: (items: number, item: unknown) => {
       return (
-        <Link to={`/${chainId}/collections/${(item as Collection).collection_id}`}>
+        <Link to={`/${chainId.toLowerCase()}/collections/${(item as Collection).collection_id}`}>
           {items || 0}
         </Link>
       );
