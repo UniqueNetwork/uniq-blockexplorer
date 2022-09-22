@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
 
@@ -23,14 +23,19 @@ export const RightMenu: FC<RightMenuProps> = ({
   view,
 }) => {
   const [queryParams] = useSearchParams();
-  const sortFromQuery = queryParams.get('sort');
-  const splitSort = sortFromQuery?.split('-');
 
-  const sort = OPTIONS.find((option) => {
-    if (splitSort) {
-      return option.sortDir === splitSort[1] && option.sortField === splitSort[0];
-    }
-  });
+  const [sort, setSort] = useState<SelectOptionProps>();
+
+  useEffect(() => {
+    const sortFromQuery = queryParams.get('sort');
+    const splitSort = sortFromQuery?.split('-');
+    const currentSorting = OPTIONS.find((option) => {
+      if (splitSort) {
+        return option.sortDir === splitSort[1] && option.sortField === splitSort[0];
+      }
+    });
+    setSort(currentSorting);
+  }, [queryParams]);
 
   return (
     <RightTabMenu className="right-tab-menu">
