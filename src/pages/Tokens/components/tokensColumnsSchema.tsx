@@ -34,7 +34,7 @@ export const getTokensColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 180,
   },
   {
     dataIndex: 'date_of_creation',
@@ -48,7 +48,7 @@ export const getTokensColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 150,
   },
   {
     dataIndex: 'collection_id',
@@ -69,7 +69,7 @@ export const getTokensColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 160,
   },
   {
     dataIndex: 'transfers_count',
@@ -90,6 +90,6 @@ export const getTokensColumns = (
     key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
-    width: 100,
+    width: 150,
   },
 ];

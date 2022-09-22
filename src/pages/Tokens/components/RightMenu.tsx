@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
+import { useSearchParams } from 'react-router-dom';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
@@ -11,7 +12,6 @@ interface RightMenuProps {
   selectSort: (selected: SelectOptionProps) => void;
   selectGrid: () => void;
   selectList: () => void;
-  sort?: SelectOptionProps;
   view: ViewType;
 }
 
@@ -20,9 +20,18 @@ export const RightMenu: FC<RightMenuProps> = ({
   selectSort,
   selectGrid,
   selectList,
-  sort,
   view,
 }) => {
+  const [queryParams] = useSearchParams();
+  const sortFromQuery = queryParams.get('sort');
+  const splitSort = sortFromQuery?.split('-');
+
+  const sort = OPTIONS.find((option) => {
+    if (splitSort) {
+      return option.sortDir === splitSort[1] && option.sortField === splitSort[0];
+    }
+  });
+
   return (
     <RightTabMenu className="right-tab-menu">
       <Select

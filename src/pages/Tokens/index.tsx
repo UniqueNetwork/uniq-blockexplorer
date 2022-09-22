@@ -1,7 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 
 import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
@@ -31,6 +37,15 @@ const TokensPage: FC = () => {
     title: DEFAULT_PAGE_SIZE.toString(),
   });
 
+  useEffect(() => {
+    queryParams.set(
+      'sort',
+      // @ts-ignore
+      `${Object.keys(orderBy)[0]}-${orderBy[Object.keys(orderBy)[0]]}`,
+    );
+    setQueryParams(queryParams);
+  }, [orderBy]);
+
   const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
   const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
   const basePath = `/${currentChain.network.toLowerCase()}/tokens`;
@@ -38,6 +53,8 @@ const TokensPage: FC = () => {
   const currentTabIndex = tabUrls.findIndex((tab) =>
     location.pathname.includes(`${basePath}/${tab}`),
   );
+
+  const [queryParams, setQueryParams] = useSearchParams();
 
   const defaultSort =
     OPTIONS.find((option) =>
@@ -54,6 +71,8 @@ const TokensPage: FC = () => {
     if (option && option.sortField) {
       selectSort(option);
       setOrderBy({ [option.sortField]: option.sortDir });
+      queryParams.set('sort', `${option.sortField}-${option.sortDir}`);
+      setQueryParams(queryParams);
     }
   };
 
@@ -89,7 +108,6 @@ const TokensPage: FC = () => {
                   selectSort={selectFilter}
                   selectGrid={selectGrid}
                   selectList={selectList}
-                  sort={sort}
                   view={view}
                 />
               )}
