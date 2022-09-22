@@ -1,9 +1,9 @@
 import { Chain } from '@app/api/ApiContext';
 
 // TODO - add the same logo for OPAL
-import unique from '../logos/unique.png';
-import quarts from '../logos/quartz.png';
-import opal from '../logos/opal.png';
+import unique from '../logos/unique.svg';
+import quarts from '../logos/quartz.svg';
+import opal from '../logos/opal.svg';
 
 export const getChainBackground = (currentChain: Chain) => {
   switch (currentChain.network) {
