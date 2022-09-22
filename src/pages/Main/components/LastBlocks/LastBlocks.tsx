@@ -16,7 +16,7 @@ import { blocksWithTimeDifference } from './blocksWithTimeDifference';
 import { DeviceSize, useDeviceSize } from '../../../../hooks/useDeviceSize';
 
 export const LastBlocks = ({
-  pageSize = 5,
+  pageSize = 6,
   searchModeOn,
   searchString,
   setResultExist,

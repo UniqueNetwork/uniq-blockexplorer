@@ -44,7 +44,7 @@ export const RightMenu: FC<RightMenuProps> = ({
         <ViewButtons>
           <ViewButton onClick={selectList}>
             <SVGIcon
-              color={view === ViewType.List ? 'var(--link-color)' : ''}
+              color={view === ViewType.List ? 'var(--primary-500)' : ''}
               name="list"
               width={32}
               height={32}
@@ -52,7 +52,7 @@ export const RightMenu: FC<RightMenuProps> = ({
           </ViewButton>
           <ViewButton onClick={selectGrid}>
             <SVGIcon
-              color={view === ViewType.Grid ? 'var(--link-color)' : ''}
+              color={view === ViewType.Grid ? 'var(--primary-500)' : ''}
               name="grid"
               width={32}
               height={32}
