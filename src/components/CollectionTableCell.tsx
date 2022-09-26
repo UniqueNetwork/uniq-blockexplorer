@@ -30,7 +30,7 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
 
   return (
     <CollectionLink
-      to={`/${chainId}/collections/${collectionId}`}
+      to={`/${chainId.toLowerCase()}/collections/${collectionId}`}
       onClick={onCollectionClick}
     >
       <SimpleRoundedCover collectionId={collectionId} coverImageUrl={coverImageUrl} />

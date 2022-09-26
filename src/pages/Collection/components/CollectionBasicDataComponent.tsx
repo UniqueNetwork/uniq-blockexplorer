@@ -80,7 +80,6 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
 };
 
 const PropertiesWrapper = styled.div`
-  border-top: 1px dashed var(--border-color);
   padding-top: calc(var(--gap) * 1.5);
   margin-top: var(--gap);
   display: flex;

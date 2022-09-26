@@ -21,7 +21,7 @@ export type LastTransfersProps = {
 
 export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
   accountId,
-  pageSize = 5,
+  pageSize = 6,
   searchString,
   hideButton,
 }) => {

@@ -34,6 +34,11 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
 
     if (orderBy[dataIndex] === 'asc_nulls_first') orderValue = 'desc_nulls_last';
 
+    // If the current sorting is in the same column, change the value to the opposite
+    if (dataIndex === Object.keys(orderBy)[0] && orderValue !== 'desc_nulls_last') {
+      orderValue = 'asc_nulls_first';
+    }
+
     onOrderChange({ [dataIndex]: orderValue });
   }, [orderBy, dataIndex, onOrderChange]);
 

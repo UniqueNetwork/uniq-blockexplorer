@@ -41,7 +41,7 @@ export const Tokens: VFC<TokensProps> = ({
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
-    const linkUrl = `/${currentChain.network.toLowerCase()}/tokens`;
+    const linkUrl = `/${currentChain.network.toLowerCase()}/tokens/nfts`;
     const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
 
     if (searchString) {
