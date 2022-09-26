@@ -1,14 +1,14 @@
-import React, { VFC, useCallback } from 'react';
+import { VFC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Text, Heading, Icon } from '@unique-nft/ui-kit';
+import { Text, Heading } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import clock from '@app/images/icons/clock.svg';
 import { timeDifference } from '@app/utils';
+import { SVGIcon } from '@app/components/SVGIcon';
 
 import { CollectionCover } from '../CollectionCover';
 
@@ -37,7 +37,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
 
   return (
     <CollectionCardLink
-      to={`/${currentChain.network}/collections/${collectionId}`}
+      to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
       onClick={onCollectionsCardClick}
     >
       <CollectionCover
@@ -57,13 +57,13 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
             </Text>
           </span>
           <span>
-            <Icon name="empty-image" size={13} />
+            <StyledSVGIcon height={16} name="emptyImage" width={16} />
             <Text size="s" weight="light">
               {tokensCount}
             </Text>
           </span>
           <span>
-            <img alt="created" src={clock} />
+            <StyledSVGIcon height={16} name="clock" width={16} />
             <Text size="s" weight="light">
               {createdTimeDiff}
             </Text>
@@ -73,6 +73,10 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
     </CollectionCardLink>
   );
 };
+
+const StyledSVGIcon = styled(SVGIcon)`
+  color: var(--blue-gray-400);
+`;
 
 const CollectionNameWrapper = styled.div`
   display: -webkit-box;
@@ -144,7 +148,7 @@ const CollectionProperties = styled.div`
 `;
 
 const IconText = styled.div`
-  color: var(--grey);
+  color: var(--blue-gray-400);
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;

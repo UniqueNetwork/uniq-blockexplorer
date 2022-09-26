@@ -1,12 +1,4 @@
-import { SelectOptionProps } from '@unique-nft/ui-kit/dist/cjs/types';
-
-import { TokenSorting } from '../../api/graphQL';
-
-export interface TokensComponentProps {
-  orderBy?: TokenSorting;
-  pageSize?: number;
-  searchString?: string;
-}
+import { SelectOptionProps } from '@app/components';
 
 export interface IconProps {
   size: number;
@@ -18,6 +10,12 @@ export interface IconProps {
 export interface TokensSelectOption extends SelectOptionProps {
   id: string;
   title: string;
-  sortDir?: 'asc' | 'desc' | 'desc_nulls_last' | 'asc_nulls_last';
+  sortDir?:
+    | 'asc'
+    | 'desc'
+    | 'desc_nulls_last'
+    | 'asc_nulls_last'
+    | 'asc_nulls_first'
+    | 'desc_nulls_first';
   sortField?: string;
 }

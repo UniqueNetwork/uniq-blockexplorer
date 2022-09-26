@@ -1,6 +1,6 @@
 import { FC, useCallback } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
 import { useApi, useCheckImageExists } from '@app/hooks';
@@ -9,7 +9,7 @@ import { Token } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
-import clock from '@app/images/icons/clock.svg';
+import { SVGIcon } from '@app/components/SVGIcon';
 
 type TokenCardProps = Token & { timeNow?: number };
 
@@ -22,6 +22,7 @@ const TokenCard: FC<TokenCardProps> = ({
   token_id: tokenId,
   token_prefix: prefix,
 }) => {
+  const navigate = useNavigate();
   const { currentChain } = useApi();
   // user analytics
   const onNFTCardClick = useCallback(() => {
@@ -30,15 +31,14 @@ const TokenCard: FC<TokenCardProps> = ({
     if (path.includes('collections')) {
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
-  }, []);
+
+    navigate(`/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`);
+  }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
   return (
-    <TokenCardLink
-      to={`/${currentChain.network}/tokens/${collectionId}/${tokenId}`}
-      onClick={onNFTCardClick}
-    >
+    <TokenCardLink onClick={onNFTCardClick}>
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -55,7 +55,7 @@ const TokenCard: FC<TokenCardProps> = ({
           </TokenCollectionLink>
         </div>
         <TokenProperties>
-          <img alt="created" src={clock} />
+          <StyledSVGIcon height={16} name="clock" width={16} />
           <Text color="additional-dark" size="xs">
             {timeDifference(dateOfCreation, timeNow)}
           </Text>
@@ -65,7 +65,13 @@ const TokenCard: FC<TokenCardProps> = ({
   );
 };
 
-const TokenCardLink = styled(Link)`
+const StyledSVGIcon = styled(SVGIcon)`
+  color: var(--blue-gray-400);
+  margin-right: 5px;
+`;
+
+const TokenCardLink = styled.div`
+  cursor: pointer;
   width: 100%;
   border: 1px solid var(--blue-gray-200);
   border-radius: calc(var(--bradius) * 2);
@@ -120,12 +126,6 @@ const TokenProperties = styled.div`
   display: flex;
   align-items: center;
   margin-top: calc(var(--gap) / 2);
-
-  img {
-    width: 13px;
-    height: 13px;
-    margin-right: 5px;
-  }
 `;
 
 export default TokenCard;

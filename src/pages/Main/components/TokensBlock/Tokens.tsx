@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
+import { Button, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper, TokenCard } from '@app/components';
+import { PagePaperWrapper, DropdownOptionProps, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { TokenSorting, useGraphQlTokens } from '@app/api/graphQL';
@@ -28,7 +28,7 @@ export const Tokens: VFC<TokensProps> = ({
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(tokensOptions[0]);
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(tokensOptions[0]);
 
   const deviceSize = useDeviceSize();
 
@@ -41,7 +41,7 @@ export const Tokens: VFC<TokensProps> = ({
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
-    const linkUrl = `/${currentChain.network}/tokens`;
+    const linkUrl = `/${currentChain.network.toLowerCase()}/tokens/nfts`;
     const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
 
     if (searchString) {
@@ -102,7 +102,7 @@ export const Tokens: VFC<TokensProps> = ({
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="tokens">
       {searchModeOn ? (
         <StyledHeader size="2">Tokens</StyledHeader>
       ) : (

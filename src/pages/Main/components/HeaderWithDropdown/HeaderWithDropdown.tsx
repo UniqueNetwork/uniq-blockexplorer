@@ -1,14 +1,14 @@
-import { VFC } from 'react';
+import { isValidElement, VFC } from 'react';
 import styled from 'styled-components';
-import { Dropdown, Icon, SelectOptionProps } from '@unique-nft/ui-kit';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
+import { Dropdown, SVGIcon, DropdownOptionProps } from '@app/components';
 
 interface HeaderWithDropdownProps {
-  options?: SelectOptionProps[];
-  selectedSort?: SelectOptionProps;
-  setSelectedSort?: (option: SelectOptionProps) => void;
+  options?: DropdownOptionProps[];
+  selectedSort?: DropdownOptionProps;
+  setSelectedSort?: (option: DropdownOptionProps) => void;
   title: string;
 }
 
@@ -17,23 +17,46 @@ export const HeaderWithDropdown: VFC<HeaderWithDropdownProps> = ({
   selectedSort,
   setSelectedSort,
   title,
-}) => (
-  <Wrapper>
-    <StyledHeader size="2">{title}</StyledHeader>
-    {selectedSort && (
-      <Dropdown
-        options={options}
-        value={selectedSort.id as string}
-        onChange={setSelectedSort}
-      >
-        <SelectedOption>
-          {selectedSort.title}
-          <Icon name="triangle" size={12} />
-        </SelectedOption>
-      </Dropdown>
-    )}
-  </Wrapper>
-);
+}) => {
+  const optionRender = (option: DropdownOptionProps) => {
+    if (option.iconRight && isValidElement(option.iconRight)) {
+      return (
+        <>
+          {option.title}
+          {option.iconRight}
+        </>
+      );
+    }
+
+    return undefined;
+  };
+  return (
+    <Wrapper>
+      <StyledHeader size="2">{title}</StyledHeader>
+      {selectedSort && (
+        <Dropdown
+          optionRender={optionRender}
+          options={options}
+          value={selectedSort.id as string}
+          onChange={setSelectedSort}
+        >
+          <SelectedOption>
+            {selectedSort.title}
+            <StyledSVGIcon height={16} name="triangle" width={16} />
+          </SelectedOption>
+        </Dropdown>
+      )}
+    </Wrapper>
+  );
+};
+
+const StyledSVGIcon = styled(SVGIcon)`
+  margin-left: calc(var(--gap) / 2);
+
+  svg path {
+    fill: var(--primary-500);
+  }
+`;
 
 const StyledHeader = styled(Header)`
   @media ${deviceWidth.smallerThan.md} {
@@ -48,24 +71,13 @@ const Wrapper = styled.div`
   grid-column-gap: calc(var(--gap) / 2);
   margin-bottom: calc(var(--gap) * 2);
 
-  .unique-dropdown {
+  .skan-dropdown {
     font-style: normal;
     font-weight: 700;
     font-size: 28px;
     line-height: 42px;
     color: var(--primary-500);
     cursor: pointer;
-
-    .dropdown-wrapper {
-      .icon-triangle {
-        position: inherit;
-        margin-left: calc(var(--gap) / 2);
-
-        use {
-          fill: var(--primary-500);
-        }
-      }
-    }
 
     .dropdown-options {
       width: 142px;
@@ -99,6 +111,8 @@ const Wrapper = styled.div`
 `;
 
 const SelectedOption = styled.div`
+  display: flex;
+
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

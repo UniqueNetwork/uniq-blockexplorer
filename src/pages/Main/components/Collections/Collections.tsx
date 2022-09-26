@@ -1,11 +1,11 @@
 import { useEffect, useCallback, useState, useMemo, VFC } from 'react';
 import styled from 'styled-components';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, SelectOptionProps, Skeleton } from '@unique-nft/ui-kit';
+import { Button, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper } from '@app/components';
+import { PagePaperWrapper, DropdownOptionProps } from '@app/components';
 import {
   CollectionSorting,
   useGraphQlCollections,
@@ -31,7 +31,7 @@ export const Collections: VFC<CollectionsProps> = ({
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
     collectionsOptions[0],
   );
 
@@ -85,7 +85,7 @@ export const Collections: VFC<CollectionsProps> = ({
   }));
 
   const onClick = useCallback(() => {
-    const linkUrl = `/${currentChain.network}/collections`;
+    const linkUrl = `/${currentChain.network.toLowerCase()}/collections`;
     const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
 
     if (searchString) {
@@ -110,7 +110,7 @@ export const Collections: VFC<CollectionsProps> = ({
   if (!isCollectionsFetching && !collections.length) return null;
 
   return (
-    <Wrapper>
+    <Wrapper data-automation-id="collections">
       {searchModeOn ? (
         <StyledHeader size="2">Collections</StyledHeader>
       ) : (

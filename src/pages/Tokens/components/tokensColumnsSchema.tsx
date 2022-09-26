@@ -34,7 +34,21 @@ export const getTokensColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 180,
+  },
+  {
+    dataIndex: 'date_of_creation',
+    key: 'date_of_creation',
+    render: timestampTableFormat,
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="date_of_creation"
+        orderBy={orderBy}
+        title="Created"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 150,
   },
   {
     dataIndex: 'collection_id',
@@ -55,17 +69,17 @@ export const getTokensColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 160,
   },
   {
-    dataIndex: 'date_of_creation',
-    key: 'date_of_creation',
-    render: timestampTableFormat,
+    dataIndex: 'transfers_count',
+    key: 'transfers_count',
+    render: (value: string, item: unknown) => <>{value}</>,
     title: (
       <TableSortableColumnTitle
-        dataIndex="date_of_creation"
+        dataIndex="transfers_count"
         orderBy={orderBy}
-        title="Date"
+        title="Transfers"
         onOrderChange={onOrderChange}
       />
     ),
@@ -76,6 +90,6 @@ export const getTokensColumns = (
     key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
-    width: 100,
+    width: 150,
   },
 ];

@@ -20,19 +20,19 @@ const ApiWrapper = ({ children }: ChainProviderProps) => {
   // get context value for ApiContext
   const value = useMemo<ApiContextProps>(
     () => ({
-      currentChain: chainId ? chains[chainId] : defaultChain,
+      currentChain: chainId ? chains[chainId.toUpperCase()] : defaultChain,
     }),
     [chainId],
   );
 
   const client = useMemo(() => {
-    const currentChain = chainId ? chains[chainId] : defaultChain;
+    const currentChain = chainId ? chains[chainId.toUpperCase()] : defaultChain;
 
     return getApolloClient(currentChain.gqlEndpoint);
   }, [chainId]);
 
   useEffect(() => {
-    localStorage.setItem(defaultChainKey, chainId || defaultChain.network);
+    localStorage.setItem(defaultChainKey, chainId?.toUpperCase() || defaultChain.network);
   }, [chainId]);
 
   return (

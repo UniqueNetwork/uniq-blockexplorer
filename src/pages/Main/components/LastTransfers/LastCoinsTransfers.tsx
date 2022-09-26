@@ -18,7 +18,7 @@ export type LastTransfersProps = {
 
 export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
   accountId,
-  pageSize = 5,
+  pageSize = 6,
   searchString,
   hideButton,
 }) => {
@@ -74,7 +74,7 @@ export const LastCoinsTransfers: VFC<LastTransfersProps> = ({
       <Pagination
         count={transfersCount}
         currentPage={currentPage}
-        pageSize={pageSize}
+        pageSize={{ id: pageSize }}
         siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
         onPageChange={setCurrentPage}
       />

@@ -21,6 +21,7 @@ declare global {
 }
 
 const chains = getChainList(window.ENV || process.env);
+console.log('chains', chains);
 
 const config: Config = {
   GTMExists: window.ENV?.REACT_APP_GTM_EXISTS || process.env.REACT_APP_GTM_EXISTS,

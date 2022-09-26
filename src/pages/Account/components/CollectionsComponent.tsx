@@ -30,7 +30,9 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   });
 
   const onClickSeeMore = () => {
-    navigate(`/${currentChain.network}/collections/?accountId=${accountId}`);
+    navigate(
+      `/${currentChain.network.toLowerCase()}/collections/?accountId=${accountId}`,
+    );
   };
 
   useEffect(() => {
@@ -41,11 +43,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   return (
     <>
       <ControlsWrapper>
-        <Search
-          placeholder={'NFT / collection'}
-          value={searchString}
-          onSearchChange={setSearchString}
-        />
+        <Search placeholder="NFT / collection" onSearchChange={setSearchString} />
       </ControlsWrapper>
       <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
       <CollectionsWrapper>
