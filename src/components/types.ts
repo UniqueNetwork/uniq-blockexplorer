@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent } from 'react';
+import { ChangeEvent, KeyboardEvent, ReactNode } from 'react';
 
 import { SVGIconProps } from '@app/components/SVGIcon';
 
@@ -37,4 +37,10 @@ export interface SelectOptionProps {
   [x: string | number | symbol]: unknown;
   iconLeft?: SVGIconProps;
   iconRight?: SVGIconProps;
+}
+
+export interface DropdownOptionProps {
+  [x: string | number | symbol]: unknown;
+  iconLeft?: SVGIconProps;
+  iconRight?: SVGIconProps | ReactNode;
 }

@@ -53,18 +53,18 @@ const AccountPage = () => {
         <AssetsWrapper>
           <Heading size="2">Assets</Heading>
           <Tabs
-            content={['collections', 'tokens']}
+            content={['tokens', 'collections']}
             currentTabIndex={activeAssetsTabIndex}
             setCurrentTabIndex={setActiveAssetsTabIndex}
           />
           {activeAssetsTabIndex === 0 && (
+            <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
+          )}
+          {activeAssetsTabIndex === 1 && (
             <CollectionsComponent
               accountId={normalizeSubstrate(substrateAddress as string)}
               key="collections"
             />
-          )}
-          {activeAssetsTabIndex === 1 && (
-            <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
           )}
         </AssetsWrapper>
       </PagePaper>
