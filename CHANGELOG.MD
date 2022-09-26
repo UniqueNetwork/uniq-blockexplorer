@@ -13,6 +13,7 @@
 ## Version 2.0.5
 
 - ReactFlow 
+- removed fields from BlockDetails query (session_length, total_issuance, need_rescan)
 
 ## Version 2.0.4
 

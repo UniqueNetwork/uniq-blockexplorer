@@ -20,7 +20,7 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   tokenId,
   tokenPrefix,
 }) => (
-  <TokenLink to={`/${chainId}/nfts/${collectionId}/${tokenId}`}>
+  <TokenLink to={`/${chainId.toLowerCase()}/nfts/${collectionId}/${tokenId}`}>
     <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} />
     <TokenTitle>
       <Text color={'secondary-500'}>{`${tokenPrefix} #${tokenId}`}</Text>
