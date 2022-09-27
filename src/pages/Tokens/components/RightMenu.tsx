@@ -8,7 +8,6 @@ import { DeviceSizes } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 
 interface RightMenuProps {
-  defaultSort: string;
   selectSort: (selected: SelectOptionProps) => void;
   selectGrid: () => void;
   selectList: () => void;
@@ -16,7 +15,6 @@ interface RightMenuProps {
 }
 
 export const RightMenu: FC<RightMenuProps> = ({
-  defaultSort,
   selectSort,
   selectGrid,
   selectList,
@@ -39,12 +37,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
-      <Select
-        defaultValue={defaultSort}
-        options={OPTIONS}
-        value={sort?.id as string}
-        onChange={selectSort}
-      />
+      <Select options={OPTIONS} value={sort?.id as string} onChange={selectSort} />
       <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>

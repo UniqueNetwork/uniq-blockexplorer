@@ -31,37 +31,38 @@ const TokensPage: FC = () => {
   const { currentChain } = useApi();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
   const [sort, selectSort] = useState<SelectOptionProps>();
+  const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
+
+  const setOrderAndQuery = (sorting: TokenSorting) => {
+    setOrderBy(sorting);
+    queryParams.set(
+      'sort',
+      // @ts-ignore
+      `${Object.keys(sorting)[0]}-${sorting[Object.keys(sorting)[0]]}`,
+    );
+    setQueryParams(queryParams);
+  };
+
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
     id: DEFAULT_PAGE_SIZE,
     title: DEFAULT_PAGE_SIZE.toString(),
   });
 
+  // get sort from query string
   useEffect(() => {
-    queryParams.set(
-      'sort',
-      // @ts-ignore
-      `${Object.keys(orderBy)[0]}-${orderBy[Object.keys(orderBy)[0]]}`,
-    );
-    setQueryParams(queryParams);
-  }, [orderBy]);
+    if (queryParams.get('sort')) {
+      const split = queryParams.get('sort')?.split('-');
+      const orderBy = split ? { [split[0]]: split[1] } : ({} as TokenSorting);
+      setOrderBy(orderBy);
+    }
+  }, [queryParams]);
 
-  const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
-  const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
   const basePath = `/${currentChain.network.toLowerCase()}/tokens`;
 
   const currentTabIndex = tabUrls.findIndex((tab) =>
     location.pathname.includes(`${basePath}/${tab}`),
   );
-
-  const [queryParams, setQueryParams] = useSearchParams();
-
-  const defaultSort =
-    OPTIONS.find((option) =>
-      sort
-        ? option.sortDir === sort.sortDir
-        : option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
-    )?.id ?? '';
 
   const selectFilter = (selected: SelectOptionProps) => {
     const option = OPTIONS.find((item) => {
@@ -103,7 +104,6 @@ const TokensPage: FC = () => {
             <>
               {currentTabIndex === 0 && (
                 <RightMenu
-                  defaultSort={defaultSort}
                   key="top-right-menu"
                   selectSort={selectFilter}
                   selectGrid={selectGrid}
@@ -132,7 +132,7 @@ const TokensPage: FC = () => {
             element={
               <NFTs
                 orderBy={orderBy}
-                setOrderBy={setOrderBy}
+                setOrderBy={setOrderAndQuery}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
                 view={view}
