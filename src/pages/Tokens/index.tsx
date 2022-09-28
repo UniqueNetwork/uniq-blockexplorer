@@ -30,7 +30,7 @@ const TokensPage: FC = () => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
   const [view, setView] = useState<ViewType>(ViewType.Grid);
-  const [sort, selectSort] = useState<SelectOptionProps>();
+  const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
 
@@ -64,7 +64,7 @@ const TokensPage: FC = () => {
     location.pathname.includes(`${basePath}/${tab}`),
   );
 
-  const selectFilter = (selected: SelectOptionProps) => {
+  const selectSorting = (selected: SelectOptionProps) => {
     const option = OPTIONS.find((item) => {
       return item.id === selected.id;
     });
@@ -105,7 +105,7 @@ const TokensPage: FC = () => {
               {currentTabIndex === 0 && (
                 <RightMenu
                   key="top-right-menu"
-                  selectSort={selectFilter}
+                  selectSort={selectSorting}
                   selectGrid={selectGrid}
                   selectList={selectList}
                   view={view}
