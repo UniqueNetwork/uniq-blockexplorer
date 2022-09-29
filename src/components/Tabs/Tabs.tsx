@@ -87,8 +87,8 @@ const Tab = styled.div`
   }
 
   &.active {
-    color: var(--link-color);
-    border-bottom: 2px solid var(--link-color);
+    color: var(--primary-500);
+    border-bottom: 2px solid var(--primary-500);
   }
 
   &.disabled {

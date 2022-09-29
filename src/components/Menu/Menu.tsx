@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { useApi } from '@app/hooks';
+import { defaultSorting } from '@app/pages/Tokens/constants';
 
 const Menu: FC = () => {
   const { currentChain } = useApi();
@@ -29,10 +30,12 @@ const Menu: FC = () => {
   return (
     <>
       <NavLink
-        to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}tokens`}
+        to={`/${
+          currentChain ? currentChain?.network.toLowerCase() + '/' : ''
+        }tokens/nfts/?sort=${defaultSorting}`}
         onClick={onMenuClick('NFTS')}
       >
-        NFTs
+        Tokens
       </NavLink>
       <NavLink
         to={`/${

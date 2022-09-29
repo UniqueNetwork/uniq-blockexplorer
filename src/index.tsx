@@ -43,7 +43,7 @@ ReactDOM.render(
               <Route index element={<Collections />} />
               <Route element={<Collection />} path=":collectionId" />
             </Route>
-            <Route path="tokens" element={<Tokens />}>
+            <Route path="tokens/*" element={<Tokens />}>
               <Route path="fractional" />
               <Route path="nfts" />
             </Route>

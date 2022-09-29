@@ -9,6 +9,7 @@ import { PagePaperWrapper, DropdownOptionProps, TokenCard } from '@app/component
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { TokenSorting, useGraphQlTokens } from '@app/api/graphQL';
+import { defaultSorting } from '@app/pages/Tokens/constants';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
@@ -41,17 +42,18 @@ export const Tokens: VFC<TokensProps> = ({
   }, [deviceSize]);
 
   const onClick = useCallback(() => {
-    const linkUrl = `/${currentChain.network.toLowerCase()}/tokens`;
-    const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
+    let params: { sort?: string; search?: string } = {};
+    params.sort = defaultSorting;
 
     if (searchString) {
-      const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
-
-      navigateTo.search = searchParams;
+      params.search = searchString;
     }
 
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_MAIN_PAGE);
-    navigate(navigateTo);
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/tokens/nfts/`,
+      search: `?${createSearchParams(params)}`,
+    });
   }, [currentChain, navigate, searchString]);
 
   const filter = collectionId

@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { Token, useGraphQlTokens } from '@app/api';
@@ -8,6 +8,7 @@ import { Search, TokenCard } from '@app/components';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
+import { defaultSorting } from '@app/pages/Tokens/constants';
 
 interface TokensComponentProps {
   accountId: string;
@@ -18,6 +19,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState<string>();
+  const [queryParams, setQueryParams] = useSearchParams();
   // assume that we got the substrate address
   let substrateAddress = accountId;
 
@@ -45,10 +47,30 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
   const showButton = tokensCount > pageSize;
 
   const onClickSeeMore = useCallback(() => {
-    navigate(
-      `/${currentChain.network.toLowerCase()}/tokens/nfts/?accountId=${accountId}`,
-    );
-  }, [currentChain.network, navigate, accountId]);
+    let params: { accountId?: string; search?: string; sort?: string } = {};
+    params.sort = defaultSorting;
+
+    if (accountId) {
+      params.accountId = accountId;
+    }
+
+    if (searchString) {
+      params.search = searchString;
+    }
+
+    setQueryParams(queryParams);
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/tokens/nfts/`,
+      search: `?${createSearchParams(params)}`,
+    });
+  }, [
+    accountId,
+    searchString,
+    setQueryParams,
+    queryParams,
+    navigate,
+    currentChain.network,
+  ]);
 
   return (
     <>

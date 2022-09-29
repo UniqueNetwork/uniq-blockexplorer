@@ -1,7 +1,13 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { TokenSorting } from '@app/api';
@@ -24,26 +30,38 @@ const TokensPage: FC = () => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
   const { view, setView, sort, selectSort } = useContext(MenuContext);
+  const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
+
+  const setOrderAndQuery = (sorting: TokenSorting) => {
+    setOrderBy(sorting);
+    queryParams.set(
+      'sort',
+      // @ts-ignore
+      `${Object.keys(sorting)[0]}-${sorting[Object.keys(sorting)[0]]}`,
+    );
+    setQueryParams(queryParams);
+  };
+
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
     id: DEFAULT_PAGE_SIZE,
     title: DEFAULT_PAGE_SIZE.toString(),
   });
 
-  const defaultSortKey: string = Object.keys(defaultOrderBy)?.[0];
-  const defaultSortValue: string = Object.values(defaultOrderBy)?.[0];
+  // get sort from query string
+  useEffect(() => {
+    if (queryParams.get('sort')) {
+      const split = queryParams.get('sort')?.split('-');
+      const orderBy = split ? { [split[0]]: split[1] } : ({} as TokenSorting);
+      setOrderBy(orderBy);
+    }
+  }, [queryParams]);
+
   const basePath = `/${currentChain.network.toLowerCase()}/tokens`;
 
   const currentTabIndex = tabUrls.findIndex((tab) =>
     location.pathname.includes(`${basePath}/${tab}`),
   );
-
-  const defaultSort =
-    OPTIONS.find((option) =>
-      sort
-        ? option.sortDir === sort.sortDir
-        : option.sortDir === defaultSortValue && option.sortField === defaultSortKey,
-    )?.id ?? '';
 
   const selectFilter = (selected: SelectOptionProps) => {
     const option = OPTIONS.find((item) => {
@@ -53,6 +71,8 @@ const TokensPage: FC = () => {
     if (option && option.sortField) {
       selectSort(option);
       setOrderBy({ [option.sortField]: option.sortDir });
+      queryParams.set('sort', `${option.sortField}-${option.sortDir}`);
+      setQueryParams(queryParams);
     }
   };
 
@@ -83,12 +103,10 @@ const TokensPage: FC = () => {
             <>
               {currentTabIndex === 0 && (
                 <RightMenu
-                  defaultSort={defaultSort}
                   key="top-right-menu"
                   selectSort={selectFilter}
                   selectGrid={selectGrid}
                   selectList={selectList}
-                  sort={sort}
                   view={view}
                 />
               )}
@@ -96,9 +114,9 @@ const TokensPage: FC = () => {
           ]}
           basePath={basePath}
           content={[
-            <div className="flex-column">{tabUrls[0]}</div>,
+            <div className="flex-column">NFTs</div>,
             <div className="flex-row">
-              {tabUrls[1]}
+              Fractional
               <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
               <ReactTooltip id="sadFace" effect="solid">
                 <span>Coming soon</span>
@@ -113,7 +131,7 @@ const TokensPage: FC = () => {
             element={
               <NFTs
                 orderBy={orderBy}
-                setOrderBy={setOrderBy}
+                setOrderBy={setOrderAndQuery}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
                 view={view}

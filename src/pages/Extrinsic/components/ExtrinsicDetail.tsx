@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
-import { useDeviceSize, DeviceSize, useScrollToTop } from '@app/hooks';
+import { useDeviceSize, DeviceSize, useScrollToTop, useApi } from '@app/hooks';
 import {
   formatAmount,
   formatBlockNumber,
@@ -23,6 +23,7 @@ interface ExtrinsicDetailProps {
 const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ blockIndex, extrinsic, index }) => {
   useScrollToTop();
   const deviceSize = useDeviceSize();
+  const { currentChain } = useApi();
 
   const {
     amount,
@@ -73,12 +74,12 @@ const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ blockIndex, extrinsic, inde
           <Text color="grey-500">Amount</Text>
           {/* TODO: due to API issues - amount of some transactions is object which is, for now, should be translated as zero */}
           <ChainLogoWrapper>
-            <ChainLogo isInline={true} />
+            <ChainLogo logo={currentChain.network.toLowerCase()} isInline={true} />
             <Text>{`${formatAmount(amount || 0)}`}</Text>
           </ChainLogoWrapper>
           <Text color="grey-500">Fee</Text>
           <ChainLogoWrapper>
-            <ChainLogo isInline={true} />
+            <ChainLogo logo={currentChain.network.toLowerCase()} isInline={true} />
             <Text>{`${formatAmount(fee || 0)}`}</Text>
           </ChainLogoWrapper>
         </ExtrinsicDataWrapper>

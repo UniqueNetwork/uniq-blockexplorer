@@ -25,7 +25,11 @@ export const getLastBlocksColumns = (chainId: string) => [
     dataIndex: 'block_with_index',
     key: 'block_with_index',
     render: (value: string) => (
-      <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value.split('-')?.[0]}`}>
+      <Link
+        to={`/${chainId ? chainId.toLowerCase() + '/' : ''}extrinsic/${
+          value.split('-')?.[0]
+        }`}
+      >
         {value.split('-')?.[1]}
       </Link>
     ),

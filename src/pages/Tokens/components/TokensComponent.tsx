@@ -8,6 +8,7 @@ import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
 import {
   Pagination,
   ScrollableTable,
+  Search,
   SelectOptionProps,
   ViewType,
 } from '@app/components';
@@ -95,8 +96,18 @@ const TokensComponent: FC<TokensComponentProps> = ({
     setSearchString(searchFromQuery);
   }, [searchFromQuery, setSearchString]);
 
+  const onSearchChange = (value: string) => {
+    setSearchString(value);
+    setCurrentPage(1);
+  };
+
   return (
     <Wrapper>
+      <Search
+        placeholder="NFT / collection"
+        // value={searchString}
+        onSearchChange={onSearchChange}
+      />
       <TopPaginationContainer>
         <Pagination
           count={tokensCount || 0}
@@ -148,6 +159,9 @@ const TokensComponent: FC<TokensComponentProps> = ({
 };
 
 const Wrapper = styled.div`
+  > :first-of-type {
+    margin-bottom: calc(var(--gap) * 1.5);
+  }
   .pagination {
     font-weight: 400;
     font-size: 16px;

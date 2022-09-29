@@ -13,7 +13,9 @@ export const getTransferNftColumns = (chainId?: string) => [
     render: (value: string, row: any) => (
       <Link
         className="token-transfer-cell"
-        to={`/${chainId ? chainId + '/' : ''}tokens/${row.collection_id}/${value}`}
+        to={`/${chainId ? chainId.toLowerCase() + '/' : ''}nfts/${
+          row.collection_id
+        }/${value}`}
       >
         <LinkInner>
           <Picture
@@ -43,7 +45,11 @@ export const getTransferNftColumns = (chainId?: string) => [
     key: 'collection_name',
     render: (value: string, row: any) => (
       <CollectionWrapper>
-        <Link to={`/${chainId ? chainId + '/' : ''}collections/${row.collection_id}`}>
+        <Link
+          to={`/${chainId ? chainId.toLowerCase() + '/' : ''}collections/${
+            row.collection_id
+          }`}
+        >
           <Text color="primary-500" size="m" weight="light">
             {value}
           </Text>
@@ -57,7 +63,9 @@ export const getTransferNftColumns = (chainId?: string) => [
     dataIndex: 'block_index',
     key: 'block_index',
     render: (value: string) => (
-      <Link to={`/${chainId ? chainId + '/' : ''}extrinsic/${value}`}>{value}</Link>
+      <Link to={`/${chainId ? chainId.toLowerCase() + '/' : ''}extrinsic/${value}`}>
+        {value}
+      </Link>
     ),
     title: 'Extrinsic ID',
     width: 150,
