@@ -40,5 +40,9 @@ const Wrapper = styled.div.attrs<{ src?: string }>((props) => ({
     height: 64px;
     top: calc(100% - 32px);
     left: calc(50% - 32px);
+    svg {
+      width: 60px;
+      height: 60px;
+    }
   }
 `;

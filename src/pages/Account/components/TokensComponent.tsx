@@ -8,6 +8,7 @@ import { Search, TokenCard } from '@app/components';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
+import { defaultSorting } from '@app/pages/Tokens/constants';
 
 interface TokensComponentProps {
   accountId: string;
@@ -46,7 +47,8 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
   const showButton = tokensCount > pageSize;
 
   const onClickSeeMore = useCallback(() => {
-    let params: { accountId?: string; search?: string } = {};
+    let params: { accountId?: string; search?: string; sort?: string } = {};
+    params.sort = defaultSorting;
 
     if (accountId) {
       params.accountId = accountId;
