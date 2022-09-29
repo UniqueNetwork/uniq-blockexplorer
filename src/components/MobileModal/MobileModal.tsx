@@ -1,4 +1,3 @@
-import { Button } from '@unique-nft/ui-kit';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -9,9 +8,15 @@ import { SVGIcon } from '../SVGIcon';
 export const MobileModal = ({
   visible,
   setVisible,
+  children,
+  actions,
+  title,
 }: {
   visible: boolean;
   setVisible: (state: boolean) => void;
+  children: JSX.Element;
+  actions?: JSX.Element | null;
+  title: string;
 }) => {
   const [localVisible, setLocalVisible] = useState(false);
 
@@ -44,22 +49,13 @@ export const MobileModal = ({
       <Modal className={`${localVisible && visible && 'visible'}`}>
         <Content>
           <Header>
-            <Heading2>Filter and sort</Heading2>
+            <Heading2>{title}</Heading2>
             <Close onClick={() => setVisible(false)}>
               <SVGIcon name="close" color="#091941" width={22} height={22} />
             </Close>
           </Header>
-          <ModalBody>Modal content</ModalBody>
-          <Actions>
-            <Button wide title="Apply" role="primary" />
-            <Button
-              title="Reset All"
-              role="danger"
-              onClick={() => {
-                setVisible(false);
-              }}
-            />
-          </Actions>
+          <ModalBody>{children}</ModalBody>
+          {actions && <Actions className="actions">{actions}</Actions>}
         </Content>
       </Modal>
     </Wrapper>
@@ -109,7 +105,7 @@ const Modal = styled.div`
   justefy-content: space-between;
   transition: 0.2s;
   &.visible {
-    max-height: 624px;
+    max-height: 50%;
   }
 `;
 

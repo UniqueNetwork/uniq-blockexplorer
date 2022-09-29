@@ -1,19 +1,20 @@
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import ReactTooltip from 'react-tooltip';
+import { FC, useContext, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
+import styled from 'styled-components';
 
-import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
-import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
-import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
 import { RouterTabs, SelectOptionProps, ViewType } from '@app/components';
+import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
+import { Question } from '@app/images/icons/svgs';
+import MenuContext from '@app/toolbarContext/toolbarContext';
+import { logUserEvents } from '@app/utils';
 
-import { NFTs } from './NFTs';
-import { RightMenu } from './components/RightMenu';
-import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
 import PagePaper from '../../components/PagePaper';
+import { RightMenu } from './components/RightMenu';
+import { defaultOrderBy, DEFAULT_PAGE_SIZE, OPTIONS } from './constants';
+import { NFTs } from './NFTs';
 
 const tabUrls = ['nfts', 'fractional'];
 
@@ -22,8 +23,7 @@ const TokensPage: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentChain } = useApi();
-  const [view, setView] = useState<ViewType>(ViewType.Grid);
-  const [sort, selectSort] = useState<SelectOptionProps>();
+  const { view, setView, sort, selectSort } = useContext(MenuContext);
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
     id: DEFAULT_PAGE_SIZE,

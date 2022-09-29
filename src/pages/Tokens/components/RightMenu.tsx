@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-import { OPTIONS } from '@app/pages/Tokens/constants';
-import { DeviceSizes } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
+import { DeviceSizes } from '@app/hooks';
+import { OPTIONS } from '@app/pages/Tokens/constants';
 
 interface RightMenuProps {
   defaultSort: string;
@@ -58,6 +58,9 @@ const RightTabMenu = styled.div`
   display: flex;
   align-items: center;
   grid-column-gap: 44px;
+  @media (max-width: ${DeviceSizes.md}) {
+    display: none;
+  }
 `;
 
 const Controls = styled.div`

@@ -1,29 +1,33 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { FC, useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { createRef, FC, useCallback, useEffect } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useSearchParams } from 'react-router-dom';
 
-import { useApi, useSearchFromQuery } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 import { SVGIcon } from '@app/components/SVGIcon';
+import { useApi, useSearchFromQuery } from '@app/hooks';
+import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface SearchComponentProps {
   hideSearchButton?: boolean;
   placeholder?: string;
   onSearchChange(value: string | undefined): void;
   setResultExist?: (value: boolean) => void;
+  searchRef?: React.RefObject<HTMLInputElement>;
 }
+
+let ref: React.RefObject<HTMLInputElement>;
 
 const SearchComponent: FC<SearchComponentProps> = ({
   hideSearchButton,
   onSearchChange,
   placeholder,
+  searchRef,
 }) => {
   const [queryParams, setQueryParams] = useSearchParams();
   const { searchString, setSearchString } = useSearchFromQuery();
   const { pathname } = useLocation();
+  ref = searchRef || createRef();
 
   const { currentChain } = useApi();
 
@@ -80,6 +84,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
   const onChangeSearchString = useCallback(
     (value: string | undefined) => {
       setSearchString(value?.toString() || '');
+      onSearchChange(value);
     },
     [setSearchString],
   );
@@ -96,6 +101,8 @@ const SearchComponent: FC<SearchComponentProps> = ({
         iconLeft={{ name: 'magnify', size: 18 }}
         placeholder={placeholder}
         value={searchString}
+        // @ts-ignore
+        ref={ref}
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}
       />
