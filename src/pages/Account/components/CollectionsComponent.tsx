@@ -7,7 +7,7 @@ import { useApi, useSearchFromQuery } from '@app/hooks';
 import { Collection, useGraphQlCollections } from '@app/api/graphQL';
 import { Search } from '@app/components';
 
-import CollectionCard from '../../../components/CollectionCard';
+import CollectionCard from '../../../components/CollectionCardOld';
 
 interface CollectionsComponentProps {
   accountId: string;

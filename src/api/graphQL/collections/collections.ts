@@ -28,6 +28,7 @@ const collectionsQuery = gql`
         limits_sponsore_data_rate
         limits_sponsore_data_size
         mint_mode
+        nesting_enabled
         name
         offchain_schema
         owner

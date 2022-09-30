@@ -18,9 +18,10 @@ import {
 } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
-import { CollectionSorting, useGraphQlCollections } from '@app/api';
-
+import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api';
 // import CollectionsComponent from './components/CollectionsComponent';
+import { CollectionCard } from '@app/components/CollectionCard';
+
 import { RightMenu } from './components/RightMenu';
 import { ViewType } from './components/TokensComponent';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
@@ -38,6 +39,7 @@ const CollectionsPage: FC = () => {
   const { currentChain } = useApi();
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const [, setSearchString] = useState<string | undefined>(searchFromQuery);
+  const [nestingOn, setNestingOn] = useState<boolean>(false);
   const pageSize = DEFAULT_PAGE_SIZE;
   const offset = (currentPage - 1) * pageSize;
 
@@ -53,13 +55,29 @@ const CollectionsPage: FC = () => {
     return undefined;
   }, [queryParams]);
 
-  const { collections, collectionsCount, isCollectionsFetching } = useGraphQlCollections({
+  const { collections, collectionsCount, isCollectionsFetching, timestamp } =
+    useGraphQlCollections({
+      filter,
+      offset,
+      orderBy,
+      pageSize,
+      searchString,
+    });
+
+  const { tokens } = useGraphQlTokens({
     filter,
-    offset,
-    orderBy,
+    offset: 0,
     pageSize,
-    searchString,
   });
+
+  const collectionsWithTokenCover = collections?.map((collection) => ({
+    ...collection,
+    collection_cover:
+      collection.collection_cover ||
+      tokens?.find((token) => token.collection_id === collection.collection_id)?.image
+        ?.fullUrl ||
+      '',
+  }));
 
   useEffect(() => {
     setSearchString(searchFromQuery);
@@ -101,13 +119,15 @@ const CollectionsPage: FC = () => {
       <PagePaper>
         <RightMenu
           key="top-right-menu"
+          nestingOn={nestingOn}
           selectSort={selectSorting}
           selectGrid={selectGrid}
           selectList={selectList}
+          setNestingOn={setNestingOn}
           view={view}
         />
         <div>
-          <SearchComponent
+          <SearchWrapper
             placeholder="NFT / collection"
             // value={searchString}
             onSearchChange={onSearchChange}
@@ -147,7 +167,15 @@ const CollectionsPage: FC = () => {
                 //   loading={isTokensFetching}
                 //   rowKey={getRowKey}
                 // />
-                <div>CollectionsGrid</div>
+                <CollectionsList>
+                  {collectionsWithTokenCover.map((collection) => (
+                    <CollectionCard
+                      key={`collection-${collection.collection_id}`}
+                      timestamp={timestamp}
+                      {...collection}
+                    />
+                  ))}
+                </CollectionsList>
               )}
             </>
           )}
@@ -168,6 +196,10 @@ const CollectionsPage: FC = () => {
   );
 };
 
+const SearchWrapper = styled(SearchComponent)`
+  margin-bottom: calc(var(--gap) * 1.5);
+`;
+
 const SkeletonWrapper = styled.div`
   padding: 0;
   display: flex;
@@ -183,6 +215,23 @@ const SkeletonWrapper = styled.div`
 const PagePaper = styled(PagePaperWrapper)`
   > div:first-of-type {
     margin-bottom: calc(var(--gap) * 3);
+  }
+`;
+
+const CollectionsList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: var(--gap);
+  grid-row-gap: var(--gap);
+  position: relative;
+  margin-bottom: calc(var(--gap) * 1.5);
+
+  @media (min-width: 576px) and (max-width: 1199px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 575px) {
+    grid-template-columns: 1fr;
   }
 `;
 

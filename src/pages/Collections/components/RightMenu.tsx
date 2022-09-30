@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
+import { Toggle } from '@unique-nft/ui-kit';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
@@ -11,6 +12,8 @@ interface RightMenuProps {
   selectSort: (selected: SelectOptionProps) => void;
   selectGrid: () => void;
   selectList: () => void;
+  setNestingOn: (nestingOn: boolean) => void;
+  nestingOn: boolean;
   view: ViewType;
 }
 
@@ -18,6 +21,8 @@ export const RightMenu: FC<RightMenuProps> = ({
   selectSort,
   selectGrid,
   selectList,
+  nestingOn,
+  setNestingOn,
   view,
 }) => {
   const [queryParams] = useSearchParams();
@@ -37,6 +42,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
+      <Toggle label="Only nesting enabled" on={nestingOn} onChange={setNestingOn} />
       <Select options={OPTIONS} value={sort?.id as string} onChange={selectSort} />
       <Controls className="controls">
         <ViewButtons>
@@ -65,6 +71,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 const RightTabMenu = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   grid-column-gap: 44px;
 `;
 
