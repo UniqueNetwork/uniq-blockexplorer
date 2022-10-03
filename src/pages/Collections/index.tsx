@@ -22,9 +22,13 @@ import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app
 import { CollectionCard } from '@app/components/CollectionCard';
 
 import { RightMenu } from './components/RightMenu';
-import { ViewType } from './components/TokensComponent';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
 import { getCollectionsColumns } from './components/collectionsColumnsSchema';
+
+export enum ViewType {
+  Grid = 'Grid',
+  List = 'List',
+}
 
 const CollectionsPage: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -140,11 +144,6 @@ const CollectionsPage: FC = () => {
     setView(ViewType.List);
   };
 
-  // const onSearchChange = (value: string) => {
-  //   setSearchString(value);
-  //   setCurrentPage(1);
-  // };
-
   return (
     <div>
       <TopBar>
@@ -183,6 +182,7 @@ const CollectionsPage: FC = () => {
                     currentChain.network,
                     orderBy,
                     setOrderAndQuery,
+                    timestamp,
                   )}
                   data={collections || []}
                   loading={isCollectionsFetching}

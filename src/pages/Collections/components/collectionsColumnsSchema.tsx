@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Text } from '@unique-nft/ui-kit';
 
-import { timestampTableFormat } from '@app/utils';
+import { timeDifference } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import { Collection, CollectionSorting } from '../../../api/graphQL';
@@ -13,6 +14,7 @@ export const getCollectionsColumns = (
   chainId: string,
   orderBy: CollectionSorting,
   onOrderChange: (orderBy: CollectionSorting) => void,
+  timestamp: number,
 ) => [
   {
     dataIndex: 'collection_id',
@@ -38,7 +40,13 @@ export const getCollectionsColumns = (
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
-    render: timestampTableFormat,
+    render: (value: number) => {
+      return (
+        <Text size="m" weight="regular">
+          {timeDifference(value, timestamp)}
+        </Text>
+      );
+    },
     title: (
       <TableSortableColumnTitle
         dataIndex="date_of_creation"
