@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import {
   Route,
@@ -9,12 +8,13 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
-import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
+import { useApi, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
 import { RouterTabs, SelectOptionProps } from '@app/components';
+import PageHeading from '@app/components/PageHeading';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
@@ -95,9 +95,7 @@ const TokensPage: FC = () => {
 
   return (
     <div className="tokens-page">
-      <TopBar>
-        <Title>Tokens</Title>
-      </TopBar>
+      <PageHeading title="Tokens" />
       <PagePaper>
         <RouterTabs
           additionalContent={[
@@ -146,26 +144,5 @@ const TokensPage: FC = () => {
     </div>
   );
 };
-
-const TopBar = styled.div`
-  display: grid;
-  grid-column-gap: calc(var(--gap) * 2);
-  grid-template-columns: 1fr 560px 72px;
-  margin-bottom: calc(var(--gap) * 2.5);
-
-  .unique-select .select-wrapper > svg {
-    z-index: unset;
-  }
-
-  @media (max-width: ${DeviceSizes.sm}) {
-    margin-bottom: 24px;
-  }
-`;
-
-const Title = styled.h2`
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 48px;
-`;
 
 export default TokensPage;

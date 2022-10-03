@@ -9,17 +9,12 @@ import {
   ScrollableTable,
   SelectOptionProps,
 } from '@app/components';
-import {
-  DeviceSize,
-  DeviceSizes,
-  useApi,
-  useDeviceSize,
-  useSearchFromQuery,
-} from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api';
 import { CollectionCard } from '@app/components/CollectionCard';
+import PageHeading from '@app/components/PageHeading';
 
 import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
@@ -146,9 +141,7 @@ const CollectionsPage: FC = () => {
 
   return (
     <div>
-      <TopBar>
-        <Title>Collections</Title>
-      </TopBar>
+      <PageHeading title="Collections" />
       <PagePaper>
         <RightMenu
           key="top-right-menu"
@@ -252,27 +245,6 @@ const CollectionsList = styled.div`
   @media (max-width: 575px) {
     grid-template-columns: 1fr;
   }
-`;
-
-const TopBar = styled.div`
-  display: grid;
-  grid-column-gap: calc(var(--gap) * 2);
-  grid-template-columns: 1fr 560px 72px;
-  margin-bottom: calc(var(--gap) * 2.5);
-
-  .unique-select .select-wrapper > svg {
-    z-index: unset;
-  }
-
-  @media (max-width: ${DeviceSizes.sm}) {
-    margin-bottom: 24px;
-  }
-`;
-
-const Title = styled.h2`
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 48px;
 `;
 
 const TopPaginationContainer = styled.div`
