@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 
@@ -158,6 +158,7 @@ const ChainsSelectWrapper = styled.div`
 
 const ChainsSelect = styled(Select)`
   .select-wrapper {
+    width: 250px;
     .icon-triangle {
       z-index: auto;
       margin: 21px;
@@ -174,14 +175,15 @@ const ChainsSelect = styled(Select)`
 
   @media (max-width: 450px) {
     width: auto;
-    position: static;
 
     .select-wrapper {
+      width: auto;
       position: static;
       display: flex;
       .select-value {
         font-size: 0;
-        width: 50px;
+        width: 32px;
+        margin-right: 0;
         svg,
         img {
           margin-right: 0 !important;
@@ -189,16 +191,14 @@ const ChainsSelect = styled(Select)`
       }
       .icon-triangle {
         top: auto;
-        right: 18px;
       }
       .select-dropdown {
         position: absolute;
-        top: 100%;
-        left: 0;
+        width: 160px;
+        height: auto;
         right: 0;
-        border: 0;
-        border-radius: 0;
-        height: calc(100vh - 80px);
+        left: auto;
+        border-radius: var(--prop-border-radius);
         background-color: var(--white-color);
         padding: calc(var(--gap) * 1.5) var(--gap);
         box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
