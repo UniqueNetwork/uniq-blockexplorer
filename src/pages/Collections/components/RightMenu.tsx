@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSearchParams } from 'react-router-dom';
 import { Toggle } from '@unique-nft/ui-kit';
 
-import { OPTIONS } from '@app/pages/Tokens/constants';
+import { OPTIONS } from '@app/pages/Collections/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 import { DeviceSizes } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
@@ -73,6 +73,8 @@ const RightTabMenu = styled.div`
   align-items: center;
   justify-content: flex-end;
   grid-column-gap: 44px;
+  border-bottom: 1px solid var(--grey-300);
+  padding-bottom: calc(var(--gap) * 1.5);
 `;
 
 const Controls = styled.div`

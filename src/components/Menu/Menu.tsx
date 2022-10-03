@@ -40,7 +40,7 @@ const Menu: FC = () => {
       <NavLink
         to={`/${
           currentChain ? currentChain?.network.toLowerCase() + '/' : ''
-        }collections`}
+        }collections/?sort=${defaultSorting}`}
         onClick={onMenuClick('COLLECTIONS')}
       >
         Collections

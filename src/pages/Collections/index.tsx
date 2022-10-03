@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import {
@@ -19,13 +19,11 @@ import {
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api';
-// import CollectionsComponent from './components/CollectionsComponent';
 import { CollectionCard } from '@app/components/CollectionCard';
 
 import { RightMenu } from './components/RightMenu';
 import { ViewType } from './components/TokensComponent';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
-import SearchComponent from '../../components/SearchComponent';
 import { getCollectionsColumns } from './components/collectionsColumnsSchema';
 
 const CollectionsPage: FC = () => {
@@ -39,20 +37,56 @@ const CollectionsPage: FC = () => {
   const { currentChain } = useApi();
   const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
   const [, setSearchString] = useState<string | undefined>(searchFromQuery);
-  const [nestingOn, setNestingOn] = useState<boolean>(false);
+  const [nestingOn, setNestingOn] = useState<boolean>(
+    queryParams.get('nesting') === 'true',
+  );
   const pageSize = DEFAULT_PAGE_SIZE;
   const offset = (currentPage - 1) * pageSize;
 
+  const setOrderAndQuery = (sorting: CollectionSorting) => {
+    setOrderBy(sorting);
+    queryParams.set(
+      'sort',
+      // @ts-ignore
+      `${Object.keys(sorting)[0]}-${sorting[Object.keys(sorting)[0]]}`,
+    );
+    setQueryParams(queryParams);
+  };
+
+  const setNestingAndQuery = () => {
+    setNestingOn(!nestingOn);
+    queryParams.set('nesting', `${!nestingOn}`);
+    setQueryParams(queryParams);
+  };
+
+  // get sort from query string
+  useEffect(() => {
+    if (queryParams.get('sort')) {
+      const split = queryParams.get('sort')?.split('-');
+      const orderBy = split ? { [split[0]]: split[1] } : ({} as CollectionSorting);
+      setOrderBy(orderBy);
+    }
+  }, [queryParams]);
+
+  let tokensFilter;
+
   const filter = useMemo(() => {
     const accountId = queryParams.get('accountId');
+    let filters = { _or: [{}], nesting_enabled: {} };
 
     if (accountId) {
-      return {
-        _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
-      };
+      filters._or = [
+        { owner: { _eq: accountId } },
+        { owner_normalized: { _eq: accountId } },
+      ];
+      tokensFilter = { ...filters };
     }
 
-    return undefined;
+    if (nestingOn) {
+      filters.nesting_enabled = { _eq: 'true' };
+    }
+
+    return filters;
   }, [queryParams]);
 
   const { collections, collectionsCount, isCollectionsFetching, timestamp } =
@@ -65,7 +99,7 @@ const CollectionsPage: FC = () => {
     });
 
   const { tokens } = useGraphQlTokens({
-    filter,
+    filter: tokensFilter,
     offset: 0,
     pageSize,
   });
@@ -106,10 +140,10 @@ const CollectionsPage: FC = () => {
     setView(ViewType.List);
   };
 
-  const onSearchChange = (value: string) => {
-    setSearchString(value);
-    setCurrentPage(1);
-  };
+  // const onSearchChange = (value: string) => {
+  //   setSearchString(value);
+  //   setCurrentPage(1);
+  // };
 
   return (
     <div>
@@ -123,22 +157,16 @@ const CollectionsPage: FC = () => {
           selectSort={selectSorting}
           selectGrid={selectGrid}
           selectList={selectList}
-          setNestingOn={setNestingOn}
+          setNestingOn={setNestingAndQuery}
           view={view}
         />
         <div>
-          <SearchWrapper
-            placeholder="NFT / collection"
-            // value={searchString}
-            onSearchChange={onSearchChange}
-          />
           <TopPaginationContainer>
             <Pagination
               count={collectionsCount || 0}
               currentPage={currentPage}
               itemsName="Collections"
               pageSize={{ id: pageSize }}
-              // setPageSize={setPageSize}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
               onPageChange={setCurrentPage}
             />
@@ -154,19 +182,13 @@ const CollectionsPage: FC = () => {
                   columns={getCollectionsColumns(
                     currentChain.network,
                     orderBy,
-                    setOrderBy,
+                    setOrderAndQuery,
                   )}
                   data={collections || []}
                   loading={isCollectionsFetching}
                   rowKey="collection_id"
                 />
               ) : (
-                // <ScrollableTable
-                //   columns={tokenColumns}
-                //   data={tokens || []}
-                //   loading={isTokensFetching}
-                //   rowKey={getRowKey}
-                // />
                 <CollectionsList>
                   {collectionsWithTokenCover.map((collection) => (
                     <CollectionCard
@@ -179,26 +201,23 @@ const CollectionsPage: FC = () => {
               )}
             </>
           )}
-          <BottomPaginationContainer>
-            <Pagination
-              count={collectionsCount || 0}
-              currentPage={currentPage}
-              itemsName="Collections"
-              pageSize={{ id: pageSize }}
-              // setPageSize={setPageSize}
-              siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
-              onPageChange={setCurrentPage}
-            />
-          </BottomPaginationContainer>
+          {!!collectionsCount && (
+            <BottomPaginationContainer>
+              <Pagination
+                count={collectionsCount || 0}
+                currentPage={currentPage}
+                itemsName="Collections"
+                pageSize={{ id: pageSize }}
+                siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+                onPageChange={setCurrentPage}
+              />
+            </BottomPaginationContainer>
+          )}
         </div>
       </PagePaper>
     </div>
   );
 };
-
-const SearchWrapper = styled(SearchComponent)`
-  margin-bottom: calc(var(--gap) * 1.5);
-`;
 
 const SkeletonWrapper = styled.div`
   padding: 0;
@@ -214,7 +233,7 @@ const SkeletonWrapper = styled.div`
 
 const PagePaper = styled(PagePaperWrapper)`
   > div:first-of-type {
-    margin-bottom: calc(var(--gap) * 3);
+    margin-bottom: calc(var(--gap) * 1.5);
   }
 `;
 

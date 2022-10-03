@@ -13,6 +13,7 @@ import {
 } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { defaultSorting } from '@app/pages/Collections/constants';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { CollectionCard } from './CollectionCard';
@@ -85,18 +86,20 @@ export const Collections: VFC<CollectionsProps> = ({
   }));
 
   const onClick = useCallback(() => {
-    const linkUrl = `/${currentChain.network.toLowerCase()}/collections`;
-    const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
+    let params: { sort?: string; search?: string } = {};
+    params.sort = defaultSorting;
 
     if (searchString) {
-      const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
-
-      navigateTo.search = searchParams;
+      params.search = searchString;
     }
 
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
-    navigate(navigateTo);
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/collections/`,
+      search: `?${createSearchParams(params)}`,
+    });
   }, [currentChain, navigate, searchString]);
+
   const [showButton, setShowButton] = useState<boolean>(true);
 
   useEffect(() => {

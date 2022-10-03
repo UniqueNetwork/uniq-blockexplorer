@@ -1,4 +1,4 @@
-import { TokenSorting } from '@app/api';
+import { CollectionSorting } from '@app/api';
 
 import { TokensSelectOption } from './types';
 // transfers_count
@@ -7,15 +7,15 @@ export const OPTIONS: TokensSelectOption[] = [
     iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
     id: '1',
     sortDir: 'asc_nulls_first',
-    sortField: 'token_id',
-    title: 'Item',
+    sortField: 'tokens_count',
+    title: 'Items',
   },
   {
     iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
     id: '2',
     sortDir: 'desc_nulls_last',
-    sortField: 'token_id',
-    title: 'Item',
+    sortField: 'tokens_count',
+    title: 'Items',
   },
   {
     iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
@@ -49,19 +49,33 @@ export const OPTIONS: TokensSelectOption[] = [
     iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
     id: '7',
     sortDir: 'asc_nulls_first',
+    sortField: 'holders_count',
+    title: 'Holders',
+  },
+  {
+    iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
+    id: '8',
+    sortDir: 'desc_nulls_last',
+    sortField: 'holders_count',
+    title: 'Holders',
+  },
+  {
+    iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
+    id: '9',
+    sortDir: 'asc_nulls_first',
     sortField: 'transfers_count',
     title: 'Transfers',
   },
   {
     iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
-    id: '8',
+    id: '10',
     sortDir: 'desc_nulls_last',
     sortField: 'transfers_count',
     title: 'Transfers',
   },
 ];
 
-export const defaultOrderBy: TokenSorting = { date_of_creation: 'desc_nulls_last' };
+export const defaultOrderBy: CollectionSorting = { date_of_creation: 'desc_nulls_last' };
 export const defaultSorting: string = 'date_of_creation-desc_nulls_last';
 
 export const DEFAULT_PAGE_SIZE = 24;
