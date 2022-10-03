@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Select, SVGIcon, ViewType } from '@app/components';
 import SearchComponent from '@app/components/SearchComponent';
 import { deviceWidth } from '@app/hooks';
-import { OPTIONS } from '@app/pages/Tokens/constants';
+import { defaultOrderId, OPTIONS } from '@app/pages/Tokens/constants';
 import toolbarContext from '@app/toolbarContext/toolbarContext';
 
 import { MobileModal } from '../MobileModal/MobileModal';
@@ -18,14 +18,8 @@ export enum MobileType {
   Search = 'Search',
 }
 
-export enum ToolbarLocationsEnable {
-  Collections = '/unique/collections',
-  NFTs = '/unique/tokens/nfts',
-}
-
 export const Toolbar = () => {
-  const { view, setView, searchString, setSearchString, defaultSort, selectSort, sort } =
-    useContext(toolbarContext);
+  const { view, setView, selectSort, sort } = useContext(toolbarContext);
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
   const [currentLocation, setCurrentLocation] = useState(false);
@@ -41,14 +35,10 @@ export const Toolbar = () => {
   }, [searchRef]);
 
   useEffect(() => {
-    switch (location.pathname) {
-      case ToolbarLocationsEnable.Collections:
-      case ToolbarLocationsEnable.NFTs:
-        setCurrentLocation(true);
-        break;
-      default:
-        setCurrentLocation(false);
-        break;
+    if (location.pathname.match(`\/(collections|tokens)`)) {
+      setCurrentLocation(true);
+    } else {
+      setCurrentLocation(false);
     }
   }, [location.pathname]);
 
@@ -88,9 +78,7 @@ export const Toolbar = () => {
             <SearchComponent
               searchRef={searchRef}
               placeholder="Global search"
-              onSearchChange={(text) => {
-                console.log('change?!', text);
-              }}
+              onSearchChange={() => {}}
             />
           </SearchWrapper>
         );
@@ -98,12 +86,7 @@ export const Toolbar = () => {
       default:
         return (
           <SelectWrapper>
-            <Select
-              defaultValue={defaultSort}
-              options={OPTIONS}
-              value={sort?.id as string}
-              onChange={selectSort}
-            />
+            <Select options={OPTIONS} value={sort?.id as string} onChange={selectSort} />
           </SelectWrapper>
         );
     }
@@ -121,9 +104,11 @@ export const Toolbar = () => {
             }}
           >
             <SVGIcon name="filter" width={32} height={32} />
-            <Mark>
-              <SVGIcon name="mark" width={12} height={12} />
-            </Mark>
+            {sort && defaultOrderId != sort?.id && (
+              <Mark>
+                <SVGIcon name="mark" width={12} height={12} />
+              </Mark>
+            )}
           </ButtonItem>
           <ButtonItem
             onClick={() => {
@@ -153,16 +138,20 @@ export const Toolbar = () => {
             <>
               <Button
                 wide
-                disabled={searchString?.length === 0}
+                disabled={sort && defaultOrderId == sort?.id}
                 title="Apply"
                 role="primary"
+                onClick={() => {
+                  setVisibleModal(false);
+                }}
               />
               <Button
-                disabled
+                disabled={sort && defaultOrderId == sort?.id}
                 title="Reset All"
                 role="danger"
                 onClick={() => {
                   setVisibleModal(false);
+                  selectSort(OPTIONS[3]);
                 }}
               />
             </>

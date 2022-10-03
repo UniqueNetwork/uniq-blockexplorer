@@ -1,5 +1,6 @@
 import { Consumer, Context, createContext, Provider } from 'react';
 
+import { TokenSorting } from '@app/api/graphQL/tokens/types';
 import { SelectOptionProps, ViewType } from '@app/components';
 
 export type ToolbarContextProps = {
@@ -9,7 +10,10 @@ export type ToolbarContextProps = {
   selectSort: (sort: SelectOptionProps) => void;
   searchString: string | undefined;
   setSearchString: (search: string | undefined) => void;
-  defaultSort: any;
+  queryParams: URLSearchParams;
+  setQueryParams: (param: URLSearchParams) => void;
+  orderBy: TokenSorting;
+  setOrderBy: (orderBy: TokenSorting) => void;
 };
 
 const ToolbarContext: Context<ToolbarContextProps> = createContext(

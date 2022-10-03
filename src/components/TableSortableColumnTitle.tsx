@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
 import { Text } from '@unique-nft/ui-kit';
+import { FC, useCallback, useMemo } from 'react';
+import styled from 'styled-components';
 
 import { Sorting } from '@app/api/graphQL/types';
 
@@ -40,7 +40,7 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
     }
 
     onOrderChange({ [dataIndex]: orderValue });
-  }, [orderBy, dataIndex, onOrderChange]);
+  }, [orderBy, dataIndex]);
 
   return (
     <>

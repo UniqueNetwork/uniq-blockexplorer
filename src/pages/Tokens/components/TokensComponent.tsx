@@ -1,10 +1,9 @@
 import { Skeleton } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
-import { FC, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { FC, useContext, useMemo } from 'react';
 import styled from 'styled-components';
 
-import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
+import { Token, useGraphQlTokens } from '@app/api';
 import {
   Pagination,
   ScrollableTable,
@@ -12,13 +11,8 @@ import {
   SelectOptionProps,
   ViewType,
 } from '@app/components';
-import {
-  DeviceSize,
-  DeviceSizes,
-  useApi,
-  useDeviceSize,
-  useSearchFromQuery,
-} from '@app/hooks';
+import { DeviceSize, DeviceSizes, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import ToolbarContext from '@app/toolbarContext/toolbarContext';
 
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
@@ -46,32 +40,22 @@ const filter = ({
 
 interface TokensComponentProps {
   currentPage: number;
-  orderBy: TokenSorting;
   pageSize: SelectOptionProps;
-  searchString?: string;
   setCurrentPage: (currentPage: number) => void;
   setPageSize: (pageSize: SelectOptionProps) => void;
-  setSearchString: (searchString: string | undefined) => void;
-  setOrderBy: (orderBy: TokenSorting) => void;
-  view: ViewType;
 }
 
 const TokensComponent: FC<TokensComponentProps> = ({
   currentPage,
-  orderBy,
   pageSize,
-  searchString,
   setCurrentPage,
   setPageSize,
-  setSearchString,
-  setOrderBy,
-  view,
 }) => {
   const deviceSize = useDeviceSize();
-  const { searchString: searchFromQuery } = useSearchFromQuery();
+  const { view, searchString, setSearchString, queryParams, orderBy, setOrderBy } =
+    useContext(ToolbarContext);
   const { currentChain } = useApi();
 
-  const [queryParams] = useSearchParams();
   const accountId = queryParams.get('accountId');
   const collectionId = queryParams.get('collectionId');
   const pageSizeNumber = pageSize.id as number;
@@ -91,10 +75,6 @@ const TokensComponent: FC<TokensComponentProps> = ({
       `token-${(item as Token).collection_id}-${(item as Token).token_id}`,
     [],
   );
-
-  useEffect(() => {
-    setSearchString(searchFromQuery);
-  }, [searchFromQuery, setSearchString]);
 
   const onSearchChange = (value: string) => {
     setSearchString(value);
@@ -161,6 +141,11 @@ const TokensComponent: FC<TokensComponentProps> = ({
 const Wrapper = styled.div`
   > :first-of-type {
     margin-bottom: calc(var(--gap) * 1.5);
+  }
+  .global-search {
+    @media ${deviceWidth.smallerThan.lg} {
+      display: none;
+    }
   }
   .pagination {
     font-weight: 400;

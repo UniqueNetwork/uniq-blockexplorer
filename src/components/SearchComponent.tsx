@@ -1,11 +1,12 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { createRef, FC, useCallback, useEffect } from 'react';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { createRef, FC, useCallback, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { SVGIcon } from '@app/components/SVGIcon';
-import { useApi, useSearchFromQuery } from '@app/hooks';
+import { useApi } from '@app/hooks';
+import ToolbarContext from '@app/toolbarContext/toolbarContext';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
 interface SearchComponentProps {
@@ -24,8 +25,9 @@ const SearchComponent: FC<SearchComponentProps> = ({
   placeholder,
   searchRef,
 }) => {
-  const [queryParams, setQueryParams] = useSearchParams();
-  const { searchString, setSearchString } = useSearchFromQuery();
+  const { searchString, setSearchString, queryParams, setQueryParams } =
+    useContext(ToolbarContext);
+
   const { pathname } = useLocation();
   ref = searchRef || createRef();
 

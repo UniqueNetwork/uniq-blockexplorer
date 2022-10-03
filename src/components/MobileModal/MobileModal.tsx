@@ -105,7 +105,7 @@ const Modal = styled.div`
   justefy-content: space-between;
   transition: 0.2s;
   &.visible {
-    max-height: 50%;
+    max-height: 624px;
   }
 `;
 
