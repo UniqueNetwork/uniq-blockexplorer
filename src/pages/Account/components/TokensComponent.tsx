@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { Token, useGraphQlTokens } from '@app/api';
@@ -8,16 +8,18 @@ import { Search, TokenCard } from '@app/components';
 import { useApi } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
+import { defaultSorting } from '@app/pages/Tokens/constants';
 
 interface TokensComponentProps {
   accountId: string;
   pageSize?: number;
 }
 
-const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 }) => {
+const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const [searchString, setSearchString] = useState<string>();
+  const [queryParams, setQueryParams] = useSearchParams();
   // assume that we got the substrate address
   let substrateAddress = accountId;
 
@@ -42,10 +44,33 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
     pageSize,
     searchString,
   });
+  const showButton = tokensCount > pageSize;
 
   const onClickSeeMore = useCallback(() => {
-    navigate(`/${currentChain.network}/tokens/?accountId=${accountId}`);
-  }, [currentChain.network, navigate, accountId]);
+    let params: { accountId?: string; search?: string; sort?: string } = {};
+    params.sort = defaultSorting;
+
+    if (accountId) {
+      params.accountId = accountId;
+    }
+
+    if (searchString) {
+      params.search = searchString;
+    }
+
+    setQueryParams(queryParams);
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/tokens/nfts/`,
+      search: `?${createSearchParams(params)}`,
+    });
+  }, [
+    accountId,
+    searchString,
+    setQueryParams,
+    queryParams,
+    navigate,
+    currentChain.network,
+  ]);
 
   return (
     <>
@@ -62,16 +87,18 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 10 })
             />
           ))}
       </TokensWrapper>
-      <Button
-        iconRight={{
-          color: '#fff',
-          name: 'arrow-right',
-          size: 12,
-        }}
-        role="primary"
-        title={'See all'}
-        onClick={onClickSeeMore}
-      />
+      {showButton && (
+        <Button
+          iconRight={{
+            color: '#fff',
+            name: 'arrow-right',
+            size: 12,
+          }}
+          role="primary"
+          title={'See all'}
+          onClick={onClickSeeMore}
+        />
+      )}
     </>
   );
 };
@@ -90,7 +117,7 @@ const ItemsCountWrapper = styled.div`
 
 const TokensWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-column-gap: calc(var(--gap) * 1.5);
   grid-row-gap: calc(var(--gap) * 1.5);
   margin-bottom: calc(var(--gap) * 1.5);

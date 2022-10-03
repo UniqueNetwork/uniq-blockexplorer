@@ -1,3 +1,9 @@
+## Version 2.1.1
+
+- fixed browser navigation (back/forward)
+- token sorting saved in navigation string
+- changed view icons list and grid 
+
 ## Version 2.1.0
 
 - New NFTs page
@@ -13,6 +19,7 @@
 ## Version 2.0.5
 
 - ReactFlow 
+- removed fields from BlockDetails query (session_length, total_issuance, need_rescan)
 
 ## Version 2.0.4
 

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Button } from '@unique-nft/ui-kit';
 
 import { DeviceSizes, useApi } from '@app/hooks';
-import { PagePaperWrapper, SelectOptionProps } from '@app/components';
+import { PagePaperWrapper, DropdownOptionProps } from '@app/components';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import {
@@ -23,16 +23,16 @@ export type LastTransfersProps = {
 
 export const LastTransfers: VFC<LastTransfersProps> = ({
   accountId,
-  pageSize = 5,
+  pageSize = 6,
   searchString,
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<SelectOptionProps>(
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
     lastTransferOptions[1],
   );
   const [contentExist, setContentExist] = useState<boolean>(false);
-  const linkUrl = `/${currentChain.network}/last-transfers`;
+  const linkUrl = `/${currentChain.network.toLowerCase()}/last-transfers`;
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
   const showCoins = selectedSort.id === SELECTED_BLOCK_COIN;
 

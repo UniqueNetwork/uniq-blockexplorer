@@ -29,7 +29,10 @@ ReactDOM.render(
     <Router>
       <Routes>
         <Route element={<App />} path="/">
-          <Route index element={<Navigate to={`/${defaultChain.network}/`} />} />
+          <Route
+            index
+            element={<Navigate to={`/${defaultChain.network.toLowerCase()}/`} />}
+          />
           <Route path=":chainId">
             <Route index element={<Main />} />
             <Route element={<Block />} path="block/:blockIndex" />
@@ -40,7 +43,7 @@ ReactDOM.render(
               <Route index element={<Collections />} />
               <Route element={<Collection />} path=":collectionId" />
             </Route>
-            <Route path="tokens" element={<Tokens />}>
+            <Route path="tokens/*" element={<Tokens />}>
               <Route path="fractional" />
               <Route path="nfts" />
             </Route>

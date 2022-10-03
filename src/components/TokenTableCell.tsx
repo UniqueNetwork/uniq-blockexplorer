@@ -19,16 +19,14 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   imageUrl,
   tokenId,
   tokenPrefix,
-}) => {
-  return (
-    <TokenLink to={`/${chainId}/tokens/${collectionId}/${tokenId}`}>
-      <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} />
-      <TokenTitle>
-        <Text color={'secondary-500'}>{`${tokenPrefix} #${tokenId}`}</Text>
-      </TokenTitle>
-    </TokenLink>
-  );
-};
+}) => (
+  <TokenLink to={`/${chainId.toLowerCase()}/nfts/${collectionId}/${tokenId}`}>
+    <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} />
+    <TokenTitle>
+      <Text color={'secondary-500'}>{`${tokenPrefix} #${tokenId}`}</Text>
+    </TokenTitle>
+  </TokenLink>
+);
 
 const TokenLink = styled(Link)`
   display: flex;

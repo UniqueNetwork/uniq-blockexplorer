@@ -1,11 +1,11 @@
 import { Skeleton } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Token, useGraphQlTokens } from '@app/api';
-import { Pagination, ScrollableTable } from '@app/components';
+import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
+import { Pagination, ScrollableTable, Search, SelectOptionProps } from '@app/components';
 import {
   DeviceSize,
   DeviceSizes,
@@ -14,7 +14,6 @@ import {
   useSearchFromQuery,
 } from '@app/hooks';
 
-import { TokensComponentProps } from '../types';
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
 
@@ -27,8 +26,8 @@ const filter = ({
   accountId,
   collectionId,
 }: {
-  accountId?: string;
-  collectionId?: string;
+  accountId: string | null;
+  collectionId: string | null;
 }) => {
   let _filter = {};
 
@@ -44,19 +43,36 @@ const filter = ({
   return _filter;
 };
 
+interface TokensComponentProps {
+  currentPage: number;
+  orderBy: TokenSorting;
+  pageSize: SelectOptionProps;
+  searchString?: string;
+  setCurrentPage: (currentPage: number) => void;
+  setPageSize: (pageSize: SelectOptionProps) => void;
+  setSearchString: (searchString: string | undefined) => void;
+  setOrderBy: (orderBy: TokenSorting) => void;
+  view: ViewType;
+}
+
 const TokensComponent: FC<TokensComponentProps> = ({
   currentPage,
   orderBy,
   pageSize,
   searchString,
+  setCurrentPage,
+  setPageSize,
   setSearchString,
   setOrderBy,
-  setTokensCount,
   view,
 }) => {
+  const deviceSize = useDeviceSize();
   const searchFromQuery = useSearchFromQuery();
   const { currentChain } = useApi();
-  const { accountId, collectionId } = useParams();
+
+  const [queryParams] = useSearchParams();
+  const accountId = queryParams.get('accountId');
+  const collectionId = queryParams.get('collectionId');
   const pageSizeNumber = pageSize.id as number;
 
   const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
@@ -79,12 +95,29 @@ const TokensComponent: FC<TokensComponentProps> = ({
     setSearchString(searchFromQuery);
   }, [searchFromQuery, setSearchString]);
 
-  useEffect(() => {
-    setTokensCount(tokensCount);
-  }, [tokensCount]);
+  const onSearchChange = (value: string) => {
+    setSearchString(value);
+    setCurrentPage(1);
+  };
 
   return (
     <Wrapper>
+      <Search
+        placeholder="NFT / collection"
+        // value={searchString}
+        onSearchChange={onSearchChange}
+      />
+      <TopPaginationContainer>
+        <Pagination
+          count={tokensCount || 0}
+          currentPage={currentPage}
+          itemsName="NFTs"
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          onPageChange={setCurrentPage}
+        />
+      </TopPaginationContainer>
       {isTokensFetching ? (
         <SkeletonWrapper>
           <Skeleton />
@@ -109,11 +142,25 @@ const TokensComponent: FC<TokensComponentProps> = ({
           )}
         </>
       )}
+      <BottomPaginationContainer>
+        <Pagination
+          count={tokensCount || 0}
+          currentPage={currentPage}
+          itemsName="NFTs"
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          onPageChange={setCurrentPage}
+        />
+      </BottomPaginationContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  > :first-of-type {
+    margin-bottom: calc(var(--gap) * 1.5);
+  }
   .pagination {
     font-weight: 400;
     font-size: 16px;

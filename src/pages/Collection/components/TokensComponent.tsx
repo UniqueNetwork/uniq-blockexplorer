@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, Heading, Text } from '@unique-nft/ui-kit';
 
 import { useGraphQlTokens } from '@app/api';
@@ -8,6 +8,7 @@ import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
 import { LoadingComponent, TokenCard } from '@app/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { defaultSorting } from '@app/pages/Tokens/constants';
 
 interface TokensComponentProps {
   searchString?: string;
@@ -39,7 +40,17 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
 
   const onButtonClick = useCallback(() => {
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_COLLECTION_PAGE);
-    navigate(`/${currentChain.network}/tokens/${collectionId || ''}`);
+    let params: { sort?: string; collectionId?: string } = {};
+    params.sort = defaultSorting;
+
+    if (collectionId) {
+      params.collectionId = collectionId;
+    }
+
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/tokens/nfts/`,
+      search: `?${createSearchParams(params)}`,
+    });
   }, [currentChain, navigate, collectionId]);
 
   return (

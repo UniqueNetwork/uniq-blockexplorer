@@ -7,7 +7,7 @@ export const OPTIONS: TokensSelectOption[] = [
     iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
     id: '1',
     sortDir: 'asc_nulls_first',
-    sortField: 'date_of_creation',
+    sortField: 'token_id',
     title: 'Item',
   },
   {
@@ -21,7 +21,7 @@ export const OPTIONS: TokensSelectOption[] = [
     iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
     id: '3',
     sortDir: 'asc_nulls_first',
-    sortField: 'token_id',
+    sortField: 'date_of_creation',
     title: 'Created',
   },
   {
@@ -62,5 +62,6 @@ export const OPTIONS: TokensSelectOption[] = [
 ];
 
 export const defaultOrderBy: TokenSorting = { date_of_creation: 'desc_nulls_last' };
+export const defaultSorting: string = 'date_of_creation-desc_nulls_last';
 
 export const DEFAULT_PAGE_SIZE = 24;
