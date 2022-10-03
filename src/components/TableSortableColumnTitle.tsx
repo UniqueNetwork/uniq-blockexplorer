@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Text } from '@unique-nft/ui-kit';
 
 import { Sorting } from '@app/api/graphQL/types';

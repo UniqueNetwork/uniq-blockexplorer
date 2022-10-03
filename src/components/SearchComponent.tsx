@@ -1,7 +1,7 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 
 import { useApi, useSearchFromQuery } from '@app/hooks';

@@ -1,5 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, Heading, Text } from '@unique-nft/ui-kit';
 

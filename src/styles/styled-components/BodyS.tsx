@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const BodyS = styled.div`
   font-family: var(--prop-font-family);

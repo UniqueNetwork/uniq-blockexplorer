@@ -2,7 +2,7 @@ import { Skeleton } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
 import { Pagination, ScrollableTable, Search, SelectOptionProps } from '@app/components';

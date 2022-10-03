@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 

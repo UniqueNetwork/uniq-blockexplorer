@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 import { Toggle } from '@unique-nft/ui-kit';
 

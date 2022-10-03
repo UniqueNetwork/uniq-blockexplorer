@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
 import RCTable from 'rc-table';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import LoadingComponent from './LoadingComponent';
 
