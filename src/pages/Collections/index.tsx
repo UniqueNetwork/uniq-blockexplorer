@@ -14,7 +14,7 @@ import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api';
 import { CollectionCard } from '@app/components/CollectionCard';
-import PageHeading from '@app/components/PageHeading';
+import { PageHeading } from '@app/components/PageHeading';
 
 import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';

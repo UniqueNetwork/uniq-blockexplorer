@@ -7,9 +7,7 @@ interface PageHeadingProps {
   title: string;
 }
 
-const PageHeading: VFC<PageHeadingProps> = (props) => {
-  const { title } = props;
-
+export const PageHeading: VFC<PageHeadingProps> = ({ title }) => {
   return (
     <TopBar>
       <Title>{title}</Title>
@@ -37,5 +35,3 @@ const Title = styled.h2`
   font-size: 36px;
   line-height: 48px;
 `;
-
-export default PageHeading;
