@@ -8,7 +8,7 @@ import { Collection, useGraphQlCollections } from '@app/api/graphQL';
 import { Search } from '@app/components';
 import { defaultSorting } from '@app/pages/Collections/constants';
 
-import CollectionCard from '../../../components/CollectionCardOld';
+import { CollectionCard } from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
   accountId: string;

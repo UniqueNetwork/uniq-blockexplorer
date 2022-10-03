@@ -14,9 +14,9 @@ import {
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { defaultSorting } from '@app/pages/Collections/constants';
+import { CollectionCard } from '@app/components/CollectionCard';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
-import { CollectionCard } from './CollectionCard';
 import { collectionsOptions } from './collectionsOptions';
 
 interface CollectionsProps {

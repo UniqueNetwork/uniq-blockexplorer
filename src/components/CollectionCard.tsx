@@ -13,7 +13,7 @@ import { SVGIcon } from '@app/components/SVGIcon';
 import { CollectionCover } from './CollectionCover';
 
 interface CollectionCardProps extends Collection {
-  timestamp: number;
+  timestamp?: number;
 }
 
 export const CollectionCard: VFC<CollectionCardProps> = ({
