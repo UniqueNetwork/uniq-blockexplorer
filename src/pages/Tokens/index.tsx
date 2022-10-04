@@ -14,7 +14,7 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
 import { RouterTabs, SelectOptionProps } from '@app/components';
-import PageHeading from '@app/components/PageHeading';
+import { PageHeading } from '@app/components/PageHeading';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
