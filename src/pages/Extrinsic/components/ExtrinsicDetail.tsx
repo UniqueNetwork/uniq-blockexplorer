@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { useDeviceSize, DeviceSize, useScrollToTop, useApi } from '@app/hooks';

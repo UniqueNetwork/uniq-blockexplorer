@@ -1,5 +1,5 @@
 import React, { VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Header1 } from '@app/styles/styled-components';
 import { deviceWidth, useApi } from '@app/hooks';

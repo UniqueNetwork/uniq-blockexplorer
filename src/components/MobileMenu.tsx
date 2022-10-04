@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
 
 import MobileMenuIcon from './MobileMenuIcon';

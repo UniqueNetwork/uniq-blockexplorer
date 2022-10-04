@@ -1,5 +1,5 @@
 import { useEffect, useState, VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';

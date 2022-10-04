@@ -1,6 +1,6 @@
 import { FC, useCallback, useState } from 'react';
 import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Text } from '@unique-nft/ui-kit';
 
 import { ColumnItem } from './ColumnItem';

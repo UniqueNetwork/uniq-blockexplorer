@@ -1,6 +1,6 @@
 import { Key, ReactNode, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { SVGIcon } from '@app/components';
 

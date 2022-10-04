@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Icon } from '@unique-nft/ui-kit';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { usePagination, DOTS, DeviceSizes } from '@app/hooks';
 import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
