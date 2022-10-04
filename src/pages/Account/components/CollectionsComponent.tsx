@@ -1,13 +1,14 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { useApi, useSearchFromQuery } from '@app/hooks';
 import { Collection, useGraphQlCollections } from '@app/api/graphQL';
 import { Search } from '@app/components';
+import { defaultSorting } from '@app/pages/Collections/constants';
 
-import CollectionCard from '../../../components/CollectionCard';
+import { CollectionCard } from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
   accountId: string;
@@ -19,6 +20,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const searchFromQuery = useSearchFromQuery();
+  const [queryParams, setQueryParams] = useSearchParams();
   const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
 
   const { collections, collectionsCount } = useGraphQlCollections({
@@ -29,11 +31,31 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     searchString,
   });
 
-  const onClickSeeMore = () => {
-    navigate(
-      `/${currentChain.network.toLowerCase()}/collections/?accountId=${accountId}`,
-    );
-  };
+  const onClickSeeMore = useCallback(() => {
+    let params: { accountId?: string; search?: string; sort?: string } = {};
+    params.sort = defaultSorting;
+
+    if (accountId) {
+      params.accountId = accountId;
+    }
+
+    if (searchString) {
+      params.search = searchString;
+    }
+
+    setQueryParams(queryParams);
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/collections/`,
+      search: `?${createSearchParams(params)}`,
+    });
+  }, [
+    accountId,
+    searchString,
+    setQueryParams,
+    queryParams,
+    navigate,
+    currentChain.network,
+  ]);
 
   useEffect(() => {
     setSearchString(searchFromQuery);

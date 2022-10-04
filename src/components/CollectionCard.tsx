@@ -1,29 +1,31 @@
-import React, { FC, useCallback } from 'react';
+import { VFC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Text, Heading } from '@unique-nft/ui-kit';
 
 import { Collection } from '@app/api';
 import { useApi } from '@app/hooks';
-import { shortcutText } from '@app/utils';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { SimpleRoundedCover } from '@app/components/SimpleRoundedCover';
+import { timeDifference } from '@app/utils';
+import { SVGIcon } from '@app/components/SVGIcon';
 
-import Avatar from './Avatar';
-import { UserEvents } from '../analytics/user_analytics';
+import { CollectionCover } from './CollectionCover';
 
-type CollectionCardProps = Collection;
+interface CollectionCardProps extends Collection {
+  timestamp?: number;
+}
 
-const CollectionCard: FC<CollectionCardProps> = ({
+export const CollectionCard: VFC<CollectionCardProps> = ({
   collection_cover,
   collection_id: collectionId,
+  date_of_creation,
   name,
-  owner,
-  token_prefix: tokenPrefix,
+  timestamp,
   tokens_count: tokensCount,
 }) => {
   const { currentChain } = useApi();
+  const createdTimeDiff = timeDifference(date_of_creation, timestamp);
 
   const onCollectionsCardClick = useCallback(() => {
     const path = window.location.pathname;
@@ -38,95 +40,116 @@ const CollectionCard: FC<CollectionCardProps> = ({
       to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
       onClick={onCollectionsCardClick}
     >
-      <CollectionCover>
-        <SimpleRoundedCover
-          avatarSize="middle"
-          collectionId={collectionId.toString()}
-          coverImageUrl={collection_cover}
-          size={64}
-        />
-      </CollectionCover>
+      <CollectionCover
+        collectionId={collectionId}
+        collectionName={name}
+        coverSrc={collection_cover}
+      />
       <CollectionInfo>
-        <Heading size="4">{name}</Heading>
+        <CollectionNameWrapper>
+          <Heading size="4">{name}</Heading>
+        </CollectionNameWrapper>
         <CollectionProperties>
           <span>
-            <Text color="grey-500" size="s">
-              ID:
+            <IconText>ID</IconText>
+            <Text size="s" weight="light">
+              {collectionId.toString()}
             </Text>
-            <Text size="s">{collectionId.toString()}</Text>
           </span>
           <span>
-            <Text color="grey-500" size="s">
-              Symbol:
+            <StyledSVGIcon height={16} name="emptyImage" width={16} />
+            <Text size="s" weight="light">
+              {tokensCount}
             </Text>
-            <Text size="s">{tokenPrefix}</Text>
           </span>
           <span>
-            <Text color="grey-500" size="s">
-              Items:
+            <StyledSVGIcon height={16} name="clock" width={16} />
+            <Text size="s" weight="light">
+              {createdTimeDiff}
             </Text>
-            <Text size="s">{tokensCount?.toString() || '0'}</Text>
           </span>
         </CollectionProperties>
-        <div>
-          <Text color="grey-500" size="s">
-            Owner:{' '}
-          </Text>
-          <Text size="s">{shortcutText(owner)}</Text>
-        </div>
       </CollectionInfo>
     </CollectionCardLink>
   );
 };
 
+const StyledSVGIcon = styled(SVGIcon)`
+  color: var(--blue-gray-400);
+`;
+
+const CollectionNameWrapper = styled.div`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const CollectionCardLink = styled(Link)`
   background: var(--white-color);
-  border: 1px solid #dfe0e2;
-  border-radius: var(--bradius);
+  border: 1px solid var(--grey-200);
+  border-radius: var(--gap);
   box-sizing: border-box;
-  padding: calc(var(--gap) * 1.5) calc(var(--gap) * 1.5);
   display: flex;
+  align-items: center;
+  flex-direction: column;
   column-gap: var(--gap);
-  align-items: flex-start;
+
   &:hover {
+    transform: translate(0, -5px);
     text-decoration: none;
   }
 
-  h4 {
+  .unique-font-heading.size-4 {
     overflow: hidden;
     word-break: break-word;
-    max-height: 3rem;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    text-align: center;
 
     &:hover {
       color: var(--primary-500);
     }
   }
-
-  @media (max-width: 767px) {
-    border: none;
-    padding: 0;
-  }
-`;
-
-const CollectionCover = styled.div`
-  min-width: 64px;
 `;
 
 const CollectionInfo = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   row-gap: 0;
+  width: calc(100% - (var(--gap) * 3));
+  padding: calc(var(--gap) * 1.5);
+  padding-top: 48px;
+
+  @media (max-width: 767px) {
+    padding: var(--gap);
+    padding-top: 32px;
+  }
 `;
 
 const CollectionProperties = styled.div`
   display: flex;
   column-gap: var(--gap);
   margin-bottom: calc(var(--gap) / 4);
+
   span {
     display: flex;
     column-gap: calc(var(--gap) / 4);
+    align-items: center;
+    justify-content: center;
+  }
+
+  img {
+    width: 13px;
   }
 `;
 
-export default CollectionCard;
+const IconText = styled.div`
+  color: var(--blue-gray-400);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+`;
