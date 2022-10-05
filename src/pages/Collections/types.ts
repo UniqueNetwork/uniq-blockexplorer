@@ -8,7 +8,7 @@ export type CollectionsComponentProps = {
   setCurrentPage: (page: number) => void;
 };
 
-export interface TokensSelectOption extends SelectOptionProps {
+export interface CollectionsSelectOption extends SelectOptionProps {
   id: string;
   title: string;
   sortDir?:

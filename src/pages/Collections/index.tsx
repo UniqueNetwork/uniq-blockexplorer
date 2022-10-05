@@ -28,9 +28,11 @@ export enum ViewType {
 const CollectionsPage: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const searchFromQuery = useSearchFromQuery();
-  const [view, setView] = useState<ViewType>(ViewType.Grid);
   const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
+  const [view, setView] = useState<ViewType>(
+    (queryParams.get('collections_view') as ViewType) || ViewType.List,
+  );
   const searchString = useSearchFromQuery();
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
@@ -39,8 +41,14 @@ const CollectionsPage: FC = () => {
   const [nestingOn, setNestingOn] = useState<boolean>(
     queryParams.get('nesting') === 'true',
   );
-  const pageSize = DEFAULT_PAGE_SIZE;
-  const offset = (currentPage - 1) * pageSize;
+
+  const [pageSize, setPageSize] = useState<SelectOptionProps>({
+    id: Number(queryParams.get('pageSize')) || DEFAULT_PAGE_SIZE,
+    title: queryParams.get('pageSize') || DEFAULT_PAGE_SIZE.toString(),
+  });
+  const pageSizeNumber = pageSize.id as number;
+
+  const offset = (currentPage - 1) * pageSizeNumber;
 
   const setOrderAndQuery = (sorting: CollectionSorting) => {
     setOrderBy(sorting);
@@ -54,7 +62,14 @@ const CollectionsPage: FC = () => {
 
   const setNestingAndQuery = () => {
     setNestingOn(!nestingOn);
+    setCurrentPage(1);
     queryParams.set('nesting', `${!nestingOn}`);
+    setQueryParams(queryParams);
+  };
+
+  const setPageSizeAndQuery = (option: SelectOptionProps) => {
+    setPageSize(option);
+    queryParams.set('pageSize', `${option.title}`);
     setQueryParams(queryParams);
   };
 
@@ -64,6 +79,10 @@ const CollectionsPage: FC = () => {
       const split = queryParams.get('sort')?.split('-');
       const orderBy = split ? { [split[0]]: split[1] } : ({} as CollectionSorting);
       setOrderBy(orderBy);
+    }
+
+    if (queryParams.get('collections_view')) {
+      setView(queryParams.get('collections_view') as ViewType);
     }
   }, [queryParams]);
 
@@ -93,14 +112,14 @@ const CollectionsPage: FC = () => {
       filter,
       offset,
       orderBy,
-      pageSize,
+      pageSize: pageSizeNumber,
       searchString,
     });
 
   const { tokens } = useGraphQlTokens({
     filter: tokensFilter,
     offset: 0,
-    pageSize,
+    pageSize: pageSizeNumber,
   });
 
   const collectionsWithTokenCover = collections?.map((collection) => ({
@@ -119,6 +138,8 @@ const CollectionsPage: FC = () => {
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_COLLECTIONS);
     setView(ViewType.Grid);
+    queryParams.set('collections_view', `${ViewType.Grid}`);
+    setQueryParams(queryParams);
   };
 
   const selectSorting = (selected: SelectOptionProps) => {
@@ -137,6 +158,8 @@ const CollectionsPage: FC = () => {
   const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_COLLECTIONS);
     setView(ViewType.List);
+    queryParams.set('collections_view', `${ViewType.List}`);
+    setQueryParams(queryParams);
   };
 
   return (
@@ -158,7 +181,8 @@ const CollectionsPage: FC = () => {
               count={collectionsCount || 0}
               currentPage={currentPage}
               itemsName="Collections"
-              pageSize={{ id: pageSize }}
+              pageSize={pageSize}
+              setPageSize={setPageSizeAndQuery}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
               onPageChange={setCurrentPage}
             />
@@ -200,7 +224,8 @@ const CollectionsPage: FC = () => {
                 count={collectionsCount || 0}
                 currentPage={currentPage}
                 itemsName="Collections"
-                pageSize={{ id: pageSize }}
+                pageSize={pageSize}
+                setPageSize={setPageSizeAndQuery}
                 siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
                 onPageChange={setCurrentPage}
               />
@@ -249,13 +274,43 @@ const CollectionsList = styled.div`
 
 const TopPaginationContainer = styled.div`
   .pagination {
+    display: flex;
+    flex-direction: column;
     margin-bottom: calc(var(--gap) * 2);
+    align-items: flex-end;
+    gap: calc(var(--gap));
+    > div:first-of-type {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      > div:last-of-type {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--gap) / 2);
+      }
+    }
   }
 `;
 
 const BottomPaginationContainer = styled.div`
   .pagination {
+    display: flex;
+    flex-direction: column;
     margin-top: calc(var(--gap) * 2.25);
+    align-items: flex-end;
+    gap: calc(var(--gap));
+    > div:first-of-type {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      > div:last-of-type {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--gap) / 2);
+      }
+    }
   }
 `;
 

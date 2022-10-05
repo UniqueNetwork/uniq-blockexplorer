@@ -67,6 +67,7 @@ export const Pagination: FC<PaginationProps> = ({
 
   const changePageSize = (selected: SelectOptionProps) => {
     setPageSize && setPageSize(selected);
+    onPageChange(1);
   };
 
   return (

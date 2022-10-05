@@ -29,7 +29,7 @@ const TokensPage: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentChain } = useApi();
-  const [view, setView] = useState<ViewType>(ViewType.Grid);
+  const [view, setView] = useState<ViewType>(ViewType.List);
   const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
