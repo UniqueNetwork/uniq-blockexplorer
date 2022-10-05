@@ -11,7 +11,7 @@ import { PageNumber } from './PageNumber';
 interface PaginationProps {
   count: number; // total number of elements in DB
   itemsName?: string;
-  pageSize: number; // how many elements we present per single page
+  pageSize: SelectOptionProps; // how many elements we present per single page
   onPageChange: (page: number) => void; // fetch new page data
   setPageSize?: (pageSize: SelectOptionProps) => void;
   siblingCount?: number; // how many pages to show, the rest will be "..."
