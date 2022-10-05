@@ -42,8 +42,14 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
+      {view === ViewType.Grid && (
+        <SelectStyled
+          options={OPTIONS}
+          value={sort?.id as string}
+          onChange={selectSort}
+        />
+      )}
       <Toggle label="Only nesting enabled" on={nestingOn} onChange={setNestingOn} />
-      <Select options={OPTIONS} value={sort?.id as string} onChange={selectSort} />
       <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>
@@ -68,9 +74,14 @@ export const RightMenu: FC<RightMenuProps> = ({
   );
 };
 
+const SelectStyled = styled(Select)`
+  width: 180px;
+`;
+
 const RightTabMenu = styled.div`
   display: flex;
   align-items: center;
+  height: 40px;
   justify-content: flex-end;
   grid-column-gap: 44px;
   border-bottom: 1px solid var(--grey-300);

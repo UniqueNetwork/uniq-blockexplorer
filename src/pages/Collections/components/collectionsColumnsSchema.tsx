@@ -17,8 +17,8 @@ export const getCollectionsColumns = (
   timestamp: number,
 ) => [
   {
-    dataIndex: 'collection_id',
-    key: 'collection_id',
+    dataIndex: 'name',
+    key: 'name',
     render: (value: string, item: unknown) => (
       <CollectionTableCell
         chainId={chainId}
@@ -29,9 +29,9 @@ export const getCollectionsColumns = (
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="collection_id"
+        dataIndex="name"
         orderBy={orderBy}
-        title="Collection"
+        title="Collection name"
         onOrderChange={onOrderChange}
       />
     ),
