@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 
 import { PagePaperWrapper, Stub } from '@app/components';

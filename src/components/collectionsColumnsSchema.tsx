@@ -1,20 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Text } from '@unique-nft/ui-kit';
 
-import { timeDifference } from '@app/utils';
+import { timestampTableFormat } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
-import { Collection, CollectionSorting } from '../../../api/graphQL';
-import CollectionTableCell from '../../../components/CollectionTableCell';
-import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import { Collection, CollectionSorting } from '../api/graphQL';
+import CollectionTableCell from './CollectionTableCell';
+import TableSortableColumnTitle from './TableSortableColumnTitle';
+import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
 export const getCollectionsColumns = (
   chainId: string,
   orderBy: CollectionSorting,
   onOrderChange: (orderBy: CollectionSorting) => void,
-  timestamp: number,
 ) => [
   {
     dataIndex: 'collection_id',
@@ -35,34 +33,28 @@ export const getCollectionsColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 180,
+    width: 150,
   },
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
-    render: (value: number) => {
-      return (
-        <Text size="m" weight="regular">
-          {timeDifference(value, timestamp)}
-        </Text>
-      );
-    },
+    render: timestampTableFormat,
     title: (
       <TableSortableColumnTitle
         dataIndex="date_of_creation"
         orderBy={orderBy}
-        title="Created"
+        title="Date"
         onOrderChange={onOrderChange}
       />
     ),
-    width: 120,
+    width: 100,
   },
   {
     dataIndex: 'owner',
     key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
-    width: 150,
+    width: 100,
   },
   {
     dataIndex: 'holders_count',
@@ -96,19 +88,6 @@ export const getCollectionsColumns = (
         dataIndex={'tokens_count'}
         orderBy={orderBy}
         title={'Items'}
-        onOrderChange={onOrderChange}
-      />
-    ),
-    width: 100,
-  },
-  {
-    dataIndex: 'transfers_count',
-    key: 'transfers_count',
-    title: (
-      <TableSortableColumnTitle
-        dataIndex="transfers_count"
-        orderBy={orderBy}
-        title="Transfers"
         onOrderChange={onOrderChange}
       />
     ),

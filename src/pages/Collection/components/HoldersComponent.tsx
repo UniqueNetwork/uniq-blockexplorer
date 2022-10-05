@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { useDeviceSize, DeviceSize } from '@app/hooks';

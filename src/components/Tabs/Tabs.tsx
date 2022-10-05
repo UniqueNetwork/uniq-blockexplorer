@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
+import classNames from 'classnames';
+import styled from 'styled-components/macro';
 
 import { DeviceSizes } from '@app/hooks';
 

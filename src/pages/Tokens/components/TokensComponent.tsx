@@ -1,7 +1,7 @@
 import { Skeleton } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useContext, useMemo } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Token, useGraphQlTokens } from '@app/api';
 import {

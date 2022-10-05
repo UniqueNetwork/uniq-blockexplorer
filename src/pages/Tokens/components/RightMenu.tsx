@@ -1,12 +1,12 @@
 import { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
+import { UserEvents } from '@app/analytics/user_analytics';
 import { Select, SVGIcon, ViewType } from '@app/components';
 import { DeviceSizes } from '@app/hooks';
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import ToolbarContext from '@app/toolbarContext/toolbarContext';
 import { logUserEvents } from '@app/utils';
-import { UserEvents } from '@app/analytics/user_analytics';
 
 export const RightMenu = () => {
   const { sort, selectSort, view, setView } = useContext(ToolbarContext);

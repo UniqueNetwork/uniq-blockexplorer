@@ -1,6 +1,6 @@
 import { Text } from '@unique-nft/ui-kit';
 import { FC, useCallback, useMemo } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Sorting } from '@app/api/graphQL/types';
 

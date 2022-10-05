@@ -11,6 +11,7 @@ export * from './IdentityIcon';
 export * from './RouterTabs';
 export * from './Select';
 export * from './SVGIcon';
+export * from './PageHeading';
 export * from './PagePaper';
 export * from './Pagination';
 export * from './Tabs';

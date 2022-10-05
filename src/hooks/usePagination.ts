@@ -63,8 +63,10 @@ const getTotalPages = (
   /*
     No right dots to show, but left dots to be shown
   */
+  const coefForRightItemsCount = siblingCount === 1 ? 2 : 3;
+
   if (shouldShowLeftDots && !shouldShowRightDots) {
-    const rightItemCount = 3 + 2 * siblingCount;
+    const rightItemCount = coefForRightItemsCount + 2 * siblingCount;
     const rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount);
 
     return [firstPageIndex, DOTS, ...rightRange];

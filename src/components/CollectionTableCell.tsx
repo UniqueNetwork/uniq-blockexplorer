@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react';
 import { Text } from '@unique-nft/ui-kit';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 
 import { UserEvents } from '@app/analytics/user_analytics';

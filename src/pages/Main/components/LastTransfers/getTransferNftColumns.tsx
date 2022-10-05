@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Text } from '@unique-nft/ui-kit';
 
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';

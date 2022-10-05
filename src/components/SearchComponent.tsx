@@ -1,7 +1,7 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
 import { createRef, FC, useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { SVGIcon } from '@app/components/SVGIcon';

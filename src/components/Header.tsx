@@ -1,21 +1,14 @@
-import React, { FC, useCallback } from 'react';
-import styled from 'styled-components';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FC, useCallback } from 'react';
+import styled from 'styled-components/macro';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 
-import {
-  DeviceSize,
-  DeviceSizes,
-  useApi,
-  useDeviceSize,
-  useSearchFromQuery,
-} from '@app/hooks';
+import { useApi } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Select, SelectOptionProps } from '@app/components';
 import { capitalizeFirstLetter } from '@app/components/utils';
 import { IconType } from '@app/images/icons';
-import SearchComponent from '@app/components/SearchComponent';
 
 import config from '../config';
 import MobileMenu from './MobileMenu';
@@ -23,25 +16,20 @@ import { Menu } from './Menu';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
-  const deviceSize = useDeviceSize();
-  const location = useLocation();
+
   const navigate = useNavigate();
   const [queryParams, setQueryParams] = useSearchParams();
-  const isDesktop = deviceSize > DeviceSize.md;
-  const { setSearchString } = useSearchFromQuery();
-  const isNotMainPage =
-    location.pathname !== `/${currentChain.network}/` &&
-    location.pathname !== `/${currentChain.network}`;
-  const canShowSearch = isDesktop && isNotMainPage;
 
   const onLogoClick = useCallback(() => {
+    const onTheMainPage =
+      window.location.pathname === `/${currentChain?.network.toLowerCase()}/`;
     queryParams.delete('search');
     setQueryParams(queryParams);
 
-    if (!isNotMainPage) {
+    if (onTheMainPage) {
       window.location.reload();
     }
-  }, [isNotMainPage, queryParams, setQueryParams]);
+  }, [currentChain?.network, queryParams, setQueryParams]);
 
   const onSelectChange = useCallback(
     (option: SelectOptionProps) => {
@@ -66,7 +54,7 @@ const Header: FC = () => {
 
   return (
     <>
-      <HeaderWrapper canShowSearch={canShowSearch} data-automation-id="header">
+      <HeaderWrapper data-automation-id="header">
         <HeaderNavWrapper>
           <Link
             to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}`}
@@ -78,9 +66,6 @@ const Header: FC = () => {
             <Menu />
           </HeaderNav>
         </HeaderNavWrapper>
-        {canShowSearch && (
-          <SearchComponent placeholder="Global search" onSearchChange={setSearchString} />
-        )}
         <ChainsSelectWrapper>
           <ChainsSelect
             options={Object.values(config.chains).map(({ network, name }) => ({
@@ -102,35 +87,19 @@ const Header: FC = () => {
   );
 };
 
-const HeaderWrapper = styled.div.attrs<{ canShowSearch?: boolean }>((props) => ({
-  canShowSearch: props.canShowSearch,
-}))<{ canShowSearch?: boolean }>`
-  display: grid;
-  grid-template-columns: ${(props) =>
-    props.canShowSearch ? '1fr 676px 180px' : '1fr 180px'};
+const HeaderWrapper = styled.div`
+  display: flex;
   column-gap: var(--gap);
   align-items: center;
   justify-content: space-between;
   width: 100%;
-
-  .global-search {
-    .unique-input-text {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: ${DeviceSizes.xl}) {
-    grid-template-columns: ${(props) =>
-      props.canShowSearch ? '1fr 302px 180px' : '1fr 180px'};
-  }
 `;
 
 const HeaderNavWrapper = styled.div`
   display: flex;
   column-gap: calc(var(--gap) * 2.5);
   align-items: center;
-
-  @media (max-width: ${DeviceSizes.sm}) {
+  @media (max-width: 767px) {
     column-gap: calc(var(--gap));
   }
 `;
@@ -171,7 +140,7 @@ const HeaderNav = styled.nav`
     }
   }
 
-  @media (max-width: ${DeviceSizes.lg}) {
+  @media (max-width: 991px) {
     display: none;
   }
 `;
@@ -189,31 +158,32 @@ const ChainsSelectWrapper = styled.div`
 
 const ChainsSelect = styled(Select)`
   .select-wrapper {
+    width: 250px;
     .icon-triangle {
       z-index: auto;
+      margin: 21px;
     }
-
     .select-value {
       border-radius: 8px;
-
-      > {
-        display: none;
-      }
+      padding: var(--gap);
     }
-
     .select-dropdown {
       top: 54px;
       border-radius: 8px;
     }
   }
 
-  @media (max-width: ${DeviceSizes.xxl}) {
-    .select-wrapper {
-      display: flex;
+  @media (max-width: 450px) {
+    width: auto;
 
+    .select-wrapper {
+      width: auto;
+      position: static;
+      display: flex;
       .select-value {
         font-size: 0;
-        width: 50px;
+        width: 32px;
+        margin-right: 0;
         svg,
         img {
           margin-right: 0 !important;
@@ -221,16 +191,14 @@ const ChainsSelect = styled(Select)`
       }
       .icon-triangle {
         top: auto;
-        right: 18px;
       }
       .select-dropdown {
         position: absolute;
-        top: 100%;
-        left: 0;
+        width: 160px;
+        height: auto;
         right: 0;
-        border: 0;
-        border-radius: 0;
-        height: calc(100vh - 80px);
+        left: auto;
+        border-radius: var(--prop-border-radius);
         background-color: var(--white-color);
         padding: calc(var(--gap) * 1.5) var(--gap);
         box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,

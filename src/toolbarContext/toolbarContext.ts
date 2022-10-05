@@ -14,6 +14,8 @@ export type ToolbarContextProps = {
   setQueryParams: (param: URLSearchParams) => void;
   orderBy: TokenSorting;
   setOrderBy: (orderBy: TokenSorting) => void;
+  nesting: boolean;
+  setNesting: (param: boolean) => void;
 };
 
 const ToolbarContext: Context<ToolbarContextProps> = createContext(

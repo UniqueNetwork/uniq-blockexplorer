@@ -19,15 +19,21 @@ const ToolbarContextWrapper = ({ children }: ToolbarContextWrapperProps) => {
   const [sort, selectSort] = useState<SelectOptionProps>(OPTIONS[3]);
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
   const [queryParams, setQueryParams] = useSearchParams();
+  const [nesting, setNesting] = useState<boolean>(queryParams.get('nesting') === 'true');
 
   useEffect(() => {
     const sortFromQuery = queryParams.get('sort');
+    const nestingFromQuery = queryParams.get('nesting') ? true : false;
     const splitSort = sortFromQuery?.split('-');
     const currentSorting = OPTIONS.find((option) => {
       if (splitSort) {
         return option.sortDir === splitSort[1] && option.sortField === splitSort[0];
       }
     });
+
+    if (nestingFromQuery) {
+      setNesting(nestingFromQuery);
+    }
 
     if (currentSorting) {
       selectSort(currentSorting);
@@ -54,6 +60,8 @@ const ToolbarContextWrapper = ({ children }: ToolbarContextWrapperProps) => {
       setQueryParams,
       orderBy,
       setOrderBy,
+      nesting,
+      setNesting,
     }),
     [view, searchString, sort, queryParams, setQueryParams, orderBy],
   );
