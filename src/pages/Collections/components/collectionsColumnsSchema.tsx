@@ -22,8 +22,8 @@ export const getCollectionsColumns = (
     render: (value: string, item: unknown) => (
       <CollectionTableCell
         chainId={chainId}
-        collectionId={value}
-        collectionName={(item as Collection).name}
+        collectionId={(item as Collection).collection_id.toString()}
+        collectionName={value}
         coverImageUrl={getCoverURLFromCollection((item as Collection).collection_cover)}
       />
     ),
