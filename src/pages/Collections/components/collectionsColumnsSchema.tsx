@@ -17,21 +17,21 @@ export const getCollectionsColumns = (
   timestamp: number,
 ) => [
   {
-    dataIndex: 'collection_id',
-    key: 'collection_id',
+    dataIndex: 'name',
+    key: 'name',
     render: (value: string, item: unknown) => (
       <CollectionTableCell
         chainId={chainId}
-        collectionId={value}
-        collectionName={(item as Collection).name}
+        collectionId={(item as Collection).collection_id.toString()}
+        collectionName={value}
         coverImageUrl={getCoverURLFromCollection((item as Collection).collection_cover)}
       />
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="collection_id"
+        dataIndex="name"
         orderBy={orderBy}
-        title="Collection"
+        title="Collection name"
         onOrderChange={onOrderChange}
       />
     ),

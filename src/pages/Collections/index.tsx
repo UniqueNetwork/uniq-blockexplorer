@@ -67,6 +67,10 @@ const CollectionsPage: FC = () => {
       const orderBy = split ? { [split[0]]: split[1] } : ({} as CollectionSorting);
       setOrderBy(orderBy);
     }
+
+    if (queryParams.get('collections_view')) {
+      setView(queryParams.get('collections_view') as ViewType);
+    }
   }, [queryParams]);
 
   let tokensFilter;
@@ -95,14 +99,14 @@ const CollectionsPage: FC = () => {
       filter,
       offset,
       orderBy,
-      pageSize,
+      pageSize: pageSizeNumber,
       searchString,
     });
 
   const { tokens } = useGraphQlTokens({
     filter: tokensFilter,
     offset: 0,
-    pageSize,
+    pageSize: pageSizeNumber,
   });
 
   const collectionsWithTokenCover = collections?.map((collection) => ({
@@ -121,6 +125,8 @@ const CollectionsPage: FC = () => {
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_COLLECTIONS);
     setView(ViewType.Grid);
+    queryParams.set('collections_view', `${ViewType.Grid}`);
+    setQueryParams(queryParams);
   };
 
   const selectSorting = (selected: SelectOptionProps) => {
@@ -139,6 +145,8 @@ const CollectionsPage: FC = () => {
   const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_COLLECTIONS);
     setView(ViewType.List);
+    queryParams.set('collections_view', `${ViewType.List}`);
+    setQueryParams(queryParams);
   };
 
   return (
@@ -160,7 +168,8 @@ const CollectionsPage: FC = () => {
               count={collectionsCount || 0}
               currentPage={currentPage}
               itemsName="Collections"
-              pageSize={{ id: pageSize }}
+              pageSize={pageSize}
+              setPageSize={setPageSizeAndQuery}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
               onPageChange={setCurrentPage}
             />
@@ -202,7 +211,8 @@ const CollectionsPage: FC = () => {
                 count={collectionsCount || 0}
                 currentPage={currentPage}
                 itemsName="Collections"
-                pageSize={{ id: pageSize }}
+                pageSize={pageSize}
+                setPageSize={setPageSizeAndQuery}
                 siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
                 onPageChange={setCurrentPage}
               />
@@ -251,13 +261,43 @@ const CollectionsList = styled.div`
 
 const TopPaginationContainer = styled.div`
   .pagination {
+    display: flex;
+    flex-direction: column;
     margin-bottom: calc(var(--gap) * 2);
+    align-items: flex-end;
+    gap: calc(var(--gap));
+    > div:first-of-type {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      > div:last-of-type {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--gap) / 2);
+      }
+    }
   }
 `;
 
 const BottomPaginationContainer = styled.div`
   .pagination {
+    display: flex;
+    flex-direction: column;
     margin-top: calc(var(--gap) * 2.25);
+    align-items: flex-end;
+    gap: calc(var(--gap));
+    > div:first-of-type {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      > div:last-of-type {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--gap) / 2);
+      }
+    }
   }
 `;
 

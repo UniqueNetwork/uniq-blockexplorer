@@ -30,9 +30,9 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
   const onArrowsClick = useCallback(() => {
     let orderValue;
 
-    if (!orderBy[dataIndex]) orderValue = 'asc_nulls_first';
+    if (!orderBy[dataIndex]) orderValue = 'desc_nulls_last';
 
-    if (orderBy[dataIndex] === 'asc_nulls_first') orderValue = 'desc_nulls_last';
+    if (orderBy[dataIndex] === 'desc_nulls_last') orderValue = 'asc_nulls_first';
 
     // If the current sorting is in the same column, change the value to the opposite
     if (dataIndex === Object.keys(orderBy)[0] && orderValue !== 'desc_nulls_last') {
