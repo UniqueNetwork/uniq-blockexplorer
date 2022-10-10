@@ -56,9 +56,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     currentChain.network,
   ]);
 
-  useEffect(() => {
-    setParamToQuery('search', searchString);
-  }, [searchString, setParamToQuery]);
   const showButton = collectionsCount > pageSize;
 
   const setSearch = (value: string) => {

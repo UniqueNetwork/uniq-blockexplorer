@@ -1,10 +1,15 @@
 import { Button } from '@unique-nft/ui-kit';
 import { createRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
-import { Select, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
-import SearchComponent from '@app/components/SearchComponent';
+import {
+  GlobalSearch,
+  Select,
+  SelectOptionProps,
+  SVGIcon,
+  ViewType,
+} from '@app/components';
 import { deviceWidth, useLocationPathname, useQueryParams } from '@app/hooks';
 import { defaultOrderId, OPTIONS as tokensOptions } from '@app/pages/Tokens/constants';
 import {
@@ -46,6 +51,12 @@ export const Toolbar = () => {
 
     return tokensOptions;
   };
+
+  useEffect(() => {
+    if (searchRef.current) {
+      searchRef.current.focus();
+    }
+  }, [searchRef]);
 
   const Options = getSortingOptions();
 
@@ -139,11 +150,7 @@ export const Toolbar = () => {
       case MobileType.Search:
         return (
           <SearchWrapper>
-            <SearchComponent
-              // searchRef={searchRef}
-              placeholder="Global search"
-              onSearchChange={() => {}}
-            />
+            <GlobalSearch searchRef={searchRef} />
           </SearchWrapper>
         );
       case MobileType.Filter:
@@ -275,10 +282,13 @@ const Mark = styled.div`
 `;
 const SearchWrapper = styled.div`
   width: 100%;
-  .global-search {
+  /* .global-search {
     .unique-input-text {
       width: 100%;
     }
+  } */
+  > div > div {
+    flex-grow: 1;
   }
 `;
 const SelectWrapper = styled.div`
