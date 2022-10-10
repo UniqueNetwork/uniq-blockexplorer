@@ -8,8 +8,9 @@ import {
   PagePaperWrapper,
   ScrollableTable,
   SelectOptionProps,
+  ViewType,
 } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize, useSearchFromQuery } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api';
@@ -20,24 +21,31 @@ import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
 import { getCollectionsColumns } from './components/collectionsColumnsSchema';
 
-export enum ViewType {
-  Grid = 'Grid',
-  List = 'List',
-}
-
 const CollectionsPage: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const searchFromQuery = useSearchFromQuery();
-  const [, selectSort] = useState<SelectOptionProps>();
+  const {
+    searchString: searchFromQuery,
+    accountId,
+    sort,
+    setParamToQuery,
+    view,
+  } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
-  const [view, setView] = useState<ViewType>(
-    (queryParams.get('collections_view') as ViewType) || ViewType.List,
-  );
-  const searchString = useSearchFromQuery();
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
-  const [orderBy, setOrderBy] = useState<CollectionSorting>(defaultOrderBy);
-  const [, setSearchString] = useState<string | undefined>(searchFromQuery);
+
+  // get sort from query string
+  const getOrderByFromQuery = () => {
+    const split = sort?.split('-');
+    return split ? { [split[0]]: split[1] } : ({} as CollectionSorting);
+  };
+  const [orderBy, setOrderBy] = useState<CollectionSorting>(
+    getOrderByFromQuery() || defaultOrderBy,
+  );
+
+  useEffect(() => {
+    setOrderBy(getOrderByFromQuery());
+  }, [sort]);
   const [nestingOn, setNestingOn] = useState<boolean>(
     queryParams.get('nesting') === 'true',
   );
@@ -52,19 +60,17 @@ const CollectionsPage: FC = () => {
 
   const setOrderAndQuery = (sorting: CollectionSorting) => {
     setOrderBy(sorting);
-    queryParams.set(
+    setParamToQuery(
       'sort',
       // @ts-ignore
       `${Object.keys(sorting)[0]}-${sorting[Object.keys(sorting)[0]]}`,
     );
-    setQueryParams(queryParams);
   };
 
   const setNestingAndQuery = () => {
     setNestingOn(!nestingOn);
     setCurrentPage(1);
-    queryParams.set('nesting', `${!nestingOn}`);
-    setQueryParams(queryParams);
+    setParamToQuery('nesting', `${!nestingOn}`);
   };
 
   const setPageSizeAndQuery = (option: SelectOptionProps) => {
@@ -73,23 +79,9 @@ const CollectionsPage: FC = () => {
     setQueryParams(queryParams);
   };
 
-  // get sort from query string
-  useEffect(() => {
-    if (queryParams.get('sort')) {
-      const split = queryParams.get('sort')?.split('-');
-      const orderBy = split ? { [split[0]]: split[1] } : ({} as CollectionSorting);
-      setOrderBy(orderBy);
-    }
-
-    if (queryParams.get('collections_view')) {
-      setView(queryParams.get('collections_view') as ViewType);
-    }
-  }, [queryParams]);
-
   let tokensFilter;
 
   const filter = useMemo(() => {
-    const accountId = queryParams.get('accountId');
     let filters = { _or: [{}], nesting_enabled: {} };
 
     if (accountId) {
@@ -113,7 +105,7 @@ const CollectionsPage: FC = () => {
       offset,
       orderBy,
       pageSize: pageSizeNumber,
-      searchString,
+      searchString: searchFromQuery,
     });
 
   const { tokens } = useGraphQlTokens({
@@ -131,15 +123,13 @@ const CollectionsPage: FC = () => {
       '',
   }));
 
-  useEffect(() => {
-    setSearchString(searchFromQuery);
-  }, [searchFromQuery]);
+  // useEffect(() => {
+  //   setSearchString(searchFromQuery);
+  // }, [searchFromQuery]);
 
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_COLLECTIONS);
-    setView(ViewType.Grid);
-    queryParams.set('collections_view', `${ViewType.Grid}`);
-    setQueryParams(queryParams);
+    setParamToQuery('view', `${ViewType.Grid}`);
   };
 
   const selectSorting = (selected: SelectOptionProps) => {
@@ -148,18 +138,14 @@ const CollectionsPage: FC = () => {
     });
 
     if (option && option.sortField) {
-      selectSort(option);
       setOrderBy({ [option.sortField]: option.sortDir });
-      queryParams.set('sort', `${option.sortField}-${option.sortDir}`);
-      setQueryParams(queryParams);
+      setParamToQuery('sort', `${option.sortField}-${option.sortDir}`);
     }
   };
 
   const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_COLLECTIONS);
-    setView(ViewType.List);
-    queryParams.set('collections_view', `${ViewType.List}`);
-    setQueryParams(queryParams);
+    setParamToQuery('view', `${ViewType.List}`);
   };
 
   return (
@@ -173,7 +159,7 @@ const CollectionsPage: FC = () => {
           selectGrid={selectGrid}
           selectList={selectList}
           setNestingOn={setNestingAndQuery}
-          view={view}
+          view={view as ViewType}
         />
         <div>
           <TopPaginationContainer>

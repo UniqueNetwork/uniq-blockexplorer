@@ -2,9 +2,8 @@ import { Button, InputText } from '@unique-nft/ui-kit';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { useSearchParams } from 'react-router-dom';
 
-import { useApi, useSearchFromQuery } from '@app/hooks';
+import { useApi, useQueryParams } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
@@ -19,8 +18,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
   placeholder,
   setResultExist,
 }) => {
-  const [queryParams, setQueryParams] = useSearchParams();
-  const searchFromQuery = useSearchFromQuery();
+  const { searchString: searchFromQuery, setParamToQuery } = useQueryParams();
   const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
   const { pathname } = useLocation();
 
@@ -53,20 +51,13 @@ const SearchComponent: FC<SearchComponentProps> = ({
       return;
     }
 
-    if (inputValue) {
-      queryParams.set('search', inputValue);
-    } else {
-      queryParams.delete('search');
-    }
-
-    setQueryParams(queryParams);
+    setParamToQuery('search', inputValue);
 
     onSearchChange(inputValue ? inputValue.trim() : inputValue);
   }, [
     pathname,
     inputValue,
-    setQueryParams,
-    queryParams,
+    setParamToQuery,
     onSearchChange,
     navigate,
     currentChain.network,
