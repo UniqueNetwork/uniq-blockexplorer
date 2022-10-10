@@ -5,3 +5,4 @@ export * from './useRandomColor';
 export * from './usePagination';
 export * from './useQueryParams';
 export * from './useScrollToTop';
+export * from './useLocationPathname';

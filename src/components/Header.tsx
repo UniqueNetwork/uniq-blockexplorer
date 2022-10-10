@@ -3,10 +3,10 @@ import styled from 'styled-components/macro';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 
-import { useApi } from '@app/hooks';
+import { DeviceSizes, useApi, useLocationPathname } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { Select, SelectOptionProps } from '@app/components';
+import { Search, Select, SelectOptionProps } from '@app/components';
 import { capitalizeFirstLetter } from '@app/components/utils';
 import { IconType } from '@app/images/icons';
 
@@ -16,6 +16,7 @@ import { Menu } from './Menu';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
+  const { notTheMainPage } = useLocationPathname();
 
   const navigate = useNavigate();
   const [queryParams, setQueryParams] = useSearchParams();
@@ -52,40 +53,85 @@ const Header: FC = () => {
     [navigate],
   );
 
+  const onGlobalSearch = (value: string) => {
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/`,
+      search: `?search=${value}`,
+    });
+  };
+
   return (
     <>
       <HeaderWrapper data-automation-id="header">
-        <HeaderNavWrapper>
-          <Link
-            to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}`}
-            onClick={onLogoClick}
-          >
-            <Logo alt="Logo" src="/logos/logo_product.svg" />
-          </Link>
-          <HeaderNav data-automation-id="desktop-menu">
-            <Menu />
-          </HeaderNav>
-        </HeaderNavWrapper>
-        <ChainsSelectWrapper>
-          <ChainsSelect
-            options={Object.values(config.chains).map(({ network, name }) => ({
-              iconLeft: {
-                name: `chain${capitalizeFirstLetter(network)}` as IconType,
-                height: 16,
-                width: 16,
-              },
-              id: network,
-              title: network === 'UNIQUE' ? name : capitalizeFirstLetter(network),
-            }))}
-            value={currentChain?.network}
-            onChange={onSelectChange}
-          />
-        </ChainsSelectWrapper>
+        <LeftSide>
+          <HeaderNavWrapper>
+            <Link
+              to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}`}
+              onClick={onLogoClick}
+            >
+              <Logo alt="Logo" src="/logos/logo_product.svg" />
+            </Link>
+            <HeaderNav data-automation-id="desktop-menu">
+              <Menu />
+            </HeaderNav>
+          </HeaderNavWrapper>
+        </LeftSide>
+        <RightSide>
+          {notTheMainPage && (
+            <SearchWrapper>
+              <Search
+                hideSearchButton
+                placeholder="Global search"
+                onSearchChange={onGlobalSearch}
+              />
+            </SearchWrapper>
+          )}
+          <ChainsSelectWrapper>
+            <ChainsSelect
+              options={Object.values(config.chains).map(({ network, name }) => ({
+                iconLeft: {
+                  name: `chain${capitalizeFirstLetter(network)}` as IconType,
+                  height: 16,
+                  width: 16,
+                },
+                id: network,
+                title: network === 'UNIQUE' ? name : capitalizeFirstLetter(network),
+              }))}
+              value={currentChain?.network}
+              onChange={onSelectChange}
+            />
+          </ChainsSelectWrapper>
+          <MobileMenu />
+        </RightSide>
       </HeaderWrapper>
-      <MobileMenu />
     </>
   );
 };
+
+const LeftSide = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const RightSide = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+`;
+
+const SearchWrapper = styled.div`
+  flex-grow: 1;
+  max-width: 614px;
+  margin-right: 40px;
+  > div > div {
+    width: auto;
+    flex-grow: 1;
+    margin-right: 0;
+  }
+  @media (max-width: ${DeviceSizes.md}) {
+    display: none;
+  }
+`;
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -140,7 +186,7 @@ const HeaderNav = styled.nav`
     }
   }
 
-  @media (max-width: 991px) {
+  @media (max-width: ${DeviceSizes.lg}) {
     display: none;
   }
 `;
@@ -154,56 +200,42 @@ const Logo = styled.img`
 const ChainsSelectWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
+  height: 40px;
 `;
 
 const ChainsSelect = styled(Select)`
+  width: auto;
+
   .select-wrapper {
-    width: 250px;
-    .icon-triangle {
-      z-index: auto;
-      margin: 21px;
-    }
+    width: auto;
+    position: static;
+    display: flex;
+    border-radius: calc(var(--gap) / 2);
+
     .select-value {
-      border-radius: 8px;
-      padding: var(--gap);
+      width: 32px;
+      font-size: 0;
+      margin-right: 0;
+      border-radius: calc(var(--gap) / 2);
+      svg,
+      img {
+        margin-right: 0 !important;
+      }
+    }
+    .icon-triangle {
+      top: auto;
     }
     .select-dropdown {
-      top: 54px;
-      border-radius: 8px;
-    }
-  }
-
-  @media (max-width: 450px) {
-    width: auto;
-
-    .select-wrapper {
-      width: auto;
-      position: static;
-      display: flex;
-      .select-value {
-        font-size: 0;
-        width: 32px;
-        margin-right: 0;
-        svg,
-        img {
-          margin-right: 0 !important;
-        }
-      }
-      .icon-triangle {
-        top: auto;
-      }
-      .select-dropdown {
-        position: absolute;
-        width: 160px;
-        height: auto;
-        right: 0;
-        left: auto;
-        border-radius: var(--prop-border-radius);
-        background-color: var(--white-color);
-        padding: calc(var(--gap) * 1.5) var(--gap);
-        box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
-          0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
-      }
+      position: absolute;
+      width: 160px;
+      height: auto;
+      right: 0;
+      left: auto;
+      border-radius: var(--prop-border-radius);
+      background-color: var(--white-color);
+      padding: calc(var(--gap) * 1.5) var(--gap);
+      box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
+        0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
     }
   }
 `;

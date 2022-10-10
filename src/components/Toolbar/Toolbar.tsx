@@ -1,11 +1,11 @@
 import { Button } from '@unique-nft/ui-kit';
-import { createRef, useContext, useEffect, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Select, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
 import SearchComponent from '@app/components/SearchComponent';
-import { deviceWidth, useQueryParams } from '@app/hooks';
+import { deviceWidth, useLocationPathname, useQueryParams } from '@app/hooks';
 import { defaultOrderId, OPTIONS as tokensOptions } from '@app/pages/Tokens/constants';
 import {
   defaultSorting,
@@ -25,7 +25,7 @@ export const Toolbar = () => {
   const { view, setParamToQuery, sort: sortFromQuery } = useQueryParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
-  const [currentLocation, setCurrentLocation] = useState(false);
+  const { tokensOrCollectionsPage: toolbarIsActive } = useLocationPathname();
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
@@ -72,14 +72,6 @@ export const Toolbar = () => {
     setStatePrev({ sort: sortFromQuery });
     checkDefaultSettings();
   }, [sortFromQuery]);
-
-  useEffect(() => {
-    if (location.pathname.match(`/(collections|tokens)`)) {
-      setCurrentLocation(true);
-    } else {
-      setCurrentLocation(false);
-    }
-  }, [location.pathname]);
 
   useEffect(() => {
     window.addEventListener('scroll', listenToScroll);
@@ -170,7 +162,7 @@ export const Toolbar = () => {
 
   return (
     <>
-      <Wrapper className={`${visibleToolbar && currentLocation ? 'show' : 'hide'}`}>
+      <Wrapper className={`${visibleToolbar && toolbarIsActive ? 'show' : 'hide'}`}>
         <WrapperShadow />
         <Buttons>
           <ButtonItem
