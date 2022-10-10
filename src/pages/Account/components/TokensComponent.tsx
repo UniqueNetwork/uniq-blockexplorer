@@ -1,11 +1,11 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { Token, useGraphQlTokens } from '@app/api';
 import { Search, TokenCard } from '@app/components';
-import { useApi } from '@app/hooks';
+import { useApi, useQueryParams } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { defaultSorting } from '@app/pages/Tokens/constants';
@@ -18,7 +18,7 @@ interface TokensComponentProps {
 const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [searchString, setSearchString] = useState<string>();
+  const { searchString, setParamToQuery } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
   // assume that we got the substrate address
   let substrateAddress = accountId;
@@ -45,6 +45,10 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
     searchString,
   });
   const showButton = tokensCount > pageSize;
+
+  const setSearch = (value: string) => {
+    setParamToQuery('search', value);
+  };
 
   const onClickSeeMore = useCallback(() => {
     let params: { accountId?: string; search?: string; sort?: string } = {};
@@ -75,7 +79,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
   return (
     <>
       <ControlsWrapper>
-        <Search placeholder="NFT / collection" onSearchChange={setSearchString} />
+        <Search placeholder="NFT / collection" onSearchChange={setSearch} />
       </ControlsWrapper>
       <ItemsCountWrapper>{tokensCount || 0} items</ItemsCountWrapper>
       <TokensWrapper>

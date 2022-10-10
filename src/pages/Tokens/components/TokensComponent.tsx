@@ -62,7 +62,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   view,
 }) => {
   const deviceSize = useDeviceSize();
-  const { accountId, collectionId, searchString } = useQueryParams();
+  const { accountId, collectionId, searchString, setParamToQuery } = useQueryParams();
   const { currentChain } = useApi();
 
   const pageSizeNumber = pageSize.id as number;
@@ -83,8 +83,8 @@ const TokensComponent: FC<TokensComponentProps> = ({
     [],
   );
 
-  const onSearchChange = (value: string) => {
-    console.log('onSearchChange in Tokens component');
+  const setSearch = (value: string) => {
+    setParamToQuery('search', value);
   };
 
   return (
@@ -92,7 +92,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
       <Search
         placeholder="NFT / collection"
         // value={searchString}
-        onSearchChange={onSearchChange}
+        onSearchChange={setSearch}
       />
       <TopPaginationContainer>
         <Pagination

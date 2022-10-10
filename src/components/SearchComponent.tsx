@@ -1,5 +1,5 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { createRef, FC, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
@@ -14,6 +14,7 @@ interface SearchComponentProps {
   onSearchChange(value: string | undefined): void;
   setResultExist?: (value: boolean) => void;
   hideSearchButton?: boolean;
+  searchRef?: React.RefObject<HTMLInputElement>;
 }
 
 const SearchComponent: FC<SearchComponentProps> = ({
@@ -21,6 +22,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
   placeholder,
   setResultExist,
   hideSearchButton = false,
+  searchRef,
 }) => {
   const { searchString: searchFromQuery, setParamToQuery } = useQueryParams();
   const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
@@ -29,9 +31,11 @@ const SearchComponent: FC<SearchComponentProps> = ({
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
+  const ref = searchRef || createRef();
 
   const clearSearch = () => {
     setInputValue('');
+    ref.current?.focus();
   };
 
   useEffect(() => {
@@ -59,7 +63,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
       return;
     }
 
-    setParamToQuery('search', inputValue);
+    // setParamToQuery('search', inputValue);
 
     onSearchChange(inputValue ? inputValue.trim() : inputValue);
   }, [
@@ -90,6 +94,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
       <SearchInput
         iconLeft={{ name: 'magnify', size: 18 }}
         placeholder={placeholder}
+        ref={ref}
         value={inputValue}
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}

@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { DeviceSizes, useApi, useLocationPathname } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { Search, Select, SelectOptionProps } from '@app/components';
+import { GlobalSearch, Select, SelectOptionProps } from '@app/components';
 import { capitalizeFirstLetter } from '@app/components/utils';
 import { IconType } from '@app/images/icons';
 
@@ -53,13 +53,6 @@ const Header: FC = () => {
     [navigate],
   );
 
-  const onGlobalSearch = (value: string) => {
-    navigate({
-      pathname: `/${currentChain.network.toLowerCase()}/`,
-      search: `?search=${value}`,
-    });
-  };
-
   return (
     <>
       <HeaderWrapper data-automation-id="header">
@@ -79,11 +72,7 @@ const Header: FC = () => {
         <RightSide>
           {notTheMainPage && (
             <SearchWrapper>
-              <Search
-                hideSearchButton
-                placeholder="Global search"
-                onSearchChange={onGlobalSearch}
-              />
+              <GlobalSearch />
             </SearchWrapper>
           )}
           <ChainsSelectWrapper>
