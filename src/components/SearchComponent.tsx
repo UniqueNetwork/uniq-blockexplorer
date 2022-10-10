@@ -7,16 +7,20 @@ import { useApi, useQueryParams } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 
+import { SVGIcon } from '.';
+
 interface SearchComponentProps {
   placeholder?: string;
   onSearchChange(value: string | undefined): void;
   setResultExist?: (value: boolean) => void;
+  hideSearchButton?: boolean;
 }
 
 const SearchComponent: FC<SearchComponentProps> = ({
   onSearchChange,
   placeholder,
   setResultExist,
+  hideSearchButton = false,
 }) => {
   const { searchString: searchFromQuery, setParamToQuery } = useQueryParams();
   const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
@@ -25,6 +29,10 @@ const SearchComponent: FC<SearchComponentProps> = ({
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
+
+  const clearSearch = () => {
+    setInputValue('');
+  };
 
   useEffect(() => {
     setInputValue(searchFromQuery);
@@ -86,12 +94,18 @@ const SearchComponent: FC<SearchComponentProps> = ({
         onChange={onChangeSearchString}
         onKeyDown={onSearchKeyDown}
       />
-      <Button role={'primary'} title="Search" onClick={onSearch} />
+      {!!inputValue && (
+        <ClearSearch onClick={clearSearch}>
+          <SVGIcon name="close" width={8} height={8} />
+        </ClearSearch>
+      )}
+      {!hideSearchButton && <Button role="primary" title="Search" onClick={onSearch} />}
     </SearchWrapper>
   );
 };
 
 const SearchWrapper = styled.div`
+  position: relative;
   display: flex;
   height: 40px;
 
@@ -102,6 +116,13 @@ const SearchWrapper = styled.div`
       display: none;
     }
   }
+`;
+
+const ClearSearch = styled.div`
+  position: absolute;
+  cursor: pointer;
+  right: 20px;
+  top: 16px;
 `;
 
 const SearchInput = styled(InputText)`
