@@ -1,9 +1,9 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
-import { useApi, useSearchFromQuery } from '@app/hooks';
+import { useApi, useQueryParams } from '@app/hooks';
 import { Collection, useGraphQlCollections } from '@app/api/graphQL';
 import { Search } from '@app/components';
 import { defaultSorting } from '@app/pages/Collections/constants';
@@ -19,9 +19,8 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const searchFromQuery = useSearchFromQuery();
+  const { searchString, setParamToQuery } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
-  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
 
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
@@ -58,14 +57,18 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   ]);
 
   useEffect(() => {
-    setSearchString(searchFromQuery);
-  }, [searchFromQuery]);
+    setParamToQuery('search', searchString);
+  }, [searchString, setParamToQuery]);
   const showButton = collectionsCount > pageSize;
+
+  const setSearch = (value: string) => {
+    setParamToQuery('search', value);
+  };
 
   return (
     <>
       <ControlsWrapper>
-        <Search placeholder="NFT / collection" onSearchChange={setSearchString} />
+        <Search placeholder="NFT / collection" onSearchChange={setSearch} />
       </ControlsWrapper>
       <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
       <CollectionsWrapper>

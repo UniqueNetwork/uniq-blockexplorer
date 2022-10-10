@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 
-import { useSearchFromQuery } from '@app/hooks';
 import { TokenSorting } from '@app/api';
 import { SelectOptionProps } from '@app/components';
 
@@ -21,8 +20,6 @@ export const NFTs: FC<NFTsProps> = ({
   setPageSize,
   view,
 }) => {
-  const searchFromQuery = useSearchFromQuery();
-  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   return (
@@ -31,9 +28,7 @@ export const NFTs: FC<NFTsProps> = ({
       orderBy={orderBy}
       pageSize={pageSize}
       setPageSize={setPageSize}
-      searchString={searchString}
       setCurrentPage={setCurrentPage}
-      setSearchString={setSearchString}
       setOrderBy={setOrderBy}
       view={view}
     />

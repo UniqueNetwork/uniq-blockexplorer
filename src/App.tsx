@@ -1,8 +1,9 @@
 import './app.scss';
-import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Notifications } from '@unique-nft/ui-kit';
 import amplitude from 'amplitude-js';
+
+import { Toolbar } from '@app/components/Toolbar';
 
 import PageLayout from './components/PageLayout';
 // contains gql and rpc with contexts and providers
@@ -27,6 +28,7 @@ export default function App() {
           <PageLayout>
             <Outlet />
           </PageLayout>
+          <Toolbar />
         </ApiWrapper>
       </Notifications>
     </div>

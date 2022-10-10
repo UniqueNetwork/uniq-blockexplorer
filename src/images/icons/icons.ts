@@ -13,3 +13,6 @@ export { default as list } from './list.svg';
 export { default as magnifier } from './magnifier.svg';
 export { default as triangle } from './triangle.svg';
 export { default as question } from './question.svg';
+export { default as filter } from './filter.svg';
+export { default as mark } from './mark.svg';
+export { default as search } from './search.svg';

@@ -63,5 +63,6 @@ export const OPTIONS: TokensSelectOption[] = [
 
 export const defaultOrderBy: TokenSorting = { date_of_creation: 'desc_nulls_last' };
 export const defaultSorting: string = 'date_of_creation-desc_nulls_last';
+export const defaultOrderId = 3;
 
 export const DEFAULT_PAGE_SIZE = 24;
