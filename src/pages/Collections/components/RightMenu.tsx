@@ -5,7 +5,7 @@ import { Toggle } from '@unique-nft/ui-kit';
 
 import { OPTIONS } from '@app/pages/Collections/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
-import { DeviceSizes } from '@app/hooks';
+import { DeviceSizes, deviceWidth } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 
 interface RightMenuProps {
@@ -79,13 +79,16 @@ const SelectStyled = styled(Select)`
 `;
 
 const RightTabMenu = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   height: 40px;
   justify-content: flex-end;
   grid-column-gap: 44px;
   border-bottom: 1px solid var(--grey-300);
   padding-bottom: calc(var(--gap) * 1.5);
+  @media ${deviceWidth.biggerThan.md} {
+    display: flex;
+  }
 `;
 
 const Controls = styled.div`

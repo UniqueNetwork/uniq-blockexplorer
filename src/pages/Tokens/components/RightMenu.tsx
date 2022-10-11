@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
-import { DeviceSizes } from '@app/hooks';
+import { DeviceSizes, deviceWidth } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 
 interface RightMenuProps {
@@ -37,7 +37,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
-      <Select options={OPTIONS} value={sort?.id as string} onChange={selectSort} />
+      <SelectStyled options={OPTIONS} value={sort?.id as string} onChange={selectSort} />
       <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>
@@ -63,9 +63,16 @@ export const RightMenu: FC<RightMenuProps> = ({
 };
 
 const RightTabMenu = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   grid-column-gap: 44px;
+  @media ${deviceWidth.biggerThan.md} {
+    display: flex;
+  }
+`;
+
+const SelectStyled = styled(Select)`
+  width: 180px;
 `;
 
 const Controls = styled.div`

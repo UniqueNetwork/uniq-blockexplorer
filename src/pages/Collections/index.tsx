@@ -26,6 +26,7 @@ const CollectionsPage: FC = () => {
   const {
     searchString: searchFromQuery,
     accountId,
+    nesting,
     sort,
     setParamToQuery,
     view,
@@ -46,9 +47,6 @@ const CollectionsPage: FC = () => {
   useEffect(() => {
     setOrderBy(getOrderByFromQuery());
   }, [sort]);
-  const [nestingOn, setNestingOn] = useState<boolean>(
-    queryParams.get('nesting') === 'true',
-  );
 
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
     id: Number(queryParams.get('pageSize')) || DEFAULT_PAGE_SIZE,
@@ -68,9 +66,8 @@ const CollectionsPage: FC = () => {
   };
 
   const setNestingAndQuery = () => {
-    setNestingOn(!nestingOn);
     setCurrentPage(1);
-    setParamToQuery('nesting', `${!nestingOn}`);
+    setParamToQuery('nesting', nesting === 'true' ? 'false' : 'true');
   };
 
   const setPageSizeAndQuery = (option: SelectOptionProps) => {
@@ -92,12 +89,12 @@ const CollectionsPage: FC = () => {
       tokensFilter = { ...filters };
     }
 
-    if (nestingOn) {
+    if (nesting === 'true') {
       filters.nesting_enabled = { _eq: 'true' };
     }
 
     return filters;
-  }, [queryParams]);
+  }, [accountId, nesting]);
 
   const { collections, collectionsCount, isCollectionsFetching, timestamp } =
     useGraphQlCollections({
@@ -122,10 +119,6 @@ const CollectionsPage: FC = () => {
         ?.fullUrl ||
       '',
   }));
-
-  // useEffect(() => {
-  //   setSearchString(searchFromQuery);
-  // }, [searchFromQuery]);
 
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_COLLECTIONS);
@@ -154,7 +147,7 @@ const CollectionsPage: FC = () => {
       <PagePaper>
         <RightMenu
           key="top-right-menu"
-          nestingOn={nestingOn}
+          nestingOn={nesting === 'true'}
           selectSort={selectSorting}
           selectGrid={selectGrid}
           selectList={selectList}

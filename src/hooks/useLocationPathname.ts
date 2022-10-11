@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 export const useLocationPathname = () => {
   const [notTheMainPage, setNotTheMainPage] = useState(false);
   const [tokensOrCollectionsPage, setTokensOrCollectionsPage] = useState(false);
+  const [collectionsPage, setCollectionsPage] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -18,7 +19,13 @@ export const useLocationPathname = () => {
     } else {
       setTokensOrCollectionsPage(false);
     }
+
+    if (location.pathname.match(`/(collections)`)) {
+      setCollectionsPage(true);
+    } else {
+      setCollectionsPage(false);
+    }
   }, [location.pathname]);
 
-  return { notTheMainPage, tokensOrCollectionsPage };
+  return { collectionsPage, notTheMainPage, tokensOrCollectionsPage };
 };
