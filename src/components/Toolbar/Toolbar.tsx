@@ -237,7 +237,7 @@ export const Toolbar = () => {
             }}
           >
             <SVGIcon name="filter" width={32} height={32} />
-            {sortLocal && defaultOrderId !== sortLocal?.id && (
+            {!allDefaultSettings && (
               <Mark>
                 <SVGIcon name="mark" width={12} height={12} />
               </Mark>
@@ -263,7 +263,7 @@ export const Toolbar = () => {
       </Wrapper>
 
       <MobileModal
-        visible={visibleModal}
+        visible={visibleModal && toolbarIsActive}
         setVisible={setVisibleModal}
         title={mobileType === MobileType.Filter ? 'Filter and sort' : 'Search'}
         actions={

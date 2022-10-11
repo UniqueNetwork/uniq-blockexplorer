@@ -51,6 +51,7 @@ const MobileMenuNav = styled.nav`
   top: 100%;
   left: 0;
   right: 0;
+  z-index: 9;
   height: calc(100vh - 80px);
   background-color: var(--white-color);
   padding: calc(var(--gap) * 1.5) var(--gap);
