@@ -8,7 +8,7 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
-import { useApi, useScrollToTop } from '@app/hooks';
+import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
@@ -29,7 +29,15 @@ const TokensPage: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentChain } = useApi();
-  const [view, setView] = useState<ViewType>(ViewType.List);
+  const {
+    searchString: searchFromQuery,
+    accountId,
+    nesting,
+    sort,
+    setParamToQuery,
+    view,
+  } = useQueryParams();
+  // const [view, setView] = useState<ViewType>(ViewType.List);
   const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
@@ -79,12 +87,12 @@ const TokensPage: FC = () => {
 
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
-    setView(ViewType.Grid);
+    setParamToQuery('view', `${ViewType.Grid}`);
   };
 
   const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
-    setView(ViewType.List);
+    setParamToQuery('view', `${ViewType.List}`);
   };
 
   useEffect(() => {
@@ -106,7 +114,7 @@ const TokensPage: FC = () => {
                   selectSort={selectSorting}
                   selectGrid={selectGrid}
                   selectList={selectList}
-                  view={view}
+                  view={view as ViewType}
                 />
               )}
             </>,
@@ -133,7 +141,7 @@ const TokensPage: FC = () => {
                 setOrderBy={setOrderAndQuery}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
-                view={view}
+                view={view as ViewType}
               />
             }
             path="nfts"

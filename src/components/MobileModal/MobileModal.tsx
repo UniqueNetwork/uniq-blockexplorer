@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { deviceWidth } from '@app/hooks';
 
@@ -102,7 +102,7 @@ const Modal = styled.div`
   border-radius: var(--gap) var(--gap) 0px 0px;
   display: flex;
   flex-direction: column;
-  justefy-content: space-between;
+  justify-content: space-between;
   transition: 0.2s;
   &.visible {
     max-height: 624px;
@@ -119,8 +119,10 @@ const Content = styled.div`
 
 const ModalBody = styled.div`
   display: flex;
+  flex-direction: column;
   height: 100%;
   margin-top: calc(var(--gap) * 2);
+  gap: 40px;
 `;
 
 const Actions = styled.div`

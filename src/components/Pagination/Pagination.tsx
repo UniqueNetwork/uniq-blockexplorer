@@ -130,6 +130,11 @@ const PaginationWrapper = styled.div`
     flex-direction: column;
     row-gap: calc(var(--gap) * 1.5);
   }
+  @media (max-width: ${DeviceSizes.xxs}) {
+    > div {
+      flex-direction: column;
+    }
+  }
 `;
 
 const PageNumbersWrapper = styled.ul`

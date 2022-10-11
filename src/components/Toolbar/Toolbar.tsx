@@ -1,4 +1,4 @@
-import { Button } from '@unique-nft/ui-kit';
+import { Button, Toggle } from '@unique-nft/ui-kit';
 import { createRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -27,29 +27,74 @@ export enum MobileType {
 }
 
 export const Toolbar = () => {
-  const { view, setParamToQuery, sort: sortFromQuery } = useQueryParams();
+  const { view, setParamToQuery, sort, nesting } = useQueryParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
-  const { tokensOrCollectionsPage: toolbarIsActive } = useLocationPathname();
+  const { tokensOrCollectionsPage: toolbarIsActive, collectionsPage } =
+    useLocationPathname();
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
   const location = useLocation();
 
-  const [statePrev, setStatePrev] = useState<{ sort?: string }>({ sort: sortFromQuery });
-  const [stateNew, setStateNew] = useState<{ sort?: string }>();
+  const [statePrev, setStatePrev] = useState<{ sort?: string; nesting?: string }>();
+  const [stateNew, setStateNew] = useState<{ sort?: string; nesting?: string }>();
 
-  const [sort, setSort] = useState<SelectOptionProps>();
+  const [sortLocal, setSortLocal] = useState<SelectOptionProps>();
+  const [nestingLocal, setNestingLocal] = useState<string | undefined>(
+    nesting || 'false',
+  );
   const [allDefaultSettings, setAllDefaultSettings] = useState<boolean>(true);
 
+  const itIsNoChange = () => {
+    return stateNew?.sort === statePrev?.sort && stateNew?.nesting === statePrev?.nesting;
+  };
+
+  useEffect(() => {
+    checkDefaultSettings();
+  }, [sortLocal, nestingLocal]);
+
+  const checkDefaultSettings = () => {
+    if (sortLocal && sortLocal.id !== defaultOrderId.toString()) {
+      setAllDefaultSettings(false);
+      return;
+    }
+
+    if (collectionsPage && nestingLocal && nestingLocal !== 'false') {
+      setAllDefaultSettings(false);
+      return;
+    }
+
+    setAllDefaultSettings(true);
+  };
+
+  // by opening modal
+  useEffect(() => {
+    //set the both state equal
+    setStatePrev({ sort });
+    setStateNew({ sort });
+    // checkDefaultSettings();
+
+    if (visibleModal && collectionsPage) {
+      setNestingLocal(nesting);
+      setStatePrev({ sort, nesting });
+      setStateNew({ sort, nesting });
+    }
+  }, [collectionsPage, visibleModal]);
+
   const getSortingOptions = () => {
-    if (location.pathname.match(`/(collections)`)) {
+    if (collectionsPage) {
       return collectionsOptions;
     } else if (location.pathname.match(`/(tokens)`)) {
       return tokensOptions;
     }
 
     return tokensOptions;
+  };
+
+  const nestingToggled = () => {
+    setStateNew({ ...stateNew, nesting: nestingLocal === 'true' ? 'false' : 'true' });
+    setNestingLocal(nestingLocal === 'true' ? 'false' : 'true');
   };
 
   useEffect(() => {
@@ -66,23 +111,21 @@ export const Toolbar = () => {
     });
 
     if (option && option.sortField) {
-      setSort(option);
-      // setOrderBy({ [option.sortField]: option.sortDir });
-      setStateNew({ sort: `${option.sortField}-${option.sortDir}` });
+      setSortLocal(option);
+      setStateNew({ ...stateNew, sort: `${option.sortField}-${option.sortDir}` });
     }
   };
 
   useEffect(() => {
-    const splitSort = sortFromQuery?.split('-');
+    const splitSort = sort?.split('-');
     const currentSorting = Options.find((option) => {
       if (splitSort) {
         return option.sortDir === splitSort[1] && option.sortField === splitSort[0];
       }
     });
-    setSort(currentSorting);
-    setStatePrev({ sort: sortFromQuery });
-    checkDefaultSettings();
-  }, [sortFromQuery]);
+    setSortLocal(currentSorting);
+    setStatePrev({ sort });
+  }, [sort]);
 
   useEffect(() => {
     window.addEventListener('scroll', listenToScroll);
@@ -94,10 +137,21 @@ export const Toolbar = () => {
   }, []);
 
   const handleApplyClick = () => {
-    setParamToQuery('sort', `${stateNew?.sort}`);
-    setStatePrev({ sort: `${stateNew?.sort}` });
+    //
+    // should use createParams!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // in order to navigation makes only ones
+    //
+    if (collectionsPage && stateNew?.nesting) {
+      console.log('1');
+      setParamToQuery('nesting', `${stateNew.nesting}`);
+    }
+
+    if (stateNew?.sort) {
+      console.log('2');
+      setParamToQuery('sort', `${stateNew?.sort}`);
+    }
+
     setVisibleModal(false);
-    setStateNew(undefined);
   };
 
   const handleResetAll = () => {
@@ -106,18 +160,13 @@ export const Toolbar = () => {
     });
 
     if (option && option.sortField) {
-      setSort(option);
-      // setOrderBy({ [option.sortField]: option.sortDir });
+      setSortLocal(option);
       setStateNew({ sort: `${option.sortField}-${option.sortDir}` });
     }
 
-    setAllDefaultSettings(true);
-  };
-
-  const checkDefaultSettings = () => {
-    if (sort && sort.id !== defaultOrderId.toString()) {
-      setAllDefaultSettings(false);
-      return;
+    if (collectionsPage) {
+      setNestingLocal('false');
+      setStateNew({ ...stateNew, nesting: 'false' });
     }
 
     setAllDefaultSettings(true);
@@ -156,13 +205,22 @@ export const Toolbar = () => {
       case MobileType.Filter:
       default:
         return (
-          <SelectWrapper>
-            <Select
-              options={Options}
-              value={sort?.id as string}
-              onChange={selectSorting}
-            />
-          </SelectWrapper>
+          <>
+            <SelectWrapper>
+              <Select
+                options={Options}
+                value={sortLocal?.id as string}
+                onChange={selectSorting}
+              />
+            </SelectWrapper>
+            {collectionsPage && (
+              <Toggle
+                label="Only nesting enabled"
+                on={nestingLocal === 'true'}
+                onChange={nestingToggled}
+              />
+            )}
+          </>
         );
     }
   };
@@ -179,7 +237,7 @@ export const Toolbar = () => {
             }}
           >
             <SVGIcon name="filter" width={32} height={32} />
-            {sort && defaultOrderId !== sort?.id && (
+            {sortLocal && defaultOrderId !== sortLocal?.id && (
               <Mark>
                 <SVGIcon name="mark" width={12} height={12} />
               </Mark>
@@ -196,7 +254,7 @@ export const Toolbar = () => {
           <ButtonItem onClick={toggleView}>
             <SVGIcon
               color="white"
-              name={view === ViewType.List ? 'list' : 'grid'}
+              name={view === ViewType.List ? 'grid' : 'list'}
               width={32}
               height={32}
             />
@@ -213,7 +271,7 @@ export const Toolbar = () => {
             <>
               <Button
                 wide
-                disabled={!stateNew || statePrev.sort === stateNew?.sort}
+                disabled={itIsNoChange()}
                 title="Apply"
                 role="primary"
                 onClick={handleApplyClick}
@@ -282,11 +340,6 @@ const Mark = styled.div`
 `;
 const SearchWrapper = styled.div`
   width: 100%;
-  /* .global-search {
-    .unique-input-text {
-      width: 100%;
-    }
-  } */
   > div > div {
     flex-grow: 1;
   }
