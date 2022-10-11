@@ -91,6 +91,8 @@ export const useQueryParams = () => {
 
     if (queryParams.get('nesting')) {
       setNesting(queryParams.get('nesting') as string);
+    } else {
+      setNesting('false');
     }
 
     if (queryParams.get('view')) {
