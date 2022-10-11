@@ -125,7 +125,13 @@ export const Toolbar = () => {
     });
     setSortLocal(currentSorting);
     setStatePrev({ sort });
+    checkDefaultSettings();
   }, [sort]);
+
+  useEffect(() => {
+    setNestingLocal(nesting);
+    checkDefaultSettings();
+  }, [nesting]);
 
   useEffect(() => {
     window.addEventListener('scroll', listenToScroll);
