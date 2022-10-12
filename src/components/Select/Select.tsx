@@ -213,6 +213,9 @@ const Wrapper = styled.div`
   font-size: var(--prop-font-size);
   font-weight: var(--prop-font-weight);
   position: relative;
+  &:focus &:active {
+    outline: none;
+  }
 
   label {
     color: var(--color-secondary-500);
@@ -258,6 +261,9 @@ const Wrapper = styled.div`
       .select-value {
         border: 1px solid var(--color-grey-400);
       }
+    }
+    &:focus {
+      outline: none;
     }
 
     .select-value {

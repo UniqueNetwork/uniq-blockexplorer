@@ -47,7 +47,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
   const showButton = tokensCount > pageSize;
 
   const setSearch = (value: string) => {
-    setParamToQuery('search', value);
+    setParamToQuery([{ name: 'search', value }]);
   };
 
   const onClickSeeMore = useCallback(() => {

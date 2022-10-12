@@ -22,7 +22,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 export default function App() {
   return (
-    <div className="app-wrapper">
+    <div id="app-wrapper" className="app-wrapper">
       <Notifications closingDelay={5000}>
         <ApiWrapper>
           <PageLayout>

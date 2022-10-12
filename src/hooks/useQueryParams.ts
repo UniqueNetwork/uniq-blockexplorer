@@ -3,6 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { ViewType } from '@app/components';
 
+export type TParam = {
+  name: string;
+  value?: string | ViewType;
+};
+
 export const useQueryParams = () => {
   const [queryParams, setQueryParams] = useSearchParams();
   const [searchString, setSearchString] = useState<string | undefined>(
@@ -43,32 +48,17 @@ export const useQueryParams = () => {
     }
   };
 
-  // for (const [key, value] of queryParams.entries()) {
-  //   console.log(`${key}, ${value}`);
-  // }
+  const setParamToQuery = (param: [TParam]) => {
+    param.forEach((param) => {
+      const { name, value } = param;
+      setFunction(name)(value);
 
-  // const serializeFromQuery = () => {
-  //   const arrayParams = queryParams.toString().split('&');
-  //   let params = {} as any;
-  //   arrayParams.forEach((param) => {
-  //     const a = param.split('=');
-  //     params[a[0]] = a[1];
-  //   });
-  //   return params;
-  // };
-
-  // const params = serializeFromQuery();
-  // console.log('params', params);
-
-  const setParamToQuery = (param: string, value?: string | ViewType) => {
-    setFunction(param)(value);
-
-    if (value) {
-      queryParams.set(`${param}`, value);
-    } else {
-      queryParams.delete(`${param}`);
-    }
-
+      if (value) {
+        queryParams.set(`${name}`, value);
+      } else {
+        queryParams.delete(`${name}`);
+      }
+    });
     setQueryParams(queryParams);
   };
 

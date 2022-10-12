@@ -24,7 +24,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
   hideSearchButton = false,
   searchRef,
 }) => {
-  const { searchString: searchFromQuery, setParamToQuery } = useQueryParams();
+  const { searchString: searchFromQuery } = useQueryParams();
   const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
   const { pathname } = useLocation();
 
@@ -63,17 +63,8 @@ const SearchComponent: FC<SearchComponentProps> = ({
       return;
     }
 
-    // setParamToQuery('search', inputValue);
-
     onSearchChange(inputValue ? inputValue.trim() : inputValue);
-  }, [
-    pathname,
-    inputValue,
-    setParamToQuery,
-    onSearchChange,
-    navigate,
-    currentChain.network,
-  ]);
+  }, [pathname, inputValue, onSearchChange, navigate, currentChain.network]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {

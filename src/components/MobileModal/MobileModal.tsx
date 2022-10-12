@@ -7,13 +7,13 @@ import { SVGIcon } from '../SVGIcon';
 
 export const MobileModal = ({
   visible,
-  setVisible,
+  onCloseModal,
   children,
   actions,
   title,
 }: {
   visible: boolean;
-  setVisible: (state: boolean) => void;
+  onCloseModal: () => void;
   children: JSX.Element;
   actions?: JSX.Element | null;
   title: string;
@@ -42,15 +42,13 @@ export const MobileModal = ({
     <Wrapper className={`${localVisible && visible && 'visible'}`}>
       <Background
         className={`${localVisible && visible && 'visible'}`}
-        onClick={() => {
-          setVisible(false);
-        }}
+        onClick={onCloseModal}
       />
       <Modal className={`${localVisible && visible && 'visible'}`}>
         <Content>
           <Header>
             <Heading2>{title}</Heading2>
-            <Close onClick={() => setVisible(false)}>
+            <Close onClick={onCloseModal}>
               <SVGIcon name="close" color="#091941" width={22} height={22} />
             </Close>
           </Header>

@@ -87,12 +87,12 @@ const TokensPage: FC = () => {
 
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
-    setParamToQuery('view', `${ViewType.Grid}`);
+    setParamToQuery([{ name: 'view', value: `${ViewType.Grid}` }]);
   };
 
   const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
-    setParamToQuery('view', `${ViewType.List}`);
+    setParamToQuery([{ name: 'view', value: `${ViewType.List}` }]);
   };
 
   useEffect(() => {
