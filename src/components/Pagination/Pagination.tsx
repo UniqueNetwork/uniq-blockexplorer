@@ -131,6 +131,7 @@ const PaginationWrapper = styled.div`
     row-gap: calc(var(--gap) * 1.5);
   }
   @media (max-width: ${DeviceSizes.xxs}) {
+    align-items: center !important;
     > div {
       flex-direction: column;
     }

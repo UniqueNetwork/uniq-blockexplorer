@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import styled from 'styled-components/macro';
 import { useNavigate } from 'react-router-dom';
 
 import { useApi, useQueryParams } from '@app/hooks';
@@ -22,7 +21,7 @@ const GlobalSearch: FC<GlobalSearchProps> = ({ searchRef }) => {
         search: `?search=${value}`,
       });
     } else {
-      setParamToQuery('search', '');
+      setParamToQuery([{ name: 'search', value: '' }]);
     }
   };
 
@@ -35,19 +34,5 @@ const GlobalSearch: FC<GlobalSearchProps> = ({ searchRef }) => {
     />
   );
 };
-
-// const SearchWrapper = styled.div`
-//   flex-grow: 1;
-//   max-width: 614px;
-//   margin-right: 40px;
-//   > div > div {
-//     width: auto;
-//     flex-grow: 1;
-//     margin-right: 0;
-//   }
-//   @media (max-width: ${DeviceSizes.md}) {
-//     display: none;
-//   }
-// `;
 
 export default GlobalSearch;

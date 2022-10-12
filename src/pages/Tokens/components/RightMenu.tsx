@@ -79,9 +79,9 @@ const Controls = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media (max-width: ${DeviceSizes.sm}) {
+  /* @media (max-width: ${DeviceSizes.sm}) {
     width: 100%;
-  }
+  } */
 `;
 
 const ViewButtons = styled.div`

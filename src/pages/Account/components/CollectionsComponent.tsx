@@ -1,6 +1,6 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback } from 'react';
 import styled from 'styled-components/macro';
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
 import { useApi, useQueryParams } from '@app/hooks';
@@ -20,7 +20,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const { searchString, setParamToQuery } = useQueryParams();
-  const [queryParams, setQueryParams] = useSearchParams();
 
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
@@ -42,24 +41,16 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
       params.search = searchString;
     }
 
-    setQueryParams(queryParams);
     navigate({
       pathname: `/${currentChain.network.toLowerCase()}/collections/`,
       search: `?${createSearchParams(params)}`,
     });
-  }, [
-    accountId,
-    searchString,
-    setQueryParams,
-    queryParams,
-    navigate,
-    currentChain.network,
-  ]);
+  }, [accountId, searchString, navigate, currentChain.network]);
 
   const showButton = collectionsCount > pageSize;
 
   const setSearch = (value: string) => {
-    setParamToQuery('search', value);
+    setParamToQuery([{ name: 'search', value }]);
   };
 
   return (

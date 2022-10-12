@@ -51,12 +51,7 @@ const MainPage = () => {
 
   return (
     <Wrapper>
-      <SearchHeader
-        searchModeOn={searchModeOn}
-        searchString={searchString}
-        setSearchString={setSearchString}
-        setResultExist={setResultExist}
-      />
+      <SearchHeader searchModeOn={searchModeOn} setResultExist={setResultExist} />
       {!searchModeOn && <TokenInformation />}
       <Tokens
         searchModeOn={searchModeOn}

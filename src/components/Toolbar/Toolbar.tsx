@@ -10,12 +10,9 @@ import {
   SVGIcon,
   ViewType,
 } from '@app/components';
-import { deviceWidth, useLocationPathname, useQueryParams } from '@app/hooks';
+import { deviceWidth, TParam, useLocationPathname, useQueryParams } from '@app/hooks';
 import { defaultOrderId, OPTIONS as tokensOptions } from '@app/pages/Tokens/constants';
-import {
-  defaultSorting,
-  OPTIONS as collectionsOptions,
-} from '@app/pages/Collections/constants';
+import { OPTIONS as collectionsOptions } from '@app/pages/Collections/constants';
 
 import { MobileModal } from '../MobileModal/MobileModal';
 
@@ -73,7 +70,6 @@ export const Toolbar = () => {
     //set the both state equal
     setStatePrev({ sort });
     setStateNew({ sort });
-    // checkDefaultSettings();
 
     if (visibleModal && collectionsPage) {
       setNestingLocal(nesting);
@@ -133,46 +129,62 @@ export const Toolbar = () => {
     checkDefaultSettings();
   }, [nesting]);
 
+  // function preventDefault(e: { preventDefault: () => void }) {
+  //   e.preventDefault();
+  // }
+
+  // function disableScroll(){
+  //     document.body.addEventListener('touchmove', preventDefault, { passive: false });
+  // }
+  // function enableScroll(){
+  //     document.body.removeEventListener('touchmove', preventDefault);
+  // }
+
   useEffect(() => {
-    window.addEventListener('scroll', listenToScroll);
-    window.addEventListener('keydown', keydown);
+    document.getElementById('app-wrapper')?.addEventListener('scroll', listenToScroll);
+    console.log(
+      'document.getElementById(app-wrapper)',
+      document.getElementById('app-wrapper'),
+    );
+    document.getElementById('app-wrapper')?.addEventListener('keydown', keydown);
     return () => {
-      window.removeEventListener('scroll', listenToScroll);
-      window.removeEventListener('keydown', keydown);
+      document
+        .getElementById('app-wrapper')
+        ?.removeEventListener('scroll', listenToScroll);
+      document.getElementById('app-wrapper')?.removeEventListener('keydown', keydown);
     };
   }, []);
 
   const handleApplyClick = () => {
-    //
-    // should use createParams!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // in order to navigation makes only ones
-    //
+    const params: [TParam] = [] as unknown as [TParam];
+
     if (collectionsPage && stateNew?.nesting) {
-      console.log('1');
-      setParamToQuery('nesting', `${stateNew.nesting}`);
+      params.push({ name: 'nesting', value: `${stateNew?.nesting}` });
     }
 
     if (stateNew?.sort) {
-      console.log('2');
-      setParamToQuery('sort', `${stateNew?.sort}`);
+      params.push({ name: 'sort', value: `${stateNew?.sort}` });
     }
+
+    setParamToQuery(params);
 
     setVisibleModal(false);
   };
 
   const handleResetAll = () => {
     const option = Options.find((item) => {
-      return item.id === '3';
+      return item.id === defaultOrderId.toString();
     });
 
-    if (option && option.sortField) {
+    if (!collectionsPage && option && option.sortField) {
       setSortLocal(option);
       setStateNew({ sort: `${option.sortField}-${option.sortDir}` });
     }
 
-    if (collectionsPage) {
+    if (collectionsPage && option) {
       setNestingLocal('false');
-      setStateNew({ ...stateNew, nesting: 'false' });
+      setSortLocal(option);
+      setStateNew({ sort: `${option.sortField}-${option.sortDir}`, nesting: 'false' });
     }
 
     setAllDefaultSettings(true);
@@ -185,7 +197,9 @@ export const Toolbar = () => {
   };
 
   const listenToScroll = () => {
-    const documentScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const documentScroll =
+      document.getElementById('app-wrapper')?.scrollTop ||
+      document.documentElement.scrollTop;
 
     if (documentScroll > localScroll) {
       setVisibleToolbar(false);
@@ -193,11 +207,28 @@ export const Toolbar = () => {
       setVisibleToolbar(true);
     }
 
-    localScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    localScroll =
+      document.getElementById('app-wrapper')?.scrollTop ||
+      document.documentElement.scrollTop;
   };
 
   const toggleView = () => {
-    setParamToQuery('view', view === ViewType.List ? ViewType.Grid : ViewType.List);
+    setParamToQuery([
+      { name: 'view', value: view === ViewType.List ? ViewType.Grid : ViewType.List },
+    ]);
+  };
+
+  const closeModal = () => {
+    setVisibleModal(false);
+    setNestingLocal(statePrev?.nesting);
+
+    const splitSort = statePrev?.sort?.split('-');
+    const currentSorting = Options.find((option) => {
+      if (splitSort) {
+        return option.sortDir === splitSort[1] && option.sortField === splitSort[0];
+      }
+    });
+    setSortLocal(currentSorting);
   };
 
   const ModalContent = () => {
@@ -270,7 +301,6 @@ export const Toolbar = () => {
 
       <MobileModal
         visible={visibleModal && toolbarIsActive}
-        setVisible={setVisibleModal}
         title={mobileType === MobileType.Filter ? 'Filter and sort' : 'Search'}
         actions={
           mobileType === MobileType.Filter ? (
@@ -291,6 +321,7 @@ export const Toolbar = () => {
             </>
           ) : null
         }
+        onCloseModal={closeModal}
       >
         <ModalContent />
       </MobileModal>

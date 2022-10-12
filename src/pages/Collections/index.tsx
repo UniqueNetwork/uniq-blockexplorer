@@ -58,16 +58,18 @@ const CollectionsPage: FC = () => {
 
   const setOrderAndQuery = (sorting: CollectionSorting) => {
     setOrderBy(sorting);
-    setParamToQuery(
-      'sort',
-      // @ts-ignore
-      `${Object.keys(sorting)[0]}-${sorting[Object.keys(sorting)[0]]}`,
-    );
+    setParamToQuery([
+      {
+        name: 'sort',
+        // @ts-ignore
+        value: `${Object.keys(sorting)[0]}-${sorting[Object.keys(sorting)[0]]}`,
+      },
+    ]);
   };
 
   const setNestingAndQuery = () => {
     setCurrentPage(1);
-    setParamToQuery('nesting', nesting === 'true' ? 'false' : 'true');
+    setParamToQuery([{ name: 'nesting', value: nesting === 'true' ? 'false' : 'true' }]);
   };
 
   const setPageSizeAndQuery = (option: SelectOptionProps) => {
@@ -122,7 +124,7 @@ const CollectionsPage: FC = () => {
 
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_COLLECTIONS);
-    setParamToQuery('view', `${ViewType.Grid}`);
+    setParamToQuery([{ name: 'view', value: `${ViewType.Grid}` }]);
   };
 
   const selectSorting = (selected: SelectOptionProps) => {
@@ -132,13 +134,13 @@ const CollectionsPage: FC = () => {
 
     if (option && option.sortField) {
       setOrderBy({ [option.sortField]: option.sortDir });
-      setParamToQuery('sort', `${option.sortField}-${option.sortDir}`);
+      setParamToQuery([{ name: 'sort', value: `${option.sortField}-${option.sortDir}` }]);
     }
   };
 
   const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_COLLECTIONS);
-    setParamToQuery('view', `${ViewType.List}`);
+    setParamToQuery([{ name: 'view', value: `${ViewType.List}` }]);
   };
 
   return (
