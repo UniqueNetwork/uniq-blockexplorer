@@ -79,6 +79,7 @@ export const NFTsTransfersSearchResult: VFC<LastTransfersProps> = ({
 };
 
 const StyledHeader = styled(Header)`
+  margin-bottom: 32px !important;
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

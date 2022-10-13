@@ -333,6 +333,7 @@ const WrapperShadow = styled.div`
   position: absolute;
   width: 192px;
   filter: blur(8px);
+  opacity: 0.24;
   height: 72px;
   bottom: -8px;
   border-radius: 16px;
