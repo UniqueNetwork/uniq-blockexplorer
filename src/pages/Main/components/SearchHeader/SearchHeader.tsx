@@ -50,7 +50,8 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
 };
 
 const SearchWrapper = styled.div`
-  width: 561px;
+  max-width: 561px;
+  width: 100%;
 `;
 
 const Wrapper = styled.div`
