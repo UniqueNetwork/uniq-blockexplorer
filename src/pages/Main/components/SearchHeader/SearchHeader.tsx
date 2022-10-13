@@ -38,14 +38,20 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
           <NetworkName networkColor={networkColor}>{networkName}</NetworkName>
         </H>
       )}
-      <SearchComponent
-        placeholder="Extrinsic / collection / NFT / account"
-        setResultExist={setResultExist}
-        onSearchChange={onSearchChange}
-      />
+      <SearchWrapper>
+        <SearchComponent
+          placeholder="Extrinsic / collection / NFT / account"
+          setResultExist={setResultExist}
+          onSearchChange={onSearchChange}
+        />
+      </SearchWrapper>
     </Wrapper>
   );
 };
+
+const SearchWrapper = styled.div`
+  width: 561px;
+`;
 
 const Wrapper = styled.div`
   display: flex;

@@ -113,6 +113,7 @@ const ControlsWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: var(--gap);
+  width: 561px;
 `;
 
 const ItemsCountWrapper = styled.div`
