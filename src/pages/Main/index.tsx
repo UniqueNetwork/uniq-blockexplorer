@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 
 import { PagePaperWrapper, Stub } from '@app/components';
+import { useQueryParams } from '@app/hooks/useQueryParams';
 
 import {
   Collections,
@@ -30,10 +31,7 @@ const MainPage = () => {
     transfersCoinsExist ||
     blocksExist;
 
-  const [searchParams] = useSearchParams();
-  const [searchString, setSearchString] = useState<string | undefined>(
-    searchParams.get('search') || '',
-  );
+  const { searchString } = useQueryParams();
 
   useEffect(() => {
     setResultExist(isResultExist);
@@ -42,12 +40,6 @@ const MainPage = () => {
   useEffect(() => {
     setSearchModeOn(!!searchString && searchString !== '');
   }, [searchString]);
-
-  useEffect(() => {
-    if (searchParams.get('search')) {
-      setSearchString(decodeURI(searchParams.get('search') as string));
-    } else setSearchString('');
-  }, [searchParams]);
 
   return (
     <Wrapper>

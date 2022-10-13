@@ -64,7 +64,7 @@ export const useQueryParams = () => {
 
   useEffect(() => {
     if (queryParams.get('search')) {
-      setSearchString(decodeURI(queryParams.get('search') as string));
+      setSearchString(queryParams.get('search') as string);
     } else setSearchString('');
 
     if (queryParams.get('accountId')) {
