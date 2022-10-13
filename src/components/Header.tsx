@@ -220,6 +220,7 @@ const ChainsSelect = styled(Select)`
       height: auto;
       right: 0;
       left: auto;
+      z-index: 10;
       border-radius: var(--prop-border-radius);
       background-color: var(--white-color);
       padding: calc(var(--gap) * 1.5) var(--gap);
