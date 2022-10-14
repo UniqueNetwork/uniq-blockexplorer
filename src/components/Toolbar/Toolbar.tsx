@@ -129,29 +129,12 @@ export const Toolbar = () => {
     checkDefaultSettings();
   }, [nesting]);
 
-  // function preventDefault(e: { preventDefault: () => void }) {
-  //   e.preventDefault();
-  // }
-
-  // function disableScroll(){
-  //     document.body.addEventListener('touchmove', preventDefault, { passive: false });
-  // }
-  // function enableScroll(){
-  //     document.body.removeEventListener('touchmove', preventDefault);
-  // }
-
   useEffect(() => {
-    document.getElementById('app-wrapper')?.addEventListener('scroll', listenToScroll);
-    console.log(
-      'document.getElementById(app-wrapper)',
-      document.getElementById('app-wrapper'),
-    );
-    document.getElementById('app-wrapper')?.addEventListener('keydown', keydown);
+    window.addEventListener('scroll', listenToScroll);
+    window.addEventListener('keydown', keydown);
     return () => {
-      document
-        .getElementById('app-wrapper')
-        ?.removeEventListener('scroll', listenToScroll);
-      document.getElementById('app-wrapper')?.removeEventListener('keydown', keydown);
+      window.removeEventListener('scroll', listenToScroll);
+      window.removeEventListener('keydown', keydown);
     };
   }, []);
 
@@ -197,19 +180,15 @@ export const Toolbar = () => {
   };
 
   const listenToScroll = () => {
-    const documentScroll =
-      document.getElementById('app-wrapper')?.scrollTop ||
-      document.documentElement.scrollTop;
+    const documentScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
-    if (documentScroll > localScroll) {
+    if (documentScroll > 0 && documentScroll > localScroll) {
       setVisibleToolbar(false);
     } else {
       setVisibleToolbar(true);
     }
 
-    localScroll =
-      document.getElementById('app-wrapper')?.scrollTop ||
-      document.documentElement.scrollTop;
+    localScroll = document.body.scrollTop || document.documentElement.scrollTop;
   };
 
   const toggleView = () => {
@@ -354,6 +333,7 @@ const WrapperShadow = styled.div`
   position: absolute;
   width: 192px;
   filter: blur(8px);
+  opacity: 0.24;
   height: 72px;
   bottom: -8px;
   border-radius: 16px;

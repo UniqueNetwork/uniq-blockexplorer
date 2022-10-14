@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 
 import { deviceWidth } from '@app/hooks';
@@ -18,33 +17,14 @@ export const MobileModal = ({
   actions?: JSX.Element | null;
   title: string;
 }) => {
-  const [localVisible, setLocalVisible] = useState(false);
-
-  useEffect(() => {
-    if (visible) {
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => {
-        setLocalVisible(visible);
-      }, 100);
-    } else {
-      document.body.style.overflow = 'unset';
-      setTimeout(() => {
-        setLocalVisible(visible);
-      }, 500);
-    }
-  }, [visible]);
-
-  if (!visible && !localVisible) {
+  if (!visible) {
     return <></>;
   }
 
   return (
-    <Wrapper className={`${localVisible && visible && 'visible'}`}>
-      <Background
-        className={`${localVisible && visible && 'visible'}`}
-        onClick={onCloseModal}
-      />
-      <Modal className={`${localVisible && visible && 'visible'}`}>
+    <Wrapper className={`${visible && 'visible'}`}>
+      <Background className={`${visible && 'visible'}`} onClick={onCloseModal} />
+      <Modal className={`${visible && 'visible'}`}>
         <Content>
           <Header>
             <Heading2>{title}</Heading2>
@@ -62,7 +42,7 @@ export const MobileModal = ({
 
 const Wrapper = styled.div`
   position: fixed;
-  z-index: 3;
+  z-index: 1111;
   width: 100vw;
   height: 100vh;
   bottom: 0;
@@ -93,17 +73,20 @@ const Modal = styled.div`
   z-index: 4;
   background: #fff;
   width: 100%;
-  max-height: 0;
-  height: 100%;
+  max-height: 624px;
+  height: calc(100vh-160px);
   bottom: 0;
+  top: 160px;
   position: absolute;
   border-radius: var(--gap) var(--gap) 0px 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: 0.2s;
+  transform: translateY(100vh-160px);
+  transition: transform 0.2s;
   &.visible {
-    max-height: 624px;
+    transform: translateY(100vh-160px);
+    //opacity: 1;
   }
 `;
 

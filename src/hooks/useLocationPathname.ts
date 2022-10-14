@@ -8,7 +8,7 @@ export const useLocationPathname = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname.match(`/(collections|tokens|account|extrinsic|block)`)) {
+    if (location.pathname.match(`/(collections|tokens|account|extrinsic|block|nfts)`)) {
       setNotTheMainPage(true);
     } else {
       setNotTheMainPage(false);
