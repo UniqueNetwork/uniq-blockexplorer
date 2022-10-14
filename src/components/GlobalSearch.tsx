@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import { useApi, useQueryParams } from '@app/hooks';
 import { Search } from '@app/components';
@@ -15,10 +15,13 @@ const GlobalSearch: FC<GlobalSearchProps> = ({ searchRef }) => {
   const { setParamToQuery } = useQueryParams();
 
   const onGlobalSearch = (value: string) => {
+    const param = { search: '' };
+    param.search = value;
+
     if (value) {
       navigate({
         pathname: `/${currentChain.network.toLowerCase()}/`,
-        search: `?search=${value}`,
+        search: `?${createSearchParams(param)}`,
       });
     } else {
       setParamToQuery([{ name: 'search', value: '' }]);

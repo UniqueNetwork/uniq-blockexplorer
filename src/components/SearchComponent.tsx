@@ -82,26 +82,34 @@ const SearchComponent: FC<SearchComponentProps> = ({
 
   return (
     <SearchWrapper>
-      <SearchInput
-        iconLeft={{ name: 'magnify', size: 18 }}
-        placeholder={placeholder}
-        ref={ref}
-        value={inputValue}
-        onChange={onChangeSearchString}
-        onKeyDown={onSearchKeyDown}
-      />
-      {!!inputValue && (
-        <ClearSearch onClick={clearSearch}>
-          <SVGIcon name="close" width={8} height={8} />
-        </ClearSearch>
-      )}
+      <InputWrapper>
+        <SearchInput
+          iconLeft={{ name: 'magnify', size: 18 }}
+          placeholder={placeholder}
+          ref={ref}
+          value={inputValue}
+          onChange={onChangeSearchString}
+          onKeyDown={onSearchKeyDown}
+        />
+        {!!inputValue && (
+          <ClearSearch onClick={clearSearch}>
+            <SVGIcon name="close" width={8} height={8} />
+          </ClearSearch>
+        )}
+      </InputWrapper>
       {!hideSearchButton && <Button role="primary" title="Search" onClick={onSearch} />}
     </SearchWrapper>
   );
 };
 
-const SearchWrapper = styled.div`
+const InputWrapper = styled.div`
   position: relative;
+  display: flex;
+  width: 100%;
+`;
+
+const SearchWrapper = styled.div`
+  width: 100%;
   display: flex;
   height: 40px;
 
@@ -123,7 +131,7 @@ const ClearSearch = styled.div`
 
 const SearchInput = styled(InputText)`
   box-sizing: border-box;
-  width: 450px;
+  width: 100%;
   margin-right: calc(var(--gap) / 2);
   background-color: var(--white-color);
 
