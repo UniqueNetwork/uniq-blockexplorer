@@ -1,3 +1,10 @@
+## Version 2.2.0
+
+- New collections page
+- toolbar for mobile devices with search, sort and view
+- globalSearch
+
+
 ## Version 2.1.1
 
 - fixed browser navigation (back/forward)

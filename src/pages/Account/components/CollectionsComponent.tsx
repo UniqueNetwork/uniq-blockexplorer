@@ -1,13 +1,14 @@
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { FC, useCallback } from 'react';
+import styled from 'styled-components/macro';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 
-import { useApi, useSearchFromQuery } from '@app/hooks';
+import { useApi, useQueryParams } from '@app/hooks';
 import { Collection, useGraphQlCollections } from '@app/api/graphQL';
 import { Search } from '@app/components';
+import { defaultSorting } from '@app/pages/Collections/constants';
 
-import CollectionCard from '../../../components/CollectionCard';
+import { CollectionCard } from '../../../components/CollectionCard';
 
 interface CollectionsComponentProps {
   accountId: string;
@@ -18,8 +19,7 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const searchFromQuery = useSearchFromQuery();
-  const [searchString, setSearchString] = useState<string | undefined>(searchFromQuery);
+  const { searchString, setParamToQuery } = useQueryParams();
 
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
@@ -29,21 +29,34 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     searchString,
   });
 
-  const onClickSeeMore = () => {
-    navigate(
-      `/${currentChain.network.toLowerCase()}/collections/?accountId=${accountId}`,
-    );
-  };
+  const onClickSeeMore = useCallback(() => {
+    let params: { accountId?: string; search?: string; sort?: string } = {};
+    params.sort = defaultSorting;
 
-  useEffect(() => {
-    setSearchString(searchFromQuery);
-  }, [searchFromQuery]);
+    if (accountId) {
+      params.accountId = accountId;
+    }
+
+    if (searchString) {
+      params.search = searchString;
+    }
+
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/collections/`,
+      search: `?${createSearchParams(params)}`,
+    });
+  }, [accountId, searchString, navigate, currentChain.network]);
+
   const showButton = collectionsCount > pageSize;
+
+  const setSearch = (value: string) => {
+    setParamToQuery([{ name: 'search', value }]);
+  };
 
   return (
     <>
       <ControlsWrapper>
-        <Search placeholder="NFT / collection" onSearchChange={setSearchString} />
+        <Search placeholder="NFT / collection" onSearchChange={setSearch} />
       </ControlsWrapper>
       <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
       <CollectionsWrapper>
@@ -77,6 +90,7 @@ const ControlsWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: var(--gap);
+  width: 561px;
 `;
 
 const ItemsCountWrapper = styled.div`

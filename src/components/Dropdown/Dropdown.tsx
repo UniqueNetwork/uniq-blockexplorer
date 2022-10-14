@@ -1,6 +1,6 @@
 import { isValidElement, Key, ReactNode, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { ComponentProps, DropdownOptionProps } from '../types';
 import { SVGIcon, SVGIconProps } from '../SVGIcon';

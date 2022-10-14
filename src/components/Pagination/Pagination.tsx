@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Icon } from '@unique-nft/ui-kit';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { usePagination, DOTS, DeviceSizes } from '@app/hooks';
 import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
@@ -67,6 +67,7 @@ export const Pagination: FC<PaginationProps> = ({
 
   const changePageSize = (selected: SelectOptionProps) => {
     setPageSize && setPageSize(selected);
+    onPageChange(1);
   };
 
   return (
@@ -128,6 +129,12 @@ const PaginationWrapper = styled.div`
   @media (max-width: ${DeviceSizes.sm}) {
     flex-direction: column;
     row-gap: calc(var(--gap) * 1.5);
+  }
+  @media (max-width: ${DeviceSizes.xxs}) {
+    align-items: center !important;
+    > div {
+      flex-direction: column;
+    }
   }
 `;
 

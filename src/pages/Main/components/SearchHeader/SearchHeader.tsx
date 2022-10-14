@@ -1,31 +1,31 @@
 import React, { VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Header1 } from '@app/styles/styled-components';
-import { deviceWidth, useApi } from '@app/hooks';
+import { deviceWidth, useApi, useQueryParams } from '@app/hooks';
 import { getChainColor } from '@app/utils';
 import SearchComponent from '@app/components/SearchComponent';
 
 interface SearchHeaderProps {
   searchModeOn: boolean;
   setResultExist?: (value: boolean) => void;
-  setSearchString: (searchString: string | undefined) => void;
-  searchString?: string;
 }
 
 export const SearchHeader: VFC<SearchHeaderProps> = ({
   searchModeOn,
-  searchString,
-  setSearchString,
   setResultExist,
 }) => {
   const { currentChain } = useApi();
+  const { searchString, setParamToQuery } = useQueryParams();
   const networkColor = getChainColor(currentChain);
   const networkName =
     currentChain?.network === 'UNIQUE'
       ? currentChain.name
       : currentChain?.network.charAt(0) + currentChain?.network.slice(1).toLowerCase();
 
+  const onSearchChange = (value: string) => {
+    setParamToQuery([{ name: 'search', value }]);
+  };
   return (
     <Wrapper data-automation-id="search-header">
       {searchModeOn ? (
@@ -38,14 +38,21 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
           <NetworkName networkColor={networkColor}>{networkName}</NetworkName>
         </H>
       )}
-      <SearchComponent
-        placeholder="Extrinsic / collection / NFT / account"
-        setResultExist={setResultExist}
-        onSearchChange={setSearchString}
-      />
+      <SearchWrapper>
+        <SearchComponent
+          placeholder="Extrinsic / collection / NFT / account"
+          setResultExist={setResultExist}
+          onSearchChange={onSearchChange}
+        />
+      </SearchWrapper>
     </Wrapper>
   );
 };
+
+const SearchWrapper = styled.div`
+  max-width: 561px;
+  width: 100%;
+`;
 
 const Wrapper = styled.div`
   display: flex;

@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 import {
   Route,
@@ -9,12 +8,13 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
-import { DeviceSizes, useApi, useScrollToTop } from '@app/hooks';
+import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
 import { TokenSorting } from '@app/api';
 import { RouterTabs, SelectOptionProps } from '@app/components';
+import { PageHeading } from '@app/components/PageHeading';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
@@ -29,8 +29,16 @@ const TokensPage: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentChain } = useApi();
-  const [view, setView] = useState<ViewType>(ViewType.Grid);
-  const [sort, selectSort] = useState<SelectOptionProps>();
+  const {
+    searchString: searchFromQuery,
+    accountId,
+    nesting,
+    sort,
+    setParamToQuery,
+    view,
+  } = useQueryParams();
+  // const [view, setView] = useState<ViewType>(ViewType.List);
+  const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
 
@@ -64,7 +72,7 @@ const TokensPage: FC = () => {
     location.pathname.includes(`${basePath}/${tab}`),
   );
 
-  const selectFilter = (selected: SelectOptionProps) => {
+  const selectSorting = (selected: SelectOptionProps) => {
     const option = OPTIONS.find((item) => {
       return item.id === selected.id;
     });
@@ -79,12 +87,12 @@ const TokensPage: FC = () => {
 
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_NFTS);
-    setView(ViewType.Grid);
+    setParamToQuery([{ name: 'view', value: `${ViewType.Grid}` }]);
   };
 
   const selectList = () => {
     logUserEvents(UserEvents.Click.ON_LIST_VIEW_NFTS);
-    setView(ViewType.List);
+    setParamToQuery([{ name: 'view', value: `${ViewType.List}` }]);
   };
 
   useEffect(() => {
@@ -95,9 +103,7 @@ const TokensPage: FC = () => {
 
   return (
     <div className="tokens-page">
-      <TopBar>
-        <Title>Tokens</Title>
-      </TopBar>
+      <PageHeading title="Tokens" />
       <PagePaper>
         <RouterTabs
           additionalContent={[
@@ -105,10 +111,10 @@ const TokensPage: FC = () => {
               {currentTabIndex === 0 && (
                 <RightMenu
                   key="top-right-menu"
-                  selectSort={selectFilter}
+                  selectSort={selectSorting}
                   selectGrid={selectGrid}
                   selectList={selectList}
-                  view={view}
+                  view={view as ViewType}
                 />
               )}
             </>,
@@ -135,7 +141,7 @@ const TokensPage: FC = () => {
                 setOrderBy={setOrderAndQuery}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
-                view={view}
+                view={view as ViewType}
               />
             }
             path="nfts"
@@ -146,26 +152,5 @@ const TokensPage: FC = () => {
     </div>
   );
 };
-
-const TopBar = styled.div`
-  display: grid;
-  grid-column-gap: calc(var(--gap) * 2);
-  grid-template-columns: 1fr 560px 72px;
-  margin-bottom: calc(var(--gap) * 2.5);
-
-  .unique-select .select-wrapper > svg {
-    z-index: unset;
-  }
-
-  @media (max-width: ${DeviceSizes.sm}) {
-    margin-bottom: 24px;
-  }
-`;
-
-const Title = styled.h2`
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 48px;
-`;
 
 export default TokensPage;

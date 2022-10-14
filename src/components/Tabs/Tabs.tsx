@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import classNames from 'classnames';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { DeviceSizes } from '@app/hooks';
 
@@ -41,28 +41,10 @@ const TabsHeader = styled.div`
   position: relative;
   margin-bottom: calc(var(--gap) * 1.5);
 
-  @media (max-width: ${DeviceSizes.sm}) {
-    margin-bottom: 0;
-  }
-
   .right-tab-menu {
     position: absolute;
     right: 0;
     top: 10px;
-
-    @media (max-width: ${DeviceSizes.sm}) {
-      display: grid;
-      grid-template-columns: 1fr 72px;
-      grid-column-gap: var(--gap);
-      position: relative;
-      right: 0;
-      top: 0;
-      padding: var(--gap) 0;
-
-      .unique-select {
-        width: auto;
-      }
-    }
   }
 `;
 

@@ -1,5 +1,5 @@
 import { VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 // @ts-ignore
 import Jdenticon from 'react-jdenticon';
 import { useNotifications } from '@unique-nft/ui-kit';

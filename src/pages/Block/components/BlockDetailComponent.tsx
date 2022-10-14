@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useQuery } from '@apollo/client';
 import { Heading, Text } from '@unique-nft/ui-kit';
 

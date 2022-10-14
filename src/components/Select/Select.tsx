@@ -1,6 +1,6 @@
 import { Key, ReactNode, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { SVGIcon } from '@app/components';
 
@@ -125,7 +125,7 @@ export const Select = ({
 
   return (
     <Wrapper
-      className={classNames('unique-select', `size-${size}`, className, {
+      className={classNames(`size-${size}`, className, {
         error,
       })}
     >
@@ -213,7 +213,9 @@ const Wrapper = styled.div`
   font-size: var(--prop-font-size);
   font-weight: var(--prop-font-weight);
   position: relative;
-  width: 250px;
+  &:focus &:active {
+    outline: none;
+  }
 
   label {
     color: var(--color-secondary-500);
@@ -260,6 +262,9 @@ const Wrapper = styled.div`
         border: 1px solid var(--color-grey-400);
       }
     }
+    &:focus {
+      outline: none;
+    }
 
     .select-value {
       display: flex;
@@ -272,6 +277,7 @@ const Wrapper = styled.div`
       padding: 11px 16px;
       position: relative;
       width: calc(100% - 34px);
+      margin-right: 16px;
 
       &.with-icon {
         &.to-right {

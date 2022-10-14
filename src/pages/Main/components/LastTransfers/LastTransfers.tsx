@@ -1,6 +1,6 @@
 import { useState, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Button } from '@unique-nft/ui-kit';
 
 import { DeviceSizes, useApi } from '@app/hooks';

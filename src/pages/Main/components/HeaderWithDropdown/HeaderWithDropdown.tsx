@@ -1,5 +1,5 @@
 import { isValidElement, VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Header } from '@app/styles/styled-components';
 import { deviceWidth } from '@app/hooks';
