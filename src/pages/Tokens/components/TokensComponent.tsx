@@ -4,7 +4,7 @@ import { FC, useMemo } from 'react';
 import styled from 'styled-components/macro';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
-import { Pagination, ScrollableTable, Search, SelectOptionProps } from '@app/components';
+import { Pagination, ScrollableTable, SelectOptionProps } from '@app/components';
 import {
   DeviceSize,
   DeviceSizes,
@@ -28,16 +28,21 @@ const filter = ({
   accountId?: string;
   collectionId?: string;
 }) => {
-  let _filter = {};
+  let _filter: any = { burned: { _eq: 'false' } };
 
   if (accountId) {
     _filter = {
+      ..._filter,
       _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
     };
   }
 
-  if (collectionId)
-    _filter = { ..._filter, collection_id: { _eq: Number(collectionId) } };
+  if (collectionId) {
+    _filter = {
+      ..._filter,
+      collection_id: { _eq: Number(collectionId) },
+    };
+  }
 
   return _filter;
 };

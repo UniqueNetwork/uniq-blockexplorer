@@ -57,8 +57,8 @@ export const Tokens: VFC<TokensProps> = ({
   }, [currentChain, navigate, searchString]);
 
   const filter = collectionId
-    ? { collection_id: { _eq: Number(collectionId) } }
-    : undefined;
+    ? { collection_id: { _eq: Number(collectionId) }, burned: { _eq: 'false' } }
+    : { burned: { _eq: 'false' } };
 
   const orderBy = useMemo(
     (): TokenSorting =>
