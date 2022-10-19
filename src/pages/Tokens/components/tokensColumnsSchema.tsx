@@ -76,7 +76,7 @@ export const getTokensColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 160,
+    width: 180,
   },
   {
     dataIndex: 'transfers_count',
