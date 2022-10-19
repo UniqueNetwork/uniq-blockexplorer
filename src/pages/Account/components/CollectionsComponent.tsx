@@ -24,6 +24,7 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
       _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
+      burned: { _eq: 'false' },
     },
     pageSize,
     searchString,
