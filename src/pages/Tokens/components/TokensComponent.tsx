@@ -80,7 +80,12 @@ const TokensComponent: FC<TokensComponentProps> = ({
     searchString,
   });
 
-  const tokenColumns = getTokensColumns(currentChain.network, orderBy, setOrderBy);
+  const tokenColumns = getTokensColumns(
+    currentChain.network,
+    orderBy,
+    setOrderBy,
+    timestamp,
+  );
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>
