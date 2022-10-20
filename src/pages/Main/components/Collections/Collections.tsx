@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, useMemo, VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
 
@@ -13,9 +13,10 @@ import {
 } from '@app/api/graphQL';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
+import { defaultSorting } from '@app/pages/Collections/constants';
+import { CollectionCard } from '@app/components/CollectionCard';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
-import { CollectionCard } from './CollectionCard';
 import { collectionsOptions } from './collectionsOptions';
 
 interface CollectionsProps {
@@ -53,6 +54,7 @@ export const Collections: VFC<CollectionsProps> = ({
 
   const { collections, collectionsCount, isCollectionsFetching, timestamp } =
     useGraphQlCollections({
+      filter: { burned: { _eq: 'false' } },
       orderBy,
       pageSize,
       searchString,
@@ -66,7 +68,11 @@ export const Collections: VFC<CollectionsProps> = ({
 
   const collectionIds = collections?.map((collection) => collection.collection_id);
   const filter = {
-    _and: [{ collection_id: { _in: collectionIds } }, { token_id: { _eq: 1 } }],
+    _and: [
+      { collection_id: { _in: collectionIds } },
+      { token_id: { _eq: 1 } },
+      { burned: { _eq: 'false' } },
+    ],
   };
 
   const { tokens } = useGraphQlTokens({
@@ -85,18 +91,20 @@ export const Collections: VFC<CollectionsProps> = ({
   }));
 
   const onClick = useCallback(() => {
-    const linkUrl = `/${currentChain.network.toLowerCase()}/collections`;
-    const navigateTo: { pathname: string; search?: string } = { pathname: linkUrl };
+    let params: { sort?: string; search?: string } = {};
+    params.sort = defaultSorting;
 
     if (searchString) {
-      const searchParams = `?${createSearchParams([['search', `${searchString}`]])}`;
-
-      navigateTo.search = searchParams;
+      params.search = searchString;
     }
 
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_COLLECTIONS_ON_MAIN_PAGE);
-    navigate(navigateTo);
+    navigate({
+      pathname: `/${currentChain.network.toLowerCase()}/collections/`,
+      search: `?${createSearchParams(params)}`,
+    });
   }, [currentChain, navigate, searchString]);
+
   const [showButton, setShowButton] = useState<boolean>(true);
 
   useEffect(() => {
@@ -187,6 +195,7 @@ const Wrapper = styled(PagePaperWrapper)`
 `;
 
 const StyledHeader = styled(Header)`
+  margin-bottom: 32px !important;
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

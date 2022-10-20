@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
-import { DeviceSizes } from '@app/hooks';
+import { deviceWidth } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 
 interface RightMenuProps {
@@ -37,7 +37,13 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
-      <Select options={OPTIONS} value={sort?.id as string} onChange={selectSort} />
+      {view === ViewType.Grid && (
+        <SelectStyled
+          options={OPTIONS}
+          value={sort?.id as string}
+          onChange={selectSort}
+        />
+      )}
       <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>
@@ -63,22 +69,27 @@ export const RightMenu: FC<RightMenuProps> = ({
 };
 
 const RightTabMenu = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   grid-column-gap: 44px;
+  @media ${deviceWidth.biggerThan.md} {
+    display: flex;
+  }
+`;
+
+const SelectStyled = styled(Select)`
+  width: 180px;
 `;
 
 const Controls = styled.div`
   display: flex;
   justify-content: space-between;
-
-  @media (max-width: ${DeviceSizes.sm}) {
-    width: 100%;
-  }
+  height: 40px;
 `;
 
 const ViewButtons = styled.div`
   display: flex;
+  align-items: center;
   grid-column-gap: calc(var(--gap) / 2);
 `;
 

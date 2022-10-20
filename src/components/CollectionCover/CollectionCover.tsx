@@ -1,5 +1,5 @@
 import { VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { useCheckImageExists, useRandomColor } from '@app/hooks';

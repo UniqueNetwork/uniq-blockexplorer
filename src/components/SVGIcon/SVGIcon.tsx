@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import * as IconComponents from '@app/images/icons/icons';
 import { IconType } from '@app/images/icons';

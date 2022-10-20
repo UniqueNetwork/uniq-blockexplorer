@@ -1,5 +1,5 @@
 import { useEffect, useState, VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';

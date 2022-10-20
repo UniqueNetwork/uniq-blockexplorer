@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Layout } from '@unique-nft/ui-kit';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { deviceWidth } from '@app/hooks/useDeviceSize';
 

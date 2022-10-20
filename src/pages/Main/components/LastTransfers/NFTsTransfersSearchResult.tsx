@@ -1,5 +1,5 @@
 import { useEffect, useState, VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
@@ -79,6 +79,7 @@ export const NFTsTransfersSearchResult: VFC<LastTransfersProps> = ({
 };
 
 const StyledHeader = styled(Header)`
+  margin-bottom: 32px !important;
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

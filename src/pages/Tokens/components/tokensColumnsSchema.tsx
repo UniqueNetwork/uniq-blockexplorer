@@ -1,7 +1,7 @@
-import React from 'react';
+import { Text } from '@unique-nft/ui-kit';
 
-import { timestampTableFormat } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { timeDifference } from '@app/utils';
 
 import { Token, TokenSorting } from '../../../api/graphQL';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
@@ -13,6 +13,7 @@ export const getTokensColumns = (
   chainId: string,
   orderBy: TokenSorting,
   onOrderChange: (orderBy: TokenSorting) => void,
+  timestamp?: number,
 ) => [
   {
     dataIndex: 'token_id',
@@ -39,7 +40,13 @@ export const getTokensColumns = (
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
-    render: timestampTableFormat,
+    render: (value: number) => {
+      return (
+        <Text size="m" weight="regular">
+          {timeDifference(value, timestamp)}
+        </Text>
+      );
+    },
     title: (
       <TableSortableColumnTitle
         dataIndex="date_of_creation"
@@ -69,7 +76,7 @@ export const getTokensColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 160,
+    width: 180,
   },
   {
     dataIndex: 'transfers_count',

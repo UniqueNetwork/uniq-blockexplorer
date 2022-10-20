@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
 
@@ -57,8 +57,8 @@ export const Tokens: VFC<TokensProps> = ({
   }, [currentChain, navigate, searchString]);
 
   const filter = collectionId
-    ? { collection_id: { _eq: Number(collectionId) } }
-    : undefined;
+    ? { collection_id: { _eq: Number(collectionId) }, burned: { _eq: 'false' } }
+    : { burned: { _eq: 'false' } };
 
   const orderBy = useMemo(
     (): TokenSorting =>
@@ -140,6 +140,7 @@ export const Tokens: VFC<TokensProps> = ({
   );
 };
 const StyledHeader = styled(Header)`
+  margin-bottom: 32px !important;
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

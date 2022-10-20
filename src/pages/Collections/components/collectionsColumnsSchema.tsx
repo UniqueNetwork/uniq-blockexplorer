@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Text } from '@unique-nft/ui-kit';
 
-import { timestampTableFormat } from '@app/utils';
+import { timeDifference } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import { Collection, CollectionSorting } from '../../../api/graphQL';
@@ -13,48 +14,55 @@ export const getCollectionsColumns = (
   chainId: string,
   orderBy: CollectionSorting,
   onOrderChange: (orderBy: CollectionSorting) => void,
+  timestamp: number,
 ) => [
   {
-    dataIndex: 'collection_id',
-    key: 'collection_id',
+    dataIndex: 'name',
+    key: 'name',
     render: (value: string, item: unknown) => (
       <CollectionTableCell
         chainId={chainId}
-        collectionId={value}
-        collectionName={(item as Collection).name}
+        collectionId={(item as Collection).collection_id.toString()}
+        collectionName={value}
         coverImageUrl={getCoverURLFromCollection((item as Collection).collection_cover)}
       />
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="collection_id"
+        dataIndex="name"
         orderBy={orderBy}
-        title="Collection"
+        title="Collection name"
         onOrderChange={onOrderChange}
       />
     ),
-    width: 150,
+    width: 180,
   },
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
-    render: timestampTableFormat,
+    render: (value: number) => {
+      return (
+        <Text size="m" weight="regular">
+          {timeDifference(value, timestamp)}
+        </Text>
+      );
+    },
     title: (
       <TableSortableColumnTitle
         dataIndex="date_of_creation"
         orderBy={orderBy}
-        title="Date"
+        title="Created"
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 120,
   },
   {
     dataIndex: 'owner',
     key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Owner',
-    width: 100,
+    width: 150,
   },
   {
     dataIndex: 'holders_count',
@@ -88,6 +96,19 @@ export const getCollectionsColumns = (
         dataIndex={'tokens_count'}
         orderBy={orderBy}
         title={'Items'}
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 100,
+  },
+  {
+    dataIndex: 'transfers_count',
+    key: 'transfers_count',
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="transfers_count"
+        orderBy={orderBy}
+        title="Transfers"
         onOrderChange={onOrderChange}
       />
     ),

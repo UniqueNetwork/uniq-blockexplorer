@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const Header3 = styled.div`
   font-family: var(--prop-font-family-heading);

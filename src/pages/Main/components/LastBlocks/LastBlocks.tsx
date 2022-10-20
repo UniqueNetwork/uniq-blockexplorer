@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useNavigate } from 'react-router-dom';
 
 import { useGraphQlBlocks } from '@app/api/graphQL';
@@ -130,6 +130,7 @@ const Wrapper = styled(PagePaperWrapper)`
 `;
 
 const StyledHeader = styled(Header)`
+  margin-bottom: 32px !important;
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
     line-height: 28px !important;

@@ -1,6 +1,8 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components/macro';
 import { useLocation } from 'react-router-dom';
+
+import { DeviceSizes } from '@app/hooks';
 
 import MobileMenuIcon from './MobileMenuIcon';
 import { Menu } from './Menu';
@@ -37,8 +39,9 @@ const MobileMenu: FC = () => {
 const MobileMenuWrapper = styled.div`
   display: none;
 
-  @media (max-width: 991px) {
-    display: block;
+  @media (max-width: ${DeviceSizes.lg}) {
+    display: flex;
+    align-items: center;
     margin-left: 16px;
   }
 `;
@@ -48,6 +51,7 @@ const MobileMenuNav = styled.nav`
   top: 100%;
   left: 0;
   right: 0;
+  z-index: 9;
   height: calc(100vh - 80px);
   background-color: var(--white-color);
   padding: calc(var(--gap) * 1.5) var(--gap);

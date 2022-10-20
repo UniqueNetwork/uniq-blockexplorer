@@ -1,12 +1,12 @@
 import { FC, useCallback } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 
-import { useApi } from '@app/hooks';
+import { DeviceSizes, useApi, useLocationPathname } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { Select, SelectOptionProps } from '@app/components';
+import { GlobalSearch, Select, SelectOptionProps } from '@app/components';
 import { capitalizeFirstLetter } from '@app/components/utils';
 import { IconType } from '@app/images/icons';
 
@@ -16,6 +16,7 @@ import { Menu } from './Menu';
 
 const Header: FC = () => {
   const { currentChain } = useApi();
+  const { notTheMainPage } = useLocationPathname();
 
   const navigate = useNavigate();
   const [queryParams, setQueryParams] = useSearchParams();
@@ -55,37 +56,71 @@ const Header: FC = () => {
   return (
     <>
       <HeaderWrapper data-automation-id="header">
-        <HeaderNavWrapper>
-          <Link
-            to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}`}
-            onClick={onLogoClick}
-          >
-            <Logo alt="Logo" src="/logos/logo_product.svg" />
-          </Link>
-          <HeaderNav data-automation-id="desktop-menu">
-            <Menu />
-          </HeaderNav>
-        </HeaderNavWrapper>
-        <ChainsSelectWrapper>
-          <ChainsSelect
-            options={Object.values(config.chains).map(({ network, name }) => ({
-              iconLeft: {
-                name: `chain${capitalizeFirstLetter(network)}` as IconType,
-                height: 16,
-                width: 16,
-              },
-              id: network,
-              title: network === 'UNIQUE' ? name : capitalizeFirstLetter(network),
-            }))}
-            value={currentChain?.network}
-            onChange={onSelectChange}
-          />
-        </ChainsSelectWrapper>
+        <LeftSide>
+          <HeaderNavWrapper>
+            <Link
+              to={`/${currentChain ? currentChain?.network.toLowerCase() + '/' : ''}`}
+              onClick={onLogoClick}
+            >
+              <Logo alt="Logo" src="/logos/logo_product.svg" />
+            </Link>
+            <HeaderNav data-automation-id="desktop-menu">
+              <Menu />
+            </HeaderNav>
+          </HeaderNavWrapper>
+        </LeftSide>
+        <RightSide>
+          {notTheMainPage && (
+            <SearchWrapper>
+              <GlobalSearch />
+            </SearchWrapper>
+          )}
+          <ChainsSelectWrapper>
+            <ChainsSelect
+              options={Object.values(config.chains).map(({ network, name }) => ({
+                iconLeft: {
+                  name: `chain${capitalizeFirstLetter(network)}` as IconType,
+                  height: 16,
+                  width: 16,
+                },
+                id: network,
+                title: network === 'UNIQUE' ? name : capitalizeFirstLetter(network),
+              }))}
+              value={currentChain?.network}
+              onChange={onSelectChange}
+            />
+          </ChainsSelectWrapper>
+          <MobileMenu />
+        </RightSide>
       </HeaderWrapper>
-      <MobileMenu />
     </>
   );
 };
+
+const LeftSide = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const RightSide = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+`;
+
+const SearchWrapper = styled.div`
+  flex-grow: 1;
+  max-width: 614px;
+  margin-right: 40px;
+  > div > div {
+    width: auto;
+    flex-grow: 1;
+    margin-right: 0;
+  }
+  @media (max-width: ${DeviceSizes.md}) {
+    display: none;
+  }
+`;
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -140,7 +175,7 @@ const HeaderNav = styled.nav`
     }
   }
 
-  @media (max-width: 991px) {
+  @media (max-width: ${DeviceSizes.lg}) {
     display: none;
   }
 `;
@@ -154,56 +189,43 @@ const Logo = styled.img`
 const ChainsSelectWrapper = styled.div`
   display: flex;
   column-gap: var(--gap);
+  height: 40px;
 `;
 
 const ChainsSelect = styled(Select)`
-  .select-wrapper {
-    .icon-triangle {
-      z-index: auto;
-      margin: 21px;
-    }
-    .select-value {
-      border-radius: 8px;
-      padding: var(--gap);
-    }
-    .select-dropdown {
-      top: 54px;
-      border-radius: 8px;
-    }
-  }
+  width: auto;
 
-  @media (max-width: 450px) {
+  .select-wrapper {
     width: auto;
     position: static;
+    display: flex;
+    border-radius: calc(var(--gap) / 2);
 
-    .select-wrapper {
-      position: static;
-      display: flex;
-      .select-value {
-        font-size: 0;
-        width: 50px;
-        svg,
-        img {
-          margin-right: 0 !important;
-        }
+    .select-value {
+      width: 32px;
+      font-size: 0;
+      margin-right: 0;
+      border-radius: calc(var(--gap) / 2);
+      svg,
+      img {
+        margin-right: 0 !important;
       }
-      .icon-triangle {
-        top: auto;
-        right: 18px;
-      }
-      .select-dropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        border: 0;
-        border-radius: 0;
-        height: calc(100vh - 80px);
-        background-color: var(--white-color);
-        padding: calc(var(--gap) * 1.5) var(--gap);
-        box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
-          0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
-      }
+    }
+    .icon-triangle {
+      top: auto;
+    }
+    .select-dropdown {
+      position: absolute;
+      width: 160px;
+      height: auto;
+      right: 0;
+      left: auto;
+      z-index: 10;
+      border-radius: var(--prop-border-radius);
+      background-color: var(--white-color);
+      padding: calc(var(--gap) * 1.5) var(--gap);
+      box-shadow: 0px -6px 8px -8px rgb(0 0 0 / 14%) inset,
+        0px 6px 8px -8px rgb(0 0 0 / 14%) inset;
     }
   }
 `;

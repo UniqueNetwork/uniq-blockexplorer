@@ -1,32 +1,42 @@
 import { Button, InputText } from '@unique-nft/ui-kit';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { createRef, FC, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { useSearchParams } from 'react-router-dom';
+import styled from 'styled-components/macro';
 
-import { useApi, useSearchFromQuery } from '@app/hooks';
+import { useApi, useQueryParams } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+
+import { SVGIcon } from '.';
 
 interface SearchComponentProps {
   placeholder?: string;
   onSearchChange(value: string | undefined): void;
   setResultExist?: (value: boolean) => void;
+  hideSearchButton?: boolean;
+  searchRef?: React.RefObject<HTMLInputElement>;
 }
 
 const SearchComponent: FC<SearchComponentProps> = ({
   onSearchChange,
   placeholder,
   setResultExist,
+  hideSearchButton = false,
+  searchRef,
 }) => {
-  const [queryParams, setQueryParams] = useSearchParams();
-  const searchFromQuery = useSearchFromQuery();
+  const { searchString: searchFromQuery } = useQueryParams();
   const [inputValue, setInputValue] = useState<string | undefined>(searchFromQuery);
   const { pathname } = useLocation();
 
   const { currentChain } = useApi();
 
   const navigate = useNavigate();
+  const ref = searchRef || createRef();
+
+  const clearSearch = () => {
+    setInputValue('');
+    ref.current?.focus();
+  };
 
   useEffect(() => {
     setInputValue(searchFromQuery);
@@ -53,24 +63,8 @@ const SearchComponent: FC<SearchComponentProps> = ({
       return;
     }
 
-    if (inputValue) {
-      queryParams.set('search', inputValue);
-    } else {
-      queryParams.delete('search');
-    }
-
-    setQueryParams(queryParams);
-
     onSearchChange(inputValue ? inputValue.trim() : inputValue);
-  }, [
-    pathname,
-    inputValue,
-    setQueryParams,
-    queryParams,
-    onSearchChange,
-    navigate,
-    currentChain.network,
-  ]);
+  }, [pathname, inputValue, onSearchChange, navigate, currentChain.network]);
 
   const onSearchKeyDown = useCallback(
     ({ key }) => {
@@ -88,19 +82,34 @@ const SearchComponent: FC<SearchComponentProps> = ({
 
   return (
     <SearchWrapper>
-      <SearchInput
-        iconLeft={{ name: 'magnify', size: 18 }}
-        placeholder={placeholder}
-        value={inputValue}
-        onChange={onChangeSearchString}
-        onKeyDown={onSearchKeyDown}
-      />
-      <Button role={'primary'} title="Search" onClick={onSearch} />
+      <InputWrapper>
+        <SearchInput
+          iconLeft={{ name: 'magnify', size: 18 }}
+          placeholder={placeholder}
+          ref={ref}
+          value={inputValue}
+          onChange={onChangeSearchString}
+          onKeyDown={onSearchKeyDown}
+        />
+        {!!inputValue && (
+          <ClearSearch onClick={clearSearch}>
+            <SVGIcon name="close" width={8} height={8} />
+          </ClearSearch>
+        )}
+      </InputWrapper>
+      {!hideSearchButton && <Button role="primary" title="Search" onClick={onSearch} />}
     </SearchWrapper>
   );
 };
 
+const InputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  width: 100%;
+`;
+
 const SearchWrapper = styled.div`
+  width: 100%;
   display: flex;
   height: 40px;
 
@@ -113,9 +122,16 @@ const SearchWrapper = styled.div`
   }
 `;
 
+const ClearSearch = styled.div`
+  position: absolute;
+  cursor: pointer;
+  right: 20px;
+  top: 16px;
+`;
+
 const SearchInput = styled(InputText)`
   box-sizing: border-box;
-  width: 450px;
+  width: 100%;
   margin-right: calc(var(--gap) / 2);
   background-color: var(--white-color);
 

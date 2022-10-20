@@ -1,5 +1,5 @@
 import { VFC } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import { BodyM, BodyS, Header3, Header4 } from '@app/styles/styled-components';

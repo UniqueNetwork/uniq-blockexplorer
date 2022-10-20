@@ -1,5 +1,5 @@
 import ReactTooltip from 'react-tooltip';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { SVGIcon } from '@app/components';
 import { isTouchEnabled } from '@app/utils';
