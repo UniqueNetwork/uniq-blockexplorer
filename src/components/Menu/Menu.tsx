@@ -40,6 +40,14 @@ const Menu: FC = () => {
       <NavLink
         to={`/${
           currentChain ? currentChain?.network.toLowerCase() + '/' : ''
+        }bundles/?view=List`}
+        onClick={onMenuClick('NFTS')}
+      >
+        Bundles
+      </NavLink>
+      <NavLink
+        to={`/${
+          currentChain ? currentChain?.network.toLowerCase() + '/' : ''
         }collections/?sort=${defaultSorting}`}
         onClick={onMenuClick('COLLECTIONS')}
       >
