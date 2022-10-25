@@ -24,6 +24,7 @@ export interface Token {
   collection_cover: string;
   collection_description: string;
   transfers_count: number;
+  type: 'NFT' | 'Nested' | 'Fractional';
 }
 
 export interface TokensData {
