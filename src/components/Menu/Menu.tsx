@@ -1,9 +1,13 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
+import styled from 'styled-components/macro';
 
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { useApi } from '@app/hooks';
 import { defaultSorting } from '@app/pages/Tokens/constants';
+
+import { SVGIcon } from '..';
 
 const Menu: FC = () => {
   const { currentChain } = useApi();
@@ -37,14 +41,32 @@ const Menu: FC = () => {
       >
         Tokens
       </NavLink>
-      <NavLink
-        to={`/${
-          currentChain ? currentChain?.network.toLowerCase() + '/' : ''
-        }bundles/?view=List`}
-        onClick={onMenuClick('NFTS')}
-      >
-        Bundles
-      </NavLink>
+      <Row>
+        <NavLink
+          to={`/${
+            currentChain ? currentChain?.network.toLowerCase() + '/' : ''
+          }bundles/?view=List`}
+          onClick={onMenuClick('NFTS')}
+        >
+          Bundles
+        </NavLink>
+        <SVGIconStyled
+          data-tip
+          data-for="question"
+          name="question"
+          height={24}
+          width={24}
+        />
+        <ReactTooltip
+          // event={isTouchEnabled() ? 'click' : undefined}
+          event="mouseover"
+          id="question"
+          effect="solid"
+          eventOff="mouseleave"
+        >
+          <span>A tree with nested tokens</span>{' '}
+        </ReactTooltip>
+      </Row>
       <NavLink
         to={`/${
           currentChain ? currentChain?.network.toLowerCase() + '/' : ''
@@ -56,5 +78,13 @@ const Menu: FC = () => {
     </>
   );
 };
+
+const Row = styled.div`
+  display: flex;
+`;
+
+const SVGIconStyled = styled(SVGIcon)`
+  margin-left: 4px;
+`;
 
 export default Menu;
