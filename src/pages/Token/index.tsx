@@ -6,7 +6,7 @@ import { useScrollToTop } from '@app/hooks';
 
 import TokenDetailComponent from './components/TokenDetailComponent';
 import PagePaper from '../../components/PagePaper';
-import BundleTreeSection from '@app/pages/Token/components/BundleTreeSection';
+import BundleTreeSection from './components/BundleTreeSection';
 
 const TokenPage: FC = () => {
   useScrollToTop();

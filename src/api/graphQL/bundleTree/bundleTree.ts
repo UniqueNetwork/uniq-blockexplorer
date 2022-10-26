@@ -43,13 +43,13 @@ const bundleTreeQuery = gql`
 `;
 
 export const useGraphQLBundleTree = (collection_id: number, token_id: number) => {
-  const { data, loading: isBundleFetching } = useQuery<BundleTreeData, BundleTreeVariables>(
-    bundleTreeQuery,
-    {
-      notifyOnNetworkStatusChange: true,
-      variables: { collectionId: collection_id, tokenId: token_id },
-    },
-  );
+  const { data, loading: isBundleFetching } = useQuery<
+    BundleTreeData,
+    BundleTreeVariables
+  >(bundleTreeQuery, {
+    notifyOnNetworkStatusChange: true,
+    variables: { collectionId: collection_id, tokenId: token_id },
+  });
 
   return { bundle: data?.bundleTree, isBundleFetching };
 };

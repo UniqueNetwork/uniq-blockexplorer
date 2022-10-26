@@ -1,12 +1,16 @@
 import React, { FC, useCallback } from 'react';
 import styled from 'styled-components';
 import { Text, Skeleton } from '@unique-nft/ui-kit';
+
 import { Picture } from '@app/components';
 import { useGraphQlCollection } from '@app/api';
+
 import { INestingToken, ITokenCard } from '../types';
 
 function TokenCard({ token, onViewNodeDetails }: ITokenCard) {
-  const { isCollectionFetching, collection } = useGraphQlCollection(Number(token?.collection_id));
+  const { isCollectionFetching, collection } = useGraphQlCollection(
+    Number(token?.collection_id),
+  );
 
   const viewTokenDetails = useCallback(() => {
     if (onViewNodeDetails) onViewNodeDetails(token);
@@ -14,14 +18,21 @@ function TokenCard({ token, onViewNodeDetails }: ITokenCard) {
 
   return (
     <TokenCardWrapper onClick={viewTokenDetails}>
-      <Picture alt={`T-${token.token_id} C-${token.collection_id}`} src={(token.image?.fullUrl) || undefined}/>
+      <Picture
+        alt={`T-${token.token_id} C-${token.collection_id}`}
+        src={token.image?.fullUrl || undefined}
+      />
       <TokenTitle
         token={token}
         mode={collection?.type || ''}
         prefix={collection?.token_prefix || ''}
         isCollectionLoading={isCollectionFetching}
       />
-      {token.nestingChildren && <Text color='grey-500' size='xs'>{token.nestingChildren.length} item{token.nestingChildren.length > 1 && 's'}</Text>}
+      {token.nestingChildren && (
+        <Text color="grey-500" size="xs">
+          {token.nestingChildren.length} item{token.nestingChildren.length > 1 && 's'}
+        </Text>
+      )}
     </TokenCardWrapper>
   );
 }
@@ -50,18 +61,30 @@ const TokenCardWrapper = styled.div`
   }
   &:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-    .menu { display: flex; }
+    .menu {
+      display: flex;
+    }
   }
 `;
 
 export default TokenCard;
 
-const TokenTitle: FC<{isCollectionLoading: boolean, prefix: string, token: INestingToken, mode: string }> = ({ isCollectionLoading, prefix, token, mode }) => {
+const TokenTitle: FC<{
+  isCollectionLoading: boolean;
+  prefix: string;
+  token: INestingToken;
+  mode: string;
+}> = ({ isCollectionLoading, prefix, token, mode }) => {
   if (isCollectionLoading) return <Skeleton height={52} width={62} />;
+
   return (
     <>
-      <Text color='additional-dark' size='m'>{prefix} #{token.token_id}</Text>
-      <Text color='grey-500' size='s'>{mode}</Text>
+      <Text color="additional-dark" size="m">
+        {prefix} #{token.token_id}
+      </Text>
+      <Text color="grey-500" size="s">
+        {mode}
+      </Text>
     </>
   );
 };

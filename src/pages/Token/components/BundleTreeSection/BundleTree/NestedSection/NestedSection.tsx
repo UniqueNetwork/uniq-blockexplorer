@@ -1,31 +1,55 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { Text, Skeleton } from '@unique-nft/ui-kit';
+
 import { INestedSectionView } from '@app/components/TreeView/types';
 import { useGraphQlCollection } from '@app/api';
 import { SVGIcon } from '@app/components';
+
 import { INestingToken } from '../types';
 import TokenCard from './TokenCard';
 
-export const NestedSection: FC<INestedSectionView<INestingToken>> = ({ selectedToken, onViewNodeDetails, onUnnestClick, onTransferClick }) => {
-  const { isCollectionFetching, collection } = useGraphQlCollection(Number(selectedToken?.collection_id));
+export const NestedSection: FC<INestedSectionView<INestingToken>> = ({
+  selectedToken,
+  onViewNodeDetails,
+  onUnnestClick,
+  onTransferClick,
+}) => {
+  const { isCollectionFetching, collection } = useGraphQlCollection(
+    Number(selectedToken?.collection_id),
+  );
   return (
     <NestedDetails>
-      {selectedToken && <TitleWrapper>
-        <Title token={selectedToken} isCollectionLoading={isCollectionFetching} prefix={collection?.token_prefix || ''}/>
-      </TitleWrapper>}
-      {selectedToken && !selectedToken?.nestingChildren?.length && <NoNestedWrapper><SVGIcon name={'noTrades'} width={80} height={80}/><Text color='grey-500' size='m'>No nested tokens</Text></NoNestedWrapper>}
-      {!!selectedToken?.nestingChildren?.length && <NestedTokens>
-        {selectedToken.nestingChildren.map((token) => (
-          <TokenCard
-            key={`T-${token.token_id} C-${token.collection_id}`}
-            token={token}
-            onViewNodeDetails={onViewNodeDetails}
-            onUnnestClick={onUnnestClick}
-            onTransferClick={onTransferClick}
+      {selectedToken && (
+        <TitleWrapper>
+          <Title
+            token={selectedToken}
+            isCollectionLoading={isCollectionFetching}
+            prefix={collection?.token_prefix || ''}
           />
-        ))}
-      </NestedTokens>}
+        </TitleWrapper>
+      )}
+      {selectedToken && !selectedToken?.nestingChildren?.length && (
+        <NoNestedWrapper>
+          <SVGIcon name={'noTrades'} width={80} height={80} />
+          <Text color="grey-500" size="m">
+            No nested tokens
+          </Text>
+        </NoNestedWrapper>
+      )}
+      {!!selectedToken?.nestingChildren?.length && (
+        <NestedTokens>
+          {selectedToken.nestingChildren.map((token) => (
+            <TokenCard
+              key={`T-${token.token_id} C-${token.collection_id}`}
+              token={token}
+              onViewNodeDetails={onViewNodeDetails}
+              onUnnestClick={onUnnestClick}
+              onTransferClick={onTransferClick}
+            />
+          ))}
+        </NestedTokens>
+      )}
     </NestedDetails>
   );
 };
@@ -33,7 +57,7 @@ export const NestedSection: FC<INestedSectionView<INestingToken>> = ({ selectedT
 const NestedDetails = styled.div`
   display: block;
   padding: 16px 32px;
-  background-color: #EDEDEE50;
+  background-color: #ededee50;
   width: calc(100vw - 777px);
   @media (max-width: 1440px) {
     width: calc(100vw - 729px);
@@ -58,10 +82,17 @@ const TitleWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Title: FC<{isCollectionLoading: boolean, prefix: string, token: INestingToken }> = ({ isCollectionLoading, prefix, token }) => {
+const Title: FC<{
+  isCollectionLoading: boolean;
+  prefix: string;
+  token: INestingToken;
+}> = ({ isCollectionLoading, prefix, token }) => {
   if (isCollectionLoading) return <Skeleton height={28} width={156} />;
+
   return (
-    <Text color='additional-dark' size='l'>Nested in {prefix} #{token.token_id}</Text>
+    <Text color="additional-dark" size="l">
+      Nested in {prefix} #{token.token_id}
+    </Text>
   );
 };
 

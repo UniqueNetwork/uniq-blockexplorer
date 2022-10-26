@@ -1,12 +1,14 @@
 import React, { FC, useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { INodeView, Picture, SVGIcon } from '@app/components';
-import { INestingToken } from '../types';
 import { useParams } from 'react-router-dom';
-import { DeviceSize, useDeviceSize } from '@app/hooks';
-import MobileModalActions from './MobileModalActions';
 import { Tooltip, Skeleton } from '@unique-nft/ui-kit';
+
+import { INodeView, Picture, SVGIcon } from '@app/components';
+import { DeviceSize, useDeviceSize } from '@app/hooks';
 import { useGraphQlCollection } from '@app/api';
+
+import { INestingToken } from '../types';
+import MobileModalActions from './MobileModalActions';
 
 const NodeView: FC<INodeView<INestingToken>> = ({
   arrowClicked,
@@ -20,18 +22,24 @@ const NodeView: FC<INodeView<INestingToken>> = ({
   children,
   onViewNodeDetails,
 }) => {
-  const { id, collectionId } = useParams<{ id: string, collectionId: string}>();
+  const { id, collectionId } = useParams<{ id: string; collectionId: string }>();
   const [menuVisible, setMenuVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const deviceSize = useDeviceSize();
-  const { isCollectionFetching, collection } = useGraphQlCollection(Number(data?.collection_id));
+  const { isCollectionFetching, collection } = useGraphQlCollection(
+    Number(data?.collection_id),
+  );
   const squareIcon = useRef(null);
+
   const pinIconRef = useRef(null);
 
-  const onClick = useCallback((event: React.MouseEvent) => {
-    if (deviceSize === DeviceSize.sm) setModalVisible(true);
-    else textClicked(event);
-  }, [deviceSize, textClicked]);
+  const onClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (deviceSize === DeviceSize.sm) setModalVisible(true);
+      else textClicked(event);
+    },
+    [deviceSize, textClicked],
+  );
 
   const showMenu = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     setMenuVisible(true);
@@ -44,6 +52,7 @@ const NodeView: FC<INodeView<INestingToken>> = ({
 
   const viewTokenDetails = useCallback(() => {
     if (onViewNodeDetails) onViewNodeDetails(data);
+
     setModalVisible(false);
   }, [onViewNodeDetails, data]);
 
@@ -51,15 +60,16 @@ const NodeView: FC<INodeView<INestingToken>> = ({
     setModalVisible(false);
   }, []);
 
-  const isCurrent = id === data.token_id.toString() && collectionId === data.collection_id.toString();
+  const isCurrent =
+    id === data.token_id.toString() && collectionId === data.collection_id.toString();
 
   return (
     <>
       <ViewContainer
         isFirst={isFirst}
-        onClick={onClick}
         isSelected={isSelected}
         isParentSelected={isParentSelected}
+        onClick={onClick}
         onMouseEnter={showMenu}
         onMouseLeave={hideMenu}
       >
@@ -67,48 +77,78 @@ const NodeView: FC<INodeView<INestingToken>> = ({
           <Arrow
             isFirst={isFirst}
             level={level}
-            onClick={arrowClicked}
             isOpened={isOpened}
+            onClick={arrowClicked}
           >
-            {!!children && <SVGIcon width={16} height={16} name={'triangle'} color={'var(--primary-500)'} />}
+            {!!children && (
+              <SVGIcon
+                width={16}
+                height={16}
+                name={'triangle'}
+                color={'var(--primary-500)'}
+              />
+            )}
           </Arrow>
-          <Picture alt={`T-${data.token_id} C-${data.collection_id}`} src={(data.image?.fullUrl) || undefined}/>
-          <TokenTitle token={data} isCollectionLoading={isCollectionFetching} prefix={collection?.token_prefix || ''}/>
+          <Picture
+            alt={`T-${data.token_id} C-${data.collection_id}`}
+            src={data.image?.fullUrl || undefined}
+          />
+          <TokenTitle
+            token={data}
+            isCollectionLoading={isCollectionFetching}
+            prefix={collection?.token_prefix || ''}
+          />
         </NftInfo>
         <Actions>
-          {deviceSize !== DeviceSize.sm && <ActionButtons className={'action-buttons'}>
-            {!isCurrent && <div onClick={viewTokenDetails}>
+          {deviceSize !== DeviceSize.sm && (
+            <ActionButtons className={'action-buttons'}>
+              {!isCurrent && (
+                <div onClick={viewTokenDetails}>
+                  <Tooltip
+                    align={{
+                      vertical: 'top',
+                      horizontal: 'middle',
+                      appearance: 'vertical',
+                    }}
+                    targetRef={squareIcon}
+                  >
+                    Go to the token page
+                  </Tooltip>
+                  <SVGIcon
+                    width={32}
+                    height={32}
+                    name={'square'}
+                    color={'var(--primary-400)'}
+                    innerRef={squareIcon}
+                  />
+                </div>
+              )}
+            </ActionButtons>
+          )}
+          {isCurrent && (
+            <PinIcon className={'pin-icon'}>
               <Tooltip
                 align={{ vertical: 'top', horizontal: 'middle', appearance: 'vertical' }}
-                targetRef={squareIcon}
+                targetRef={pinIconRef}
               >
-                Go to the token page
+                Current token page
               </Tooltip>
-              <SVGIcon
-                width={32}
-                height={32}
-                name={'square'}
-                color={'var(--primary-400)'}
-                innerRef={squareIcon}
-              />
-            </div>}
-          </ActionButtons>}
-          {isCurrent && <PinIcon className={'pin-icon'}>
-            <Tooltip
-              align={{ vertical: 'top', horizontal: 'middle', appearance: 'vertical' }}
-              targetRef={pinIconRef}
-            >
-              Current token page
-            </Tooltip>
-            <SVGIcon width={32} height={32} name={'pin'} innerRef={pinIconRef}/>
-          </PinIcon>}
+              <SVGIcon width={32} height={32} name={'pin'} innerRef={pinIconRef} />
+            </PinIcon>
+          )}
         </Actions>
-        <hr/>
+        <hr />
       </ViewContainer>
       <MobileModalActions isVisible={modalVisible} onClose={closeModal}>
-        <ViewTokenAction onClick={viewTokenDetails}>Go to the token page
+        <ViewTokenAction onClick={viewTokenDetails}>
+          Go to the token page
           <IconWrapper>
-            <SVGIcon name={'arrowUpRight'} width={16} height={16} color={'var(--color-primary-500)'} />
+            <SVGIcon
+              name={'arrowUpRight'}
+              width={16}
+              height={16}
+              color={'var(--color-primary-500)'}
+            />
           </IconWrapper>
         </ViewTokenAction>
       </MobileModalActions>
@@ -117,7 +157,11 @@ const NodeView: FC<INodeView<INestingToken>> = ({
   );
 };
 
-const ViewContainer = styled.div<{ isFirst: boolean | undefined, isSelected: boolean | undefined, isParentSelected: boolean | undefined }>`
+const ViewContainer = styled.div<{
+  isFirst: boolean | undefined;
+  isSelected: boolean | undefined;
+  isParentSelected: boolean | undefined;
+}>`
   height: 60px;
   position: relative;
   display: flex;
@@ -125,7 +169,8 @@ const ViewContainer = styled.div<{ isFirst: boolean | undefined, isSelected: boo
   justify-content: space-between;
   cursor: pointer;
   min-width: 524px;
-  border: 1px solid ${({ isSelected }) => isSelected ? 'var(--primary-200)' : 'transparent'};
+  border: 1px solid
+    ${({ isSelected }) => (isSelected ? 'var(--primary-200)' : 'transparent')};
   hr {
     position: absolute;
     border-top: 1px dashed var(--grey-300);
@@ -153,9 +198,16 @@ const ViewContainer = styled.div<{ isFirst: boolean | undefined, isSelected: boo
     hr {
       display: none;
     }
-    .action-buttons { display: flex; }
+    .action-buttons {
+      display: flex;
+    }
   }
-  background-color: ${({ isSelected, isParentSelected }) => (isSelected ? 'var(--primary-200)' : isParentSelected ? 'var(--primary-100)' : 'none')} !important;
+  background-color: ${({ isSelected, isParentSelected }) =>
+    isSelected
+      ? 'var(--primary-200)'
+      : isParentSelected
+      ? 'var(--primary-100)'
+      : 'none'} !important;
 `;
 
 const NftInfo = styled.div`
@@ -178,10 +230,13 @@ const ActionButtons = styled.div`
   }
 `;
 
-const PinIcon = styled.div`
-`;
+const PinIcon = styled.div``;
 
-const Arrow = styled.div<{ isOpened: boolean | undefined, isFirst: boolean | undefined, level: number }>`
+const Arrow = styled.div<{
+  isOpened: boolean | undefined;
+  isFirst: boolean | undefined;
+  level: number;
+}>`
   cursor: pointer;
   display: inline-block;
   -webkit-user-select: none;
@@ -189,7 +244,7 @@ const Arrow = styled.div<{ isOpened: boolean | undefined, isFirst: boolean | und
   -ms-user-select: none;
   user-select: none;
   transition: 0.2s;
-  transform: ${({ isOpened }) => (!isOpened && 'rotate(180deg)')};
+  transform: ${({ isOpened }) => !isOpened && 'rotate(180deg)'};
   margin-left: ${({ isFirst, level }) => (isFirst ? 24 : 24 + 16 * level)}px;
   width: 16px;
 `;
@@ -235,12 +290,23 @@ const IconWrapper = styled.div`
 
 export default NodeView;
 
-const TokenTitle: FC<{isCollectionLoading: boolean, prefix: string, token: INestingToken}> = ({ isCollectionLoading, prefix, token }) => {
+const TokenTitle: FC<{
+  isCollectionLoading: boolean;
+  prefix: string;
+  token: INestingToken;
+}> = ({ isCollectionLoading, prefix, token }) => {
   if (isCollectionLoading) return <Skeleton height={24} width={60} />;
+
   return (
     <TitleContainer>
-      <Name>{prefix} #{token.token_id}</Name>
-      {token.nestingChildren?.length > 0 && <NestedCount>{token.nestingChildren.length} item{token.nestingChildren.length > 1 && 's'}</NestedCount>}
+      <Name>
+        {prefix} #{token.token_id}
+      </Name>
+      {token.nestingChildren?.length > 0 && (
+        <NestedCount>
+          {token.nestingChildren.length} item{token.nestingChildren.length > 1 && 's'}
+        </NestedCount>
+      )}
     </TitleContainer>
   );
 };
@@ -253,7 +319,7 @@ const TitleContainer = styled.div`
 const Name = styled.p`
   font-size: 16px;
   line-height: 24px;
-  color: var(--dark);;
+  color: var(--dark);
 `;
 
 const NestedCount = styled.p`
