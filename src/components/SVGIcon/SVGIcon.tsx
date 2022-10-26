@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ForwardedRef } from 'react';
 import styled from 'styled-components/macro';
 
 import * as IconComponents from '@app/images/icons/icons';
@@ -10,6 +10,7 @@ export interface SVGIconProps {
   width: number;
   height: number;
   className?: string;
+  innerRef?: ForwardedRef<any>;
 }
 
 export const SVGIcon: FC<SVGIconProps> = ({
@@ -18,6 +19,7 @@ export const SVGIcon: FC<SVGIconProps> = ({
   color,
   height = 16,
   width = 16,
+  innerRef,
   ...props
 }: SVGIconProps) => {
   const Icon = IconComponents[name];
@@ -28,6 +30,7 @@ export const SVGIcon: FC<SVGIconProps> = ({
       color={color}
       height={height}
       width={width}
+      ref={innerRef}
       {...props}
     >
       <Icon />

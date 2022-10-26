@@ -16,3 +16,7 @@ export { default as question } from './question.svg';
 export { default as filter } from './filter.svg';
 export { default as mark } from './mark.svg';
 export { default as search } from './search.svg';
+export { default as noTrades } from './no-trades.svg';
+export { default as square } from './square.svg';
+export { default as pin } from './pin.svg';
+export { default as arrowUpRight } from './arrow-up-right.svg';
