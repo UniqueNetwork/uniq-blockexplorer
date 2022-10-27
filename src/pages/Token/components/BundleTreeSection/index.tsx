@@ -14,6 +14,7 @@ import { PagePaper, BundleTree } from '@app/components';
 import { countNestedChildren } from '@app/utils';
 import { Token } from '@app/api';
 import { useGraphQLBundleTree } from '@app/api/graphQL/bundleTree/bundleTree';
+import { useApi } from '@app/hooks';
 
 import NodeView from './BundleTree/Node/NodeView';
 import { INestingToken } from './BundleTree/types';
@@ -24,15 +25,6 @@ const areNodesEqual = (a: INestingToken, b: INestingToken) =>
 
 const getKey = (a: INestingToken) => `T${a.token_id}C${a.collection_id}`;
 
-const sortTokensInBundle = (bundle: INestingToken) => {
-  if (!bundle.nestingChildren?.length) return bundle;
-
-  bundle.nestingChildren = bundle.nestingChildren
-    ?.sort((a, b) => (a.token_id > b.token_id ? 1 : -1))
-    .map((token) => sortTokensInBundle(token));
-  return bundle;
-};
-
 interface IProps {
   token: Token;
   onViewTokenDetails?: Dispatch<SetStateAction<INestingToken | undefined>>;
@@ -42,13 +34,15 @@ function BundleTreeSection({
   onViewTokenDetails: onViewTokenDetailsProps,
   token,
 }: IProps) {
+  const { collection_id, token_id } = token;
   const navigate = useNavigate();
   const [isMobileViewVisible, setIsMobileViewVisible] = useState(false);
   const [bundle, setBundle] = useState<INestingToken[]>();
   const [selectedToken, setSelectedToken] = useState<INestingToken>();
+  const { currentChain } = useApi();
   const { bundle: bundleQL, isBundleFetching } = useGraphQLBundleTree(
-    token.collection_id,
-    token.token_id,
+    collection_id,
+    token_id,
   );
 
   const onActionClick = useCallback(
@@ -62,8 +56,25 @@ function BundleTreeSection({
   useEffect(() => {
     if (bundle) return;
 
+    const sortTokensInBundleAndSelectOpened = (bundle: INestingToken) => {
+      if (bundle.token_id === token_id && bundle.collection_id === collection_id) {
+        bundle.selected = true;
+        bundle.opened = true;
+        setSelectedToken(bundle);
+      }
+
+      if (!bundle.nestingChildren?.length) return bundle;
+
+      bundle.nestingChildren = bundle.nestingChildren
+        ?.sort((a, b) => (a.token_id > b.token_id ? 1 : -1))
+        .map((token) => sortTokensInBundleAndSelectOpened(token));
+      return bundle;
+    };
+
     if (bundleQL && !isBundleFetching) {
-      setBundle([sortTokensInBundle(JSON.parse(JSON.stringify(bundleQL)))]);
+      let allowedToEditBundle = JSON.parse(JSON.stringify(bundleQL));
+      allowedToEditBundle = sortTokensInBundleAndSelectOpened(allowedToEditBundle);
+      setBundle([allowedToEditBundle]);
     }
   }, [bundle, bundleQL, isBundleFetching]);
 
@@ -77,15 +88,19 @@ function BundleTreeSection({
 
   const onViewTokenDetails = useCallback(
     (token: INestingToken) => {
-      navigate(`/token/${token.collection_id}/${token.token_id}`);
+      navigate(
+        `/${currentChain.network.toLowerCase()}/nfts/${collection_id}/${token_id}`,
+      );
 
       if (onViewTokenDetailsProps) onViewTokenDetailsProps(token);
       // if (isMobileViewVisible) closeView();
     },
-    [onViewTokenDetailsProps, isMobileViewVisible],
+    [onViewTokenDetailsProps, isMobileViewVisible, navigate],
   );
 
   if (isBundleFetching) return <BundleIsLoading />;
+
+  if (!bundle) return null;
 
   return (
     <>
@@ -104,6 +119,7 @@ function BundleTreeSection({
             className={'tree-container'}
             compareNodes={areNodesEqual}
             childrenProperty={'nestingChildren'}
+            selectedToken={selectedToken}
             getKey={getKey}
             onNodeClicked={onNodeClicked}
             onViewNodeDetails={onViewTokenDetails}

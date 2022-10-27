@@ -45,6 +45,7 @@ export interface ITree<T> {
   compareNodes: (a: T, b: T) => boolean;
   getKey: (a: T) => string;
   childrenProperty: keyof T;
+  selectedToken?: T;
   onViewNodeDetails?: (node: T) => void;
   onUnnestClick?: (node: T) => void;
   onTransferClick?: (node: T) => void;

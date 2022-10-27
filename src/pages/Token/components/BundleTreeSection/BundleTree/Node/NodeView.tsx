@@ -22,7 +22,10 @@ const NodeView: FC<INodeView<INestingToken>> = ({
   children,
   onViewNodeDetails,
 }) => {
-  const { id, collectionId } = useParams<{ id: string; collectionId: string }>();
+  const { tokenId, collectionId } = useParams<{
+    tokenId: string;
+    collectionId: string;
+  }>();
   const [menuVisible, setMenuVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const deviceSize = useDeviceSize();
@@ -61,7 +64,8 @@ const NodeView: FC<INodeView<INestingToken>> = ({
   }, []);
 
   const isCurrent =
-    id === data.token_id.toString() && collectionId === data.collection_id.toString();
+    tokenId === data.token_id.toString() &&
+    collectionId === data.collection_id.toString();
 
   return (
     <>
@@ -80,13 +84,8 @@ const NodeView: FC<INodeView<INestingToken>> = ({
             isOpened={isOpened}
             onClick={arrowClicked}
           >
-            {!!children && (
-              <SVGIcon
-                width={16}
-                height={16}
-                name={'triangle'}
-                color={'var(--primary-500)'}
-              />
+            {!(!children || (Array.isArray(children) && children.length === 0)) && (
+              <SVGIcon width={16} height={16} name={'triangle'} />
             )}
           </Arrow>
           <Picture
@@ -114,13 +113,7 @@ const NodeView: FC<INodeView<INestingToken>> = ({
                   >
                     Go to the token page
                   </Tooltip>
-                  <SVGIcon
-                    width={32}
-                    height={32}
-                    name={'square'}
-                    color={'var(--primary-400)'}
-                    innerRef={squareIcon}
-                  />
+                  <SVGIcon width={32} height={32} name={'square'} innerRef={squareIcon} />
                 </div>
               )}
             </ActionButtons>
@@ -225,8 +218,10 @@ const ActionButtons = styled.div`
   gap: 4px;
   display: none;
   align-items: center;
-  svg:hover {
-    fill: var(--secondary-200);
+  svg {
+    path {
+      fill: var(--secondary-200);
+    }
   }
 `;
 
