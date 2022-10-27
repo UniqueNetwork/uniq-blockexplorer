@@ -33,9 +33,9 @@ export const Toolbar = () => {
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
-  const location = useLocation();
-  // const toolbarIsActive = tokensPage || collectionsPage || bundlesPage;
   const toolbarIsActive = notTheMainPage;
+  const showFilter = notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
+  const showView = notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
 
   const [statePrev, setStatePrev] = useState<{ sort?: string; nesting?: string }>();
   const [stateNew, setStateNew] = useState<{ sort?: string; nesting?: string }>();
@@ -249,21 +249,22 @@ export const Toolbar = () => {
   return (
     <>
       <Wrapper className={`${visibleToolbar && toolbarIsActive ? 'show' : 'hide'}`}>
-        <WrapperShadow />
         <Buttons>
-          <ButtonItem
-            onClick={() => {
-              setMobileType(MobileType.Filter);
-              setVisibleModal(true);
-            }}
-          >
-            <SVGIcon name="filter" width={32} height={32} />
-            {!allDefaultSettings && (
-              <Mark>
-                <SVGIcon name="mark" width={12} height={12} />
-              </Mark>
-            )}
-          </ButtonItem>
+          {showFilter && (
+            <ButtonItem
+              onClick={() => {
+                setMobileType(MobileType.Filter);
+                setVisibleModal(true);
+              }}
+            >
+              <SVGIcon name="filter" width={32} height={32} />
+              {!allDefaultSettings && (
+                <Mark>
+                  <SVGIcon name="mark" width={12} height={12} />
+                </Mark>
+              )}
+            </ButtonItem>
+          )}
           <ButtonItem
             onClick={() => {
               setMobileType(MobileType.Search);
@@ -272,14 +273,16 @@ export const Toolbar = () => {
           >
             <SVGIcon name="search" width={32} height={32} />
           </ButtonItem>
-          <ButtonItem onClick={toggleView}>
-            <SVGIcon
-              color="white"
-              name={view === ViewType.List ? 'grid' : 'list'}
-              width={32}
-              height={32}
-            />
-          </ButtonItem>
+          {showView && (
+            <ButtonItem onClick={toggleView}>
+              <SVGIcon
+                color="white"
+                name={view === ViewType.List ? 'grid' : 'list'}
+                width={32}
+                height={32}
+              />
+            </ButtonItem>
+          )}
         </Buttons>
       </Wrapper>
 
@@ -349,6 +352,7 @@ const Buttons = styled.div`
   display: flex;
   padding: 20px;
   grid-column-gap: calc(var(--gap) * 2);
+  box-shadow: 0 4px 12px rgba(0, 156, 240, 0.32);
 `;
 const ButtonItem = styled.div`
   cursor: pointer;

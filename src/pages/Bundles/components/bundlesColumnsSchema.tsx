@@ -1,12 +1,10 @@
-import React from 'react';
 import { DefaultRecordType } from 'rc-table/lib/interface';
+import { Text } from '@unique-nft/ui-kit';
 
-import { timestampTableFormat } from '@app/utils';
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { timeDifference } from '@app/utils';
 
 import { Token, TokenSorting } from '../../../api/graphQL';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
-import CollectionTableCell from '../../../components/CollectionTableCell';
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
@@ -14,6 +12,7 @@ export const getBundlesColumns = (
   chainId: string,
   orderBy: TokenSorting,
   onOrderChange: (orderBy: TokenSorting) => void,
+  timestamp: number,
 ) => [
   {
     dataIndex: 'token_prefix',
@@ -40,7 +39,13 @@ export const getBundlesColumns = (
   {
     dataIndex: 'date_of_creation',
     key: 'date_of_creation',
-    render: timestampTableFormat,
+    render: (value: number) => {
+      return (
+        <Text size="m" weight="regular">
+          {timeDifference(value, timestamp)}
+        </Text>
+      );
+    },
     title: (
       <TableSortableColumnTitle
         dataIndex="date_of_creation"
@@ -55,12 +60,9 @@ export const getBundlesColumns = (
     dataIndex: 'collection_name',
     key: 'collection_name',
     render: (value: string, item: unknown) => (
-      <CollectionTableCell
-        chainId={chainId}
-        collectionId={(item as Token).collection_id}
-        collectionName={value}
-        coverImageUrl={getCoverURLFromCollection((item as Token).collection_cover)}
-      />
+      <Text color="primary-500" weight="light">
+        {value} [ID {(item as Token).collection_id}]
+      </Text>
     ),
     title: (
       <TableSortableColumnTitle
@@ -70,7 +72,7 @@ export const getBundlesColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 160,
+    width: 180,
   },
   {
     dataIndex: 'children_count',

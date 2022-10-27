@@ -147,7 +147,7 @@ export const useGraphQlTokens = ({
     () => ({
       fetchTokensError,
       isTokensFetching,
-      timestamp: data?.tokens?.timestamp,
+      timestamp: data?.tokens?.timestamp || 0,
       tokens: data?.tokens?.data,
       tokensCount: data?.tokens?.count || 0,
     }),
@@ -181,7 +181,7 @@ export const useGraphQlToken = (collectionId: number, tokenId: number) => {
   return {
     fetchTokensError,
     isTokensFetching,
-    timestamp: data?.tokens?.timestamp,
+    timestamp: data?.tokens?.timestamp || 0,
     token: data?.tokens?.data[0] || undefined,
     tokensCount: data?.tokens?.count,
   };
