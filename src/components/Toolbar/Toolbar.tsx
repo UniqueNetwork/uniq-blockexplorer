@@ -13,6 +13,7 @@ import {
 import { deviceWidth, TParam, useLocationPathname, useQueryParams } from '@app/hooks';
 import { defaultOrderId, OPTIONS as tokensOptions } from '@app/pages/Tokens/constants';
 import { OPTIONS as collectionsOptions } from '@app/pages/Collections/constants';
+import { OPTIONS as bundlesOptions } from '@app/pages/Bundles/constants';
 
 import { MobileModal } from '../MobileModal/MobileModal';
 
@@ -27,12 +28,14 @@ export const Toolbar = () => {
   const { view, setParamToQuery, sort, nesting } = useQueryParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
-  const { tokensPage, collectionsPage, bundlesPage } = useLocationPathname();
+  const { tokensPage, collectionsPage, bundlesPage, notTheMainPage } =
+    useLocationPathname();
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
   const location = useLocation();
-  const toolbarIsActive = tokensPage || collectionsPage || bundlesPage;
+  // const toolbarIsActive = tokensPage || collectionsPage || bundlesPage;
+  const toolbarIsActive = notTheMainPage;
 
   const [statePrev, setStatePrev] = useState<{ sort?: string; nesting?: string }>();
   const [stateNew, setStateNew] = useState<{ sort?: string; nesting?: string }>();
@@ -81,7 +84,9 @@ export const Toolbar = () => {
   const getSortingOptions = () => {
     if (collectionsPage) {
       return collectionsOptions;
-    } else if (location.pathname.match(`/(tokens)`)) {
+    } else if (bundlesPage) {
+      return bundlesOptions;
+    } else if (tokensPage) {
       return tokensOptions;
     }
 
