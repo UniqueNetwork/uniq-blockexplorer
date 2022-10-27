@@ -71,12 +71,24 @@ function BundleTreeSection({
       return bundle;
     };
 
+    const openNodeIfChildsPageOpened = (bundle: INestingToken) => {
+      if (!bundle.nestingChildren?.length) {
+        return bundle.token_id === token_id && bundle.collection_id === collection_id;
+      }
+
+      bundle.opened = !!bundle.nestingChildren.filter((token) =>
+        openNodeIfChildsPageOpened(token),
+      ).length;
+      return bundle;
+    };
+
     if (bundleQL && !isBundleFetching) {
       let allowedToEditBundle = JSON.parse(JSON.stringify(bundleQL));
       allowedToEditBundle = sortTokensInBundleAndSelectOpened(allowedToEditBundle);
+      allowedToEditBundle = openNodeIfChildsPageOpened(allowedToEditBundle);
       setBundle([allowedToEditBundle]);
     }
-  }, [bundle, bundleQL, isBundleFetching]);
+  }, [bundle, bundleQL, isBundleFetching, token_id, collection_id]);
 
   const onNodeClicked = useCallback((data: INestingToken) => {}, []);
 
@@ -89,7 +101,9 @@ function BundleTreeSection({
   const onViewTokenDetails = useCallback(
     (token: INestingToken) => {
       navigate(
-        `/${currentChain.network.toLowerCase()}/nfts/${collection_id}/${token_id}`,
+        `/${currentChain.network.toLowerCase()}/nfts/${token.collection_id}/${
+          token.token_id
+        }`,
       );
 
       if (onViewTokenDetailsProps) onViewTokenDetailsProps(token);
