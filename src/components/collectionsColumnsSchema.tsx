@@ -17,7 +17,7 @@ export const getCollectionsColumns = (
   {
     dataIndex: 'collection_id',
     key: 'collection_id',
-    render: (value: string, item: unknown) => (
+    render: (value: number, item: unknown) => (
       <CollectionTableCell
         chainId={chainId}
         collectionId={value}

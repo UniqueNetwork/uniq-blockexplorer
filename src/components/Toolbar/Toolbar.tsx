@@ -27,12 +27,12 @@ export const Toolbar = () => {
   const { view, setParamToQuery, sort, nesting } = useQueryParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
-  const { tokensOrCollectionsPage: toolbarIsActive, collectionsPage } =
-    useLocationPathname();
+  const { tokensPage, collectionsPage, bundlesPage } = useLocationPathname();
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
   const location = useLocation();
+  const toolbarIsActive = tokensPage || collectionsPage || bundlesPage;
 
   const [statePrev, setStatePrev] = useState<{ sort?: string; nesting?: string }>();
   const [stateNew, setStateNew] = useState<{ sort?: string; nesting?: string }>();

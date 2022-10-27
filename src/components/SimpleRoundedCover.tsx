@@ -8,7 +8,7 @@ import { IdentityIcon } from '@app/components/IdentityIcon';
 
 interface SimpleRoundedCoverProps {
   avatarSize?: 'small' | 'large' | 'middle' | 'x-small';
-  collectionId: string;
+  collectionId: number;
   coverImageUrl?: string;
   size?: number;
 }
