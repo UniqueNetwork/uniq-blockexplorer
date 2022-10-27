@@ -63,7 +63,7 @@ export const Tokens: VFC<TokensProps> = ({
         _or: [
           { type: { _eq: 'NFT' } },
           { type: { _eq: 'FRACTIONAL' } },
-          { _and: [{ type: { _eq: 'NESTED' } }, { parent_id: { _eq: null } }] },
+          { _and: [{ type: { _eq: 'NESTED' } }, { parent_id: { _is_null: true } }] },
         ],
       };
 
