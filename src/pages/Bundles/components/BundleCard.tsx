@@ -14,6 +14,7 @@ import { SVGIcon } from '@app/components/SVGIcon';
 type BundleCardProps = Token & { timeNow?: number };
 
 const BundleCard: FC<BundleCardProps> = ({
+  children_count,
   collection_id: collectionId,
   collection_name: name,
   date_of_creation: dateOfCreation,
@@ -21,6 +22,7 @@ const BundleCard: FC<BundleCardProps> = ({
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
+  transfers_count,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
@@ -51,7 +53,7 @@ const BundleCard: FC<BundleCardProps> = ({
               currentChain ? currentChain?.network + '/' : ''
             }collections/${collectionId}`}
           >
-            {`${'CollectionName'}`} [ID {collectionId}]
+            {name} [ID {collectionId}]
           </TokenCollectionLink>
         </CollectionLinkWrapper>
         <TokenProperties>
@@ -60,7 +62,7 @@ const BundleCard: FC<BundleCardProps> = ({
               Transfers:&nbsp;
             </Text>
             <Text color="additional-dark" size="xs" weight="light">
-              98
+              {transfers_count}
             </Text>
           </TransfersRow>
           <NestedRow>
@@ -68,7 +70,7 @@ const BundleCard: FC<BundleCardProps> = ({
               Nested items:&nbsp;
             </Text>
             <Text color="additional-dark" size="xs" weight="light">
-              98
+              {children_count}
             </Text>
           </NestedRow>
           <CreatedRow>

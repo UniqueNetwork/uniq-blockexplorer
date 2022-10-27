@@ -2,10 +2,11 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 
-import { OPTIONS } from '@app/pages/Collections/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 import { DeviceSizes, deviceWidth } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
+
+import { OPTIONS } from '../constants';
 
 interface RightMenuProps {
   selectSort: (selected: SelectOptionProps) => void;

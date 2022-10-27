@@ -7,7 +7,7 @@ import Picture from './Picture';
 
 interface TokenTableCellProps {
   chainId: string;
-  tokenId: string;
+  tokenId: number;
   collectionId: number;
   imageUrl: string | null;
   tokenPrefix: string;

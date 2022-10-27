@@ -2,6 +2,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 import { Skeleton } from '@unique-nft/ui-kit';
+import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import {
   Pagination,
@@ -13,14 +14,13 @@ import {
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
-import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api';
-// import { CollectionCard } from '@app/components/CollectionCard';
+import { CollectionSorting, Token, useGraphQlBundles } from '@app/api';
 import { PageHeading } from '@app/components/PageHeading';
 
 import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
-import { getCollectionsColumns } from './components/collectionsColumnsSchema';
 import BundlesGrid from './components/BundlesGrid';
+import { getBundlesColumns } from './components/bundlesColumnsSchema';
 
 const BundlesPage: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -79,49 +79,40 @@ const BundlesPage: FC = () => {
     setQueryParams(queryParams);
   };
 
-  let tokensFilter;
-
   const filter = useMemo(() => {
-    let filters = { _or: [{}], nesting_enabled: {}, burned: { _eq: 'false' } };
+    let filters = { _or: [{}], burned: { _eq: 'false' } };
 
     if (accountId) {
       filters._or = [
         { owner: { _eq: accountId } },
         { owner_normalized: { _eq: accountId } },
       ];
-      tokensFilter = { ...filters };
-    }
-
-    if (nesting === 'true') {
-      filters.nesting_enabled = { _eq: 'true' };
     }
 
     return filters;
-  }, [accountId, nesting]);
+  }, [accountId]);
 
-  const { collections, collectionsCount, isCollectionsFetching, timestamp } =
-    useGraphQlCollections({
-      filter,
-      offset,
-      orderBy,
-      pageSize: pageSizeNumber,
-      searchString: searchFromQuery,
-    });
-
-  const { tokens } = useGraphQlTokens({
-    filter: tokensFilter,
-    offset: 0,
+  const { bundles, bundlesCount, isBundlesFetching, timestamp } = useGraphQlBundles({
+    filter,
+    offset,
+    orderBy,
     pageSize: pageSizeNumber,
+    searchString: searchFromQuery,
   });
 
-  const collectionsWithTokenCover = collections?.map((collection) => ({
-    ...collection,
-    collection_cover:
-      collection.collection_cover ||
-      tokens?.find((token) => token.collection_id === collection.collection_id)?.image
-        ?.fullUrl ||
-      '',
-  }));
+  console.log('bundles', bundles);
+
+  const bundleColumns = getBundlesColumns(
+    currentChain.network,
+    orderBy,
+    setOrderAndQuery,
+  );
+
+  const getRowKey = useMemo(
+    () => (item: DefaultRecordType) =>
+      `token-${(item as Token).collection_id}-${(item as Token).token_id}`,
+    [],
+  );
 
   const selectGrid = () => {
     logUserEvents(UserEvents.Click.ON_GRID_VIEW_COLLECTIONS);
@@ -158,16 +149,16 @@ const BundlesPage: FC = () => {
         <div>
           <TopPaginationContainer>
             <Pagination
-              count={collectionsCount || 0}
+              count={bundlesCount || 0}
               currentPage={currentPage}
-              itemsName="Collections"
+              itemsName="Bundles"
               pageSize={pageSize}
               setPageSize={setPageSizeAndQuery}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
               onPageChange={setCurrentPage}
             />
           </TopPaginationContainer>
-          {isCollectionsFetching ? (
+          {isBundlesFetching ? (
             <SkeletonWrapper>
               <Skeleton />
             </SkeletonWrapper>
@@ -175,31 +166,26 @@ const BundlesPage: FC = () => {
             <>
               {view === ViewType.List ? (
                 <ScrollableTable
-                  columns={getCollectionsColumns(
-                    currentChain.network,
-                    orderBy,
-                    setOrderAndQuery,
-                    timestamp,
-                  )}
-                  data={collections || []}
-                  loading={isCollectionsFetching}
-                  rowKey="collection_id"
+                  columns={bundleColumns}
+                  data={bundles || []}
+                  loading={isBundlesFetching}
+                  rowKey={getRowKey}
                 />
               ) : (
                 <BundlesGrid
                   chainNetwork={currentChain.network}
                   timestamp={timestamp}
-                  tokens={tokens || []}
+                  bundles={bundles || []}
                 />
               )}
             </>
           )}
-          {!!collectionsCount && (
+          {!!bundlesCount && (
             <BottomPaginationContainer>
               <Pagination
-                count={collectionsCount || 0}
+                count={bundlesCount || 0}
                 currentPage={currentPage}
-                itemsName="Collections"
+                itemsName="Bundles"
                 pageSize={pageSize}
                 setPageSize={setPageSizeAndQuery}
                 siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}

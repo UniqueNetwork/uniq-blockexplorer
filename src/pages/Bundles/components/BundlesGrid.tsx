@@ -1,35 +1,34 @@
 import { FC } from 'react';
 import styled from 'styled-components/macro';
 
-import { Token } from '@app/api';
-import { TokenCard } from '@app/components';
 import { deviceWidth, useScrollToTop } from '@app/hooks';
+import { Token } from '@app/api';
 
 import BundleCard from './BundleCard';
 
 interface BundlesGridProps {
   chainNetwork: string;
   timestamp: number | undefined;
-  tokens: Token[];
+  bundles: Token[];
 }
 
-const BundlesGrid: FC<BundlesGridProps> = ({ chainNetwork, timestamp, tokens }) => {
+const BundlesGrid: FC<BundlesGridProps> = ({ chainNetwork, timestamp, bundles }) => {
   useScrollToTop();
 
   return (
-    <TokenGallery>
-      {tokens.map((token) => (
+    <BundlesGallery>
+      {bundles.map((bundle) => (
         <BundleCard
-          key={`token-${token.collection_id}-${token.token_id}`}
-          {...token}
+          key={`token-${bundle.collection_id}-${bundle.token_id}`}
+          {...bundle}
           timeNow={timestamp}
         />
       ))}
-    </TokenGallery>
+    </BundlesGallery>
   );
 };
 
-const TokenGallery = styled.div`
+const BundlesGallery = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-column-gap: calc(var(--gap) * 1.5);

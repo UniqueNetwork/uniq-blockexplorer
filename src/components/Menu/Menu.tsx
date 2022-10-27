@@ -6,6 +6,7 @@ import styled from 'styled-components/macro';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { useApi } from '@app/hooks';
 import { defaultSorting } from '@app/pages/Tokens/constants';
+import { isTouchEnabled } from '@app/utils';
 
 import { SVGIcon } from '..';
 
@@ -45,7 +46,7 @@ const Menu: FC = () => {
         <NavLink
           to={`/${
             currentChain ? currentChain?.network.toLowerCase() + '/' : ''
-          }bundles/?view=List`}
+          }bundles/?sort=${defaultSorting}`}
           onClick={onMenuClick('NFTS')}
         >
           Bundles
@@ -58,8 +59,8 @@ const Menu: FC = () => {
           width={24}
         />
         <ReactTooltip
-          // event={isTouchEnabled() ? 'click' : undefined}
-          event="mouseover"
+          event={isTouchEnabled() ? 'click' : undefined}
+          // event="mouseover"
           id="question"
           effect="solid"
           eventOff="mouseleave"

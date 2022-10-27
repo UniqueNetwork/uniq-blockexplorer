@@ -1,14 +1,14 @@
-import { CollectionSorting } from '@app/api';
+import { BundleSorting } from '@app/api';
 import { SelectOptionProps } from '@app/components';
 
 export type CollectionsComponentProps = {
   currentPage: number;
   pageSize?: number;
-  orderBy?: CollectionSorting;
+  orderBy?: BundleSorting;
   setCurrentPage: (page: number) => void;
 };
 
-export interface CollectionsSelectOption extends SelectOptionProps {
+export interface BundlesSelectOption extends SelectOptionProps {
   id: string;
   title: string;
   sortDir?:

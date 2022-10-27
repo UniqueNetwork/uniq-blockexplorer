@@ -1,4 +1,5 @@
 import React from 'react';
+import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { timestampTableFormat } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
@@ -9,28 +10,28 @@ import CollectionTableCell from '../../../components/CollectionTableCell';
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
-export const getTokensColumns = (
+export const getBundlesColumns = (
   chainId: string,
   orderBy: TokenSorting,
   onOrderChange: (orderBy: TokenSorting) => void,
 ) => [
   {
-    dataIndex: 'token_id',
-    key: 'token_id',
-    render: (value: number, item: unknown) => (
+    dataIndex: 'token_prefix',
+    key: 'token_prefix',
+    render: (value: string, item: DefaultRecordType) => (
       <TokenTableCell
         chainId={chainId}
-        collectionId={(item as Token).collection_id}
-        imageUrl={(item as Token).image.fullUrl}
-        tokenId={value}
-        tokenPrefix={(item as Token).token_prefix}
+        collectionId={item.collection_id}
+        imageUrl={item.image.fullUrl}
+        tokenId={item.token_id}
+        tokenPrefix={value}
       />
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="token_id"
+        dataIndex="token_prefix"
         orderBy={orderBy}
-        title="Item"
+        title="Bundle"
         onOrderChange={onOrderChange}
       />
     ),
@@ -44,32 +45,46 @@ export const getTokensColumns = (
       <TableSortableColumnTitle
         dataIndex="date_of_creation"
         orderBy={orderBy}
-        title="Created"
+        title="Bundle created"
         onOrderChange={onOrderChange}
       />
     ),
     width: 150,
   },
   {
-    dataIndex: 'collection_id',
-    key: 'collection_id',
-    render: (value: number, item: unknown) => (
+    dataIndex: 'collection_name',
+    key: 'collection_name',
+    render: (value: string, item: unknown) => (
       <CollectionTableCell
         chainId={chainId}
-        collectionId={value}
-        collectionName={(item as Token).collection_name}
+        collectionId={(item as Token).collection_id}
+        collectionName={value}
         coverImageUrl={getCoverURLFromCollection((item as Token).collection_cover)}
       />
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="collection_id"
+        dataIndex="collection_name"
         orderBy={orderBy}
         title="Collection"
         onOrderChange={onOrderChange}
       />
     ),
     width: 160,
+  },
+  {
+    dataIndex: 'children_count',
+    key: 'children_count',
+    render: (value: string, item: unknown) => <>{value}</>,
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="children_count"
+        orderBy={orderBy}
+        title="Nested items"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 100,
   },
   {
     dataIndex: 'transfers_count',

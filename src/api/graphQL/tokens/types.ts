@@ -11,6 +11,7 @@ export interface Token {
   attributes: DecodedAttributes;
   burned: boolean;
   token_id: number;
+  children_count: number;
   collection_id: number;
   collection_name: string;
   image: {

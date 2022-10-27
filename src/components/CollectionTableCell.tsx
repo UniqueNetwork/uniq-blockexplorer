@@ -9,7 +9,7 @@ import { SimpleRoundedCover } from '@app/components/SimpleRoundedCover';
 
 interface CollectionTableCellProps {
   chainId: string;
-  collectionId: string;
+  collectionId: number;
   coverImageUrl?: string;
   collectionName: string;
 }
