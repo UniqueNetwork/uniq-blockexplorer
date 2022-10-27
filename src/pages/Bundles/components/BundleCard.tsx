@@ -6,8 +6,6 @@ import { Text } from '@unique-nft/ui-kit';
 import { useApi, useCheckImageExists } from '@app/hooks';
 import { timeDifference } from '@app/utils';
 import { Token } from '@app/api';
-import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 
@@ -26,21 +24,15 @@ const BundleCard: FC<BundleCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
-  // user analytics
-  const onNFTCardClick = useCallback(() => {
-    const path = window.location.pathname;
-
-    // if (path.includes('collections')) {
-    //   logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
-    // }
-
+  const onBundleCardClick = useCallback(() => {
+    // todo: correct navigation to bundle page
     navigate(`/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`);
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
   return (
-    <TokenCardLink onClick={onNFTCardClick}>
+    <BundleCardLink onClick={onBundleCardClick}>
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -81,7 +73,7 @@ const BundleCard: FC<BundleCardProps> = ({
           </CreatedRow>
         </TokenProperties>
       </TokenTitle>
-    </TokenCardLink>
+    </BundleCardLink>
   );
 };
 
@@ -105,7 +97,7 @@ const StyledSVGIcon = styled(SVGIcon)`
   margin-right: 5px;
 `;
 
-const TokenCardLink = styled.div`
+const BundleCardLink = styled.div`
   cursor: pointer;
   width: 100%;
   border: 1px solid var(--blue-gray-200);

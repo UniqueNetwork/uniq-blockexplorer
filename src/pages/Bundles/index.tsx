@@ -27,7 +27,6 @@ const BundlesPage: FC = () => {
   const {
     searchString: searchFromQuery,
     accountId,
-    nesting,
     sort,
     setParamToQuery,
     view,
@@ -68,11 +67,6 @@ const BundlesPage: FC = () => {
     ]);
   };
 
-  const setNestingAndQuery = () => {
-    setCurrentPage(1);
-    setParamToQuery([{ name: 'nesting', value: nesting === 'true' ? 'false' : 'true' }]);
-  };
-
   const setPageSizeAndQuery = (option: SelectOptionProps) => {
     setPageSize(option);
     queryParams.set('pageSize', `${option.title}`);
@@ -99,8 +93,6 @@ const BundlesPage: FC = () => {
     pageSize: pageSizeNumber,
     searchString: searchFromQuery,
   });
-
-  console.log('bundles', bundles);
 
   const bundleColumns = getBundlesColumns(
     currentChain.network,

@@ -7,25 +7,6 @@ export interface BundlesVariables {
   orderBy?: BundleSorting;
 }
 
-// export interface Bundle {
-//   attributes: DecodedAttributes;
-//   burned: boolean;
-//   token_id: number;
-//   collection_id: number;
-//   collection_name: string;
-//   image: {
-//     fullUrl: string | null;
-//   };
-//   date_of_creation: number;
-//   token_prefix: string;
-//   owner: string;
-//   owner_normalized: string;
-//   image_path: string;
-//   collection_cover: string;
-//   collection_description: string;
-//   transfers_count: number;
-// }
-
 export interface BundlesData {
   tokens: {
     data: Token[];

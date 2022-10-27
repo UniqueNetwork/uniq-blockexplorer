@@ -60,7 +60,6 @@ const Menu: FC = () => {
         />
         <ReactTooltip
           event={isTouchEnabled() ? 'click' : undefined}
-          // event="mouseover"
           id="question"
           effect="solid"
           eventOff="mouseleave"

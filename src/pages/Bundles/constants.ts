@@ -1,7 +1,6 @@
 import { BundleSorting } from '@app/api';
 
 import { BundlesSelectOption } from './types';
-// transfers_count
 export const OPTIONS: BundlesSelectOption[] = [
   {
     iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
@@ -35,14 +34,14 @@ export const OPTIONS: BundlesSelectOption[] = [
     iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
     id: '5',
     sortDir: 'desc_nulls_last',
-    sortField: 'collection_id',
+    sortField: 'collection_name',
     title: 'Collection name',
   },
   {
     iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
     id: '6',
     sortDir: 'asc_nulls_first',
-    sortField: 'collection_id',
+    sortField: 'collection_name',
     title: 'Collection name',
   },
   {
