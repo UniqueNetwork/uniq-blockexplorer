@@ -65,7 +65,7 @@ const NestedDetails = styled.div`
   @media (max-width: 1024px) {
     width: calc(100vw - 665px);
   }
-  @media (max-width: 768px) {
+  @media (max-width: 991px) {
     display: none;
   }
 `;

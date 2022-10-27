@@ -189,7 +189,7 @@ const ViewContainer = styled.div<{
     border: 1px solid var(--primary-400);
     z-index: 2;
     hr {
-      display: none;
+      opacity: 0;
     }
     .action-buttons {
       display: flex;

@@ -146,17 +146,6 @@ function BundleTreeSection({
 
 const BundlePagePaper = styled(PagePaper)`
   display: block;
-
-  .tree-container {
-    width: 536px;
-    @media (max-width: 768px) {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: 567px) {
-    display: none;
-  }
 `;
 
 const HeaderStyled = styled.div`
@@ -172,6 +161,29 @@ const Content = styled.div`
   display: flex;
   border: 1px solid var(--grey-300);
   border-radius: 4px;
+  @media (max-width: 991px) {
+    display: block;
+  }
+
+  .tree-container {
+    overflow: auto;
+    width: 550px;
+    height: 306px;
+    @media (max-width: 1440px) {
+      width: 618px;
+    }
+    @media (max-width: 1199px) {
+      width: 462px;
+      height: 554px;
+    }
+    @media (max-width: 991px) {
+      width: 100%;
+      height: 354px;
+    }
+    @media (max-width: 479px) {
+      height: 346px;
+    }
+  }
 `;
 
 export default BundleTreeSection;
