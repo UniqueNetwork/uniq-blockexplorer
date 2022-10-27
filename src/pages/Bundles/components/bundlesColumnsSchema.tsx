@@ -29,7 +29,7 @@ export const getBundlesColumns = (
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="token_prefix"
+        dataIndex="token_name"
         orderBy={orderBy}
         title="Bundle"
         onOrderChange={onOrderChange}

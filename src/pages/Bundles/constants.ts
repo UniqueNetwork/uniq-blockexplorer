@@ -6,14 +6,14 @@ export const OPTIONS: BundlesSelectOption[] = [
     iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
     id: '1',
     sortDir: 'desc_nulls_last',
-    sortField: 'token_prefix',
+    sortField: 'token_name',
     title: 'Token name',
   },
   {
     iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
     id: '2',
     sortDir: 'asc_nulls_first',
-    sortField: 'token_prefix',
+    sortField: 'token_name',
     title: 'Token name',
   },
   {
