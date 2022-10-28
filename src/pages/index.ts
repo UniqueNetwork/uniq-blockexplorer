@@ -7,6 +7,7 @@ import Tokens from './Tokens';
 import Token from './Token';
 import Transfers from './Transfers';
 import Block from './Block';
+import Bundle from './Bundle';
 
 export {
   Account,
@@ -18,4 +19,5 @@ export {
   Token,
   Transfers,
   Block,
+  Bundle,
 };

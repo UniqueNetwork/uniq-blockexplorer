@@ -5,14 +5,14 @@ import ReactTooltip from 'react-tooltip';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Token } from '@app/api';
-import { LoadingComponent, Picture } from '@app/components';
+import { LoadingComponent, Picture } from '@app/components/index';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, timestampFormat } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
 
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
 interface TokenDetailComponentProps {
   token: Token;
@@ -29,7 +29,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   const {
     attributes,
-    collection_description: description,
     collection_id: collectionId,
     collection_name: name,
     date_of_creation: createdOn,
@@ -37,7 +36,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     owner,
     token_id: id,
     token_prefix: prefix,
-    type = 'Nested', // TODO: remove default value once type is available on back-end
+    type,
   } = token;
 
   if (loading) return <LoadingComponent />;

@@ -23,7 +23,7 @@ const Picture: FC<PictureProps> = ({ alt, className, src, badge }) => {
       ) : (
         <>
           {badge && (
-            <Badge className={'badge'}>{badge === 'Nested' ? 'Bundle' : badge}</Badge>
+            <Badge className={'badge'}>{badge === 'NESTED' ? 'Bundle' : badge}</Badge>
           )}
           {imgSrc ? (
             <img alt={alt} src={imgSrc} />

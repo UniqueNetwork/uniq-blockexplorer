@@ -24,6 +24,7 @@ const tokensQuery = gql`
         token_id
         token_prefix
         transfers_count
+        type
       }
       count
       timestamp
