@@ -1,11 +1,9 @@
 import { Text } from '@unique-nft/ui-kit';
 
-import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { timeDifference } from '@app/utils';
 
 import { Token, TokenSorting } from '../../../api/graphQL';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
-import CollectionTableCell from '../../../components/CollectionTableCell';
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
@@ -13,7 +11,7 @@ export const getTokensColumns = (
   chainId: string,
   orderBy: TokenSorting,
   onOrderChange: (orderBy: TokenSorting) => void,
-  timestamp?: number,
+  timestamp: number,
 ) => [
   {
     dataIndex: 'token_id',
@@ -61,12 +59,9 @@ export const getTokensColumns = (
     dataIndex: 'collection_id',
     key: 'collection_id',
     render: (value: number, item: unknown) => (
-      <CollectionTableCell
-        chainId={chainId}
-        collectionId={value}
-        collectionName={(item as Token).collection_name}
-        coverImageUrl={getCoverURLFromCollection((item as Token).collection_cover)}
-      />
+      <Text color="primary-500" weight="light">
+        {(item as Token).collection_name} [ID {value}]
+      </Text>
     ),
     title: (
       <TableSortableColumnTitle

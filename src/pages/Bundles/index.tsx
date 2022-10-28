@@ -98,6 +98,7 @@ const BundlesPage: FC = () => {
     currentChain.network,
     orderBy,
     setOrderAndQuery,
+    timestamp,
   );
 
   const getRowKey = useMemo(

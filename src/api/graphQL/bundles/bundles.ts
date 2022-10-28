@@ -182,7 +182,7 @@ export const useGraphQlBundle = (collectionId: number, tokenId: number) => {
   return {
     fetchBundlesError,
     isBundlesFetching,
-    timestamp: data?.tokens?.timestamp,
+    timestamp: data?.tokens?.timestamp || 0,
     bundle: data?.tokens?.data[0] || undefined,
     bundlesCount: data?.tokens?.count,
   };
