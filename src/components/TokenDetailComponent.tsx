@@ -164,7 +164,7 @@ const TokenInfo = styled.div`
   border-bottom: 1px dashed var(--border-color);
 
   span {
-    display: flex;
+    display: flex !important;
     align-items: center;
   }
 `;
