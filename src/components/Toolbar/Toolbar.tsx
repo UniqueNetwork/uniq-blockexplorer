@@ -277,7 +277,7 @@ export const Toolbar = () => {
             <ButtonItem onClick={toggleView}>
               <SVGIcon
                 color="white"
-                name={view === ViewType.List ? 'grid' : 'list'}
+                name={view === ViewType.List || !view ? 'grid' : 'list'}
                 width={32}
                 height={32}
               />

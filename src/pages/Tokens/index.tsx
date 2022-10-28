@@ -29,14 +29,7 @@ const TokensPage: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentChain } = useApi();
-  const {
-    searchString: searchFromQuery,
-    accountId,
-    nesting,
-    sort,
-    setParamToQuery,
-    view,
-  } = useQueryParams();
+  const { setParamToQuery, view } = useQueryParams();
   // const [view, setView] = useState<ViewType>(ViewType.List);
   const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
