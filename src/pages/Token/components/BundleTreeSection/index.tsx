@@ -36,21 +36,12 @@ function BundleTreeSection({
 }: IProps) {
   const { collection_id, token_id } = token;
   const navigate = useNavigate();
-  const [isMobileViewVisible, setIsMobileViewVisible] = useState(false);
   const [bundle, setBundle] = useState<INestingToken[]>();
   const [selectedToken, setSelectedToken] = useState<INestingToken>();
   const { currentChain } = useApi();
   const { bundle: bundleQL, isBundleFetching } = useGraphQLBundleTree(
     collection_id,
     token_id,
-  );
-
-  const onActionClick = useCallback(
-    (/* action: BundleModalType */) => (token: INestingToken) => {
-      setSelectedToken(token);
-      // setModalType(action);
-    },
-    [],
   );
 
   useEffect(() => {
@@ -100,6 +91,7 @@ function BundleTreeSection({
 
   const onViewTokenDetails = useCallback(
     (token: INestingToken) => {
+      // todo: correct navigation to bundle page
       navigate(
         `/${currentChain.network.toLowerCase()}/nfts/${token.collection_id}/${
           token.token_id
@@ -107,9 +99,8 @@ function BundleTreeSection({
       );
 
       if (onViewTokenDetailsProps) onViewTokenDetailsProps(token);
-      // if (isMobileViewVisible) closeView();
     },
-    [onViewTokenDetailsProps, isMobileViewVisible, navigate],
+    [onViewTokenDetailsProps, navigate],
   );
 
   if (isBundleFetching) return <BundleIsLoading />;
@@ -122,7 +113,7 @@ function BundleTreeSection({
         <HeaderStyled id={'bundle'}>
           <Heading size={'2'}>Bundle tree structure</Heading>
           <Text color="grey-500" size="m">
-            {tokensCount + 1} items total
+            {tokensCount + 1} nested items
           </Text>
         </HeaderStyled>
         <Content>
@@ -146,6 +137,7 @@ function BundleTreeSection({
 
 const BundlePagePaper = styled(PagePaper)`
   display: block;
+  padding: 0;
 `;
 
 const HeaderStyled = styled.div`
@@ -155,33 +147,47 @@ const HeaderStyled = styled.div`
   & > span {
     padding-top: 12px;
   }
+  @media (max-width: 575px) {
+    flex-direction: column;
+    gap: calc(var(--gap) / 2);
+    margin-bottom: calc(var(--gap) * 2);
+    & > span {
+      padding-top: 0;
+    }
+    & > .unique-font-heading.size-2 {
+      margin: 0;
+    }
+  }
 `;
 
 const Content = styled.div`
   display: flex;
   border: 1px solid var(--grey-300);
   border-radius: 4px;
+  height: 306px;
+  @media (max-width: 1199px) {
+    height: 554px;
+  }
   @media (max-width: 991px) {
     display: block;
+    height: 354px;
+  }
+  @media (max-width: 479px) {
+    height: 346px;
   }
 
   .tree-container {
     overflow: auto;
-    width: 550px;
-    height: 306px;
+    width: 682px;
+    height: 100%;
     @media (max-width: 1440px) {
       width: 618px;
     }
     @media (max-width: 1199px) {
       width: 462px;
-      height: 554px;
     }
     @media (max-width: 991px) {
       width: 100%;
-      height: 354px;
-    }
-    @media (max-width: 479px) {
-      height: 346px;
     }
   }
 `;

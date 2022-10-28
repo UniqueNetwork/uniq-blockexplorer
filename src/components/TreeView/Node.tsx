@@ -1,22 +1,40 @@
 import React, { useCallback, useState } from 'react';
-import { INode, INodeContainer } from './types';
 import styled from 'styled-components';
+
 import { classNames } from 'utils/classNames';
 
-export function Node<T extends INode>({ data, onNodeClicked, nodeView: NodeView, isFirst, level, children, onViewNodeDetails, onTransferClick, onUnnestClick }: INodeContainer<T>) {
+import { INode, INodeContainer } from './types';
+
+export function Node<T extends INode>({
+  data,
+  onNodeClicked,
+  nodeView: NodeView,
+  isFirst,
+  level,
+  children,
+  onViewNodeDetails,
+  onTransferClick,
+  onUnnestClick,
+}: INodeContainer<T>) {
   const [isOpened, setIsOpened] = useState(data.opened);
 
-  const arrowClicked = useCallback((event: React.MouseEvent) => {
-    event.stopPropagation();
-    setIsOpened(!isOpened);
-  }, [isOpened]);
+  const arrowClicked = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      setIsOpened(!isOpened);
+    },
+    [isOpened],
+  );
 
   const textClicked = useCallback(() => {
     if (onNodeClicked) onNodeClicked(data);
   }, [data, onNodeClicked]);
 
   return (
-    <NodeContainer isOpened={!!isOpened} className={classNames({ className: 'treenode', selected: !!data.selected })}>
+    <NodeContainer
+      isOpened={!!isOpened}
+      className={classNames({ className: 'treenode', selected: !!data.selected })}
+    >
       <NodeView
         arrowClicked={arrowClicked}
         isOpened={!!isOpened}
@@ -29,7 +47,9 @@ export function Node<T extends INode>({ data, onNodeClicked, nodeView: NodeView,
         onViewNodeDetails={onViewNodeDetails}
         onUnnestClick={onUnnestClick}
         onTransferClick={onTransferClick}
-      >{children}</NodeView>
+      >
+        {children}
+      </NodeView>
     </NodeContainer>
   );
 }

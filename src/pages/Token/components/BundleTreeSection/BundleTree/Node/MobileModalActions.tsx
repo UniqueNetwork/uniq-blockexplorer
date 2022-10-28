@@ -5,15 +5,15 @@ import styled from 'styled-components/macro';
 interface IMobileModalActionsProps {
   isVisible: boolean;
   onClose(): void;
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 function MobileModalActions({ isVisible, onClose, children }: IMobileModalActionsProps) {
   return (
     <ModalWrapper>
-      <Modal isVisible={isVisible} onClose={onClose} isClosable >
+      <Modal isClosable isVisible={isVisible} onClose={onClose}>
         <HeadingWrapper>
-          <Heading size='3'>Choose the action</Heading>
+          <Heading size="3">Choose the action</Heading>
         </HeadingWrapper>
         {children}
       </Modal>

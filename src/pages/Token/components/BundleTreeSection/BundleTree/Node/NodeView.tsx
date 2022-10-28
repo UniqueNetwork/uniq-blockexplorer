@@ -26,7 +26,6 @@ const NodeView: FC<INodeView<INestingToken>> = ({
     tokenId: string;
     collectionId: string;
   }>();
-  const [menuVisible, setMenuVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const deviceSize = useDeviceSize();
   const { isCollectionFetching, collection } = useGraphQlCollection(
@@ -38,20 +37,11 @@ const NodeView: FC<INodeView<INestingToken>> = ({
 
   const onClick = useCallback(
     (event: React.MouseEvent) => {
-      if (deviceSize === DeviceSize.sm) setModalVisible(true);
+      if (deviceSize <= DeviceSize.sm) setModalVisible(true);
       else textClicked(event);
     },
     [deviceSize, textClicked],
   );
-
-  const showMenu = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-    setMenuVisible(true);
-    event.stopPropagation();
-  }, []);
-
-  const hideMenu = useCallback(() => {
-    setMenuVisible(false);
-  }, []);
 
   const viewTokenDetails = useCallback(() => {
     if (onViewNodeDetails) onViewNodeDetails(data);
@@ -74,8 +64,6 @@ const NodeView: FC<INodeView<INestingToken>> = ({
         isSelected={isSelected}
         isParentSelected={isParentSelected}
         onClick={onClick}
-        onMouseEnter={showMenu}
-        onMouseLeave={hideMenu}
       >
         <NftInfo>
           <Arrow

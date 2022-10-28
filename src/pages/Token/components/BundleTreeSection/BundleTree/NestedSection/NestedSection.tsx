@@ -59,6 +59,7 @@ const NestedDetails = styled.div`
   padding: 16px 32px;
   background-color: #ededee50;
   width: calc(100vw - 777px);
+  overflow-y: auto;
   @media (max-width: 1440px) {
     width: calc(100vw - 729px);
   }
@@ -103,6 +104,6 @@ const NoNestedWrapper = styled.div`
   justify-content: center;
   row-gap: var(--gap);
   width: 100%;
-  height: 100%;
+  height: calc(100% - 28px);
   min-height: 140px;
 `;
