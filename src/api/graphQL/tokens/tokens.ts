@@ -21,9 +21,11 @@ const tokensQuery = gql`
         owner
         owner_normalized
         image
+        parent_id
         token_id
         token_prefix
         transfers_count
+        type
       }
       count
       timestamp
