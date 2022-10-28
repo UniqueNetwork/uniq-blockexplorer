@@ -1,5 +1,7 @@
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { Text } from '@unique-nft/ui-kit';
+import styled from 'styled-components/macro';
+import { Link } from 'react-router-dom';
 
 import { timeDifference } from '@app/utils';
 
@@ -59,10 +61,12 @@ export const getBundlesColumns = (
   {
     dataIndex: 'collection_name',
     key: 'collection_name',
-    render: (value: string, item: unknown) => (
-      <Text color="primary-500" weight="light">
-        {value} [ID {(item as Token).collection_id}]
-      </Text>
+    render: (value: string, item: DefaultRecordType) => (
+      <CollectionLink to={`/${chainId.toLowerCase()}/collections/${item.collection_id}`}>
+        <Text color="primary-500" weight="light">
+          {value} [ID {(item as Token).collection_id}]
+        </Text>
+      </CollectionLink>
     ),
     title: (
       <TableSortableColumnTitle
@@ -110,3 +114,9 @@ export const getBundlesColumns = (
     width: 150,
   },
 ];
+
+const CollectionLink = styled(Link)`
+  &:hover {
+    text-decoration: none;
+  }
+`;

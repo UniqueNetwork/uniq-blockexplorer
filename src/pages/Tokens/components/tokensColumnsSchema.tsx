@@ -1,4 +1,6 @@
 import { Text } from '@unique-nft/ui-kit';
+import styled from 'styled-components/macro';
+import { Link } from 'react-router-dom';
 
 import { timeDifference } from '@app/utils';
 
@@ -59,9 +61,11 @@ export const getTokensColumns = (
     dataIndex: 'collection_id',
     key: 'collection_id',
     render: (value: number, item: unknown) => (
-      <Text color="primary-500" weight="light">
-        {(item as Token).collection_name} [ID {value}]
-      </Text>
+      <CollectionLink to={`/${chainId.toLowerCase()}/collections/${value}`}>
+        <Text color="primary-500" weight="light">
+          {(item as Token).collection_name} [ID {value}]
+        </Text>
+      </CollectionLink>
     ),
     title: (
       <TableSortableColumnTitle
@@ -95,3 +99,9 @@ export const getTokensColumns = (
     width: 150,
   },
 ];
+
+const CollectionLink = styled(Link)`
+  &:hover {
+    text-decoration: none;
+  }
+`;
