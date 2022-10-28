@@ -7,7 +7,7 @@ export interface TokensVariables {
   orderBy?: TokenSorting;
 }
 
-type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT';
+export type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT';
 
 export interface Token {
   attributes: DecodedAttributes;

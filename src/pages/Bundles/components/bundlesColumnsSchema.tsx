@@ -17,15 +17,18 @@ export const getBundlesColumns = (
   {
     dataIndex: 'token_prefix',
     key: 'token_prefix',
-    render: (value: string, item: DefaultRecordType) => (
-      <TokenTableCell
-        chainId={chainId}
-        collectionId={item.collection_id}
-        imageUrl={item.image.fullUrl}
-        tokenId={item.token_id}
-        tokenPrefix={value}
-      />
-    ),
+    render: (value: string, item: DefaultRecordType) => {
+      return (
+        <TokenTableCell
+          chainId={chainId}
+          collectionId={item.collection_id}
+          imageUrl={item.image.fullUrl}
+          tokenId={item.token_id}
+          tokenPrefix={value}
+          type={item.type}
+        />
+      );
+    },
     title: (
       <TableSortableColumnTitle
         dataIndex="token_name"

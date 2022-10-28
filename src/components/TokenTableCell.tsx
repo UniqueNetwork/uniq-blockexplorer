@@ -3,6 +3,8 @@ import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
+import { TokenTypeEnum } from '@app/api';
+
 import Picture from './Picture';
 
 interface TokenTableCellProps {
@@ -11,6 +13,7 @@ interface TokenTableCellProps {
   collectionId: number;
   imageUrl: string | null;
   tokenPrefix: string;
+  type: TokenTypeEnum;
 }
 
 const TokenTableCell: FC<TokenTableCellProps> = ({
@@ -19,8 +22,13 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   imageUrl,
   tokenId,
   tokenPrefix,
+  type,
 }) => (
-  <TokenLink to={`/${chainId.toLowerCase()}/nfts/${collectionId}/${tokenId}`}>
+  <TokenLink
+    to={`/${chainId.toLowerCase()}/${
+      type === 'NESTED' ? 'bundles' : 'nfts'
+    }/${collectionId}/${tokenId}`}
+  >
     <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} />
     <TokenTitle>
       <Text color="primary-500">{`${tokenPrefix} #${tokenId}`}</Text>
