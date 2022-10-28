@@ -1,3 +1,4 @@
+import { DefaultRecordType } from 'rc-table/lib/interface';
 import { Text } from '@unique-nft/ui-kit';
 
 import { timeDifference } from '@app/utils';
@@ -7,29 +8,29 @@ import TableSortableColumnTitle from '../../../components/TableSortableColumnTit
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
-export const getTokensColumns = (
+export const getBundlesColumns = (
   chainId: string,
   orderBy: TokenSorting,
   onOrderChange: (orderBy: TokenSorting) => void,
   timestamp: number,
 ) => [
   {
-    dataIndex: 'token_id',
-    key: 'token_id',
-    render: (value: number, item: unknown) => (
+    dataIndex: 'token_prefix',
+    key: 'token_prefix',
+    render: (value: string, item: DefaultRecordType) => (
       <TokenTableCell
         chainId={chainId}
-        collectionId={(item as Token).collection_id}
-        imageUrl={(item as Token).image.fullUrl}
-        tokenId={value}
-        tokenPrefix={(item as Token).token_prefix}
+        collectionId={item.collection_id}
+        imageUrl={item.image.fullUrl}
+        tokenId={item.token_id}
+        tokenPrefix={value}
       />
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="token_id"
+        dataIndex="token_name"
         orderBy={orderBy}
-        title="Item"
+        title="Bundle"
         onOrderChange={onOrderChange}
       />
     ),
@@ -49,29 +50,43 @@ export const getTokensColumns = (
       <TableSortableColumnTitle
         dataIndex="date_of_creation"
         orderBy={orderBy}
-        title="Created"
+        title="Bundle created"
         onOrderChange={onOrderChange}
       />
     ),
     width: 150,
   },
   {
-    dataIndex: 'collection_id',
-    key: 'collection_id',
-    render: (value: number, item: unknown) => (
+    dataIndex: 'collection_name',
+    key: 'collection_name',
+    render: (value: string, item: unknown) => (
       <Text color="primary-500" weight="light">
-        {(item as Token).collection_name} [ID {value}]
+        {value} [ID {(item as Token).collection_id}]
       </Text>
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="collection_id"
+        dataIndex="collection_name"
         orderBy={orderBy}
         title="Collection"
         onOrderChange={onOrderChange}
       />
     ),
     width: 180,
+  },
+  {
+    dataIndex: 'children_count',
+    key: 'children_count',
+    render: (value: string, item: unknown) => <>{value}</>,
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="children_count"
+        orderBy={orderBy}
+        title="Nested items"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 100,
   },
   {
     dataIndex: 'transfers_count',

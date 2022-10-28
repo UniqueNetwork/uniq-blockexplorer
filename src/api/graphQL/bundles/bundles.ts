@@ -1,10 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
-import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
+import { BundlesData, BundlesVariables, useGraphQlBundlesProps } from './types';
 
-const tokensQuery = gql`
-  query getTokens(
+const BundlesQuery = gql`
+  query getBundles(
     $limit: Int
     $offset: Int
     $where: TokenWhereParams = {}
@@ -13,6 +13,7 @@ const tokensQuery = gql`
     tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
         attributes
+        children_count
         collection_cover
         collection_description
         collection_id
@@ -21,11 +22,9 @@ const tokensQuery = gql`
         owner
         owner_normalized
         image
-        parent_id
         token_id
         token_prefix
         transfers_count
-        type
       }
       count
       timestamp
@@ -83,13 +82,13 @@ const getSearchQuery = (searchString: string): Record<string, unknown>[] => {
     .map((searchPart: number) => ({ collection_id: { _eq: Number(searchPart) } }));
 };
 
-export const useGraphQlTokens = ({
+export const useGraphQlBundles = ({
   filter,
   offset,
   orderBy,
   pageSize,
   searchString,
-}: useGraphQlTokensProps) => {
+}: useGraphQlBundlesProps) => {
   if (searchString) {
     parseSearchString(searchString);
   }
@@ -130,9 +129,9 @@ export const useGraphQlTokens = ({
 
   const {
     data,
-    error: fetchTokensError,
-    loading: isTokensFetching,
-  } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    error: fetchBundlesError,
+    loading: isBundlesFetching,
+  } = useQuery<BundlesData, BundlesVariables>(BundlesQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -147,30 +146,30 @@ export const useGraphQlTokens = ({
 
   return useMemo(
     () => ({
-      fetchTokensError,
-      isTokensFetching,
+      fetchBundlesError,
+      isBundlesFetching,
       timestamp: data?.tokens?.timestamp || 0,
-      tokens: data?.tokens?.data,
-      tokensCount: data?.tokens?.count || 0,
+      bundles: data?.tokens?.data,
+      bundlesCount: data?.tokens?.count || 0,
     }),
     [
       data?.tokens?.count,
       data?.tokens?.data,
       data?.tokens?.timestamp,
-      fetchTokensError,
-      isTokensFetching,
+      fetchBundlesError,
+      isBundlesFetching,
     ],
   );
 };
 
-export const useGraphQlToken = (collectionId: number, tokenId: number) => {
+export const useGraphQlBundle = (collectionId: number, tokenId: number) => {
   const where = { collection_id: { _eq: collectionId }, token_id: { _eq: tokenId } };
 
   const {
     data,
-    error: fetchTokensError,
-    loading: isTokensFetching,
-  } = useQuery<TokensData, TokensVariables>(tokensQuery, {
+    error: fetchBundlesError,
+    loading: isBundlesFetching,
+  } = useQuery<BundlesData, BundlesVariables>(BundlesQuery, {
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -181,12 +180,12 @@ export const useGraphQlToken = (collectionId: number, tokenId: number) => {
   });
 
   return {
-    fetchTokensError,
-    isTokensFetching,
+    fetchBundlesError,
+    isBundlesFetching,
     timestamp: data?.tokens?.timestamp || 0,
-    token: data?.tokens?.data[0] || undefined,
-    tokensCount: data?.tokens?.count,
+    bundle: data?.tokens?.data[0] || undefined,
+    bundlesCount: data?.tokens?.count,
   };
 };
 
-export { tokensQuery };
+export { BundlesQuery };

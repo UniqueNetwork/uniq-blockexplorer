@@ -78,7 +78,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
-          {type === 'Nested' ? (
+          {type === 'NESTED' ? (
             <HeaderWithTooltip>
               <Heading size="4">Parent NFT attributes</Heading>
               <img data-tip alt="tooltip" data-for="bundleAttrTooltip" src={Question} />

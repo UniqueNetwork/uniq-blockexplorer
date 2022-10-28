@@ -73,7 +73,6 @@ const Modal = styled.div`
   z-index: 4;
   background: #fff;
   width: 100%;
-  max-height: 624px;
   height: calc(100vh-160px);
   bottom: 0;
   top: 160px;

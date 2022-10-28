@@ -7,6 +7,7 @@ import App from './App';
 import {
   Account,
   Block,
+  Bundles,
   Collections,
   Collection,
   Extrinsic,
@@ -39,7 +40,10 @@ ReactDOM.render(
             <Route element={<Block />} path="block/:blockIndex" />
             <Route element={<Account />} path="account/:accountId" />
             <Route element={<Extrinsic />} path="extrinsic/:blockIndex" />
-            <Route element={<Block />} path="block/:blockIndex" />
+            <Route path="bundles">
+              <Route index element={<Bundles />} />
+              <Route element={<Collection />} path=":collectionId" />
+            </Route>
             <Route path="collections">
               <Route index element={<Collections />} />
               <Route element={<Collection />} path=":collectionId" />
