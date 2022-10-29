@@ -63,7 +63,7 @@ export const Tokens: VFC<TokensProps> = ({
   const orderBy = useMemo(
     (): TokenSorting =>
       selectedSort.id === 'new'
-        ? { date_of_creation: 'desc' }
+        ? { date_of_creation: 'desc_nulls_last' }
         : { transfers_count: 'desc_nulls_last' },
     [selectedSort.id],
   );
