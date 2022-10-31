@@ -8,7 +8,7 @@ export interface BundlesVariables {
 }
 
 export interface BundlesData {
-  tokens: {
+  tokenBundles: {
     data: Token[];
     count: number;
     timestamp: number;
