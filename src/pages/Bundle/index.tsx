@@ -23,10 +23,12 @@ const BundlePage: FC = () => {
   if (!token) return null;
 
   return (
-    <PagePaper>
-      <TokenDetailComponent loading={isTokensFetching} token={token} />
+    <>
+      <PagePaper>
+        <TokenDetailComponent loading={isTokensFetching} token={token} />
+      </PagePaper>
       <BundleTreeSection token={token} />
-    </PagePaper>
+    </>
   );
 };
 

@@ -60,10 +60,10 @@ const NestedDetails = styled.div`
   background-color: #ededee50;
   width: calc(100vw - 777px);
   overflow-y: auto;
-  @media (max-width: 1440px) {
+  @media (max-width: 1679px) {
     width: calc(100vw - 729px);
   }
-  @media (max-width: 1024px) {
+  @media (max-width: 1199px) {
     width: calc(100vw - 665px);
   }
   @media (max-width: 991px) {

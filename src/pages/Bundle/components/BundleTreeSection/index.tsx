@@ -136,7 +136,6 @@ function BundleTreeSection({
 
 const BundlePagePaper = styled(PagePaper)`
   display: block;
-  padding: 0;
 `;
 
 const HeaderStyled = styled.div`

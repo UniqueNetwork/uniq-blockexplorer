@@ -1,11 +1,13 @@
-import React, { FC, useCallback, useRef, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { Tooltip, Skeleton } from '@unique-nft/ui-kit';
+import ReactTooltip from 'react-tooltip';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 import { INodeView, Picture, SVGIcon } from '@app/components';
 import { DeviceSize, useDeviceSize } from '@app/hooks';
 import { useGraphQlCollection } from '@app/api';
+import { isTouchEnabled } from '@app/utils';
 
 import { INestingToken } from '../types';
 import MobileModalActions from './MobileModalActions';
@@ -31,9 +33,6 @@ const NodeView: FC<INodeView<INestingToken>> = ({
   const { isCollectionFetching, collection } = useGraphQlCollection(
     Number(data?.collection_id),
   );
-  const squareIcon = useRef(null);
-
-  const pinIconRef = useRef(null);
 
   const onClick = useCallback(
     (event: React.MouseEvent) => {
@@ -90,31 +89,43 @@ const NodeView: FC<INodeView<INestingToken>> = ({
           {deviceSize !== DeviceSize.sm && (
             <ActionButtons className={'action-buttons'}>
               {!isCurrent && (
-                <div onClick={viewTokenDetails}>
-                  <Tooltip
-                    align={{
-                      vertical: 'top',
-                      horizontal: 'middle',
-                      appearance: 'vertical',
-                    }}
-                    targetRef={squareIcon}
+                <>
+                  <SVGIcon
+                    data-tip
+                    width={32}
+                    height={32}
+                    name={'square'}
+                    data-for={`square_T-${data.token_id}_C-${data.collection_id}`}
+                  />
+                  <ReactTooltip
+                    event={isTouchEnabled() ? 'click' : undefined}
+                    id={`square_T-${data.token_id}_C-${data.collection_id}`}
+                    effect="solid"
+                    eventOff="mouseleave"
                   >
-                    Go to the token page
-                  </Tooltip>
-                  <SVGIcon width={32} height={32} name={'square'} innerRef={squareIcon} />
-                </div>
+                    <span>Go to the token page</span>
+                  </ReactTooltip>
+                </>
               )}
             </ActionButtons>
           )}
           {isCurrent && (
             <PinIcon className={'pin-icon'}>
-              <Tooltip
-                align={{ vertical: 'top', horizontal: 'middle', appearance: 'vertical' }}
-                targetRef={pinIconRef}
+              <SVGIcon
+                data-tip
+                width={32}
+                height={32}
+                name={'pin'}
+                data-for={`pin_T-${data.token_id}_C-${data.collection_id}`}
+              />
+              <ReactTooltip
+                event={isTouchEnabled() ? 'click' : undefined}
+                id={`pin_T-${data.token_id}_C-${data.collection_id}`}
+                effect="solid"
+                eventOff="mouseleave"
               >
-                Current token page
-              </Tooltip>
-              <SVGIcon width={32} height={32} name={'pin'} innerRef={pinIconRef} />
+                <span>Current token page</span>
+              </ReactTooltip>
             </PinIcon>
           )}
         </Actions>
