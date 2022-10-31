@@ -6,8 +6,9 @@ import { useScrollToTop } from '@app/hooks';
 
 import TokenDetailComponent from '../../components/TokenDetailComponent';
 import PagePaper from '../../components/PagePaper';
+import BundleTreeSection from './components/BundleTreeSection';
 
-const TokenPage: FC = () => {
+const BundlePage: FC = () => {
   useScrollToTop();
   const { collectionId, tokenId } = useParams<{
     collectionId: string;
@@ -22,10 +23,13 @@ const TokenPage: FC = () => {
   if (!token) return null;
 
   return (
-    <PagePaper>
-      <TokenDetailComponent loading={isTokensFetching} token={token} />
-    </PagePaper>
+    <>
+      <PagePaper>
+        <TokenDetailComponent loading={isTokensFetching} token={token} />
+      </PagePaper>
+      <BundleTreeSection token={token} />
+    </>
   );
 };
 
-export default TokenPage;
+export default BundlePage;

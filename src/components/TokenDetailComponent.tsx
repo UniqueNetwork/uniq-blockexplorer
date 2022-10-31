@@ -1,16 +1,18 @@
 import { FC, useCallback } from 'react';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Token } from '@app/api';
-import { LoadingComponent, Picture } from '@app/components';
+import { LoadingComponent, Picture } from '@app/components/index';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, timestampFormat } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { Question } from '@app/images/icons/svgs';
 
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
 interface TokenDetailComponentProps {
   token: Token;
@@ -27,7 +29,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   const {
     attributes,
-    collection_description: description,
     collection_id: collectionId,
     collection_name: name,
     date_of_creation: createdOn,
@@ -35,6 +36,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     owner,
     token_id: id,
     token_prefix: prefix,
+    type,
   } = token;
 
   if (loading) return <LoadingComponent />;
@@ -43,10 +45,31 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   return (
     <Wrapper>
-      <TokenPicture alt={`${prefix}-${id}`} src={image.fullUrl} />
+      <TokenPicture
+        alt={`${prefix}-${id}`}
+        src={image.fullUrl}
+        badge={type !== 'NFT' ? type : ''}
+      />
       <div>
         <Heading size="2">{`${prefix} #${id}`}</Heading>
         <TokenInfo>
+          <Text color="grey-500">Collection</Text>
+          <div>
+            <CollectionLink
+              to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
+              onClick={onCollectionClick}
+            >
+              <Picture alt={`token ${id}`} src={token.collection_cover} />
+              <div>
+                <Text color="primary-500">{name}</Text>
+                <div>
+                  <Text color="additional-dark" size="xs">
+                    ID {token.collection_id}
+                  </Text>
+                </div>
+              </div>
+            </CollectionLink>
+          </div>
           <Text color="grey-500">Created on</Text>
           <Text>{timestampFormat(createdOn)}</Text>
           <Text color="grey-500">Owner</Text>
@@ -55,7 +78,20 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
-          <Heading size="4">Attributes</Heading>
+          {type === 'NESTED' ? (
+            <HeaderWithTooltip>
+              <Heading size="4">Parent NFT attributes</Heading>
+              <img data-tip alt="tooltip" data-for="bundleAttrTooltip" src={Question} />
+              <ReactTooltip id="bundleAttrTooltip" effect="solid">
+                <span>
+                  Special features of the token that the collection creator specifies when
+                  minting
+                </span>
+              </ReactTooltip>
+            </HeaderWithTooltip>
+          ) : (
+            <Heading size="4">Attributes</Heading>
+          )}
           <div>
             {attributesParsed.map((attr) => (
               <div key={`attribute-${attr.name}`}>
@@ -71,20 +107,6 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
             ))}
           </div>
         </TokenAttributes>
-        <CollectionInfoWrapper>
-          <CollectionLink
-            to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
-            onClick={onCollectionClick}
-          >
-            <Picture alt={`token ${id}`} src={token.collection_cover} />
-            <div>
-              <Heading size="4">{name}</Heading>
-              <div>
-                <Text color="grey-500">{description || ''}</Text>
-              </div>
-            </div>
-          </CollectionLink>
-        </CollectionInfoWrapper>
       </div>
     </Wrapper>
   );
@@ -135,14 +157,14 @@ const TokenPicture = styled(Picture)`
 const TokenInfo = styled.div`
   display: grid;
   grid-template-columns: 85px 1fr;
-  grid-column-gap: calc(var(--gap) * 2);
+  grid-column-gap: var(--gap);
   grid-row-gap: var(--gap);
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);
 
   span {
-    display: flex;
+    display: flex !important;
     align-items: center;
   }
 `;
@@ -166,23 +188,23 @@ const Tag = styled.div`
   background-color: var(--blue-gray);
 `;
 
-const CollectionInfoWrapper = styled.div`
-  padding-bottom: calc(var(--gap) * 2);
-  margin-bottom: calc(var(--gap) * 2);
+const HeaderWithTooltip = styled.div`
+  display: flex;
+  gap: calc(var(--gap) / 2);
+  align-items: start;
+  img {
+    margin-top: 2px;
+  }
 `;
 
 const CollectionLink = styled(Link)`
   display: flex;
-  column-gap: var(--gap);
+  column-gap: calc(var(--gap) / 2);
   word-break: break-word;
   overflow: hidden;
 
   &:hover {
     text-decoration: none;
-
-    h4 {
-      color: var(--primary-500);
-    }
   }
 
   .picture {

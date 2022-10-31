@@ -25,8 +25,7 @@ const BundleCard: FC<BundleCardProps> = ({
   const navigate = useNavigate();
   const { currentChain } = useApi();
   const onBundleCardClick = useCallback(() => {
-    // todo: correct navigation to bundle page
-    navigate(`/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`);
+    navigate(`/${currentChain.network.toLowerCase()}/bundles/${collectionId}/${tokenId}`);
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);

@@ -10,9 +10,10 @@ interface PictureProps {
   className?: string;
   src?: string | null;
   alt: string;
+  badge?: string;
 }
 
-const Picture: FC<PictureProps> = ({ alt, className, src }) => {
+const Picture: FC<PictureProps> = ({ alt, className, src, badge }) => {
   const { imgSrc, loading } = useCheckImageExists(getCoverURLFromCollection(src || ''));
 
   return (
@@ -21,6 +22,7 @@ const Picture: FC<PictureProps> = ({ alt, className, src }) => {
         <Skeleton height="100%" width="100%" />
       ) : (
         <>
+          {badge && <Badge>{badge === 'NESTED' ? 'Bundle' : badge}</Badge>}
           {imgSrc ? (
             <img alt={alt} src={imgSrc} />
           ) : (
@@ -51,6 +53,24 @@ const PictureWrapper = styled.div`
   img {
     width: 100%;
   }
+`;
+
+const Badge = styled.div`
+  position: absolute;
+  top: var(--gap);
+  right: var(--gap);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: var(--white-color);
+  border: 1px solid var(--blue-gray-200);
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--dark);
+  z-index: 2;
 `;
 
 export default Picture;
