@@ -10,7 +10,7 @@ const BundlesQuery = gql`
     $where: TokenWhereParams = {}
     $orderBy: TokenOrderByParams = {}
   ) {
-    tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+    tokenBundles(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
         attributes
         children_count
@@ -148,14 +148,14 @@ export const useGraphQlBundles = ({
     () => ({
       fetchBundlesError,
       isBundlesFetching,
-      timestamp: data?.tokens?.timestamp || 0,
-      bundles: data?.tokens?.data,
-      bundlesCount: data?.tokens?.count || 0,
+      timestamp: data?.tokenBundles?.timestamp || 0,
+      bundles: data?.tokenBundles?.data,
+      bundlesCount: data?.tokenBundles?.count || 0,
     }),
     [
-      data?.tokens?.count,
-      data?.tokens?.data,
-      data?.tokens?.timestamp,
+      data?.tokenBundles?.count,
+      data?.tokenBundles?.data,
+      data?.tokenBundles?.timestamp,
       fetchBundlesError,
       isBundlesFetching,
     ],
@@ -182,9 +182,9 @@ export const useGraphQlBundle = (collectionId: number, tokenId: number) => {
   return {
     fetchBundlesError,
     isBundlesFetching,
-    timestamp: data?.tokens?.timestamp || 0,
-    bundle: data?.tokens?.data[0] || undefined,
-    bundlesCount: data?.tokens?.count,
+    timestamp: data?.tokenBundles?.timestamp || 0,
+    bundle: data?.tokenBundles?.data[0] || undefined,
+    bundlesCount: data?.tokenBundles?.count,
   };
 };
 
