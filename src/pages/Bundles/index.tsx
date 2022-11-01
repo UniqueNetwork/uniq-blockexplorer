@@ -210,23 +210,6 @@ const PagePaper = styled(PagePaperWrapper)`
   }
 `;
 
-const CollectionsList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: var(--gap);
-  grid-row-gap: var(--gap);
-  position: relative;
-  margin-bottom: calc(var(--gap) * 1.5);
-
-  @media (min-width: 576px) and (max-width: 1199px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 575px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
 const TopPaginationContainer = styled.div`
   .pagination {
     display: flex;

@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { ColumnType, DefaultRecordType, GetRowKey } from 'rc-table/lib/interface';
+import {
+  ColumnType,
+  DefaultRecordType,
+  GetComponentProps,
+  GetRowKey,
+} from 'rc-table/lib/interface';
 import RCTable from 'rc-table';
 import styled from 'styled-components/macro';
 
@@ -11,11 +16,12 @@ interface TableProps<RecordType = DefaultRecordType> {
   data?: RecordType[];
   loading?: boolean;
   rowKey?: string | GetRowKey<RecordType>;
+  onRow?: GetComponentProps<RecordType>;
 }
 
 const TABLE_GAP = 16;
 
-const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => {
+const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey, onRow }) => {
   //for sticky first column
   const minTableWidth = columns?.reduce((accum, item) => {
     return accum + Number(item.width);
@@ -67,6 +73,7 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey }) => 
           emptyText="No data"
           id="tableContent"
           rowKey={rowKey}
+          onRow={onRow}
         />
         {loading && <TableLoading />}
       </TableWrapper>
@@ -85,18 +92,18 @@ const ShadowForScroll = styled.div.attrs<{ width: number }>((props) => ({
 }))<{ width: number }>`
   position: absolute;
   width: ${(props) => props.width}px;
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
-  box-shadow: 4px 0px 12px rgba(0, 0, 0, 0.08);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.08);
 `;
 
 const Mute = styled.div`
   position: absolute;
   width: 48px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
+  right: 0;
+  top: 0;
+  bottom: 0;
   background: linear-gradient(270deg, #ffffff 10.61%, rgba(255, 255, 255, 0) 100%);
 `;
 
