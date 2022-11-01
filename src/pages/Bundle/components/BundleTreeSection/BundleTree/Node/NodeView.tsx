@@ -89,7 +89,7 @@ const NodeView: FC<INodeView<INestingToken>> = ({
           {deviceSize !== DeviceSize.sm && (
             <ActionButtons className={'action-buttons'}>
               {!isCurrent && (
-                <>
+                <div onClick={viewTokenDetails}>
                   <SVGIcon
                     data-tip
                     width={32}
@@ -105,7 +105,7 @@ const NodeView: FC<INodeView<INestingToken>> = ({
                   >
                     <span>Go to the token page</span>
                   </ReactTooltip>
-                </>
+                </div>
               )}
             </ActionButtons>
           )}

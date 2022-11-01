@@ -26,6 +26,7 @@ const BundlesQuery = gql`
         token_prefix
         transfers_count
         type
+        bundle_created
       }
       count
       timestamp

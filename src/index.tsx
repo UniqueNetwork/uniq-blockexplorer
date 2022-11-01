@@ -55,7 +55,7 @@ ReactDOM.render(
             <Route path="nfts">
               <Route element={<Token />} path=":collectionId/:tokenId" />
             </Route>
-            <Route path="bundles">
+            <Route path="bundle">
               <Route element={<Bundle />} path=":collectionId/:tokenId" />
             </Route>
           </Route>

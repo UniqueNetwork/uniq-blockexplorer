@@ -75,6 +75,22 @@ const timestampFormat = (timestamp: number | undefined) => {
   });
 };
 
+const tokenPageTimestampFormat = (timestamp: number | undefined) => {
+  if (!timestamp) return 'undefined';
+
+  return new Date(timestamp * 1000).toLocaleString('en-US', {
+    day: '2-digit',
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit',
+    month: 'short',
+    second: 'numeric',
+    timeZone: 'GMT',
+    timeZoneName: 'short',
+    year: 'numeric',
+  });
+};
+
 const timestampTableFormat = (timestamp: number) => {
   const formatted = new Date(timestamp * 1000)
     .toLocaleString('en-GB', {
@@ -89,4 +105,9 @@ const timestampTableFormat = (timestamp: number) => {
   return formatted;
 };
 
-export { timeDifference, timestampFormat, timestampTableFormat };
+export {
+  timeDifference,
+  timestampFormat,
+  timestampTableFormat,
+  tokenPageTimestampFormat,
+};

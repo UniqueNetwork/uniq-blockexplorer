@@ -7,7 +7,7 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 import { Token } from '@app/api';
 import { LoadingComponent, Picture } from '@app/components/index';
 import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
-import { convertAttributesToView, timestampFormat } from '@app/utils';
+import { convertAttributesToView, tokenPageTimestampFormat } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
@@ -43,6 +43,8 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   const attributesParsed = convertAttributesToView(attributes);
 
+  const createdOnDate = tokenPageTimestampFormat(createdOn);
+
   return (
     <Wrapper>
       <TokenPicture
@@ -71,7 +73,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
             </CollectionLink>
           </div>
           <Text color="grey-500">Created on</Text>
-          <Text>{timestampFormat(createdOn)}</Text>
+          <Text>{createdOnDate}</Text>
           <Text color="grey-500">Owner</Text>
           <OwnerWrapper>
             <AccountLinkComponent noShort={deviceSize >= DeviceSize.lg} value={owner} />
@@ -81,8 +83,13 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           {type === 'NESTED' ? (
             <HeaderWithTooltip>
               <Heading size="4">Parent NFT attributes</Heading>
-              <img data-tip alt="tooltip" data-for="bundleAttrTooltip" src={Question} />
-              <ReactTooltip id="bundleAttrTooltip" effect="solid">
+              <img data-tip={true} alt="tooltip" data-for="bundleAttrTooltip" src={Question} />
+              <ReactTooltip
+                id="bundleAttrTooltip"
+                effect="solid"
+                place="top"
+                className={'tooltip'}
+              >
                 <span>
                   Special features of the token that the collection creator specifies when
                   minting
@@ -115,10 +122,13 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 536px 1fr;
-  grid-column-gap: var(--gap);
+  grid-column-gap: calc(var(--gap) * 4);
 
   @media (max-width: 1024px) {
     grid-template-columns: 326px 1fr;
+  }
+  @media (max-width: 992px) {
+    grid-column-gap: calc(var(--gap) * 2);
   }
   @media (max-width: 768px) {
     grid-template-columns: 224px 1fr;
@@ -172,7 +182,6 @@ const TokenInfo = styled.div`
 const TokenAttributes = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   margin-bottom: calc(var(--gap) * 2);
-  border-bottom: 1px dashed var(--border-color);
 `;
 
 const TagsWrapper = styled.div`
@@ -195,6 +204,9 @@ const HeaderWithTooltip = styled.div`
   img {
     margin-top: 2px;
   }
+  .tooltip {
+    width: 200px;
+  }
 `;
 
 const CollectionLink = styled(Link)`
@@ -209,6 +221,7 @@ const CollectionLink = styled(Link)`
 
   .picture {
     width: 40px;
+    border-radius: 48px;
   }
 `;
 
