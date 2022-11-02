@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useParams } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import { Skeleton } from '@unique-nft/ui-kit';
@@ -89,7 +89,7 @@ const NodeView: FC<INodeView<INestingToken>> = ({
           {deviceSize !== DeviceSize.sm && (
             <ActionButtons className={'action-buttons'}>
               {!isCurrent && (
-                <>
+                <div onClick={viewTokenDetails}>
                   <SVGIcon
                     data-tip
                     width={32}
@@ -105,7 +105,7 @@ const NodeView: FC<INodeView<INestingToken>> = ({
                   >
                     <span>Go to the token page</span>
                   </ReactTooltip>
-                </>
+                </div>
               )}
             </ActionButtons>
           )}
@@ -160,7 +160,7 @@ const ViewContainer = styled.div<{
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  min-width: 524px;
+  min-width: 424px;
   border: 1px solid
     ${({ isSelected }) => (isSelected ? 'var(--primary-200)' : 'transparent')};
   hr {

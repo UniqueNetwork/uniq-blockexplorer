@@ -19,23 +19,20 @@ export function Node<T extends INode>({
   const [isOpened, setIsOpened] = useState(data.opened);
   const [addClosingAnimation, setAddClosingAnimation] = useState(false);
 
-  const arrowClicked = useCallback(
-    (event: React.MouseEvent) => {
-      event.stopPropagation();
-      setIsOpened(!isOpened);
-    },
-    [isOpened],
-  );
+  const arrowClicked = useCallback(() => {
+    setIsOpened(!isOpened);
+  }, [isOpened]);
 
   const arrowClickHandler = useCallback(
     (event: React.MouseEvent) => {
+      event.stopPropagation();
       setAddClosingAnimation(!!isOpened);
 
-      if (!isOpened) arrowClicked(event);
+      if (!isOpened) arrowClicked();
       else {
         // we need some time to show animation before nodes will be removed from DOM
         setTimeout(() => {
-          arrowClicked(event);
+          arrowClicked();
         }, 300);
       }
     },

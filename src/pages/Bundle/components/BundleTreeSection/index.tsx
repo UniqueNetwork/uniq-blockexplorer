@@ -92,7 +92,7 @@ function BundleTreeSection({
   const onViewTokenDetails = useCallback(
     (token: INestingToken) => {
       navigate(
-        `/${currentChain.network.toLowerCase()}/bundles/${token.collection_id}/${
+        `/${currentChain.network.toLowerCase()}/bundle/${token.collection_id}/${
           token.token_id
         }`,
       );
@@ -163,6 +163,14 @@ const Content = styled.div`
   border: 1px solid var(--grey-300);
   border-radius: 4px;
   height: 306px;
+  .unique-scrollbar {
+    div:nth-last-child(-n + 2) {
+      z-index: 2;
+    }
+    .unique-modal-wrapper {
+      z-index: 50 !important;
+    }
+  }
   @media (max-width: 1199px) {
     height: 554px;
   }
@@ -175,11 +183,11 @@ const Content = styled.div`
   }
 
   .tree-container {
-    overflow: auto;
-    width: 682px;
+    width: 570px;
     height: 100%;
+    padding-bottom: 16px;
     @media (max-width: 1440px) {
-      width: 618px;
+      width: 544px;
     }
     @media (max-width: 1199px) {
       width: 462px;

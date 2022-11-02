@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { Text, Skeleton } from '@unique-nft/ui-kit';
+import { Text, Skeleton, Scrollbar } from '@unique-nft/ui-kit';
 
 import { INestedSectionView } from '@app/components/TreeView/types';
 import { useGraphQlCollection } from '@app/api';
@@ -20,51 +20,74 @@ export const NestedSection: FC<INestedSectionView<INestingToken>> = ({
   );
   return (
     <NestedDetails>
-      {selectedToken && (
-        <TitleWrapper>
-          <Title
-            token={selectedToken}
-            isCollectionLoading={isCollectionFetching}
-            prefix={collection?.token_prefix || ''}
-          />
-        </TitleWrapper>
-      )}
-      {selectedToken && !selectedToken?.nestingChildren?.length && (
-        <NoNestedWrapper>
-          <SVGIcon name={'noTrades'} width={80} height={80} />
-          <Text color="grey-500" size="m">
-            No nested tokens
-          </Text>
-        </NoNestedWrapper>
-      )}
-      {!!selectedToken?.nestingChildren?.length && (
-        <NestedTokens>
-          {selectedToken.nestingChildren.map((token) => (
-            <TokenCard
-              key={`T-${token.token_id} C-${token.collection_id}`}
-              token={token}
-              onViewNodeDetails={onViewNodeDetails}
-              onUnnestClick={onUnnestClick}
-              onTransferClick={onTransferClick}
-            />
-          ))}
-        </NestedTokens>
+      {selectedToken && !selectedToken?.nestingChildren?.length ? (
+        <NoNestedTokens
+          selectedToken={selectedToken}
+          isCollectionFetching={isCollectionFetching}
+          prefix={collection?.token_prefix || ''}
+        />
+      ) : (
+        <Scrollbar width={'100%'} height={'100%'}>
+          {selectedToken && (
+            <TitleWrapper>
+              <Title
+                token={selectedToken}
+                isCollectionLoading={isCollectionFetching}
+                prefix={collection?.token_prefix || ''}
+              />
+            </TitleWrapper>
+          )}
+          {!!selectedToken?.nestingChildren?.length && (
+            <NestedTokens>
+              {selectedToken.nestingChildren.map((token) => (
+                <TokenCard
+                  key={`T-${token.token_id} C-${token.collection_id}`}
+                  token={token}
+                  onViewNodeDetails={onViewNodeDetails}
+                  onUnnestClick={onUnnestClick}
+                  onTransferClick={onTransferClick}
+                />
+              ))}
+            </NestedTokens>
+          )}
+        </Scrollbar>
       )}
     </NestedDetails>
   );
 };
 
+const NoNestedTokens: FC<{
+  selectedToken: INestingToken;
+  isCollectionFetching: boolean;
+  prefix: string;
+}> = ({ selectedToken, isCollectionFetching, prefix }) => (
+  <>
+    <TitleWrapper>
+      <Title
+        token={selectedToken}
+        isCollectionLoading={isCollectionFetching}
+        prefix={prefix}
+      />
+    </TitleWrapper>
+    <NoNestedWrapper>
+      <SVGIcon name={'noTrades'} width={80} height={80} />
+      <Text color="grey-500" size="m">
+        No nested tokens
+      </Text>
+    </NoNestedWrapper>
+  </>
+);
+
 const NestedDetails = styled.div`
   display: block;
-  padding: 16px 32px;
+  padding: 0 0 16px 32px;
   background-color: #ededee50;
   width: calc(100vw - 777px);
-  overflow-y: auto;
-  @media (max-width: 1679px) {
-    width: calc(100vw - 729px);
+  .unique-scrollbar:first-of-type {
+    padding-top: 16px;
   }
-  @media (max-width: 1199px) {
-    width: calc(100vw - 665px);
+  @media (max-width: 1679px) {
+    width: calc(100vw - 624px);
   }
   @media (max-width: 991px) {
     display: none;
@@ -91,11 +114,15 @@ const Title: FC<{
   if (isCollectionLoading) return <Skeleton height={28} width={156} />;
 
   return (
-    <Text color="additional-dark" size="l">
+    <TextStyled color="additional-dark" size="l">
       Nested in {prefix} #{token.token_id}
-    </Text>
+    </TextStyled>
   );
 };
+
+const TextStyled = styled(Text)`
+  margin-top: 16px;
+`;
 
 const NoNestedWrapper = styled.div`
   display: flex;
