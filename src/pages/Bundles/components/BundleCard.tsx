@@ -25,7 +25,7 @@ const BundleCard: FC<BundleCardProps> = ({
   const navigate = useNavigate();
   const { currentChain } = useApi();
   const onBundleCardClick = useCallback(() => {
-    navigate(`/${currentChain.network.toLowerCase()}/bundles/${collectionId}/${tokenId}`);
+    navigate(`/${currentChain.network.toLowerCase()}/bundle/${collectionId}/${tokenId}`);
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);

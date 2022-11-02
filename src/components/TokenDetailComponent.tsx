@@ -225,7 +225,7 @@ const CollectionLink = styled(Link)`
   }
 
   .picture {
-    width: 40px;
+    width: 42px;
     border-radius: 48px;
   }
 `;
