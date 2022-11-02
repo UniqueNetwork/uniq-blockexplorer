@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { useParams } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import { Skeleton } from '@unique-nft/ui-kit';
@@ -160,7 +160,7 @@ const ViewContainer = styled.div<{
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  min-width: 524px;
+  min-width: 424px;
   border: 1px solid
     ${({ isSelected }) => (isSelected ? 'var(--primary-200)' : 'transparent')};
   hr {

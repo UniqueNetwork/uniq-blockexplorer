@@ -183,11 +183,11 @@ const Content = styled.div`
   }
 
   .tree-container {
-    width: 682px;
+    width: 570px;
     height: 100%;
     padding-bottom: 16px;
     @media (max-width: 1440px) {
-      width: 618px;
+      width: 544px;
     }
     @media (max-width: 1199px) {
       width: 462px;

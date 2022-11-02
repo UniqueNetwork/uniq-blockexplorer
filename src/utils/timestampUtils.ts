@@ -78,17 +78,25 @@ const timestampFormat = (timestamp: number | undefined) => {
 const tokenPageTimestampFormat = (timestamp: number | undefined) => {
   if (!timestamp) return 'undefined';
 
-  return new Date(timestamp * 1000).toLocaleString('en-US', {
-    day: '2-digit',
-    hour: '2-digit',
-    hour12: false,
-    minute: '2-digit',
-    month: 'short',
-    second: 'numeric',
-    timeZone: 'GMT',
-    timeZoneName: 'short',
-    year: 'numeric',
-  });
+  const localeStringSplitted = new Date(timestamp * 1000)
+    .toLocaleString('en-US', {
+      day: '2-digit',
+      hour: '2-digit',
+      hour12: false,
+      minute: '2-digit',
+      month: 'short',
+      second: 'numeric',
+      timeZone: 'GMT',
+      timeZoneName: 'short',
+      year: 'numeric',
+    })
+    .split(',');
+  // convert "Sep 13" to "13 Sep"
+  localeStringSplitted[1] = `${localeStringSplitted[0].split(' ')[1]} ${
+    localeStringSplitted[0].split(' ')[0]
+  } ${localeStringSplitted[1]}`;
+  localeStringSplitted.shift();
+  return localeStringSplitted.join(',');
 };
 
 const timestampTableFormat = (timestamp: number) => {

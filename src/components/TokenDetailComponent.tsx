@@ -83,7 +83,12 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           {type === 'NESTED' ? (
             <HeaderWithTooltip>
               <Heading size="4">Parent NFT attributes</Heading>
-              <img data-tip={true} alt="tooltip" data-for="bundleAttrTooltip" src={Question} />
+              <img
+                data-tip={true}
+                alt="tooltip"
+                data-for="bundleAttrTooltip"
+                src={Question}
+              />
               <ReactTooltip
                 id="bundleAttrTooltip"
                 effect="solid"
