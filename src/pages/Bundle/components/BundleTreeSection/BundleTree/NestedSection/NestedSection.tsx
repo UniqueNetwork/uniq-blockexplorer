@@ -111,7 +111,7 @@ const Title: FC<{
   prefix: string;
   token: INestingToken;
 }> = ({ isCollectionLoading, prefix, token }) => {
-  if (isCollectionLoading) return <Skeleton height={28} width={156} />;
+  if (isCollectionLoading) return <Skeleton height={42} width={156} />;
 
   return (
     <TextStyled color="additional-dark" size="l">
