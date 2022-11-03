@@ -67,9 +67,12 @@ function BundleTreeSection({
         return bundle.token_id === token_id && bundle.collection_id === collection_id;
       }
 
-      bundle.opened = !!bundle.nestingChildren.filter((token) =>
-        openNodeIfChildsPageOpened(token),
-      ).length;
+      if (!bundle.opened) {
+        bundle.opened = !!bundle.nestingChildren.filter((token) =>
+          openNodeIfChildsPageOpened(token),
+        ).length;
+      }
+
       return bundle;
     };
 
