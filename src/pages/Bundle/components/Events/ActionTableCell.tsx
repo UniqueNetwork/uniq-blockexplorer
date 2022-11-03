@@ -9,13 +9,13 @@ const ActionTableCell: FC<{ action: string }> = ({ action }) => {
   const icons: { [key: string]: IconType } = {
     ItemCreated: 'checkCircle',
     Transfer: 'transfer',
-    Burned: 'fire',
+    Destroy: 'fire',
   };
 
   const actions: { [key: string]: string } = {
     ItemCreated: 'Mint',
     Transfer: 'Transfer',
-    Burned: 'Burn',
+    Destroy: 'Burn',
   };
   return (
     <Cell>
