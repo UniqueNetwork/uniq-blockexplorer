@@ -6,11 +6,12 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Token } from '@app/api';
 import { LoadingComponent, Picture } from '@app/components/index';
-import { DeviceSize, useApi, useDeviceSize } from '@app/hooks';
+import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, tokenPageTimestampFormat } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
+import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
@@ -39,6 +40,10 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     type,
   } = token;
 
+  const { imgSrc } = useCheckImageExists(
+    getCoverURLFromCollection(token.collection_cover),
+  );
+
   if (loading) return <LoadingComponent />;
 
   const attributesParsed = convertAttributesToView(attributes);
@@ -61,7 +66,12 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
               to={`/${currentChain.network.toLowerCase()}/collections/${collectionId}`}
               onClick={onCollectionClick}
             >
-              <Picture alt={`token ${id}`} src={token.collection_cover} />
+              {/* the picture has not exists */}
+              {!imgSrc && (
+                <TokenPicture alt={token.collection_id.toString()} src={imgSrc} />
+              )}
+              {/* the picture has loaded */}
+              {imgSrc && <CollectionPicture src={imgSrc} />}
               <div>
                 <Text color="primary-500">{name}</Text>
                 <div>
@@ -167,6 +177,16 @@ const TokenPicture = styled(Picture)`
     width: 100%;
     height: 100%;
   }
+`;
+
+const CollectionPicture = styled.div<{ src: string }>`
+  width: 40px;
+  height: 40px;
+  border-radius: 48px;
+  background-image: url(${(props) => props.src});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const TokenInfo = styled.div`
