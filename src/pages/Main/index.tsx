@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
-import { useSearchParams } from 'react-router-dom';
 
 import { PagePaperWrapper, Stub } from '@app/components';
 import { useQueryParams } from '@app/hooks/useQueryParams';
@@ -12,6 +11,7 @@ import {
   SearchHeader,
   TokenInformation,
   Tokens,
+  Bundles,
 } from './components';
 import { CoinsTransfersSearchResult } from './components/LastTransfers/CoinsTransfersSearchResult';
 import { NFTsTransfersSearchResult } from './components/LastTransfers/NFTsTransfersSearchResult';
@@ -46,6 +46,11 @@ const MainPage = () => {
       <SearchHeader searchModeOn={searchModeOn} setResultExist={setResultExist} />
       {!searchModeOn && <TokenInformation />}
       <Tokens
+        searchModeOn={searchModeOn}
+        searchString={searchString}
+        setResultExist={setTokensExist}
+      />
+      <Bundles
         searchModeOn={searchModeOn}
         searchString={searchString}
         setResultExist={setTokensExist}

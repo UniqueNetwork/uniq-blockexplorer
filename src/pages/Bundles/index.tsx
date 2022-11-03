@@ -11,7 +11,13 @@ import {
   SelectOptionProps,
   ViewType,
 } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
+import {
+  DeviceSize,
+  useApi,
+  useDeviceSize,
+  useQueryParams,
+  useScrollToTop,
+} from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, Token, useGraphQlBundles } from '@app/api';
@@ -23,6 +29,7 @@ import BundlesGrid from './components/BundlesGrid';
 import { getBundlesColumns } from './components/bundlesColumnsSchema';
 
 const BundlesPage: FC = () => {
+  useScrollToTop();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const {
     searchString: searchFromQuery,
@@ -207,23 +214,6 @@ const SkeletonWrapper = styled.div`
 const PagePaper = styled(PagePaperWrapper)`
   > div:first-of-type {
     margin-bottom: calc(var(--gap) * 1.5);
-  }
-`;
-
-const CollectionsList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: var(--gap);
-  grid-row-gap: var(--gap);
-  position: relative;
-  margin-bottom: calc(var(--gap) * 1.5);
-
-  @media (min-width: 576px) and (max-width: 1199px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 575px) {
-    grid-template-columns: 1fr;
   }
 `;
 
