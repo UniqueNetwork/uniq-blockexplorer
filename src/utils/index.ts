@@ -10,3 +10,4 @@ export * from './tokenImage';
 export * from './addressMirroring';
 export * from './formatLongNumber';
 export * from './isTouchEnabled';
+export * from './countNestedChildren';

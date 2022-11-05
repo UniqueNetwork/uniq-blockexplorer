@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/macro';
 
-export const PagePaper: FC = ({ children }) => {
-  return <PagePaperWrapper>{children}</PagePaperWrapper>;
+export const PagePaper: FC<{ className?: string }> = ({ children, className }) => {
+  return <PagePaperWrapper className={className}>{children}</PagePaperWrapper>;
 };
 
 export const PagePaperWrapper = styled.div`

@@ -5,6 +5,7 @@ export const useLocationPathname = () => {
   const [notTheMainPage, setNotTheMainPage] = useState(false);
   const [tokensPage, setTokensPage] = useState(false);
   const [bundlesPage, setBundlesPage] = useState(false);
+  const [bundlePage, setBundlePage] = useState(false);
   const [collectionsPage, setCollectionsPage] = useState(false);
   const location = useLocation();
 
@@ -36,7 +37,13 @@ export const useLocationPathname = () => {
     } else {
       setBundlesPage(false);
     }
+
+    if (location.pathname.match(`/(bundle)`)) {
+      setBundlePage(true);
+    } else {
+      setBundlePage(false);
+    }
   }, [location.pathname]);
 
-  return { collectionsPage, notTheMainPage, tokensPage, bundlesPage };
+  return { collectionsPage, notTheMainPage, tokensPage, bundlesPage, bundlePage };
 };
