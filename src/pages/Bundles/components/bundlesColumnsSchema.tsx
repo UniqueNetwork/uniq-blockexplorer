@@ -39,8 +39,8 @@ export const getBundlesColumns = (
     width: 180,
   },
   {
-    dataIndex: 'date_of_creation',
-    key: 'date_of_creation',
+    dataIndex: 'bundle_created',
+    key: 'bundle_created',
     render: (value: number) => {
       return (
         <Text size="m" weight="regular">
@@ -50,7 +50,7 @@ export const getBundlesColumns = (
     },
     title: (
       <TableSortableColumnTitle
-        dataIndex="date_of_creation"
+        dataIndex="bundle_created"
         orderBy={orderBy}
         title="Bundle created"
         onOrderChange={onOrderChange}

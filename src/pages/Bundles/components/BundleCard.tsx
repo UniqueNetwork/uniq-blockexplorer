@@ -12,10 +12,10 @@ import { SVGIcon } from '@app/components/SVGIcon';
 type BundleCardProps = Token & { timeNow?: number };
 
 const BundleCard: FC<BundleCardProps> = ({
+  bundle_created: dateOfCreation,
   children_count,
   collection_id: collectionId,
   collection_name: name,
-  date_of_creation: dateOfCreation,
   image,
   timeNow,
   token_id: tokenId,
