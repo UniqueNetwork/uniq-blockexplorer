@@ -11,6 +11,7 @@ export type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT';
 
 export interface Token {
   attributes: DecodedAttributes;
+  bundle_created: number;
   burned: boolean;
   token_id: number;
   children_count: number;
