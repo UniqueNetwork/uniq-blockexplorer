@@ -13,7 +13,6 @@ const BundlesQuery = gql`
     tokenBundles(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
       data {
         attributes
-        bundle_created
         children_count
         collection_cover
         collection_description
