@@ -24,6 +24,7 @@ const bundleEventsQuery = gql`
         result
         timestamp
         token_id
+        values
       }
     }
   }

@@ -1,12 +1,14 @@
 import React, { FC, useCallback } from 'react';
 import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
+import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
-import { BundleEvent, EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import ActionTableCell from '@app/pages/Bundle/components/Events/ActionTableCell';
 import { SVGIcon } from '@app/components';
+import ResultTableCell from '@app/pages/Bundle/components/Events/ResultTableCell';
 
 import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
 
@@ -83,7 +85,10 @@ export const getBundleEventsColumns = (
     dataIndex: 'result',
     key: 'result',
     title: 'Result',
-    width: 180,
+    render: (value: string, event: DefaultRecordType) => (
+      <ResultTableCell event={event} />
+    ),
+    width: 200,
   },
 ];
 
