@@ -5,6 +5,7 @@ export { default as ScrollableTable } from './ScrollableTable';
 export { default as TokenCard } from './TokenCard';
 export { default as Stub } from './Stub';
 export { default as GlobalSearch } from './GlobalSearch';
+export { default as BundleTree } from './TreeView';
 
 export * from './CoverContainer';
 export * from './Dropdown';
@@ -17,3 +18,4 @@ export * from './PagePaper';
 export * from './Pagination';
 export * from './Tabs';
 export * from './types';
+export * from './TreeView/types';

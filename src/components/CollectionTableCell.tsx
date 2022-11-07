@@ -9,7 +9,7 @@ import { SimpleRoundedCover } from '@app/components/SimpleRoundedCover';
 
 interface CollectionTableCellProps {
   chainId: string;
-  collectionId: string;
+  collectionId: number;
   coverImageUrl?: string;
   collectionName: string;
 }
@@ -35,8 +35,8 @@ const CollectionTableCell: FC<CollectionTableCellProps> = ({
     >
       <SimpleRoundedCover collectionId={collectionId} coverImageUrl={coverImageUrl} />
       <CollectionTitle>
-        <Text color={'secondary-500'}>{collectionName}</Text>
-        <Text color={'grey-500'} size={'xs'}>{`ID ${collectionId}`}</Text>
+        <Text color="primary-500">{collectionName}</Text>
+        <Text color="grey-500" size="xs">{`ID ${collectionId}`}</Text>
       </CollectionTitle>
     </CollectionLink>
   );

@@ -87,6 +87,8 @@ export const useQueryParams = () => {
 
     if (queryParams.get('view')) {
       setView(queryParams.get('view') as string);
+    } else {
+      setView('List');
     }
   }, [queryParams]);
 

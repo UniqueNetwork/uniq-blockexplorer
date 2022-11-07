@@ -19,4 +19,6 @@ export * from './transfers/transfers';
 export * from './transfers/types';
 export * from './blocks/block';
 export * from './blocks/types';
+export * from './bundles/bundles';
+export * from './bundles/types';
 export * from './nftTransactions';

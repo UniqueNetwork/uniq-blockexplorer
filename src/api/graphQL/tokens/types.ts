@@ -7,10 +7,14 @@ export interface TokensVariables {
   orderBy?: TokenSorting;
 }
 
+export type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT';
+
 export interface Token {
   attributes: DecodedAttributes;
+  bundle_created: number;
   burned: boolean;
   token_id: number;
+  children_count: number;
   collection_id: number;
   collection_name: string;
   image: {
@@ -23,7 +27,9 @@ export interface Token {
   image_path: string;
   collection_cover: string;
   collection_description: string;
+  parent_id: string;
   transfers_count: number;
+  type: TokenTypeEnum;
 }
 
 export interface TokensData {

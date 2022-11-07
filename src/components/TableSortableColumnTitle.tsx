@@ -55,7 +55,7 @@ const ColumnTitleText = styled(Text)`
 `;
 
 const StyledArrowDownUp = styled(ArrowDownUp)`
-  @media (max-width: 1023px) {
+  @media (max-width: 991px) {
     display: none;
   }
 `;

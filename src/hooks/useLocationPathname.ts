@@ -3,21 +3,27 @@ import { useLocation } from 'react-router-dom';
 
 export const useLocationPathname = () => {
   const [notTheMainPage, setNotTheMainPage] = useState(false);
-  const [tokensOrCollectionsPage, setTokensOrCollectionsPage] = useState(false);
+  const [tokensPage, setTokensPage] = useState(false);
+  const [bundlesPage, setBundlesPage] = useState(false);
+  const [bundlePage, setBundlePage] = useState(false);
   const [collectionsPage, setCollectionsPage] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname.match(`/(collections|tokens|account|extrinsic|block|nfts)`)) {
+    if (
+      location.pathname.match(
+        `/(collections|tokens|account|extrinsic|block|nfts|bundles|bundle)`,
+      )
+    ) {
       setNotTheMainPage(true);
     } else {
       setNotTheMainPage(false);
     }
 
-    if (location.pathname.match(`/(collections|tokens)`)) {
-      setTokensOrCollectionsPage(true);
+    if (location.pathname.match(`/(tokens)`)) {
+      setTokensPage(true);
     } else {
-      setTokensOrCollectionsPage(false);
+      setTokensPage(false);
     }
 
     if (location.pathname.match(`/(collections)`)) {
@@ -25,7 +31,19 @@ export const useLocationPathname = () => {
     } else {
       setCollectionsPage(false);
     }
+
+    if (location.pathname.match(`/(bundles)`)) {
+      setBundlesPage(true);
+    } else {
+      setBundlesPage(false);
+    }
+
+    if (location.pathname.match(`/(bundle)`)) {
+      setBundlePage(true);
+    } else {
+      setBundlePage(false);
+    }
   }, [location.pathname]);
 
-  return { collectionsPage, notTheMainPage, tokensOrCollectionsPage };
+  return { collectionsPage, notTheMainPage, tokensPage, bundlesPage, bundlePage };
 };

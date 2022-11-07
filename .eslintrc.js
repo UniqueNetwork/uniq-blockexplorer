@@ -50,7 +50,7 @@ module.exports = {
       { blankLine: 'always', prev: '*', next: 'if' },
       { blankLine: 'always', prev: 'if', next: '*' },
     ],
-    'prettier/prettier': ['error', { tabWidth: 2 }],
+    'prettier/prettier': ['error', { tabWidth: 2, endOfLine: 'auto' }],
     'react/jsx-sort-props': [
       'error',
       {

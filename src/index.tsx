@@ -7,12 +7,14 @@ import App from './App';
 import {
   Account,
   Block,
+  Bundles,
   Collections,
   Collection,
   Extrinsic,
   Main,
   Tokens,
   Token,
+  Bundle,
 } from './pages';
 import config from './config';
 
@@ -38,7 +40,10 @@ ReactDOM.render(
             <Route element={<Block />} path="block/:blockIndex" />
             <Route element={<Account />} path="account/:accountId" />
             <Route element={<Extrinsic />} path="extrinsic/:blockIndex" />
-            <Route element={<Block />} path="block/:blockIndex" />
+            <Route path="bundles">
+              <Route index element={<Bundles />} />
+              <Route element={<Collection />} path=":collectionId" />
+            </Route>
             <Route path="collections">
               <Route index element={<Collections />} />
               <Route element={<Collection />} path=":collectionId" />
@@ -49,6 +54,9 @@ ReactDOM.render(
             </Route>
             <Route path="nfts">
               <Route element={<Token />} path=":collectionId/:tokenId" />
+            </Route>
+            <Route path="bundle">
+              <Route element={<Bundle />} path=":collectionId/:tokenId" />
             </Route>
           </Route>
         </Route>
