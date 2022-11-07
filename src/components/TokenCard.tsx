@@ -21,6 +21,7 @@ const TokenCard: FC<TokenCardProps> = ({
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
+  type,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
@@ -32,7 +33,11 @@ const TokenCard: FC<TokenCardProps> = ({
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
 
-    navigate(`/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`);
+    let typeLinkPart = type === 'NFT' ? 'nfts' : type === 'NESTED' ? 'bundle' : 'rft';
+
+    navigate(
+      `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
+    );
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
