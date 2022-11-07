@@ -11,7 +11,13 @@ import {
   SelectOptionProps,
   ViewType,
 } from '@app/components';
-import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
+import {
+  DeviceSize,
+  useApi,
+  useDeviceSize,
+  useQueryParams,
+  useScrollToTop,
+} from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, Token, useGraphQlBundles } from '@app/api';
@@ -23,6 +29,7 @@ import BundlesGrid from './components/BundlesGrid';
 import { getBundlesColumns } from './components/bundlesColumnsSchema';
 
 const BundlesPage: FC = () => {
+  useScrollToTop();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const {
     searchString: searchFromQuery,

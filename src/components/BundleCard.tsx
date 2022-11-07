@@ -11,9 +11,9 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 
-type TokenCardProps = Token & { timeNow?: number };
+type BundleCardProps = Token & { timeNow?: number };
 
-const TokenCard: FC<TokenCardProps> = ({
+const BundleCard: FC<BundleCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
   date_of_creation: dateOfCreation,
@@ -21,7 +21,8 @@ const TokenCard: FC<TokenCardProps> = ({
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
-  type,
+  children_count,
+  transfers_count,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
@@ -33,11 +34,7 @@ const TokenCard: FC<TokenCardProps> = ({
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
 
-    let typeLinkPart = type === 'NFT' ? 'nfts' : type === 'NESTED' ? 'bundle' : 'rft';
-
-    navigate(
-      `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
-    );
+    navigate(`/${currentChain.network.toLowerCase()}/bundle/${collectionId}/${tokenId}`);
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
@@ -56,14 +53,28 @@ const TokenCard: FC<TokenCardProps> = ({
               currentChain ? currentChain?.network + '/' : ''
             }collections/${collectionId}`}
           >
-            {name} [ID {collectionId}]
+            {name} [{collectionId}]
           </TokenCollectionLink>
         </div>
         <TokenProperties>
-          <StyledSVGIcon height={16} name="clock" width={16} />
-          <Text color="additional-dark" size="xs">
-            {timeDifference(dateOfCreation, timeNow)}
+          <Text color="grey-500" size="xs">
+            Transfers:{' '}
+            <Text color="additional-dark" size="xs">
+              {transfers_count}
+            </Text>
           </Text>
+          <Text color="grey-500" size="xs">
+            Nested items:{' '}
+            <Text color="additional-dark" size="xs">
+              {children_count}
+            </Text>
+          </Text>
+          <CreatedDate>
+            <StyledSVGIcon height={16} name="clock" width={16} />
+            <Text color="additional-dark" size="xs">
+              {timeDifference(dateOfCreation, timeNow)}
+            </Text>
+          </CreatedDate>
         </TokenProperties>
       </TokenTitle>
     </TokenCardLink>
@@ -129,8 +140,14 @@ const TokenTitle = styled.div`
 
 const TokenProperties = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   margin-top: calc(var(--gap) / 2);
+  gap: 2px;
 `;
 
-export default TokenCard;
+const CreatedDate = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export default BundleCard;

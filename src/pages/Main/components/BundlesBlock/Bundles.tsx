@@ -5,24 +5,23 @@ import { Button, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
-import { PagePaperWrapper, DropdownOptionProps, TokenCard } from '@app/components';
+import { PagePaperWrapper, DropdownOptionProps } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
-import { TokenSorting, useGraphQlTokens } from '@app/api/graphQL';
+import { BundleSorting, useGraphQlBundles } from '@app/api/graphQL';
 import { defaultSorting } from '@app/pages/Tokens/constants';
+import BundleCard from '@app/components/BundleCard';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
-import { tokensOptions } from './tokensOptions';
+import { tokensOptions } from '../TokensBlock/tokensOptions';
 
-interface TokensProps {
+interface BundlesProps {
   searchModeOn: boolean;
   searchString?: string;
-  collectionId?: number;
   setResultExist?: (val: boolean) => void;
 }
 
-export const Tokens: VFC<TokensProps> = ({
-  collectionId,
+export const Bundles: VFC<BundlesProps> = ({
   searchString,
   searchModeOn,
   setResultExist,
@@ -33,7 +32,7 @@ export const Tokens: VFC<TokensProps> = ({
 
   const deviceSize = useDeviceSize();
 
-  const tokensLimit = useMemo(() => {
+  const bundlesLimit = useMemo(() => {
     if (deviceSize === DeviceSize.xxl) return 12;
 
     if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.xl) return 8;
@@ -51,54 +50,45 @@ export const Tokens: VFC<TokensProps> = ({
 
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_MAIN_PAGE);
     navigate({
-      pathname: `/${currentChain.network.toLowerCase()}/tokens/nfts/`,
+      pathname: `/${currentChain.network.toLowerCase()}/bundles/`,
       search: `?${createSearchParams(params)}`,
     });
   }, [currentChain, navigate, searchString]);
 
-  const filter = collectionId
-    ? { collection_id: { _eq: Number(collectionId) }, burned: { _eq: 'false' } }
-    : {
-        burned: { _eq: 'false' },
-        _or: [
-          { type: { _eq: 'NFT' } },
-          { type: { _eq: 'FRACTIONAL' } },
-          { _and: [{ type: { _eq: 'NESTED' } }, { parent_id: { _is_null: false } }] },
-        ],
-      };
+  const filter = { _or: [{}], burned: { _eq: 'false' } };
 
   const orderBy = useMemo(
-    (): TokenSorting =>
+    (): BundleSorting =>
       selectedSort.id === 'new'
         ? { date_of_creation: 'desc_nulls_last' }
         : { transfers_count: 'desc_nulls_last' },
     [selectedSort.id],
   );
 
-  const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
+  const { isBundlesFetching, timestamp, bundles, bundlesCount } = useGraphQlBundles({
     filter,
     offset: 0,
     orderBy,
-    pageSize: tokensLimit,
+    pageSize: bundlesLimit,
     searchString,
   });
   const [showButton, setShowButton] = useState<boolean>(true);
 
   useEffect(() => {
-    if (tokensCount > tokensLimit) {
+    if (bundlesCount > bundlesLimit) {
       setShowButton(true);
     } else {
       setShowButton(false);
     }
-  }, [tokensCount, tokensLimit, setShowButton]);
+  }, [bundlesCount, bundlesLimit, setShowButton]);
 
   useEffect(() => {
-    if (searchModeOn && !isTokensFetching && setResultExist) {
-      setResultExist(!!tokens?.length);
+    if (searchModeOn && !isBundlesFetching && setResultExist) {
+      setResultExist(!!bundles?.length);
     }
-  }, [tokens, isTokensFetching, searchModeOn, setResultExist]);
+  }, [bundles, isBundlesFetching, searchModeOn, setResultExist]);
 
-  if (isTokensFetching) {
+  if (isBundlesFetching) {
     return (
       <SkeletonWrapper>
         <Skeleton />
@@ -106,26 +96,26 @@ export const Tokens: VFC<TokensProps> = ({
     );
   }
 
-  if (!tokens?.length) {
+  if (!bundles?.length) {
     return null;
   }
 
   return (
-    <Wrapper data-automation-id="tokens">
+    <Wrapper data-automation-id="bundles">
       {searchModeOn ? (
-        <StyledHeader size="2">Tokens</StyledHeader>
+        <StyledHeader size="2">Bundles</StyledHeader>
       ) : (
         <HeaderWithDropdown
           options={tokensOptions}
           selectedSort={selectedSort}
           setSelectedSort={setSelectedSort}
-          title="Tokens"
+          title="Bundles"
         />
       )}
       <TokensWrapper>
-        {tokens?.slice(0, tokensLimit).map((token) => (
-          <TokenCard
-            key={`token-${token.collection_id}-${token.token_id}`}
+        {bundles?.slice(0, bundlesLimit).map((token) => (
+          <BundleCard
+            key={`bundle-${token.collection_id}-${token.token_id}`}
             {...token}
             timeNow={timestamp}
           />
