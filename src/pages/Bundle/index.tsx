@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useGraphQlToken } from '@app/api';
 import { useScrollToTop } from '@app/hooks';
+import EventsTable from '@app/pages/Bundle/components/Events/EventsTable';
 
 import TokenDetailComponent from '../../components/TokenDetailComponent';
 import PagePaper from '../../components/PagePaper';
@@ -28,6 +29,7 @@ const BundlePage: FC = () => {
         <TokenDetailComponent loading={isTokensFetching} token={token} />
       </PagePaper>
       <BundleTreeSection token={token} />
+      <EventsTable />
     </>
   );
 };

@@ -20,3 +20,7 @@ export { default as noTrades } from './no-trades.svg';
 export { default as square } from './square.svg';
 export { default as pin } from './pin.svg';
 export { default as arrowUpRight } from './arrow-up-right.svg';
+export { default as checkCircle } from './checkCircle.svg';
+export { default as fire } from './fire.svg';
+export { default as transfer } from './transfer.svg';
+export { default as calendar } from './calendar.svg';

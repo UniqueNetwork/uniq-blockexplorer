@@ -14,6 +14,8 @@ interface TokenTableCellProps {
   imageUrl: string | null;
   tokenPrefix: string;
   type: TokenTypeEnum;
+  tokenName?: string;
+  iconSize?: number;
 }
 
 const TokenTableCell: FC<TokenTableCellProps> = ({
@@ -23,15 +25,19 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   tokenId,
   tokenPrefix,
   type,
+  tokenName,
+  iconSize,
 }) => (
   <TokenLink
     to={`/${chainId.toLowerCase()}/${
       type === 'NESTED' ? 'bundle' : 'nfts'
     }/${collectionId}/${tokenId}`}
   >
-    <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} />
+    <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} iconSize={iconSize} />
     <TokenTitle>
-      <Text color="primary-500">{`${tokenPrefix} #${tokenId}`}</Text>
+      <Text color="primary-500">
+        {tokenName ? tokenName : `${tokenPrefix} #${tokenId}`}
+      </Text>
     </TokenTitle>
   </TokenLink>
 );
@@ -47,9 +53,11 @@ const TokenLink = styled(Link)`
   }
 `;
 
-const TokenPicture = styled(Picture)`
-  height: 64px;
-  width: 64px;
+const TokenPicture = styled(Picture)<{
+  iconSize: number | undefined;
+}>`
+  height: ${({ iconSize }) => (iconSize ? iconSize : 64)}px;
+  width: ${({ iconSize }) => (iconSize ? iconSize : 64)}px;
   border-radius: var(--bradius);
 `;
 
