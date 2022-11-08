@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
@@ -14,9 +14,12 @@ import {
   SelectOptionProps,
 } from '@app/components';
 import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
-import { getBundleEventsColumns } from '@app/pages/Bundle/components/Events/columnsSchema';
+import {
+  getBundleEventsAccountsPageColumns,
+  getBundleEventsColumns,
+} from '@app/pages/Bundle/components/Events/columnsSchema';
 
-const EventsTable = () => {
+const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { sort, setParamToQuery } = useQueryParams();
   const { collectionId, tokenId } = useParams<{
@@ -73,20 +76,29 @@ const EventsTable = () => {
       offset,
       orderBy,
       limit: pageSizeNumber,
+      author: accountId,
     });
 
-  const columns = useMemo(
-    () =>
-      getBundleEventsColumns(
-        orderBy,
-        setOrderAndQuery,
-        timestamp,
-        currentChain?.symbol,
-        isAgeColumn,
-        setIsAgeColumn,
-      ),
-    [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn],
-  );
+  const columns = useMemo(() => {
+    return !accountId
+      ? getBundleEventsColumns(
+          orderBy,
+          setOrderAndQuery,
+          timestamp,
+          currentChain?.symbol,
+          isAgeColumn,
+          setIsAgeColumn,
+        )
+      : getBundleEventsAccountsPageColumns(
+          orderBy,
+          setOrderAndQuery,
+          timestamp,
+          currentChain?.symbol,
+          isAgeColumn,
+          setIsAgeColumn,
+          currentChain.network,
+        );
+  }, [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn]);
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>

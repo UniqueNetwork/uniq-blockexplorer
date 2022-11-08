@@ -9,6 +9,7 @@ import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import ActionTableCell from '@app/pages/Bundle/components/Events/ActionTableCell';
 import { SVGIcon } from '@app/components';
 import ResultTableCell from '@app/pages/Bundle/components/Events/ResultTableCell';
+import TokenTableCell from '@app/components/TokenTableCell';
 
 import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
 
@@ -118,3 +119,107 @@ const Wrapper = styled.div`
 const ColumnTitleText = styled(Text)`
   margin-right: calc(var(--gap) / 2);
 `;
+
+export const getBundleEventsAccountsPageColumns = (
+  orderBy: EventsSorting,
+  onOrderChange: (orderBy: EventsSorting) => void,
+  timestamp: number,
+  tokenSymbol: string = '',
+  isAgeColumn: boolean,
+  setIsAgeColumn: (newIsAgeColumn: boolean) => void,
+  chainId: string,
+) => [
+  {
+    dataIndex: 'token_id',
+    key: 'token_id',
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="token_id"
+        orderBy={orderBy}
+        title="Token"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    render: (value: string, event: DefaultRecordType) => (
+      <TokenTableCell
+        chainId={chainId}
+        collectionId={event.collection_id}
+        imageUrl={event.image.fullUrl}
+        tokenId={event.token_id}
+        tokenName={event.token_name}
+        type={event.type}
+      />
+    ),
+    width: 150,
+  },
+  {
+    dataIndex: 'action',
+    key: 'action',
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="action"
+        orderBy={orderBy}
+        title="Action"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    render: (value: string) => <ActionTableCell action={value} />,
+    width: 150,
+  },
+  {
+    dataIndex: 'timestamp',
+    key: 'timestamp',
+    render: (value: number) => {
+      return (
+        <Text size="m" weight="regular" color={'color-blue-grey-600'}>
+          {isAgeColumn ? timeDifference(value, timestamp) : timestampTableFormat(value)}
+        </Text>
+      );
+    },
+    title: (
+      <AgeTimeHeader
+        text={isAgeColumn ? 'Age' : 'Time'}
+        icon={isAgeColumn ? 'clock' : 'calendar'}
+        isAgeColumn={isAgeColumn}
+        setIsAgeColumn={setIsAgeColumn}
+      />
+    ),
+    width: 150,
+  },
+  {
+    dataIndex: 'fee',
+    key: 'fee',
+    render: (value: number) => {
+      return (
+        <Text size="m" weight="regular" color={'blue-grey-600'}>
+          {`${formatAmount(value || 0)} ${tokenSymbol}`}
+        </Text>
+      );
+    },
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="fee"
+        orderBy={orderBy}
+        title="Fee"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 150,
+  },
+  {
+    dataIndex: 'author',
+    key: 'author',
+    render: (value: string) => <AccountLinkComponent value={value} />,
+    title: 'Author',
+    width: 150,
+  },
+  {
+    dataIndex: 'result',
+    key: 'result',
+    title: 'Result',
+    render: (value: string, event: DefaultRecordType) => (
+      <ResultTableCell event={event} />
+    ),
+    width: 200,
+  },
+];
