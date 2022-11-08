@@ -9,6 +9,7 @@ export interface TokensVariables {
 
 export interface Token {
   attributes: DecodedAttributes;
+  burned: boolean;
   token_id: number;
   collection_id: number;
   collection_name: string;

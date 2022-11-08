@@ -81,7 +81,7 @@ const CollectionsPage: FC = () => {
   let tokensFilter;
 
   const filter = useMemo(() => {
-    let filters = { _or: [{}], nesting_enabled: {} };
+    let filters = { _or: [{}], nesting_enabled: {}, burned: { _eq: 'false' } };
 
     if (accountId) {
       filters._or = [

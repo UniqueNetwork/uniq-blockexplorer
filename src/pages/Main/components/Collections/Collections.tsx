@@ -54,6 +54,7 @@ export const Collections: VFC<CollectionsProps> = ({
 
   const { collections, collectionsCount, isCollectionsFetching, timestamp } =
     useGraphQlCollections({
+      filter: { burned: { _eq: 'false' } },
       orderBy,
       pageSize,
       searchString,
@@ -67,7 +68,10 @@ export const Collections: VFC<CollectionsProps> = ({
 
   const collectionIds = collections?.map((collection) => collection.collection_id);
   const filter = {
-    _and: [{ collection_id: { _in: collectionIds } }, { token_id: { _eq: 1 } }],
+    _and: [
+      { collection_id: { _in: collectionIds } },
+      { token_id: { _eq: 1 }, burned: { _eq: 'false' } },
+    ],
   };
 
   const { tokens } = useGraphQlTokens({

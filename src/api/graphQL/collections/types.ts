@@ -15,6 +15,7 @@ export interface Attributes {
 
 export interface Collection {
   attributes_schema: Attributes;
+  burned: boolean;
   collection_cover: string;
   collection_id: number;
   description: string;
