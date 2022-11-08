@@ -5,7 +5,7 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 import { Heading, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
-import { DEFAULT_PAGE_SIZE, defaultOrderBy } from '@app/pages/Bundles/constants';
+import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
 import { BundleEvent, EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 import {
   PagePaper,
@@ -34,7 +34,7 @@ const EventsTable = () => {
     return split ? { [split[0]]: split[1] } : ({} as EventsSorting);
   };
   const [orderBy, setOrderBy] = useState<EventsSorting>(
-    getOrderByFromQuery() || defaultOrderBy,
+    getOrderByFromQuery() || defaultEventsOrderBy,
   );
 
   useEffect(() => {

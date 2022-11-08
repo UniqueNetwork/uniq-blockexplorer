@@ -1,4 +1,5 @@
 import { BundleSorting } from '@app/api';
+import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 
 import { BundlesSelectOption } from './types';
 export const OPTIONS: BundlesSelectOption[] = [
@@ -75,6 +76,7 @@ export const OPTIONS: BundlesSelectOption[] = [
 ];
 
 export const defaultOrderBy: BundleSorting = { date_of_creation: 'desc_nulls_last' };
+export const defaultEventsOrderBy: EventsSorting = { timestamp: 'desc_nulls_last' };
 export const defaultSorting: string = 'date_of_creation-desc_nulls_last';
 export const defaultOrderId = 3;
 
