@@ -70,7 +70,8 @@ export const Collections: VFC<CollectionsProps> = ({
   const filter = {
     _and: [
       { collection_id: { _in: collectionIds } },
-      { token_id: { _eq: 1 }, burned: { _eq: 'false' } },
+      { token_id: { _eq: 1 } },
+      { burned: { _eq: 'false' } },
     ],
   };
 
