@@ -25,25 +25,23 @@ const TokenCard: FC<TokenCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
-  // user analytics
-  const onNFTCardClick = useCallback(() => {
+
+  let typeLinkPart = type === 'NFT' ? 'nfts' : type === 'NESTED' ? 'bundle' : 'rft';
+
+  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
+
+  const logUserAnalytics = useCallback(() => {
     const path = window.location.pathname;
 
     if (path.includes('collections')) {
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
-
-    let typeLinkPart = type === 'NFT' ? 'nfts' : type === 'NESTED' ? 'bundle' : 'rft';
-
-    navigate(
-      `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
-    );
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
   return (
-    <TokenCardLink onClick={onNFTCardClick}>
+    <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -75,7 +73,7 @@ const StyledSVGIcon = styled(SVGIcon)`
   margin-right: 5px;
 `;
 
-const TokenCardLink = styled.div`
+const TokenCardLink = styled(Link)`
   cursor: pointer;
   width: 100%;
   border: 1px solid var(--blue-gray-200);
