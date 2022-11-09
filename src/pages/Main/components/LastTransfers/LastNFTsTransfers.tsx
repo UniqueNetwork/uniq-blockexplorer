@@ -41,6 +41,8 @@ export const LastNFTsTransfers: VFC<LastTransfersProps> = ({
       searchString: prettifiedBlockSearchString,
     });
 
+  console.log('nftTransfers', nftTransfers);
+
   useEffect(() => {
     if (
       /[^$,-,.\d]/.test(searchString || '') ||

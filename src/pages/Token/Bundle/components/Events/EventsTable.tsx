@@ -14,7 +14,7 @@ import {
   SelectOptionProps,
 } from '@app/components';
 import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
-import { getBundleEventsColumns } from '@app/pages/Bundle/components/Events/columnsSchema';
+import { getBundleEventsColumns } from '@app/pages/Token/Bundle/components/Events/columnsSchema';
 
 const EventsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
