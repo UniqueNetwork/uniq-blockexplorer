@@ -33,7 +33,8 @@ const TokenCard: FC<TokenCardProps> = ({
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
 
-    let typeLinkPart = type === 'NFT' ? 'nfts' : type === 'NESTED' ? 'bundle' : 'rft';
+    let typeLinkPart =
+      type === 'NFT' ? 'nfts' : type === 'NESTED' ? 'bundle' : 'fractional';
 
     navigate(
       `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
@@ -59,12 +60,40 @@ const TokenCard: FC<TokenCardProps> = ({
             {name} [ID {collectionId}]
           </TokenCollectionLink>
         </div>
-        <TokenProperties>
-          <StyledSVGIcon height={16} name="clock" width={16} />
-          <Text color="additional-dark" size="xs">
-            {timeDifference(dateOfCreation, timeNow)}
-          </Text>
-        </TokenProperties>
+        {type === 'NFT' && (
+          <NFTProperties>
+            <StyledSVGIcon height={16} name="clock" width={16} />
+            <Text color="additional-dark" size="xs">
+              {timeDifference(dateOfCreation, timeNow)}
+            </Text>
+          </NFTProperties>
+        )}
+        {type === 'FRACTIONAL' && (
+          <RFTProperties>
+            <Property>
+              <Text color="grey-500" size="xs" weight="light">
+                Owners:&nbsp;
+              </Text>
+              <Text color="additional-dark" size="xs" weight="light">
+                100
+              </Text>
+            </Property>
+            <Property>
+              <Text color="grey-500" size="xs" weight="light">
+                Total fractions:&nbsp;
+              </Text>
+              <Text color="additional-dark" size="xs" weight="light">
+                1000000
+              </Text>
+            </Property>
+            <CreatedRow>
+              <StyledSVGIcon height={16} name="clock" width={16} />
+              <Text color="additional-dark" size="xs" weight="light">
+                {timeDifference(dateOfCreation, timeNow)}
+              </Text>
+            </CreatedRow>
+          </RFTProperties>
+        )}
       </TokenTitle>
     </TokenCardLink>
   );
@@ -127,10 +156,26 @@ const TokenTitle = styled.div`
   }
 `;
 
-const TokenProperties = styled.div`
+const NFTProperties = styled.div`
   display: flex;
   align-items: center;
   margin-top: calc(var(--gap) / 2);
+`;
+
+const RFTProperties = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(var(--gap) / 2);
+`;
+
+const Property = styled.div`
+  display: flex;
+  margin-bottom: 2px;
+`;
+
+const CreatedRow = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export default TokenCard;

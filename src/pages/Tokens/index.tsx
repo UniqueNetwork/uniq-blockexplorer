@@ -20,7 +20,8 @@ import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
 import PagePaper from '../../components/PagePaper';
-import { ViewType } from './components/TokensComponent';
+import { ViewType } from './components/NFTsComponents/TokensComponent';
+import { RFTs } from './RFTs';
 
 const tabUrls = ['nfts', 'fractional'];
 
@@ -99,17 +100,13 @@ const TokensPage: FC = () => {
       <PagePaper>
         <RouterTabs
           additionalContent={[
-            <>
-              {currentTabIndex === 0 && (
-                <RightMenu
-                  key="top-right-menu"
-                  selectSort={selectSorting}
-                  selectGrid={selectGrid}
-                  selectList={selectList}
-                  view={view as ViewType}
-                />
-              )}
-            </>,
+            <RightMenu
+              key="top-right-menu"
+              selectSort={selectSorting}
+              selectGrid={selectGrid}
+              selectList={selectList}
+              view={view as ViewType}
+            />,
           ]}
           basePath={basePath}
           content={[
@@ -122,7 +119,6 @@ const TokensPage: FC = () => {
               </ReactTooltip>
             </div>,
           ]}
-          tabsClassNames={['', 'disabled']}
           tabUrls={tabUrls}
         />
         <Routes>
@@ -138,7 +134,18 @@ const TokensPage: FC = () => {
             }
             path="nfts"
           />
-          <Route element={<div>fractional coming soon</div>} path="fractional" />
+          <Route
+            element={
+              <RFTs
+                orderBy={orderBy}
+                setOrderBy={setOrderAndQuery}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+                view={view as ViewType}
+              />
+            }
+            path="fractional"
+          />
         </Routes>
       </PagePaper>
     </div>

@@ -3,11 +3,11 @@ import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 
 import { timeDifference } from '@app/utils';
+import { Token, TokenSorting } from '@app/api';
 
-import { Token, TokenSorting } from '../../../api/graphQL';
-import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
-import TokenTableCell from '../../../components/TokenTableCell';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import TableSortableColumnTitle from '../../../../components/TableSortableColumnTitle';
+import TokenTableCell from '../../../../components/TokenTableCell';
+import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
 
 export const getTokensColumns = (
   chainId: string,
@@ -79,24 +79,31 @@ export const getTokensColumns = (
     width: 180,
   },
   {
-    dataIndex: 'transfers_count',
-    key: 'transfers_count',
-    render: (value: string, item: unknown) => <>{value}</>,
+    dataIndex: 'total_fractions',
+    key: 'total_fractions',
+    render: (value: string) => <>{value}</>,
     title: (
       <TableSortableColumnTitle
-        dataIndex="transfers_count"
+        dataIndex="total_fractions"
         orderBy={orderBy}
-        title="Transfers"
+        title="Total fractions"
         onOrderChange={onOrderChange}
       />
     ),
     width: 100,
   },
   {
-    dataIndex: 'owner',
-    key: 'owner',
+    dataIndex: 'transfers',
+    key: 'transfers',
+    render: (value: string) => <>{value}</>,
+    title: 'Transfers',
+    width: 150,
+  },
+  {
+    dataIndex: 'owners',
+    key: 'owners',
     render: (value: string) => <AccountLinkComponent value={value} />,
-    title: 'Owner',
+    title: 'Owners',
     width: 150,
   },
 ];
