@@ -84,12 +84,33 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
           <Text color="grey-500">Created on</Text>
           <Text>{createdOnDate}</Text>
-          <Text color="grey-500">Owner</Text>
+          <Text color="grey-500">Owner{type === 'FRACTIONAL' && 's'}</Text>
           <OwnerWrapper>
             <AccountLinkComponent noShort={deviceSize >= DeviceSize.lg} value={owner} />
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>
+          {type !== 'FRACTIONAL' && (
+            <>
+              <Heading size="4">Сharacteristics</Heading>
+              <RFTAttribute key={`attribute-fractions-minted`}>
+                <Text color="grey-500">Total number of minted fractions:</Text>
+                <Text>10000</Text>
+              </RFTAttribute>
+              <RFTAttribute key={`attribute-fractions-sold`}>
+                <Text color="grey-500">Total number of fractions sold:</Text>
+                <Text>10000</Text>
+              </RFTAttribute>
+              <RFTAttribute key={`attribute-fractions-owned`}>
+                <Text color="grey-500">Owned fractions:</Text>
+                <Text>10000</Text>
+              </RFTAttribute>
+              <RFTAttribute key={`attribute-fractions-owned`}>
+                <Text color="grey-500">Ownership percentage:</Text>
+                <Text>1,25 %</Text>
+              </RFTAttribute>
+            </>
+          )}
           {type === 'NESTED' ? (
             <HeaderWithTooltip>
               <Heading size="4">Parent NFT attributes</Heading>
@@ -201,6 +222,14 @@ const TokenInfo = styled.div`
   span {
     display: flex !important;
     align-items: center;
+  }
+`;
+
+const RFTAttribute = styled.div`
+  display: flex;
+  gap: calc(var(--gap) / 2);
+  &:first-of-type {
+    margin-top: var(--gap);
   }
 `;
 
