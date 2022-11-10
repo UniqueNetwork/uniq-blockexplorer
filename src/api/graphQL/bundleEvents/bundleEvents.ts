@@ -34,9 +34,14 @@ export const useGraphQLBundleEvents = ({
   limit,
   offset = 0,
   orderBy,
-  collection_id,
-  token_id,
+  tokensInBundle,
 }: useGraphQLBundleEventsProps) => {
+  const where = tokensInBundle.map((token) => {
+    return {
+      token_id: { _eq: token.tokenId },
+      collection_id: { _eq: token.collectionId },
+    };
+  });
   const {
     data,
     error: fetchBundleEventsError,
@@ -50,7 +55,7 @@ export const useGraphQLBundleEvents = ({
       limit,
       offset,
       orderBy,
-      where: { token_id: { _eq: token_id }, collection_id: { _eq: collection_id } },
+      where: { _or: where },
     },
   });
 
