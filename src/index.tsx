@@ -14,7 +14,6 @@ import {
   Main,
   Tokens,
   Token,
-  Bundle,
 } from './pages';
 import config from './config';
 
@@ -52,12 +51,7 @@ ReactDOM.render(
               <Route path="fractional" />
               <Route path="nfts" />
             </Route>
-            <Route path="nfts">
-              <Route element={<Token />} path=":collectionId/:tokenId" />
-            </Route>
-            <Route path="bundle">
-              <Route element={<Bundle />} path=":collectionId/:tokenId" />
-            </Route>
+            <Route path="nfts/:collectionId/:tokenId" element={<Token />}></Route>
           </Route>
         </Route>
       </Routes>

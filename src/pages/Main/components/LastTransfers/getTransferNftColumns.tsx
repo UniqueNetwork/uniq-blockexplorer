@@ -10,22 +10,24 @@ export const getTransferNftColumns = (chainId?: string) => [
   {
     dataIndex: 'token_id',
     key: 'token_id',
-    render: (value: string, row: any) => (
-      <Link
-        className="token-transfer-cell"
-        to={`/${chainId ? chainId.toLowerCase() + '/' : ''}nfts/${
-          row.collection_id
-        }/${value}`}
-      >
-        <LinkInner>
-          <Picture
-            alt={value.toString()}
-            src={row.image ? row.image?.fullUrl : undefined}
-          />
-          {row.token_prefix} #{value}
-        </LinkInner>
-      </Link>
-    ),
+    render: (value: string, row: any) => {
+      return (
+        <Link
+          className="token-transfer-cell"
+          to={`/${chainId ? chainId.toLowerCase() + '/' : ''}nfts/${
+            row.collection_id
+          }/${value}`}
+        >
+          <LinkInner>
+            <Picture
+              alt={value.toString()}
+              src={row.image ? row.image?.fullUrl : undefined}
+            />
+            {row.token_prefix} #{value}
+          </LinkInner>
+        </Link>
+      );
+    },
     title: 'NFT',
     width: 160,
   },
