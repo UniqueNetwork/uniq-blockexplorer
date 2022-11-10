@@ -18,9 +18,9 @@ import {
   SelectOptionProps,
 } from '@app/components';
 import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
-import { getBundleEventsColumns } from '@app/pages/Bundle/components/Events/columnsSchema';
+import { getBundleEventsColumns } from '@app/pages/Token/Bundle/components/Events/columnsSchema';
 import { useGraphQLBundleTree } from '@app/api/graphQL/bundleTree/bundleTree';
-import { INestingToken } from '@app/pages/Bundle/components/BundleTreeSection/BundleTree/types';
+import { INestingToken } from '@app/pages/Token/Bundle/components/BundleTreeSection/BundleTree/types';
 
 const EventsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
