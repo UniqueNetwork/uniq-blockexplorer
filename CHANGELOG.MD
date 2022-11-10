@@ -1,3 +1,7 @@
+## Version 2.2.6
+
+- added filter burned=false
+
 ## Version 2.2.0
 
 - New collections page
