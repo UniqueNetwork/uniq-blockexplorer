@@ -11,8 +11,6 @@ export const getTransferNftColumns = (chainId?: string) => [
     dataIndex: 'token_id',
     key: 'token_id',
     render: (value: string, row: any) => {
-      console.log('value', value);
-      console.log('row', row);
       return (
         <Link
           className="token-transfer-cell"
