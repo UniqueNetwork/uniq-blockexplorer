@@ -39,6 +39,7 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
         { owner: { _eq: accountId } },
         { owner_normalized: { _eq: normalizeSubstrate(substrateAddress) } },
       ],
+      burned: { _eq: 'false' },
     },
     offset: 0,
     pageSize,
