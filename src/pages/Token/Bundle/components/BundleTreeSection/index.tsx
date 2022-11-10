@@ -95,7 +95,7 @@ function BundleTreeSection({
   const onViewTokenDetails = useCallback(
     (token: INestingToken) => {
       navigate(
-        `/${currentChain.network.toLowerCase()}/bundle/${token.collection_id}/${
+        `/${currentChain.network.toLowerCase()}/nfts/${token.collection_id}/${
           token.token_id
         }`,
       );

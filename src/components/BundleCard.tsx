@@ -34,7 +34,7 @@ const BundleCard: FC<BundleCardProps> = ({
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
 
-    navigate(`/${currentChain.network.toLowerCase()}/bundle/${collectionId}/${tokenId}`);
+    navigate(`/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`);
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);

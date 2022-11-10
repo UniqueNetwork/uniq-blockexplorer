@@ -6,11 +6,11 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
 import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
-import ActionTableCell from '@app/pages/Bundle/components/Events/ActionTableCell';
+import ActionTableCell from '@app/pages/Token/Bundle/components/Events/ActionTableCell';
 import { SVGIcon } from '@app/components';
-import ResultTableCell from '@app/pages/Bundle/components/Events/ResultTableCell';
+import ResultTableCell from '@app/pages/Token/Bundle/components/Events/ResultTableCell';
 
-import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
+import AccountLinkComponent from '../../../../Account/components/AccountLinkComponent';
 
 export const getBundleEventsColumns = (
   orderBy: EventsSorting,
