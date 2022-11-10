@@ -8,7 +8,7 @@ import { timeDifference } from '@app/utils';
 import { Token } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { Picture } from '@app/components';
+import { Picture, Badge } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 
 type TokenCardProps = Token & { timeNow?: number };
@@ -39,9 +39,11 @@ const TokenCard: FC<TokenCardProps> = ({
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
+  const badge = type === 'FRACTIONAL' ? 'Fractional' : '';
 
   return (
     <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
+      {badge && <Badge>{badge}</Badge>}
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -74,6 +76,7 @@ const StyledSVGIcon = styled(SVGIcon)`
 `;
 
 const TokenCardLink = styled(Link)`
+  position: relative;
   cursor: pointer;
   width: 100%;
   border: 1px solid var(--blue-gray-200);
