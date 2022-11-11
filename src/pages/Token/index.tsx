@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useGraphQlToken } from '@app/api';
 import { useScrollToTop } from '@app/hooks';
 
-import { Bundle, SingleNFT } from '..';
+import { Bundle, SingleNFT, RFT } from '..';
 
 const TokenPage: FC = () => {
   useScrollToTop();
@@ -24,6 +24,7 @@ const TokenPage: FC = () => {
     <>
       {token.type === 'NESTED' && <Bundle loading={isTokensFetching} token={token} />}
       {token.type === 'NFT' && <SingleNFT loading={isTokensFetching} token={token} />}
+      {token.type === 'FRACTIONAL' && <RFT loading={isTokensFetching} token={token} />}
     </>
   );
 };

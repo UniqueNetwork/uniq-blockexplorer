@@ -12,6 +12,7 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import ProgressBar from '@app/components/ProgressBar';
 
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
@@ -91,7 +92,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
         </TokenInfo>
         <TokenAttributes>
           {type !== 'FRACTIONAL' && (
-            <>
+            <CheracteristicsInfo>
               <Heading size="4">Сharacteristics</Heading>
               <RFTAttribute key={`attribute-fractions-minted`}>
                 <Text color="grey-500">Total number of minted fractions:</Text>
@@ -109,7 +110,8 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
                 <Text color="grey-500">Ownership percentage:</Text>
                 <Text>1,25 %</Text>
               </RFTAttribute>
-            </>
+              <ProgressBarStyled filledPercent={1.25} />
+            </CheracteristicsInfo>
           )}
           {type === 'NESTED' ? (
             <HeaderWithTooltip>
@@ -225,12 +227,22 @@ const TokenInfo = styled.div`
   }
 `;
 
+const CheracteristicsInfo = styled.div`
+  padding-bottom: calc(var(--gap) * 2);
+  margin-bottom: calc(var(--gap) * 2);
+  border-bottom: 1px dashed var(--border-color);
+`;
+
 const RFTAttribute = styled.div`
   display: flex;
   gap: calc(var(--gap) / 2);
   &:first-of-type {
     margin-top: var(--gap);
   }
+`;
+
+const ProgressBarStyled = styled(ProgressBar)`
+  margin-top: 6px;
 `;
 
 const TokenAttributes = styled.div`

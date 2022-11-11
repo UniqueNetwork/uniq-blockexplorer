@@ -10,6 +10,7 @@ import Transfers from './Transfers';
 import Block from './Block';
 import Bundles from './Bundles';
 import Bundle from './Token/Bundle';
+import RFT from './Token/RFT';
 
 export {
   Account,
@@ -24,4 +25,5 @@ export {
   Transfers,
   Block,
   Bundle,
+  RFT,
 };
