@@ -14,10 +14,8 @@ import {
   SelectOptionProps,
 } from '@app/components';
 import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
-import {
-  getBundleEventsAccountsPageColumns,
-  getBundleEventsColumns,
-} from '@app/pages/Bundle/components/Events/columnsSchema';
+import { getBundleEventsColumns } from '@app/pages/Bundle/components/Events/columnsSchema';
+import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/columnsSchema';
 
 const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
   const [currentPage, setCurrentPage] = useState(1);

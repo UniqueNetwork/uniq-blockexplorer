@@ -27,10 +27,7 @@ const BundlesComponent: FC<BundlesComponentProps> = ({ accountId }) => {
 
   // if we get an ether address
   if (/0x[0-9A-Fa-f]{40}/g.test(accountId)) {
-    substrateAddress = getMirrorFromEthersToSubstrate(
-      accountId,
-      currentChain.network,
-    );
+    substrateAddress = getMirrorFromEthersToSubstrate(accountId, currentChain.network);
   }
 
   const { bundles, bundlesCount } = useGraphQlBundles({

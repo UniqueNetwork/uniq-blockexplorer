@@ -1,25 +1,51 @@
-import React, { FC, useCallback } from 'react';
-import { Text } from '@unique-nft/ui-kit';
-import styled from 'styled-components/macro';
+import React from 'react';
 import { DefaultRecordType } from 'rc-table/lib/interface';
+import { Text } from '@unique-nft/ui-kit';
 
-import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
 import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
+import TokenTableCell from '@app/components/TokenTableCell';
 import ActionTableCell from '@app/pages/Bundle/components/Events/ActionTableCell';
-import { SVGIcon } from '@app/components';
-import ResultTableCell from '@app/pages/Bundle/components/Events/ResultTableCell';
+import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
+import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
+import { AgeTimeHeader } from '@app/pages/Bundle/components/Events/columnsSchema';
+import { TokenTypeEnum } from '@app/api';
 
-import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
+import ResultTableCell from './ResultTableCell';
 
-export const getBundleEventsColumns = (
+export const getBundleEventsAccountsPageColumns = (
   orderBy: EventsSorting,
   onOrderChange: (orderBy: EventsSorting) => void,
   timestamp: number,
   tokenSymbol: string = '',
   isAgeColumn: boolean,
   setIsAgeColumn: (newIsAgeColumn: boolean) => void,
+  chainId: string,
 ) => [
+  {
+    dataIndex: 'token_name',
+    key: 'token_name',
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="token_name"
+        orderBy={orderBy}
+        title="Token"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    render: (value: string, event: DefaultRecordType) => (
+      <TokenTableCell
+        chainId={chainId}
+        collectionId={event.values.tokens[0].collection_id}
+        imageUrl={event.values.tokens[0].image.fullUrl}
+        tokenId={event.values.tokens[0].token_id}
+        tokenName={event.values.tokens[0].token_name}
+        type={event.values.tokens[0].type}
+        iconSize={40}
+      />
+    ),
+    width: 150,
+  },
   {
     dataIndex: 'action',
     key: 'action',
@@ -52,6 +78,26 @@ export const getBundleEventsColumns = (
         setIsAgeColumn={setIsAgeColumn}
       />
     ),
+    width: 150,
+  },
+  {
+    dataIndex: 'type',
+    key: 'type',
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="type"
+        orderBy={orderBy}
+        title="Type"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    render: (value: number, event: DefaultRecordType) => {
+      return (
+        <Text size="m" weight="regular" color={'blue-grey-600'}>
+          {`${formatType(event.values.tokens[0].type)}`}
+        </Text>
+      );
+    },
     width: 150,
   },
   {
@@ -92,29 +138,10 @@ export const getBundleEventsColumns = (
   },
 ];
 
-export const AgeTimeHeader: FC<{
-  text: string;
-  icon: 'clock' | 'calendar';
-  isAgeColumn: boolean;
-  setIsAgeColumn: (newIsAgeColumn: boolean) => void;
-}> = ({ text, icon, isAgeColumn, setIsAgeColumn }) => {
-  const toogleColumn = useCallback(() => {
-    setIsAgeColumn(!isAgeColumn);
-  }, [isAgeColumn]);
+const formatType = (type: TokenTypeEnum) => {
+  if (type === 'NESTED') return 'Bundle';
 
-  return (
-    <Wrapper onClick={toogleColumn}>
-      <ColumnTitleText color="primary-500">{text}</ColumnTitleText>
-      <SVGIcon name={icon} width={24} height={24} color={'var(--color-primary-500)'} />
-    </Wrapper>
-  );
+  if (type === 'FRACTIONAL') return 'Fractional';
+
+  return type;
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  cursor: pointer;
-`;
-
-const ColumnTitleText = styled(Text)`
-  margin-right: calc(var(--gap) / 2);
-`;
