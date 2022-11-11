@@ -26,7 +26,7 @@ const TokenCard: FC<TokenCardProps> = ({
   const navigate = useNavigate();
   const { currentChain } = useApi();
 
-  let typeLinkPart = type === 'FRACTIONAL' ? 'rft' : 'nfts';
+  let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
 
   const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
 
