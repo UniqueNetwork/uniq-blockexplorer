@@ -28,7 +28,10 @@ const filter = ({
   accountId?: string;
   collectionId?: string;
 }) => {
-  let _filter: any = { burned: { _eq: 'false' }, type: { _eq: 'NFT' } };
+  let _filter: any = {
+    burned: { _eq: 'false' },
+    _or: [{ type: { _eq: 'NFT' } }, { type: { _eq: 'NESTED' } }],
+  };
 
   if (accountId) {
     _filter = {
