@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Heading } from '@unique-nft/ui-kit';
+import ReactTooltip from 'react-tooltip';
 
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi, useScrollToTop } from '@app/hooks';
@@ -10,7 +11,10 @@ import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { LastTransfers } from '@app/pages/Main/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
+import { Question } from '@app/images/icons/svgs';
+import EventsTable from '@app/pages/Token/Bundle/components/Events/EventsTable';
 
+import BundlesComponent from './components/BundlesComponent';
 import AccountDetailComponent from './components/AccountDetailComponent';
 import CollectionsComponent from './components/CollectionsComponent';
 import TokensComponent from './components/TokensComponent';
@@ -28,12 +32,10 @@ const AccountPage = () => {
 
   // if we get an ether address
   if (/0x[0-9A-Fa-f]{40}/g.test(accountId as string)) {
-    const substrateMirror = getMirrorFromEthersToSubstrate(
+    substrateAddress = getMirrorFromEthersToSubstrate(
       accountId as string,
       currentChain.network,
     );
-
-    substrateAddress = substrateMirror;
     accountForTokensSearch = accountId?.toLowerCase();
   }
 
@@ -53,7 +55,17 @@ const AccountPage = () => {
         <AssetsWrapper>
           <Heading size="2">Assets</Heading>
           <Tabs
-            content={['tokens', 'collections']}
+            content={[
+              'tokens',
+              'collections',
+              <div className="flex-row">
+                Bundles
+                <img data-tip={true} alt="tooltip" data-for="sadFace" src={Question} />
+                <ReactTooltip id="sadFace" effect="solid">
+                  <span>A tree with nested tokens</span>
+                </ReactTooltip>
+              </div>,
+            ]}
             currentTabIndex={activeAssetsTabIndex}
             setCurrentTabIndex={setActiveAssetsTabIndex}
           />
@@ -66,9 +78,19 @@ const AccountPage = () => {
               key="collections"
             />
           )}
+          {activeAssetsTabIndex === 2 && (
+            <BundlesComponent
+              accountId={normalizeSubstrate(substrateAddress as string)}
+              key="collections"
+            />
+          )}
         </AssetsWrapper>
       </PagePaper>
-      <LastTransfers accountId={substrateAddress} pageSize={10} />
+      {activeAssetsTabIndex === 2 ? (
+        <EventsTable accountId={normalizeSubstrate(substrateAddress as string)} />
+      ) : (
+        <LastTransfers accountId={substrateAddress} pageSize={10} />
+      )}
     </Wrapper>
   );
 };

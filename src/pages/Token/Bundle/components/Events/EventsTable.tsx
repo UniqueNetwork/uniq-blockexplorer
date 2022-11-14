@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
@@ -18,11 +18,13 @@ import {
   SelectOptionProps,
 } from '@app/components';
 import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
-import { getBundleEventsColumns } from '@app/pages/Token/Bundle/components/Events/columnsSchema';
-import { useGraphQLBundleTree } from '@app/api/graphQL/bundleTree/bundleTree';
+import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/columnsSchema';
 import { INestingToken } from '@app/pages/Token/Bundle/components/BundleTreeSection/BundleTree/types';
+import { useGraphQLBundleTree } from '@app/api/graphQL/bundleTree/bundleTree';
 
-const EventsTable = () => {
+import { getBundleEventsColumns } from './columnsSchema';
+
+const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { sort, setParamToQuery } = useQueryParams();
   const { collectionId, tokenId } = useParams<{
@@ -53,11 +55,10 @@ const EventsTable = () => {
   // get sort from query string
   const getOrderByFromQuery = () => {
     const split = sort?.split('-');
-    return split ? { [split[0]]: split[1] } : ({} as EventsSorting);
+    // @ts-ignore
+    return (split?.length || 0) > 1 ? { [split[0]]: split[1] } : defaultEventsOrderBy;
   };
-  const [orderBy, setOrderBy] = useState<EventsSorting>(
-    getOrderByFromQuery() || defaultEventsOrderBy,
-  );
+  const [orderBy, setOrderBy] = useState<EventsSorting>(getOrderByFromQuery());
 
   useEffect(() => {
     setOrderBy(getOrderByFromQuery());
@@ -94,20 +95,29 @@ const EventsTable = () => {
       offset,
       orderBy,
       limit: pageSizeNumber,
+      author: accountId,
     });
 
-  const columns = useMemo(
-    () =>
-      getBundleEventsColumns(
-        orderBy,
-        setOrderAndQuery,
-        timestamp,
-        currentChain?.symbol,
-        isAgeColumn,
-        setIsAgeColumn,
-      ),
-    [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn],
-  );
+  const columns = useMemo(() => {
+    return !accountId
+      ? getBundleEventsColumns(
+          orderBy,
+          setOrderAndQuery,
+          timestamp,
+          currentChain?.symbol,
+          isAgeColumn,
+          setIsAgeColumn,
+        )
+      : getBundleEventsAccountsPageColumns(
+          orderBy,
+          setOrderAndQuery,
+          timestamp,
+          currentChain?.symbol,
+          isAgeColumn,
+          setIsAgeColumn,
+          currentChain.network,
+        );
+  }, [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn]);
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>

@@ -86,7 +86,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           <Text>{createdOnDate}</Text>
           <Text color="grey-500">Owner</Text>
           <OwnerWrapper>
-            <AccountLinkComponent noShort={deviceSize >= DeviceSize.lg} value={owner} />
+            <AccountLinkComponent noShort={deviceSize >= DeviceSize.xxl} value={owner} />
           </OwnerWrapper>
         </TokenInfo>
         <TokenAttributes>

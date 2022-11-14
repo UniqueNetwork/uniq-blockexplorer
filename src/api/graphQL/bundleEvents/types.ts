@@ -41,10 +41,11 @@ export interface useGraphQLBundleEventsProps {
   offset?: number;
   orderBy?: EventsSorting;
   tokensInBundle: TokenKeys[];
+  author?: string;
 }
 
 export const EventsActions = {
   create: 'ItemCreated',
   transfer: 'Transfer',
-  burn: 'Destroy',
+  burn: 'ItemDestroyed',
 };
