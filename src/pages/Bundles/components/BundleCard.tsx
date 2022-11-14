@@ -20,18 +20,19 @@ const BundleCard: FC<BundleCardProps> = ({
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
+  type,
   transfers_count,
 }) => {
-  const navigate = useNavigate();
   const { currentChain } = useApi();
-  const onBundleCardClick = useCallback(() => {
-    navigate(`/${currentChain.network.toLowerCase()}/bundle/${collectionId}/${tokenId}`);
-  }, [collectionId, currentChain.network, navigate, tokenId]);
+
+  let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
+
+  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
   return (
-    <BundleCardLink onClick={onBundleCardClick}>
+    <BundleCardLink to={navigateTo}>
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -96,7 +97,7 @@ const StyledSVGIcon = styled(SVGIcon)`
   margin-right: 5px;
 `;
 
-const BundleCardLink = styled.div`
+const BundleCardLink = styled(Link)`
   cursor: pointer;
   width: 100%;
   border: 1px solid var(--blue-gray-200);
