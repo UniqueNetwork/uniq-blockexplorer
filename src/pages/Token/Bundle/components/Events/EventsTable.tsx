@@ -53,11 +53,10 @@ const EventsTable = () => {
   // get sort from query string
   const getOrderByFromQuery = () => {
     const split = sort?.split('-');
-    return split ? { [split[0]]: split[1] } : ({} as EventsSorting);
+    // @ts-ignore
+    return (split?.length || 0) > 1 ? { [split[0]]: split[1] } : defaultEventsOrderBy;
   };
-  const [orderBy, setOrderBy] = useState<EventsSorting>(
-    getOrderByFromQuery() || defaultEventsOrderBy,
-  );
+  const [orderBy, setOrderBy] = useState<EventsSorting>(getOrderByFromQuery());
 
   useEffect(() => {
     setOrderBy(getOrderByFromQuery());
@@ -72,6 +71,7 @@ const EventsTable = () => {
   const offset = (currentPage - 1) * pageSizeNumber;
 
   const setOrderAndQuery = (sorting: EventsSorting) => {
+    console.log('setOrderAndQuery', sorting);
     setOrderBy(sorting);
     setParamToQuery([
       {
