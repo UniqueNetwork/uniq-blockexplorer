@@ -5,10 +5,10 @@ import { Text } from '@unique-nft/ui-kit';
 import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import TokenTableCell from '@app/components/TokenTableCell';
-import ActionTableCell from '@app/pages/Bundle/components/Events/ActionTableCell';
+import ActionTableCell from '@app/pages/Token/Bundle/components/Events/ActionTableCell';
 import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
-import { AgeTimeHeader } from '@app/pages/Bundle/components/Events/columnsSchema';
+import { AgeTimeHeader } from '@app/pages/Token/Bundle/components/Events/columnsSchema';
 import { TokenTypeEnum } from '@app/api';
 
 import ResultTableCell from './ResultTableCell';

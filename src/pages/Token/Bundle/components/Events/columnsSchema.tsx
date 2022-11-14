@@ -3,14 +3,14 @@ import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
-import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
+import { formatAmount, timeDifference, tokenPageTimestampFormat } from '@app/utils';
 import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
-import ActionTableCell from '@app/pages/Bundle/components/Events/ActionTableCell';
+import ActionTableCell from '@app/pages/Token/Bundle/components/Events/ActionTableCell';
 import { SVGIcon } from '@app/components';
-import ResultTableCell from '@app/pages/Bundle/components/Events/ResultTableCell';
+import ResultTableCell from '@app/pages/Token/Bundle/components/Events/ResultTableCell';
 
-import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
+import AccountLinkComponent from '../../../../Account/components/AccountLinkComponent';
 
 export const getBundleEventsColumns = (
   orderBy: EventsSorting,
@@ -40,7 +40,9 @@ export const getBundleEventsColumns = (
     render: (value: number) => {
       return (
         <Text size="m" weight="regular" color={'color-blue-grey-600'}>
-          {isAgeColumn ? timeDifference(value, timestamp) : timestampTableFormat(value)}
+          {isAgeColumn
+            ? timeDifference(value, timestamp)
+            : tokenPageTimestampFormat(value)}
         </Text>
       );
     },
