@@ -39,6 +39,7 @@ export interface Collection {
   limits_sponsore_data_size: null;
   const_chain_schema: null;
   date_of_creation: number;
+  nesting_enabled: boolean;
 }
 
 export interface CollectionsVariables {
