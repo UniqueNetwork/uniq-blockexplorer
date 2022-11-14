@@ -60,11 +60,6 @@ export const Tokens: VFC<TokensProps> = ({
     ? { collection_id: { _eq: Number(collectionId) }, burned: { _eq: 'false' } }
     : {
         burned: { _eq: 'false' },
-        _or: [
-          { type: { _eq: 'NFT' } },
-          { type: { _eq: 'FRACTIONAL' } },
-          { _and: [{ type: { _eq: 'NESTED' } }, { parent_id: { _is_null: false } }] },
-        ],
       };
 
   const orderBy = useMemo(
