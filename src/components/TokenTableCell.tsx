@@ -12,7 +12,7 @@ interface TokenTableCellProps {
   tokenId: number;
   collectionId: number;
   imageUrl: string | null;
-  tokenPrefix: string;
+  tokenPrefix?: string;
   type: TokenTypeEnum;
   tokenName?: string;
   iconSize?: number;
