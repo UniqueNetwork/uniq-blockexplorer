@@ -60,7 +60,7 @@ export const Bundles: VFC<BundlesProps> = ({
   const orderBy = useMemo(
     (): BundleSorting =>
       selectedSort.id === 'new'
-        ? { date_of_creation: 'desc_nulls_last' }
+        ? { bundle_created: 'desc_nulls_last' }
         : { transfers_count: 'desc_nulls_last' },
     [selectedSort.id],
   );
