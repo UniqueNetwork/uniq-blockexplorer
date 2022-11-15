@@ -26,6 +26,7 @@ const tokensQuery = gql`
         token_prefix
         transfers_count
         type
+        burned
       }
       count
       timestamp

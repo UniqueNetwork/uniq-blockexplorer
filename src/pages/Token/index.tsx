@@ -5,6 +5,7 @@ import { useGraphQlToken } from '@app/api';
 import { useScrollToTop } from '@app/hooks';
 
 import { Bundle, SingleNFT } from '..';
+import Page404 from '../404';
 
 const TokenPage: FC = () => {
   useScrollToTop();
@@ -17,6 +18,8 @@ const TokenPage: FC = () => {
     Number(collectionId),
     Number(tokenId),
   );
+
+  if ((!token && !isTokensFetching) || token?.burned) return <Page404 />;
 
   if (!token) return null;
 

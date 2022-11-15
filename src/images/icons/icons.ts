@@ -24,3 +24,4 @@ export { default as checkCircle } from './checkCircle.svg';
 export { default as fire } from './fire.svg';
 export { default as transfer } from './transfer.svg';
 export { default as calendar } from './calendar.svg';
+export { default as icon404 } from './404-icon.svg';
