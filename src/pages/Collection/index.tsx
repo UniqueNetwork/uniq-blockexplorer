@@ -13,7 +13,7 @@ import { CoverContainer, IdentityIcon, Tabs } from '@app/components';
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
 import HoldersComponent from './components/HoldersComponent';
-import TokensComponent from './components/TokensComponent';
+import TokensComponent from './components/TokensComponent/index';
 import PagePaper from '../../components/PagePaper';
 
 const detailTabs = ['Basic data', 'Extended'];

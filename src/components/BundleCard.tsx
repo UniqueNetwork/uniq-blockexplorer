@@ -11,7 +11,12 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 
-type BundleCardProps = Token & { timeNow?: number };
+type BundleCardProps = Token & {
+  timeNow?: number;
+  hideCreationTime?: boolean;
+  hideCollection?: boolean;
+  hideOwner?: boolean;
+};
 
 const BundleCard: FC<BundleCardProps> = ({
   collection_id: collectionId,
@@ -23,6 +28,11 @@ const BundleCard: FC<BundleCardProps> = ({
   token_prefix: prefix,
   children_count,
   transfers_count,
+  type,
+  hideCreationTime,
+  hideCollection,
+  hideOwner,
+  owner_normalized,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
@@ -34,7 +44,11 @@ const BundleCard: FC<BundleCardProps> = ({
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
 
-    navigate(`/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`);
+    let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
+
+    navigate(
+      `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
+    );
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);

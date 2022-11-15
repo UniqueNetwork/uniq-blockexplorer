@@ -10,8 +10,14 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
+import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
 
-type TokenCardProps = Token & { timeNow?: number };
+type TokenCardProps = Token & {
+  timeNow?: number;
+  hideCreationTime?: boolean;
+  hideCollection?: boolean;
+  hideOwner?: boolean;
+};
 
 const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
@@ -22,6 +28,11 @@ const TokenCard: FC<TokenCardProps> = ({
   token_id: tokenId,
   token_prefix: prefix,
   type,
+  transfers_count,
+  hideCreationTime,
+  hideCollection,
+  hideOwner,
+  owner_normalized,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
@@ -48,20 +59,38 @@ const TokenCard: FC<TokenCardProps> = ({
       {imgSrc && <TokenBackground imgUrl={imgSrc} />}
       <TokenTitle>
         <Text color="primary-500" size="l">{`${prefix || ''} #${tokenId}`}</Text>
-        <div>
-          <TokenCollectionLink
-            to={`/${
-              currentChain ? currentChain?.network + '/' : ''
-            }collections/${collectionId}`}
-          >
-            {name} [ID {collectionId}]
-          </TokenCollectionLink>
-        </div>
+        {!hideCollection && (
+          <div>
+            <TokenCollectionLink
+              to={`/${
+                currentChain ? currentChain?.network + '/' : ''
+              }collections/${collectionId}`}
+            >
+              {name} [ID {collectionId}]
+            </TokenCollectionLink>
+          </div>
+        )}
         <TokenProperties>
-          <StyledSVGIcon height={16} name="clock" width={16} />
-          <Text color="additional-dark" size="xs">
-            {timeDifference(dateOfCreation, timeNow)}
+          {!hideOwner && (
+            <OwnerProperty color="grey-500" size="xs">
+              Owner:
+              <AccountLinkComponent value={owner_normalized} size={'xs'} />
+            </OwnerProperty>
+          )}
+          <Text color="grey-500" size="xs">
+            Transfers:{' '}
+            <Text color="additional-dark" size="xs">
+              {transfers_count}
+            </Text>
           </Text>
+          {!hideCreationTime && (
+            <CreatedTime>
+              <StyledSVGIcon height={16} name="clock" width={16} />
+              <Text color="additional-dark" size="xs">
+                {timeDifference(dateOfCreation, timeNow)}
+              </Text>
+            </CreatedTime>
+          )}
         </TokenProperties>
       </TokenTitle>
     </TokenCardLink>
@@ -125,10 +154,17 @@ const TokenTitle = styled.div`
   }
 `;
 
-const TokenProperties = styled.div`
+const CreatedTime = styled.div`
   display: flex;
   align-items: center;
-  margin-top: calc(var(--gap) / 2);
+`;
+
+const TokenProperties = styled.div``;
+
+const OwnerProperty = styled(Text)`
+  display: flex !important;
+  gap: 4px;
+  align-items: center;
 `;
 
 export default TokenCard;
