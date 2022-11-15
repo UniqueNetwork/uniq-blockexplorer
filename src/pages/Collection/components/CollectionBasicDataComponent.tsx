@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components/macro';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
@@ -7,17 +7,13 @@ import { timestampFormat } from '@app/utils';
 import { useDeviceSize, DeviceSize, DeviceSizes } from '@app/hooks';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import TokensComponent from './TokensComponent';
 
 interface BasicDataComponentProps {
   collectionId: string;
   collection?: Collection;
 }
 
-const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
-  collection,
-  collectionId,
-}) => {
+const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection }) => {
   const {
     collection_id: id,
     date_of_creation: createdOn,
@@ -28,8 +24,6 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
     token_prefix: prefix,
     tokens_count: tokensCount,
   } = collection || {};
-
-  console.log('collection', collection);
 
   const deviceSize = useDeviceSize();
 
@@ -100,27 +94,23 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
             </Text>
           </DescriptionWrapper>
           <OwnerAccountWrapper>
-            <Heading size="4">Owner</Heading>
+            <StyledHeading size="4">Owner</StyledHeading>
             <AccountLinkComponent
-              noShort={deviceSize >= DeviceSize.xl}
+              noShort={deviceSize >= DeviceSize.sm}
               value={owner || ''}
             />
           </OwnerAccountWrapper>
         </GeneralInfoWrapper>
       </PropertiesWrapper>
-      <div>
-        <TokensComponent collectionId={collectionId} />
-      </div>
     </>
   );
 };
 
 const PropertiesWrapper = styled.div`
-  padding-top: calc(var(--gap) / 2);
+  margin-top: calc(var(--gap) * 2);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-bottom: 10px;
 `;
 
 const GeneralInfoWrapper = styled.div`
@@ -143,9 +133,13 @@ const GeneralInfo = styled.div`
   }
 `;
 
+const StyledHeading = styled(Heading)`
+  margin-bottom: var(--gap) !important;
+`;
+
 const DescriptionWrapper = styled.div`
-  /* margin-bottom: calc(var(--gap) * 1.5); */
   word-break: break-word;
+  max-width: 1040px;
 `;
 
 const CreatedAccountWrapper = styled.div`

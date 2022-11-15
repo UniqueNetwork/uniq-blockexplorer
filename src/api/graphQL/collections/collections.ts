@@ -22,18 +22,22 @@ const collectionsQuery = gql`
         date_of_creation
         description
         holders_count
+        limits_account_ownership
         nesting_enabled
         name
         offchain_schema
         owner
         owner_normalized
-        # owner_can_destroy
-        # owner_can_transfer
+        owner_can_destroy
+        owner_can_transfer
         schema_version
+        sponsorship
+        token_limit
         token_prefix
         tokens_count
         transfers_count
         type
+        limits_sponsore_data_size
       }
       count
       timestamp
