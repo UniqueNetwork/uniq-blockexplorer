@@ -6,6 +6,7 @@ import styled from 'styled-components/macro';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { useApi } from '@app/hooks';
 import { defaultSorting } from '@app/pages/Tokens/constants';
+import { defaultSorting as defaultSortingBundles } from '@app/pages/Bundles/constants';
 import { isTouchEnabled } from '@app/utils';
 
 import { SVGIcon } from '..';
@@ -46,7 +47,7 @@ const Menu: FC = () => {
         <NavLink
           to={`/${
             currentChain ? currentChain?.network.toLowerCase() + '/' : ''
-          }bundles/?sort=${defaultSorting}`}
+          }bundles/?sort=${defaultSortingBundles}`}
           onClick={onMenuClick('NFTS')}
         >
           Bundles
