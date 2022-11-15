@@ -1,8 +1,9 @@
 ## Version 2.3.0
 
-- New Bundles page
-- New Bundle page
+- new Bundles page
+- new Bundle page
 - added bundle block to main page
+- new page 404
 
 ## Version 2.2.6
 
