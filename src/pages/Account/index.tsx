@@ -12,8 +12,8 @@ import { LastTransfers } from '@app/pages/Main/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
-import EventsTable from '@app/pages/Token/Bundle/components/Events/EventsTable';
 
+import EventsTable from './components/BundlesComponent/Events/EventsTable';
 import BundlesComponent from './components/BundlesComponent';
 import AccountDetailComponent from './components/AccountDetailComponent';
 import CollectionsComponent from './components/CollectionsComponent';
