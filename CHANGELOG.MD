@@ -1,3 +1,9 @@
+## Version 2.3.0
+
+- New Bundles page
+- New Bundle page
+- added bundle block to main page
+
 ## Version 2.2.6
 
 - added filter burned=false
