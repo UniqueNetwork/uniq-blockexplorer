@@ -34,9 +34,24 @@ export const useGraphQLBundleEvents = ({
   limit,
   offset = 0,
   orderBy,
-  collection_id,
-  token_id,
+  tokensInBundle,
+  author,
 }: useGraphQLBundleEventsProps) => {
+  let where: { [key: string]: unknown } = {};
+
+  if (tokensInBundle?.length) {
+    where = {
+      _or: tokensInBundle.map((token) => {
+        return {
+          token_id: { _eq: token.tokenId },
+          collection_id: { _eq: token.collectionId },
+        };
+      }),
+    };
+  }
+
+  if (author) where.author = { _eq: author };
+
   const {
     data,
     error: fetchBundleEventsError,
@@ -50,7 +65,7 @@ export const useGraphQLBundleEvents = ({
       limit,
       offset,
       orderBy,
-      where: { token_id: { _eq: token_id }, collection_id: { _eq: collection_id } },
+      where,
     },
   });
 

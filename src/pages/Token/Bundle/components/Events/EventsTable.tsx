@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
@@ -6,7 +6,11 @@ import { Heading, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
 import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
-import { BundleEvent, EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import {
+  BundleEvent,
+  EventsSorting,
+  TokenKeys,
+} from '@app/api/graphQL/bundleEvents/types';
 import {
   PagePaper,
   Pagination,
@@ -14,9 +18,13 @@ import {
   SelectOptionProps,
 } from '@app/components';
 import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
-import { getBundleEventsColumns } from '@app/pages/Token/Bundle/components/Events/columnsSchema';
+import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/columnsSchema';
+import { INestingToken } from '@app/pages/Token/Bundle/components/BundleTreeSection/BundleTree/types';
+import { useGraphQLBundleTree } from '@app/api/graphQL/bundleTree/bundleTree';
 
-const EventsTable = () => {
+import { getBundleEventsColumns } from './columnsSchema';
+
+const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { sort, setParamToQuery } = useQueryParams();
   const { collectionId, tokenId } = useParams<{
@@ -27,15 +35,30 @@ const EventsTable = () => {
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
   const [isAgeColumn, setIsAgeColumn] = useState(false);
+  const { bundle } = useGraphQLBundleTree(Number(collectionId), Number(tokenId));
+
+  const tokensInBundle = useMemo(() => {
+    const result: TokenKeys[] = [];
+    const iter = (bundlesChildren: INestingToken) => {
+      result.push({
+        tokenId: bundlesChildren.token_id,
+        collectionId: bundlesChildren.collection_id,
+      });
+      bundlesChildren.nestingChildren.map((child) => iter(child));
+    };
+
+    if (bundle) iter(bundle);
+
+    return result;
+  }, [bundle]);
 
   // get sort from query string
   const getOrderByFromQuery = () => {
     const split = sort?.split('-');
-    return split ? { [split[0]]: split[1] } : ({} as EventsSorting);
+    // @ts-ignore
+    return (split?.length || 0) > 1 ? { [split[0]]: split[1] } : defaultEventsOrderBy;
   };
-  const [orderBy, setOrderBy] = useState<EventsSorting>(
-    getOrderByFromQuery() || defaultEventsOrderBy,
-  );
+  const [orderBy, setOrderBy] = useState<EventsSorting>(getOrderByFromQuery());
 
   useEffect(() => {
     setOrderBy(getOrderByFromQuery());
@@ -68,25 +91,33 @@ const EventsTable = () => {
 
   const { bundleEvents, isBundleEventsFetching, timestamp, count } =
     useGraphQLBundleEvents({
-      token_id: Number(tokenId),
-      collection_id: Number(collectionId),
+      tokensInBundle,
       offset,
       orderBy,
       limit: pageSizeNumber,
+      author: accountId,
     });
 
-  const columns = useMemo(
-    () =>
-      getBundleEventsColumns(
-        orderBy,
-        setOrderAndQuery,
-        timestamp,
-        currentChain?.symbol,
-        isAgeColumn,
-        setIsAgeColumn,
-      ),
-    [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn],
-  );
+  const columns = useMemo(() => {
+    return !accountId
+      ? getBundleEventsColumns(
+          orderBy,
+          setOrderAndQuery,
+          timestamp,
+          currentChain?.symbol,
+          isAgeColumn,
+          setIsAgeColumn,
+        )
+      : getBundleEventsAccountsPageColumns(
+          orderBy,
+          setOrderAndQuery,
+          timestamp,
+          currentChain?.symbol,
+          isAgeColumn,
+          setIsAgeColumn,
+          currentChain.network,
+        );
+  }, [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn]);
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>

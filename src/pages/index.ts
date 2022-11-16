@@ -11,6 +11,7 @@ import Block from './Block';
 import Bundles from './Bundles';
 import Bundle from './Token/Bundle';
 import RFT from './Token/RFT';
+import Page404 from './404';
 
 export {
   Account,
@@ -25,5 +26,6 @@ export {
   Transfers,
   Block,
   Bundle,
+  Page404,
   RFT,
 };

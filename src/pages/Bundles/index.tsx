@@ -37,6 +37,7 @@ const BundlesPage: FC = () => {
     sort,
     setParamToQuery,
     view,
+    collectionId,
   } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
   const deviceSize = useDeviceSize();
@@ -88,6 +89,10 @@ const BundlesPage: FC = () => {
         { owner: { _eq: accountId } },
         { owner_normalized: { _eq: accountId } },
       ];
+    }
+
+    if (collectionId) {
+      filters._or = [{ collection_id: { _eq: Number(collectionId) } }];
     }
 
     return filters;

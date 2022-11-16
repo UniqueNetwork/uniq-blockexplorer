@@ -10,8 +10,15 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
+import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
 
-type TokenCardProps = Token & { timeNow?: number };
+type TokenCardProps = Token & {
+  timeNow?: number;
+  hideCreationTime?: boolean;
+  hideCollection?: boolean;
+  hideOwner?: boolean;
+  hideTransfers?: boolean;
+};
 
 const TokenCard: FC<TokenCardProps> = ({
   collection_id: collectionId,
@@ -22,11 +29,19 @@ const TokenCard: FC<TokenCardProps> = ({
   token_id: tokenId,
   token_prefix: prefix,
   type,
+  transfers_count,
+  hideCreationTime,
+  hideCollection,
+  hideOwner,
+  owner_normalized,
+  hideTransfers,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
 
-  const navigateTo = `/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`;
+  let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
+
+  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
 
   const logUserAnalytics = useCallback(() => {
     const path = window.location.pathname;
@@ -46,25 +61,47 @@ const TokenCard: FC<TokenCardProps> = ({
       {imgSrc && <TokenBackground imgUrl={imgSrc} />}
       <TokenTitle>
         <Text color="primary-500" size="l">{`${prefix || ''} #${tokenId}`}</Text>
-        <div>
-          <TokenCollectionLink
-            to={`/${
-              currentChain ? currentChain?.network + '/' : ''
-            }collections/${collectionId}`}
-          >
-            {name} [ID {collectionId}]
-          </TokenCollectionLink>
-        </div>
+        {!hideCollection && (
+          <div>
+            <TokenCollectionLink
+              to={`/${
+                currentChain ? currentChain?.network + '/' : ''
+              }collections/${collectionId}`}
+            >
+              {name} [ID {collectionId}]
+            </TokenCollectionLink>
+          </div>
+        )}
         {type === 'NFT' && (
           <NFTProperties>
-            <StyledSVGIcon height={16} name="clock" width={16} />
-            <Text color="additional-dark" size="xs">
-              {timeDifference(dateOfCreation, timeNow)}
-            </Text>
+            {!hideOwner && (
+              <OwnerProperty color="grey-500" size="xs">
+                Owner:
+                <AccountLinkComponent value={owner_normalized} size={'xs'} />
+              </OwnerProperty>
+            )}
+            {!hideTransfers && (
+              <Text color="grey-500" size="xs">
+                Transfers:{' '}
+                <Text color="additional-dark" size="xs">
+                  {transfers_count}
+                </Text>
+              </Text>
+            )}
           </NFTProperties>
         )}
         {type === 'FRACTIONAL' && (
           <RFTProperties>
+            <Property>
+              {!hideTransfers && (
+                <Text color="grey-500" size="xs">
+                  Transfers:{' '}
+                  <Text color="additional-dark" size="xs">
+                    {transfers_count}
+                  </Text>
+                </Text>
+              )}
+            </Property>
             <Property>
               <Text color="grey-500" size="xs" weight="light">
                 Owners:&nbsp;
@@ -81,13 +118,15 @@ const TokenCard: FC<TokenCardProps> = ({
                 1000000
               </Text>
             </Property>
-            <CreatedRow>
-              <StyledSVGIcon height={16} name="clock" width={16} />
-              <Text color="additional-dark" size="xs" weight="light">
-                {timeDifference(dateOfCreation, timeNow)}
-              </Text>
-            </CreatedRow>
           </RFTProperties>
+        )}
+        {!hideCreationTime && (
+          <CreatedTime>
+            <StyledSVGIcon height={16} name="clock" width={16} />
+            <Text color="additional-dark" size="xs">
+              {timeDifference(dateOfCreation, timeNow)}
+            </Text>
+          </CreatedTime>
         )}
       </TokenTitle>
     </TokenCardLink>
@@ -157,10 +196,21 @@ const NFTProperties = styled.div`
   margin-top: calc(var(--gap) / 2);
 `;
 
+const CreatedTime = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const RFTProperties = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: calc(var(--gap) / 2);
+`;
+
+const OwnerProperty = styled(Text)`
+  display: flex !important;
+  gap: 4px;
+  align-items: center;
 `;
 
 const Property = styled.div`

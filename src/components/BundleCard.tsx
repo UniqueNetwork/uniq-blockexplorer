@@ -11,18 +11,28 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 
-type BundleCardProps = Token & { timeNow?: number };
+type BundleCardProps = Token & {
+  timeNow?: number;
+  hideCreationTime?: boolean;
+  hideCollection?: boolean;
+  hideOwner?: boolean;
+};
 
 const BundleCard: FC<BundleCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
-  date_of_creation: dateOfCreation,
+  bundle_created: bundleCreated,
   image,
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
   children_count,
   transfers_count,
+  type,
+  hideCreationTime,
+  hideCollection,
+  hideOwner,
+  owner_normalized,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
@@ -34,7 +44,11 @@ const BundleCard: FC<BundleCardProps> = ({
       logUserEvents(UserEvents.Click.ON_NFT_CARD_ON_COLLECTION_PAGE);
     }
 
-    navigate(`/${currentChain.network.toLowerCase()}/nfts/${collectionId}/${tokenId}`);
+    let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
+
+    navigate(
+      `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
+    );
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
@@ -72,7 +86,7 @@ const BundleCard: FC<BundleCardProps> = ({
           <CreatedDate>
             <StyledSVGIcon height={16} name="clock" width={16} />
             <Text color="additional-dark" size="xs">
-              {timeDifference(dateOfCreation, timeNow)}
+              {timeDifference(bundleCreated, timeNow)}
             </Text>
           </CreatedDate>
         </TokenProperties>

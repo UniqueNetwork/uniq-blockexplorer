@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Text } from '@unique-nft/ui-kit';
 
@@ -16,8 +16,6 @@ interface AccountLinkProps {
 }
 
 const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value }) => {
-  const { accountId } = useParams();
-
   const { currentChain } = useApi();
 
   const shortcut = noShort ? value : shortcutText(value);
@@ -40,8 +38,6 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
       logUserEvents(UserEvents.Click.ON_COLLECTIONS_OWNER_ACCOUNT_ON_TOKEN_PAGE);
     }
   }, []);
-
-  if (value === accountId) return <>{shortcut}</>;
 
   return (
     <Wrapper>

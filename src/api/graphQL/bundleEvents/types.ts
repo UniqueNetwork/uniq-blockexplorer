@@ -34,16 +34,18 @@ export type EventsSorting = {
     | 'desc_nulls_first';
 };
 
+export type TokenKeys = { tokenId: number; collectionId: number };
+
 export interface useGraphQLBundleEventsProps {
   limit: number;
   offset?: number;
   orderBy?: EventsSorting;
-  collection_id: number;
-  token_id: number;
+  tokensInBundle: TokenKeys[];
+  author?: string;
 }
 
 export const EventsActions = {
   create: 'ItemCreated',
   transfer: 'Transfer',
-  burn: 'Destroy',
+  burn: 'ItemDestroyed',
 };

@@ -69,8 +69,7 @@ const EventsTable = () => {
 
   const { bundleEvents, isBundleEventsFetching, timestamp, count } =
     useGraphQLBundleEvents({
-      token_id: Number(tokenId),
-      collection_id: Number(collectionId),
+      tokensInBundle: [],
       offset,
       orderBy,
       limit: pageSizeNumber,

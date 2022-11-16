@@ -1,27 +1,24 @@
-import { FC, useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components/macro';
+import { Button, Text } from '@unique-nft/ui-kit';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import { Button, Heading, Text } from '@unique-nft/ui-kit';
 
-import { useGraphQlTokens } from '@app/api';
-import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
 import { LoadingComponent, TokenCard } from '@app/components';
+import { useGraphQlTokens } from '@app/api';
+import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
-import { logUserEvents } from '@app/utils/logUserEvents';
 import { defaultSorting } from '@app/pages/Tokens/constants';
+import { useApi } from '@app/hooks';
 
-interface TokensComponentProps {
-  searchString?: string;
+type TokensTabProps = {
   pageSize?: number;
   collectionId?: string;
-}
+  tokensLimit: number;
+};
 
-const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16 }) => {
+const TokensTab = ({ collectionId, pageSize = 16, tokensLimit }: TokensTabProps) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-
-  const deviceSize = useDeviceSize();
-
   const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: collectionId
       ? { collection_id: { _eq: Number(collectionId) }, burned: { _eq: 'false' } }
@@ -29,16 +26,6 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
     offset: 0,
     pageSize,
   });
-
-  const tokensLimit = useMemo(() => {
-    if (deviceSize === DeviceSize.xs || deviceSize === DeviceSize.xxs) return 10;
-
-    if (deviceSize === DeviceSize.sm) return 12;
-
-    if (deviceSize === DeviceSize.lg || deviceSize === DeviceSize.md) return 16;
-
-    return 10;
-  }, [deviceSize]);
 
   const onButtonClick = useCallback(() => {
     logUserEvents(UserEvents.Click.BUTTON_SEE_ALL_NFTS_ON_COLLECTION_PAGE);
@@ -55,18 +42,30 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
     });
   }, [currentChain, navigate, collectionId]);
 
+  if (!tokensCount)
+    return (
+      <NoDataWrapper>
+        <Text size={'m'} color={'grey-500'}>
+          No tokens
+        </Text>
+      </NoDataWrapper>
+    );
+
   return (
     <>
-      <TokenHeadingWrapper>
-        <Heading size={'2'}>NFTs</Heading>
-        <Text>{`${tokensCount} items`}</Text>
-      </TokenHeadingWrapper>
+      {tokensCount && (
+        <ItemsCount size={'m'}>{`${tokensCount} token${
+          tokensCount > 1 ? 's' : ''
+        }`}</ItemsCount>
+      )}
       <TokensWrapper>
         {isTokensFetching && <LoadingComponent />}
         {tokens?.slice(0, tokensLimit).map((token) => (
           <TokenCard
             key={`token-${token.collection_id}-${token.token_id}`}
             timeNow={timestamp}
+            hideCollection={true}
+            hideCreationTime={true}
             {...token}
           />
         ))}
@@ -86,6 +85,16 @@ const TokensComponent: FC<TokensComponentProps> = ({ collectionId, pageSize = 16
     </>
   );
 };
+
+const NoDataWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const ItemsCount = styled(Text)`
+  display: block !important;
+  margin-bottom: calc(var(--gap) * 2);
+`;
 
 const TokensWrapper = styled.div`
   display: grid;
@@ -111,10 +120,4 @@ const TokensWrapper = styled.div`
   }
 `;
 
-const TokenHeadingWrapper = styled.div`
-  display: flex;
-  column-gap: var(--gap);
-  align-items: baseline;
-`;
-
-export default TokensComponent;
+export default TokensTab;
