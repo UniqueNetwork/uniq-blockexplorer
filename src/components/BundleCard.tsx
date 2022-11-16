@@ -21,7 +21,7 @@ type BundleCardProps = Token & {
 const BundleCard: FC<BundleCardProps> = ({
   collection_id: collectionId,
   collection_name: name,
-  date_of_creation: dateOfCreation,
+  bundle_created: bundleCreated,
   image,
   timeNow,
   token_id: tokenId,
@@ -86,7 +86,7 @@ const BundleCard: FC<BundleCardProps> = ({
           <CreatedDate>
             <StyledSVGIcon height={16} name="clock" width={16} />
             <Text color="additional-dark" size="xs">
-              {timeDifference(dateOfCreation, timeNow)}
+              {timeDifference(bundleCreated, timeNow)}
             </Text>
           </CreatedDate>
         </TokenProperties>
