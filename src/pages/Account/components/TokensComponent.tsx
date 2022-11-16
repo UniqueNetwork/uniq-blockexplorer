@@ -4,7 +4,7 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router-d
 import { Button } from '@unique-nft/ui-kit';
 
 import { Token, useGraphQlTokens } from '@app/api';
-import { Search, TokenCard } from '@app/components';
+import { TokenCard } from '@app/components';
 import { useApi, useQueryParams } from '@app/hooks';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
@@ -18,19 +18,14 @@ interface TokensComponentProps {
 const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const { searchString, setParamToQuery } = useQueryParams();
+  const { searchString } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
   // assume that we got the substrate address
   let substrateAddress = accountId;
 
   // if we get an ether address
   if (/0x[0-9A-Fa-f]{40}/g.test(accountId)) {
-    const substrateMirror = getMirrorFromEthersToSubstrate(
-      accountId,
-      currentChain.network,
-    );
-
-    substrateAddress = substrateMirror;
+    substrateAddress = getMirrorFromEthersToSubstrate(accountId, currentChain.network);
   }
 
   const { tokens, tokensCount } = useGraphQlTokens({
@@ -46,10 +41,6 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
     searchString,
   });
   const showButton = tokensCount > pageSize;
-
-  const setSearch = (value: string) => {
-    setParamToQuery([{ name: 'search', value }]);
-  };
 
   const onClickSeeMore = useCallback(() => {
     let params: { accountId?: string; search?: string; sort?: string } = {};
@@ -79,9 +70,6 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
 
   return (
     <>
-      <ControlsWrapper>
-        <Search placeholder="NFT / collection" onSearchChange={setSearch} />
-      </ControlsWrapper>
       <ItemsCountWrapper>{tokensCount || 0} items</ItemsCountWrapper>
       <TokensWrapper>
         {tokens?.map &&
@@ -107,15 +95,6 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
     </>
   );
 };
-
-const ControlsWrapper = styled.div`
-  display: flex;
-  column-gap: var(--gap);
-  align-items: center;
-  justify-content: space-between;
-  margin-top: var(--gap);
-  width: 561px;
-`;
 
 const ItemsCountWrapper = styled.div`
   margin: var(--gap) 0;
