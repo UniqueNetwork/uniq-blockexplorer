@@ -49,10 +49,10 @@ const AccountPage = () => {
 
   return (
     <OverflowWrapper>
-      <Wrapper className="account-page" id="pageWrapper">
-        <PagePaperStyled>
+      <Wrapper className="account-page">
+        <PagePaper>
           <AccountDetailComponent accountId={substrateAddress as string} />
-          <AssetsWrapper id="pageContent">
+          <AssetsWrapper>
             <Tabs
               content={[
                 'tokens',
@@ -68,26 +68,23 @@ const AccountPage = () => {
               currentTabIndex={activeAssetsTabIndex}
               setCurrentTabIndex={setActiveAssetsTabIndex}
             />
-            {activeAssetsTabIndex === 0 && (
-              <TokensComponent
-                accountId={accountForTokensSearch as string}
-                key="tokens"
-              />
-            )}
-            {activeAssetsTabIndex === 1 && (
-              <CollectionsComponent
-                accountId={normalizeSubstrate(substrateAddress as string)}
-                key="collections"
-              />
-            )}
-            {activeAssetsTabIndex === 2 && (
-              <BundlesComponent
-                accountId={normalizeSubstrate(substrateAddress as string)}
-                key="collections"
-              />
-            )}
           </AssetsWrapper>
-        </PagePaperStyled>
+          {activeAssetsTabIndex === 0 && (
+            <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
+          )}
+          {activeAssetsTabIndex === 1 && (
+            <CollectionsComponent
+              accountId={normalizeSubstrate(substrateAddress as string)}
+              key="collections"
+            />
+          )}
+          {activeAssetsTabIndex === 2 && (
+            <BundlesComponent
+              accountId={normalizeSubstrate(substrateAddress as string)}
+              key="collections"
+            />
+          )}
+        </PagePaper>
         {activeAssetsTabIndex === 2 ? (
           <EventsTable accountId={normalizeSubstrate(substrateAddress as string)} />
         ) : (
@@ -113,11 +110,12 @@ const Wrapper = styled.div`
 
 const AssetsWrapper = styled.div`
   padding-top: calc(var(--gap) * 1.5);
-  min-width: 480px;
-`;
-
-const PagePaperStyled = styled(PagePaper)`
-  min-width: 480px;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 `;
 
 export default AccountPage;
