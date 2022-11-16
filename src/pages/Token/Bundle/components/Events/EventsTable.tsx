@@ -16,6 +16,7 @@ import {
   Pagination,
   ScrollableTable,
   SelectOptionProps,
+  Stub,
 } from '@app/components';
 import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
 import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/columnsSchema';
@@ -133,16 +134,16 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
           <SkeletonWrapper>
             <Skeleton />
           </SkeletonWrapper>
+        ) : count > 0 ? (
+          <ScrollableTable
+            columns={columns}
+            data={bundleEvents || []}
+            loading={isBundleEventsFetching}
+            rowKey={getRowKey}
+            onRow={(event) => ({ className: !event.result ? 'failed-event' : '' })}
+          />
         ) : (
-          <>
-            <ScrollableTable
-              columns={columns}
-              data={bundleEvents || []}
-              loading={isBundleEventsFetching}
-              rowKey={getRowKey}
-              onRow={(event) => ({ className: !event.result ? 'failed-event' : '' })}
-            />
-          </>
+          <Stub />
         )}
         {!!count && (
           <BottomPaginationContainer>
