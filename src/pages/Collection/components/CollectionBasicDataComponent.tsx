@@ -9,7 +9,6 @@ import { useDeviceSize, DeviceSize, DeviceSizes } from '@app/hooks';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
 
 interface BasicDataComponentProps {
-  collectionId: string;
   collection?: Collection;
 }
 

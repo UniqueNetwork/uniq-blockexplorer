@@ -13,6 +13,7 @@ import { IdentityIcon, Tabs } from '@app/components';
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
 import HoldersComponent from './components/HoldersComponent';
+import TokensComponent from './components/TokensComponent/index';
 import PagePaper from '../../components/PagePaper';
 import { CoverContainer } from './components/CoverContainer';
 
@@ -56,23 +57,26 @@ const CollectionPage: FC = () => {
           setCurrentTabIndex={setActiveDetailTabIndex}
         />
         {activeDetailTabIndex === 0 && (
-          <CollectionBasicDataComponent
-            collection={collection}
-            collectionId={collectionId || ''}
-            key="collections"
-          />
+          <CollectionBasicDataComponent collection={collection} key="collections" />
         )}
         {activeDetailTabIndex === 1 && (
           <CollectionExtendedDataComponent collection={collection} key="tokens" />
         )}
       </PagePaper>
       {activeDetailTabIndex === 0 && (
-        <PagePaper>
-          <div>
-            <Heading size={'2'}>Holders</Heading>
-            <HoldersComponent collectionId={collectionId} key={'holder'} />
-          </div>
-        </PagePaper>
+        <>
+          <PagePaper>
+            <div>
+              <TokensComponent collectionId={collectionId} />
+            </div>
+          </PagePaper>
+          <PagePaper>
+            <div>
+              <Heading size={'2'}>Holders</Heading>
+              <HoldersComponent collectionId={collectionId} key={'holder'} />
+            </div>
+          </PagePaper>
+        </>
       )}
     </>
   );

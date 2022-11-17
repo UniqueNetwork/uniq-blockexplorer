@@ -7,6 +7,7 @@ import EventsTable from '@app/pages/Token/Bundle/components/Events/EventsTable';
 import TokenDetailComponent from '../../../components/TokenDetailComponent';
 import PagePaper from '../../../components/PagePaper';
 import BundleTreeSection from './components/BundleTreeSection';
+import Page404 from '../../404';
 
 interface BundlePageComponentProps {
   token: Token;
@@ -15,6 +16,8 @@ interface BundlePageComponentProps {
 
 const BundlePage: FC<BundlePageComponentProps> = ({ loading, token }) => {
   useScrollToTop();
+
+  if ((!token && !loading) || token?.burned) return <Page404 />;
 
   if (!token) return null;
 
