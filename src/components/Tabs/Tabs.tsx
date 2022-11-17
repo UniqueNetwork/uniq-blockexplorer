@@ -2,8 +2,6 @@ import { FC, ReactNode } from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components/macro';
 
-import { DeviceSizes } from '@app/hooks';
-
 interface TabsProps {
   additionalContent?: ReactNode | ReactNode[];
   content: ReactNode[];

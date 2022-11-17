@@ -9,7 +9,12 @@ import { Token } from '@app/api';
 import { Picture } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 
-type BundleCardProps = Token & { timeNow?: number };
+type BundleCardProps = Token & {
+  timeNow?: number;
+  hideCreationTime?: boolean;
+  hideCollection?: boolean;
+  hideOwner?: boolean;
+};
 
 const BundleCard: FC<BundleCardProps> = ({
   bundle_created: bundleCreated,
@@ -22,12 +27,22 @@ const BundleCard: FC<BundleCardProps> = ({
   token_prefix: prefix,
   type,
   transfers_count,
+  type,
+  hideCreationTime,
+  hideCollection,
+  hideOwner,
+  owner_normalized,
 }) => {
   const { currentChain } = useApi();
 
   let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
 
-  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
+    let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
+
+    navigate(
+      `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
+    );
+  }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
