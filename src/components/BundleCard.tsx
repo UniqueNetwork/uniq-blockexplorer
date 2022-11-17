@@ -27,7 +27,6 @@ const BundleCard: FC<BundleCardProps> = ({
   token_prefix: prefix,
   type,
   transfers_count,
-  type,
   hideCreationTime,
   hideCollection,
   hideOwner,
@@ -37,12 +36,7 @@ const BundleCard: FC<BundleCardProps> = ({
 
   let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
 
-    let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
-
-    navigate(
-      `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`,
-    );
-  }, [collectionId, currentChain.network, navigate, tokenId]);
+  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
