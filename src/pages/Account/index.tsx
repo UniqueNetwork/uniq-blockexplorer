@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { Heading } from '@unique-nft/ui-kit';
 import ReactTooltip from 'react-tooltip';
 
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
@@ -49,26 +48,27 @@ const AccountPage = () => {
   if (!accountId) return null;
 
   return (
-    <Wrapper className="account-page">
-      <PagePaper>
-        <AccountDetailComponent accountId={substrateAddress as string} />
-        <AssetsWrapper>
-          <Heading size="2">Assets</Heading>
-          <Tabs
-            content={[
-              'tokens',
-              'collections',
-              <div className="flex-row">
-                Bundles
-                <img data-tip={true} alt="tooltip" data-for="sadFace" src={Question} />
-                <ReactTooltip id="sadFace" effect="solid">
-                  <span>A tree with nested tokens</span>
-                </ReactTooltip>
-              </div>,
-            ]}
-            currentTabIndex={activeAssetsTabIndex}
-            setCurrentTabIndex={setActiveAssetsTabIndex}
-          />
+    <OverflowWrapper>
+      <Wrapper className="account-page">
+        <PagePaper>
+          <AccountDetailComponent accountId={substrateAddress as string} />
+          <AssetsWrapper>
+            <Tabs
+              content={[
+                'tokens',
+                'collections',
+                <div className="flex-row">
+                  Bundles
+                  <img data-tip={true} alt="tooltip" data-for="sadFace" src={Question} />
+                  <ReactTooltip id="sadFace" effect="solid">
+                    <span>A tree with nested tokens</span>
+                  </ReactTooltip>
+                </div>,
+              ]}
+              currentTabIndex={activeAssetsTabIndex}
+              setCurrentTabIndex={setActiveAssetsTabIndex}
+            />
+          </AssetsWrapper>
           {activeAssetsTabIndex === 0 && (
             <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
           )}
@@ -84,18 +84,25 @@ const AccountPage = () => {
               key="collections"
             />
           )}
-        </AssetsWrapper>
-      </PagePaper>
-      {activeAssetsTabIndex === 2 ? (
-        <EventsTable accountId={normalizeSubstrate(substrateAddress as string)} />
-      ) : (
-        <LastTransfers accountId={substrateAddress} pageSize={10} />
-      )}
-    </Wrapper>
+        </PagePaper>
+        {activeAssetsTabIndex === 2 ? (
+          <EventsTable accountId={normalizeSubstrate(substrateAddress as string)} />
+        ) : (
+          <LastTransfers accountId={substrateAddress} pageSize={10} />
+        )}
+      </Wrapper>
+    </OverflowWrapper>
   );
 };
 
+const OverflowWrapper = styled.div`
+  position: relative;
+  overflow: auto;
+  width: 100%;
+`;
+
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   grid-row-gap: var(--gap);
@@ -103,6 +110,12 @@ const Wrapper = styled.div`
 
 const AssetsWrapper = styled.div`
   padding-top: calc(var(--gap) * 1.5);
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 `;
 
 export default AccountPage;

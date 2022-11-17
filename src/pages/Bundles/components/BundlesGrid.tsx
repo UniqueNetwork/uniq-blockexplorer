@@ -3,8 +3,7 @@ import styled from 'styled-components/macro';
 
 import { deviceWidth, useScrollToTop } from '@app/hooks';
 import { Token } from '@app/api';
-
-import BundleCard from './BundleCard';
+import BundleCard from '@app/components/BundleCard';
 
 interface BundlesGridProps {
   chainNetwork: string;

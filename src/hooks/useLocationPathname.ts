@@ -5,7 +5,6 @@ export const useLocationPathname = () => {
   const [notTheMainPage, setNotTheMainPage] = useState(false);
   const [tokensPage, setTokensPage] = useState(false);
   const [bundlesPage, setBundlesPage] = useState(false);
-  // const [bundlePage, setBundlePage] = useState(false);
   const [collectionsPage, setCollectionsPage] = useState(false);
   const location = useLocation();
 
@@ -26,7 +25,10 @@ export const useLocationPathname = () => {
       setTokensPage(false);
     }
 
-    if (location.pathname.match(`/(collections)`)) {
+    if (
+      location.pathname.match(`/(collections)`) &&
+      !location.pathname.match(`/(collections/[0-9])`)
+    ) {
       setCollectionsPage(true);
     } else {
       setCollectionsPage(false);
