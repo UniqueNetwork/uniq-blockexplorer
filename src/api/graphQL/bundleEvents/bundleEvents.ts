@@ -40,13 +40,26 @@ export const useGraphQLBundleEvents = ({
   let where: { [key: string]: unknown } = {};
 
   if (tokensInBundle?.length) {
+    const collectionMap = new Map();
+    tokensInBundle.forEach((token) => {
+      const tokensInCollectionMap = collectionMap.get(token.collectionId);
+
+      if (!!tokensInCollectionMap) {
+        collectionMap.set(token.collectionId, [...tokensInCollectionMap, token.tokenId]);
+      } else {
+        collectionMap.set(token.collectionId, [token.tokenId]);
+      }
+    });
+
+    const tokensFilter: { [key: string]: unknown }[] = [];
+    collectionMap.forEach((tokens, collectionId) => {
+      tokensFilter.push({
+        collection_id: { _eq: collectionId },
+        token_id: { _in: tokens },
+      });
+    });
     where = {
-      _or: tokensInBundle.map((token) => {
-        return {
-          token_id: { _eq: token.tokenId },
-          collection_id: { _eq: token.collectionId },
-        };
-      }),
+      _or: tokensFilter,
     };
   }
 
