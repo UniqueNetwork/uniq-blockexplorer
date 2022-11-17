@@ -18,7 +18,6 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
   const fields = collection?.attributes_schema;
 
   const {
-    collection_id: id,
     sponsorship,
     token_limit: tokenLimit,
     limits_account_ownership: limitsAccountOwnership,
@@ -33,11 +32,7 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
   return (
     <>
       <WrapperWithBorder>
-        <CollectionBasicDataComponent
-          collection={collection}
-          collectionId={id?.toString() || ''}
-          key="collections"
-        />
+        <CollectionBasicDataComponent collection={collection} key="collections" />
       </WrapperWithBorder>
       <WrapperWithBorder>
         <Heading size="3">NFTs attributes</Heading>
