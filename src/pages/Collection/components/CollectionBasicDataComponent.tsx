@@ -7,17 +7,12 @@ import { timestampFormat } from '@app/utils';
 import { useDeviceSize, DeviceSize, DeviceSizes } from '@app/hooks';
 
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import TokensComponent from './TokensComponent';
 
 interface BasicDataComponentProps {
-  collectionId: string;
   collection?: Collection;
 }
 
-const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
-  collection,
-  collectionId,
-}) => {
+const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection }) => {
   const {
     collection_id: id,
     date_of_creation: createdOn,
@@ -31,51 +26,46 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({
   const deviceSize = useDeviceSize();
 
   return (
-    <>
-      <PropertiesWrapper>
-        <GeneralInfoWrapper>
-          <GeneralInfo>
-            <div>
-              <Text color="grey-500">ID:</Text>
-              <Text color="black">{id?.toString() || ''}</Text>
-            </div>
-            <div>
-              <Text color="grey-500">Items:</Text>
-              <Text color="black">{tokensCount?.toString() || '0'}</Text>
-            </div>
-            <div>
-              <Text color="grey-500">Symbol:</Text>
-              <Text color="black">{prefix?.toString() || ''}</Text>
-            </div>
-            <div>
-              <Text color="grey-500">Holders:</Text>
-              <Text color="black">{holders?.toString() || '0'}</Text>
-            </div>
-            <div>
-              <Text color="grey-500">Minting:</Text>
-              <Text color="black">yes</Text>
-            </div>
-          </GeneralInfo>
-          <DescriptionWrapper>
-            <Text color="grey-500">{description || ''}</Text>
-          </DescriptionWrapper>
-        </GeneralInfoWrapper>
-        <CreatedAccountWrapper>
+    <PropertiesWrapper>
+      <GeneralInfoWrapper>
+        <GeneralInfo>
           <div>
-            <Text color="grey-500">created on {timestampFormat(createdOn)}</Text>
+            <Text color="grey-500">ID:</Text>
+            <Text color="black">{id?.toString() || ''}</Text>
           </div>
-          <OwnerAccountWrapper>
-            <AccountLinkComponent
-              noShort={deviceSize >= DeviceSize.xl}
-              value={owner || ''}
-            />
-          </OwnerAccountWrapper>
-        </CreatedAccountWrapper>
-      </PropertiesWrapper>
-      <div>
-        <TokensComponent collectionId={collectionId} />
-      </div>
-    </>
+          <div>
+            <Text color="grey-500">Items:</Text>
+            <Text color="black">{tokensCount?.toString() || '0'}</Text>
+          </div>
+          <div>
+            <Text color="grey-500">Symbol:</Text>
+            <Text color="black">{prefix?.toString() || ''}</Text>
+          </div>
+          <div>
+            <Text color="grey-500">Holders:</Text>
+            <Text color="black">{holders?.toString() || '0'}</Text>
+          </div>
+          <div>
+            <Text color="grey-500">Minting:</Text>
+            <Text color="black">yes</Text>
+          </div>
+        </GeneralInfo>
+        <DescriptionWrapper>
+          <Text color="grey-500">{description || ''}</Text>
+        </DescriptionWrapper>
+      </GeneralInfoWrapper>
+      <CreatedAccountWrapper>
+        <div>
+          <Text color="grey-500">created on {timestampFormat(createdOn)}</Text>
+        </div>
+        <OwnerAccountWrapper>
+          <AccountLinkComponent
+            noShort={deviceSize >= DeviceSize.xl}
+            value={owner || ''}
+          />
+        </OwnerAccountWrapper>
+      </CreatedAccountWrapper>
+    </PropertiesWrapper>
   );
 };
 
