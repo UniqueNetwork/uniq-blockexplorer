@@ -25,6 +25,7 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
     limits_sponsore_data_size: limitsSponsoreDataSize,
     owner_can_transfer: ownerCanTransfer,
     owner_can_destroy: ownerCanDestroy,
+    offchain_schema: offchainSchema,
   } = collection || {};
 
   const deviceSize = useDeviceSize();
@@ -60,8 +61,12 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
         <DataBlockWrapper>
           <Text color="grey-500">Schema version</Text>
           <Text>{collection?.schema_version || ''}</Text>
-          <Text color="grey-500">Offchain schema </Text>
-          <Text>{collection?.offchain_schema || ''}</Text>
+          {offchainSchema && (
+            <>
+              <Text color="grey-500">Offchain schema </Text>
+              <Text>{offchainSchema}</Text>
+            </>
+          )}
         </DataBlockWrapper>
       </WrapperWithBorder>
       <WrapperWithBorder>
@@ -69,12 +74,18 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
         <DataBlockWrapper>
           <Text color="grey-500">Token limit</Text>
           <Text>{tokenLimit || ''}</Text>
-          <Text color="grey-500">Account token ownership limit </Text>
-          <Text>{limitsAccountOwnership || ''}</Text>
-          <Text color="grey-500">Sponsored mint size</Text>
-          <Text>{limitsSponsoreDataSize || ''}</Text>
-          <Text color="grey-500">Sponsor timeout</Text>
-          <Text>{collection?.offchain_schema || ''}</Text>
+          {limitsAccountOwnership && (
+            <>
+              <Text color="grey-500">Account token ownership limit </Text>
+              <Text>{limitsAccountOwnership || ''}</Text>
+            </>
+          )}
+          {limitsSponsoreDataSize && (
+            <>
+              <Text color="grey-500">Sponsored mint size</Text>
+              <Text>{limitsSponsoreDataSize || ''}</Text>
+            </>
+          )}
           <Text color="grey-500">Owner can transfer</Text>
           <Text>{ownerCanTransfer ? 'true' : 'false'}</Text>
           <Text color="grey-500">Owner can destroy</Text>
@@ -92,6 +103,7 @@ const StyledHeading = styled(Heading)`
 const TagsWrapper = styled.div`
   margin: calc(var(--gap) / 2) 0;
   display: flex;
+  flex-wrap: wrap;
   column-gap: calc(var(--gap) / 2);
   row-gap: calc(var(--gap) / 2);
 `;
@@ -105,6 +117,9 @@ const WrapperWithBorder = styled.div`
   margin-top: calc(var(--gap) * 2);
   padding-bottom: calc(var(--gap) * 2);
   border-bottom: 1px solid var(--border-color);
+  &:last-of-type {
+    border-bottom: none;
+  }
 `;
 
 const OwnerAccountWrapper = styled.div`
