@@ -33,12 +33,14 @@ export interface Collection {
   owner_can_transfer: string;
   owner_can_destroy: string;
   schema_version: string;
+  sponsorship: string;
   actions_count: number;
   limits_account_ownership: number;
   limits_sponsore_data_rate: null;
   limits_sponsore_data_size: null;
   const_chain_schema: null;
   date_of_creation: number;
+  nesting_enabled: boolean;
 }
 
 export interface CollectionsVariables {

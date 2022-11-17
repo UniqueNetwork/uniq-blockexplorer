@@ -8,13 +8,14 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { useGraphQlCollection } from '@app/api';
 import { useCheckImageExists, useScrollToTop } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import { CoverContainer, IdentityIcon, Tabs } from '@app/components';
+import { IdentityIcon, Tabs } from '@app/components';
 
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
 import HoldersComponent from './components/HoldersComponent';
 import TokensComponent from './components/TokensComponent/index';
 import PagePaper from '../../components/PagePaper';
+import { CoverContainer } from './components/CoverContainer';
 
 const detailTabs = ['Basic data', 'Extended'];
 
