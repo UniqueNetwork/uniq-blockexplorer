@@ -8,7 +8,7 @@ import { Token, useGraphQlBundles } from '@app/api';
 import { defaultSorting } from '@app/pages/Collections/constants';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
-import BundleCard from '@app/pages/Bundles/components/BundleCard';
+import BundleCard from '@app/components/BundleCard';
 
 interface BundlesComponentProps {
   accountId: string;
