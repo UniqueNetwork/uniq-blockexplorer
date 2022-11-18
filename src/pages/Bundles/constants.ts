@@ -1,5 +1,5 @@
 import { BundleSorting } from '@app/api';
-import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 
 import { BundlesSelectOption } from './types';
 export const OPTIONS: BundlesSelectOption[] = [

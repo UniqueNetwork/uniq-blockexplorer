@@ -4,22 +4,32 @@ import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { formatAmount, timeDifference, tokenPageTimestampFormat } from '@app/utils';
-import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
-import ActionTableCell from '@app/pages/Token/Bundle/components/Events/ActionTableCell';
+import ActionTableCell from '@app/components/EventsTable/ActionTableCell';
 import { SVGIcon } from '@app/components';
-import ResultTableCell from '@app/pages/Token/Bundle/components/Events/ResultTableCell';
+import ResultTableCell from '@app/components/EventsTable/ResultTableCell';
 
-import AccountLinkComponent from '../../../../Account/components/AccountLinkComponent';
+import AccountLinkComponent from '../../pages/Account/components/AccountLinkComponent';
 
-export const getBundleEventsColumns = (
-  orderBy: EventsSorting,
-  onOrderChange: (orderBy: EventsSorting) => void,
-  timestamp: number,
-  tokenSymbol: string = '',
-  isAgeColumn: boolean,
-  setIsAgeColumn: (newIsAgeColumn: boolean) => void,
-) => [
+export type TGetEventsColumns = {
+  orderBy: EventsSorting;
+  onOrderChange: (orderBy: EventsSorting) => void;
+  timestamp: number;
+  tokenSymbol: string;
+  isAgeColumn: boolean;
+  setIsAgeColumn: (newIsAgeColumn: boolean) => void;
+  chainId?: string;
+};
+
+export const getBundleEventsColumns = ({
+  orderBy,
+  onOrderChange,
+  timestamp,
+  tokenSymbol,
+  isAgeColumn,
+  setIsAgeColumn,
+}: TGetEventsColumns) => [
   {
     dataIndex: 'action',
     key: 'action',

@@ -12,7 +12,7 @@ import { LastTransfers } from '@app/pages/Main/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
-import EventsTable from '@app/pages/Token/Bundle/components/Events/EventsTable';
+import EventsTable from '@app/components/EventsTable/EventsTable';
 
 import BundlesComponent from './components/BundlesComponent';
 import AccountDetailComponent from './components/AccountDetailComponent';
@@ -87,7 +87,11 @@ const AccountPage = () => {
         </AssetsWrapper>
       </PagePaper>
       {activeAssetsTabIndex === 2 ? (
-        <EventsTable accountId={normalizeSubstrate(substrateAddress as string)} />
+        <EventsTable
+          header={'Bundle events'}
+          accountId={normalizeSubstrate(substrateAddress as string)}
+          tokens={[]}
+        />
       ) : (
         <LastTransfers accountId={substrateAddress} pageSize={10} />
       )}

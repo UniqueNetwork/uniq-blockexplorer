@@ -2,26 +2,28 @@ import React from 'react';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { Text } from '@unique-nft/ui-kit';
 
-import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import TokenTableCell from '@app/components/TokenTableCell';
-import ActionTableCell from '@app/pages/Token/Bundle/components/Events/ActionTableCell';
+import ActionTableCell from '@app/components/EventsTable/ActionTableCell';
 import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
-import { AgeTimeHeader } from '@app/pages/Token/Bundle/components/Events/columnsSchema';
+import {
+  AgeTimeHeader,
+  TGetEventsColumns,
+} from '@app/components/EventsTable/columnsSchema';
 import { TokenTypeEnum } from '@app/api';
 
 import ResultTableCell from './ResultTableCell';
 
-export const getBundleEventsAccountsPageColumns = (
-  orderBy: EventsSorting,
-  onOrderChange: (orderBy: EventsSorting) => void,
-  timestamp: number,
-  tokenSymbol: string = '',
-  isAgeColumn: boolean,
-  setIsAgeColumn: (newIsAgeColumn: boolean) => void,
-  chainId: string,
-) => [
+export const getBundleEventsAccountsPageColumns = ({
+  orderBy,
+  onOrderChange,
+  timestamp,
+  tokenSymbol,
+  isAgeColumn,
+  setIsAgeColumn,
+  chainId = '',
+}: TGetEventsColumns) => [
   {
     dataIndex: 'token_name',
     key: 'token_name',

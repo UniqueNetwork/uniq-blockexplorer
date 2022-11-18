@@ -6,9 +6,9 @@ import { useDeviceSize, DeviceSize } from '@app/hooks';
 import { Pagination, ScrollableTable } from '@app/components';
 import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
 
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
-import { Holder, holders as gqlHolders, HolderSorting } from '../../../api/graphQL';
-import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
+import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
+import { Holder, holders as gqlHolders, HolderSorting } from '../../../../api/graphQL';
+import TableSortableColumnTitle from '../../../../components/TableSortableColumnTitle';
 
 interface HoldersComponentProps {
   collectionId?: string;
