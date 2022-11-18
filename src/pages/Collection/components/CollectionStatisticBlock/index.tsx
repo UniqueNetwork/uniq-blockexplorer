@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components/macro';
 
 import PagePaper from '@app/components/PagePaper';
 import { Tabs } from '@app/components';
@@ -32,11 +33,13 @@ const CollectionStatisticBlock = ({ collectionId }: CollectionStatisticBlockProp
 
   return (
     <PagePaper>
-      <Tabs
-        content={tabs}
-        currentTabIndex={activeDetailTabIndex}
-        setCurrentTabIndex={setActiveDetailTabIndex}
-      />
+      <ScrollXWrapper>
+        <Tabs
+          content={tabs}
+          currentTabIndex={activeDetailTabIndex}
+          setCurrentTabIndex={setActiveDetailTabIndex}
+        />
+      </ScrollXWrapper>
       {activeDetailTabIndex === 0 && (
         <HoldersComponent collectionId={collectionId} key={'holder'} />
       )}
@@ -49,5 +52,15 @@ const CollectionStatisticBlock = ({ collectionId }: CollectionStatisticBlockProp
     </PagePaper>
   );
 };
+
+const ScrollXWrapper = styled.div`
+  padding-top: calc(var(--gap) * 1.5);
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+`;
 
 export default CollectionStatisticBlock;
