@@ -64,8 +64,6 @@ const ScrollableTable: FC<TableProps> = ({ columns, data, loading, rowKey, onRow
     };
   }, []);
 
-  console.log('minScreenWidthForTable', minScreenWidthForTable);
-
   return (
     <ScrollWrapper>
       <TableWrapper id="tableWrapper" minScreenWidthForTable={minScreenWidthForTable}>
