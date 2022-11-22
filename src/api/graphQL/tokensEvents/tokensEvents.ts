@@ -1,13 +1,13 @@
 import { gql, useQuery } from '@apollo/client';
 
 import {
-  BundleEventsData,
-  BundleEventsVariables,
-  useGraphQLBundleEventsProps,
+  TokensEventsData,
+  TokensEventsVariables,
+  useGraphQLTokensEventsProps,
 } from './types';
 
-const bundleEventsQuery = gql`
-  query getBundleEvents(
+const tokensEventsQuery = gql`
+  query getTokensEvents(
     $limit: Int
     $offset: Int
     $where: TokenEventWhereParams = {}
@@ -25,23 +25,24 @@ const bundleEventsQuery = gql`
         timestamp
         token_id
         values
+        token_name
       }
     }
   }
 `;
 
-export const useGraphQLBundleEvents = ({
+export const useGraphQLTokensEvents = ({
   limit,
   offset = 0,
   orderBy,
-  tokensInBundle,
+  tokens,
   author,
-}: useGraphQLBundleEventsProps) => {
+}: useGraphQLTokensEventsProps) => {
   let where: { [key: string]: unknown } = {};
 
-  if (tokensInBundle?.length) {
+  if (tokens?.length) {
     const collectionMap = new Map();
-    tokensInBundle.forEach((token) => {
+    tokens.forEach((token) => {
       const tokensInCollectionMap = collectionMap.get(token.collectionId);
 
       if (!!tokensInCollectionMap) {
@@ -67,9 +68,9 @@ export const useGraphQLBundleEvents = ({
 
   const {
     data,
-    error: fetchBundleEventsError,
-    loading: isBundleEventsFetching,
-  } = useQuery<BundleEventsData, BundleEventsVariables>(bundleEventsQuery, {
+    error: fetchTokensEventsError,
+    loading: isTokenEventsFetching,
+  } = useQuery<TokensEventsData, TokensEventsVariables>(tokensEventsQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -83,8 +84,8 @@ export const useGraphQLBundleEvents = ({
   });
 
   return {
-    fetchBundleEventsError,
-    isBundleEventsFetching,
+    fetchTokensEventsError,
+    isTokenEventsFetching,
     timestamp: data?.token_events?.timestamp || 0,
     bundleEvents: data?.token_events?.data,
     count: data?.token_events?.count || 0,

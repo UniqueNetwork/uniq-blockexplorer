@@ -12,10 +12,10 @@ import { IdentityIcon, Tabs } from '@app/components';
 
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
-import HoldersComponent from './components/HoldersComponent';
 import TokensComponent from './components/TokensComponent/index';
 import PagePaper from '../../components/PagePaper';
 import { CoverContainer } from './components/CoverContainer';
+import CollectionStatisticBlock from './components/CollectionStatisticBlock';
 
 const detailTabs = ['Basic data', 'Extended'];
 
@@ -70,12 +70,7 @@ const CollectionPage: FC = () => {
               <TokensComponent collectionId={collectionId} />
             </div>
           </PagePaper>
-          <PagePaper>
-            <div>
-              <Heading size={'2'}>Holders</Heading>
-              <HoldersComponent collectionId={collectionId} key={'holder'} />
-            </div>
-          </PagePaper>
+          <CollectionStatisticBlock collectionId={collectionId} />
         </>
       )}
     </>

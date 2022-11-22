@@ -11,7 +11,7 @@ import { LastTransfers } from '@app/pages/Main/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
-import EventsTable from '@app/pages/Token/Bundle/components/Events/EventsTable';
+import EventsTable from '@app/components/EventsTable/EventsTable';
 
 import BundlesComponent from './components/BundlesComponent';
 import AccountDetailComponent from './components/AccountDetailComponent';
@@ -48,11 +48,11 @@ const AccountPage = () => {
   if (!accountId) return null;
 
   return (
-    <OverflowWrapper>
+    <>
       <Wrapper className="account-page">
         <PagePaper>
           <AccountDetailComponent accountId={substrateAddress as string} />
-          <AssetsWrapper>
+          <ScrollXWrapper>
             <Tabs
               content={[
                 'tokens',
@@ -68,7 +68,7 @@ const AccountPage = () => {
               currentTabIndex={activeAssetsTabIndex}
               setCurrentTabIndex={setActiveAssetsTabIndex}
             />
-          </AssetsWrapper>
+          </ScrollXWrapper>
           {activeAssetsTabIndex === 0 && (
             <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
           )}
@@ -86,20 +86,18 @@ const AccountPage = () => {
           )}
         </PagePaper>
         {activeAssetsTabIndex === 2 ? (
-          <EventsTable accountId={normalizeSubstrate(substrateAddress as string)} />
+          <EventsTable
+            header={'Bundle events'}
+            accountId={normalizeSubstrate(substrateAddress as string)}
+            tokens={[]}
+          />
         ) : (
           <LastTransfers accountId={substrateAddress} pageSize={10} />
         )}
       </Wrapper>
-    </OverflowWrapper>
+    </>
   );
 };
-
-const OverflowWrapper = styled.div`
-  position: relative;
-  overflow: auto;
-  width: 100%;
-`;
 
 const Wrapper = styled.div`
   position: relative;
@@ -108,7 +106,7 @@ const Wrapper = styled.div`
   grid-row-gap: var(--gap);
 `;
 
-const AssetsWrapper = styled.div`
+const ScrollXWrapper = styled.div`
   padding-top: calc(var(--gap) * 1.5);
   overflow-x: auto;
   &::-webkit-scrollbar {
