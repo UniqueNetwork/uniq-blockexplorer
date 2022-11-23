@@ -47,7 +47,7 @@ export const TokenInformation: VFC = () => {
         <Body>
           {!!statisticsMap.holders && (
             <Cell>
-              <BigAmount>{statisticsMap.holders}</BigAmount>
+              <BigAmount>{formatLongNumber(statisticsMap.holders)}</BigAmount>
               <P>Holders</P>
             </Cell>
           )}
@@ -88,25 +88,25 @@ export const TokenInformation: VFC = () => {
         <Body>
           <Cell>
             <BigLChainAmount chainColor={getChainColor(currentChain)}>
-              {statisticsMap?.blocks}
+              {formatLongNumber(statisticsMap?.blocks)}
             </BigLChainAmount>
             <P>Blocks</P>
           </Cell>
           <Cell>
             <BigLChainAmount chainColor={getChainColor(currentChain)}>
-              {statisticsMap?.transfers}
+              {formatLongNumber(statisticsMap?.transfers)}
             </BigLChainAmount>
             <P>Transfers</P>
           </Cell>
           <Cell>
             <BigLChainAmount chainColor={getChainColor(currentChain)}>
-              {statisticsMap?.tokens}
+              {formatLongNumber(statisticsMap?.tokens)}
             </BigLChainAmount>
             <P>NFTs</P>
           </Cell>
           <Cell>
             <BigLChainAmount chainColor={getChainColor(currentChain)}>
-              {statisticsMap?.collections}
+              {formatLongNumber(statisticsMap?.collections)}
             </BigLChainAmount>
             <P>Collections</P>
           </Cell>
