@@ -17,6 +17,7 @@ type TokenCardProps = Token & {
   hideCreationTime?: boolean;
   hideCollection?: boolean;
   hideOwner?: boolean;
+  hideTransfers?: boolean;
 };
 
 const TokenCard: FC<TokenCardProps> = ({
@@ -33,6 +34,7 @@ const TokenCard: FC<TokenCardProps> = ({
   hideCollection,
   hideOwner,
   owner_normalized,
+  hideTransfers,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
@@ -77,12 +79,14 @@ const TokenCard: FC<TokenCardProps> = ({
               <AccountLinkComponent value={owner_normalized} size={'xs'} />
             </OwnerProperty>
           )}
-          <Text color="grey-500" size="xs">
-            Transfers:{' '}
-            <Text color="additional-dark" size="xs">
-              {transfers_count}
+          {!hideTransfers && (
+            <Text color="grey-500" size="xs">
+              Transfers:{' '}
+              <Text color="additional-dark" size="xs">
+                {transfers_count}
+              </Text>
             </Text>
-          </Text>
+          )}
           {!hideCreationTime && (
             <CreatedTime>
               <StyledSVGIcon height={16} name="clock" width={16} />
@@ -157,9 +161,12 @@ const TokenTitle = styled.div`
 const CreatedTime = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 4px;
 `;
 
-const TokenProperties = styled.div``;
+const TokenProperties = styled.div`
+  margin-top: calc(var(--gap) / 4);
+`;
 
 const OwnerProperty = styled(Text)`
   display: flex !important;
