@@ -4,9 +4,8 @@ import { Text } from '@unique-nft/ui-kit';
 
 import { account as gqlAccount } from '@app/api/graphQL';
 import { CoverContainer, IdentityIcon, LoadingComponent } from '@app/components';
-import { useDeviceSize, DeviceSize } from '@app/hooks';
-
-import { formatAmount, shortcutText } from '../../../utils/textUtils';
+import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
+import { formatAmount, shortcutText } from '@app/utils';
 
 interface AccountProps {
   accountId: string;
@@ -15,6 +14,7 @@ interface AccountProps {
 const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
 
+  const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
 
   if (isAccountFetching) return <LoadingComponent />;
@@ -27,7 +27,7 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
     locked_balance: lockedBalance = 'unavailable',
   } = account || {};
 
-  const { tokenSymbol = '' } = {};
+  const tokenSymbol = currentChain?.symbol || '';
   const accountAddress = accountChain || accountNormalized || accountId;
 
   return (
