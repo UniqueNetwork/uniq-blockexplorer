@@ -123,6 +123,8 @@ export const Tokens: VFC<TokensProps> = ({
             key={`token-${token.collection_id}-${token.token_id}`}
             {...token}
             timeNow={timestamp}
+            hideOwner={true}
+            hideTransfers={true}
           />
         ))}
       </TokensWrapper>
