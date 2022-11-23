@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { Button } from '@unique-nft/ui-kit';
 
-import { DeviceSizes, useApi } from '@app/hooks';
+import { DeviceSizes, useApi, useQueryParams } from '@app/hooks';
 import { PagePaperWrapper, DropdownOptionProps } from '@app/components';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
@@ -28,13 +28,27 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
-    lastTransferOptions[1],
+  const { setParamToQuery, mainLastTransfersSort } = useQueryParams();
+  const defaultSort = lastTransferOptions.find(
+    (option) => option.id === mainLastTransfersSort,
   );
-  const [contentExist, setContentExist] = useState<boolean>(false);
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
+    defaultSort || lastTransferOptions[1],
+  );
+  const [, setContentExist] = useState<boolean>(false);
   const linkUrl = `/${currentChain.network.toLowerCase()}/last-transfers`;
   const showNFTs = selectedSort.id === SELECTED_BLOCK_NFT;
   const showCoins = selectedSort.id === SELECTED_BLOCK_COIN;
+
+  const onOrderChange = (newOrder: DropdownOptionProps) => {
+    setParamToQuery([
+      {
+        name: 'mainLastTransfersSort',
+        value: newOrder.id as string,
+      },
+    ]);
+    setSelectedSort(newOrder);
+  };
 
   const onClickSeeMore = () => {
     navigate(linkUrl);
@@ -45,7 +59,7 @@ export const LastTransfers: VFC<LastTransfersProps> = ({
       <HeaderWithDropdown
         options={lastTransferOptions}
         selectedSort={selectedSort}
-        setSelectedSort={setSelectedSort}
+        setSelectedSort={onOrderChange}
         title="Last transfers"
       />
       {showNFTs && (

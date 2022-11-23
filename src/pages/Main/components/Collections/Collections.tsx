@@ -3,7 +3,13 @@ import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
 
-import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import {
+  DeviceSize,
+  deviceWidth,
+  useApi,
+  useDeviceSize,
+  useQueryParams,
+} from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
 import { PagePaperWrapper, DropdownOptionProps } from '@app/components';
 import {
@@ -32,9 +38,23 @@ export const Collections: VFC<CollectionsProps> = ({
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
-    collectionsOptions[0],
+  const { setParamToQuery, mainCollectionsSort } = useQueryParams();
+  const defaultSort = collectionsOptions.find(
+    (option) => option.id === mainCollectionsSort,
   );
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
+    defaultSort || collectionsOptions[0],
+  );
+
+  const onOrderChange = (newOrder: DropdownOptionProps) => {
+    setParamToQuery([
+      {
+        name: 'mainCollectionsSort',
+        value: newOrder.id as string,
+      },
+    ]);
+    setSelectedSort(newOrder);
+  };
 
   const orderBy = useMemo(
     (): CollectionSorting =>
@@ -125,7 +145,7 @@ export const Collections: VFC<CollectionsProps> = ({
         <HeaderWithDropdown
           options={collectionsOptions}
           selectedSort={selectedSort}
-          setSelectedSort={setSelectedSort}
+          setSelectedSort={onOrderChange}
           title="Collections"
         />
       )}
