@@ -5,7 +5,7 @@ import { Text } from '@unique-nft/ui-kit';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import TokenTableCell from '@app/components/TokenTableCell';
 import ActionTableCell from '@app/components/EventsTable/ActionTableCell';
-import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
+import { formatFeeValue, timeDifference, timestampTableFormat } from '@app/utils';
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
 import {
   AgeTimeHeader,
@@ -108,7 +108,7 @@ export const getBundleEventsAccountsPageColumns = ({
     render: (value: number) => {
       return (
         <Text size="m" weight="regular" color={'blue-grey-600'}>
-          {`${formatAmount(value || 0)} ${tokenSymbol}`}
+          {`${formatFeeValue(value || 0)} ${tokenSymbol}`}
         </Text>
       );
     },
