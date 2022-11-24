@@ -33,7 +33,7 @@ const TokenCard: FC<TokenCardProps> = ({
   hideCreationTime,
   hideCollection,
   hideOwner,
-  owner_normalized,
+  owner,
   hideTransfers,
 }) => {
   const navigate = useNavigate();
@@ -76,7 +76,7 @@ const TokenCard: FC<TokenCardProps> = ({
           {!hideOwner && (
             <OwnerProperty color="grey-500" size="xs">
               Owner:
-              <AccountLinkComponent value={owner_normalized} size={'xs'} />
+              <AccountLinkComponent value={owner} size={'xs'} />
             </OwnerProperty>
           )}
           {!hideTransfers && (
