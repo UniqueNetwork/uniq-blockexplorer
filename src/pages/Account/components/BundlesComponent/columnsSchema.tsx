@@ -38,11 +38,11 @@ export const getBundleEventsAccountsPageColumns = ({
     render: (value: string, event: DefaultRecordType) => (
       <TokenTableCell
         chainId={chainId}
-        collectionId={event.values.tokens[0].collection_id}
-        imageUrl={event.values.tokens[0].image.fullUrl}
-        tokenId={event.values.tokens[0].token_id}
-        tokenName={event.values.tokens[0].token_name}
-        type={event.values.tokens[0].type}
+        collectionId={event.tokens[0].collection_id}
+        imageUrl={event.tokens[0].image.fullUrl}
+        tokenId={event.tokens[0].token_id}
+        tokenName={event.tokens[0].token_name}
+        type={event.tokens[0].type}
         iconSize={40}
       />
     ),
@@ -96,7 +96,7 @@ export const getBundleEventsAccountsPageColumns = ({
     render: (value: number, event: DefaultRecordType) => {
       return (
         <Text size="m" weight="regular" color={'blue-grey-600'}>
-          {`${formatType(event.values.tokens[0].type)}`}
+          {`${formatType(event.tokens[0].type)}`}
         </Text>
       );
     },

@@ -23,6 +23,7 @@ export interface TokensEvent {
   token_id: number;
   token_name: string;
   values?: { [key: string]: unknown };
+  tokens: { [key: string]: unknown };
 }
 
 export type EventsSorting = {

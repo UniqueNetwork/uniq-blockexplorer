@@ -16,7 +16,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
   const { currentChain } = useApi();
   const { chainId } = useParams<'chainId'>();
   const { defaultChain } = config;
-  const { action, result, values } = event;
+  const { action, result, values, tokens } = event;
   const formatAddress = (address: string) => {
     let substrateAddress = address;
 
@@ -56,7 +56,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
 
   // nesting
   if (values.toToken) {
-    const { toToken, tokens } = values;
+    const { toToken } = values;
     let fromTokenData = tokens[0];
     let toTokenData = tokens[1];
 
