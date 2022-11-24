@@ -35,7 +35,7 @@ const BundlePage: FC<BundlePageComponentProps> = ({ loading, token }) => {
         tokenId: bundlesChildren.token_id,
         collectionId: bundlesChildren.collection_id,
       });
-      bundlesChildren.nestingChildren.map((child) => iter(child));
+      bundlesChildren.nestingChildren?.map((child) => iter(child));
     };
 
     if (bundle) iter(bundle);
