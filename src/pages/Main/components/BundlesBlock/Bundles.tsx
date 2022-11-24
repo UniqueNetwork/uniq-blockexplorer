@@ -3,7 +3,13 @@ import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
 
-import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import {
+  DeviceSize,
+  deviceWidth,
+  useApi,
+  useDeviceSize,
+  useQueryParams,
+} from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
 import { PagePaperWrapper, DropdownOptionProps } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -28,7 +34,21 @@ export const Bundles: VFC<BundlesProps> = ({
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(tokensOptions[0]);
+  const { setParamToQuery, mainBundlesSort } = useQueryParams();
+  const defaultSort = tokensOptions.find((option) => option.id === mainBundlesSort);
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
+    defaultSort || tokensOptions[0],
+  );
+
+  const onOrderChange = (newOrder: DropdownOptionProps) => {
+    setParamToQuery([
+      {
+        name: 'mainBundlesSort',
+        value: newOrder.id as string,
+      },
+    ]);
+    setSelectedSort(newOrder);
+  };
 
   const deviceSize = useDeviceSize();
 
@@ -108,7 +128,7 @@ export const Bundles: VFC<BundlesProps> = ({
         <HeaderWithDropdown
           options={tokensOptions}
           selectedSort={selectedSort}
-          setSelectedSort={setSelectedSort}
+          setSelectedSort={onOrderChange}
           title="Bundles"
         />
       )}
