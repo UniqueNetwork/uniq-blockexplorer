@@ -296,9 +296,10 @@ const TokenTitle: FC<{
       <Name>
         {prefix} #{token.token_id}
       </Name>
-      {token.nestingChildren?.length > 0 && (
+      {token.nestingChildren && token.nestingChildren.length > 0 && (
         <NestedCount>
-          {token.nestingChildren.length} item{token.nestingChildren.length > 1 && 's'}
+          {token.nestingChildren.length} item
+          {token.nestingChildren && token.nestingChildren.length > 1 && 's'}
         </NestedCount>
       )}
     </TitleContainer>

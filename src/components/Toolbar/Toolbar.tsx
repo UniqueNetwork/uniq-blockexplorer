@@ -1,6 +1,5 @@
 import { Button, Toggle } from '@unique-nft/ui-kit';
 import { createRef, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
 import {

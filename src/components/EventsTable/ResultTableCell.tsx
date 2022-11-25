@@ -4,7 +4,7 @@ import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 import { useParams } from 'react-router-dom';
 
-import { EventsActions } from '@app/api/graphQL/bundleEvents/types';
+import { EventsActions } from '@app/api/graphQL/tokensEvents/types';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi } from '@app/hooks';
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
@@ -16,7 +16,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
   const { currentChain } = useApi();
   const { chainId } = useParams<'chainId'>();
   const { defaultChain } = config;
-  const { action, result, values } = event;
+  const { action, result, values, tokens } = event;
   const formatAddress = (address: string) => {
     let substrateAddress = address;
 
@@ -56,7 +56,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
 
   // nesting
   if (values.toToken) {
-    const { toToken, tokens } = values;
+    const { toToken } = values;
     let fromTokenData = tokens[0];
     let toTokenData = tokens[1];
 

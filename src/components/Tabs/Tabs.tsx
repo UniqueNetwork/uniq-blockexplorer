@@ -2,8 +2,6 @@ import { FC, ReactNode } from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components/macro';
 
-import { DeviceSizes } from '@app/hooks';
-
 interface TabsProps {
   additionalContent?: ReactNode | ReactNode[];
   content: ReactNode[];
@@ -63,6 +61,7 @@ const Tab = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 
   .flex-column {
     display: flex;

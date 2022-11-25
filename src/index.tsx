@@ -14,6 +14,7 @@ import {
   Main,
   Tokens,
   Token,
+  Page404,
 } from './pages';
 import config from './config';
 
@@ -47,12 +48,19 @@ ReactDOM.render(
               <Route index element={<Collections />} />
               <Route element={<Collection />} path=":collectionId" />
             </Route>
+            <Route
+              path="tokens/:collectionId/:tokenId"
+              element={
+                <Navigate to={`${window.location.pathname.replace('tokens', 'nfts')}`} />
+              }
+            />
             <Route path="tokens/*" element={<Tokens />}>
               <Route path="fractional" />
               <Route path="nfts" />
             </Route>
             <Route path="nfts/:collectionId/:tokenId" element={<Token />}></Route>
           </Route>
+          <Route path="*" element={<Page404 />} />
         </Route>
       </Routes>
     </Router>

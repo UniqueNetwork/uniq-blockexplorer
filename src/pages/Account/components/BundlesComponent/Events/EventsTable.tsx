@@ -6,15 +6,15 @@ import { Heading, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
 import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
-import { BundleEvent, EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import { TokensEvent, EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 import {
   PagePaper,
   Pagination,
   ScrollableTable,
   SelectOptionProps,
 } from '@app/components';
-import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
 import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/Events/columnsSchema';
+import { useGraphQLTokensEvents } from '@app/api/graphQL/tokensEvents/tokensEvents';
 
 const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,9 +61,9 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
     setQueryParams(queryParams);
   };
 
-  const { bundleEvents, isBundleEventsFetching, timestamp, count } =
-    useGraphQLBundleEvents({
-      tokensInBundle: [],
+  const { tokensEvents, isTokenEventsFetching, timestamp, count } =
+    useGraphQLTokensEvents({
+      tokens: [],
       offset,
       orderBy,
       limit: pageSizeNumber,
@@ -71,20 +71,20 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
     });
 
   const columns = useMemo(() => {
-    return getBundleEventsAccountsPageColumns(
+    return getBundleEventsAccountsPageColumns({
       orderBy,
-      setOrderAndQuery,
+      onOrderChange: setOrderAndQuery,
       timestamp,
-      currentChain?.symbol,
+      tokenSymbol: currentChain?.symbol,
       isAgeColumn,
       setIsAgeColumn,
-      currentChain.network,
-    );
+      chainId: currentChain.network,
+    });
   }, [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn]);
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>
-      `${(item as BundleEvent).action}-${(item as BundleEvent).timestamp}`,
+      `${(item as TokensEvent).action}-${(item as TokensEvent).timestamp}`,
     [],
   );
 
@@ -92,7 +92,7 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
     <PagePaperStyled>
       <Heading size={'2'}>Bundle events</Heading>
       <div>
-        {isBundleEventsFetching ? (
+        {isTokenEventsFetching ? (
           <SkeletonWrapper>
             <Skeleton />
           </SkeletonWrapper>
@@ -100,8 +100,8 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
           <>
             <ScrollableTable
               columns={columns}
-              data={bundleEvents || []}
-              loading={isBundleEventsFetching}
+              data={tokensEvents || []}
+              loading={isTokenEventsFetching}
               rowKey={getRowKey}
               onRow={(event) => ({ className: !event.result ? 'failed-event' : '' })}
             />

@@ -5,10 +5,8 @@ import { Button } from '@unique-nft/ui-kit';
 
 import { useApi, useQueryParams } from '@app/hooks';
 import { Collection, useGraphQlCollections } from '@app/api/graphQL';
-import { Search } from '@app/components';
 import { defaultSorting } from '@app/pages/Collections/constants';
-
-import { CollectionCard } from '../../../components/CollectionCard';
+import { CollectionCard } from '@app/components/CollectionCard';
 
 interface CollectionsComponentProps {
   accountId: string;
@@ -19,7 +17,7 @@ const pageSize = 6;
 const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const { searchString, setParamToQuery } = useQueryParams();
+  const { searchString } = useQueryParams();
 
   const { collections, collectionsCount } = useGraphQlCollections({
     filter: {
@@ -50,15 +48,8 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
 
   const showButton = collectionsCount > pageSize;
 
-  const setSearch = (value: string) => {
-    setParamToQuery([{ name: 'search', value }]);
-  };
-
   return (
     <>
-      <ControlsWrapper>
-        <Search placeholder="NFT / collection" onSearchChange={setSearch} />
-      </ControlsWrapper>
       <ItemsCountWrapper>{collectionsCount || 0} items</ItemsCountWrapper>
       <CollectionsWrapper>
         {collections?.map &&
@@ -84,15 +75,6 @@ const CollectionsComponent: FC<CollectionsComponentProps> = ({ accountId }) => {
     </>
   );
 };
-
-const ControlsWrapper = styled.div`
-  display: flex;
-  column-gap: var(--gap);
-  align-items: center;
-  justify-content: space-between;
-  margin-top: var(--gap);
-  width: 561px;
-`;
 
 const ItemsCountWrapper = styled.div`
   margin: var(--gap) 0;

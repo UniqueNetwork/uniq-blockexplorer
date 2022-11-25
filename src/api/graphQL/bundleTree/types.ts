@@ -20,7 +20,7 @@ export type NestingToken = {
     fullUrl: string | null;
   };
   is_sold: boolean;
-  nestingChildren: NestingToken[] | never[];
+  nestingChildren?: NestingToken[] | never[];
   owner: string;
   owner_normalized: string;
   parent_id: string | null;

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { Heading } from '@unique-nft/ui-kit';
 import ReactTooltip from 'react-tooltip';
 
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
@@ -12,8 +11,8 @@ import { LastTransfers } from '@app/pages/Main/components';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
+import EventsTable from '@app/components/EventsTable/EventsTable';
 
-import EventsTable from './components/BundlesComponent/Events/EventsTable';
 import BundlesComponent from './components/BundlesComponent';
 import AccountDetailComponent from './components/AccountDetailComponent';
 import CollectionsComponent from './components/CollectionsComponent';
@@ -49,26 +48,27 @@ const AccountPage = () => {
   if (!accountId) return null;
 
   return (
-    <Wrapper className="account-page">
-      <PagePaper>
-        <AccountDetailComponent accountId={substrateAddress as string} />
-        <AssetsWrapper>
-          <Heading size="2">Assets</Heading>
-          <Tabs
-            content={[
-              'tokens',
-              'collections',
-              <div className="flex-row">
-                Bundles
-                <img data-tip={true} alt="tooltip" data-for="sadFace" src={Question} />
-                <ReactTooltip id="sadFace" effect="solid">
-                  <span>A tree with nested tokens</span>
-                </ReactTooltip>
-              </div>,
-            ]}
-            currentTabIndex={activeAssetsTabIndex}
-            setCurrentTabIndex={setActiveAssetsTabIndex}
-          />
+    <>
+      <Wrapper className="account-page">
+        <PagePaper>
+          <AccountDetailComponent accountId={substrateAddress as string} />
+          <ScrollXWrapper>
+            <Tabs
+              content={[
+                'tokens',
+                'collections',
+                <div className="flex-row">
+                  Bundles
+                  <img data-tip={true} alt="tooltip" data-for="sadFace" src={Question} />
+                  <ReactTooltip id="sadFace" effect="solid">
+                    <span>A tree with nested tokens</span>
+                  </ReactTooltip>
+                </div>,
+              ]}
+              currentTabIndex={activeAssetsTabIndex}
+              setCurrentTabIndex={setActiveAssetsTabIndex}
+            />
+          </ScrollXWrapper>
           {activeAssetsTabIndex === 0 && (
             <TokensComponent accountId={accountForTokensSearch as string} key="tokens" />
           )}
@@ -84,25 +84,36 @@ const AccountPage = () => {
               key="collections"
             />
           )}
-        </AssetsWrapper>
-      </PagePaper>
-      {activeAssetsTabIndex === 2 ? (
-        <EventsTable accountId={normalizeSubstrate(substrateAddress as string)} />
-      ) : (
-        <LastTransfers accountId={substrateAddress} pageSize={10} />
-      )}
-    </Wrapper>
+        </PagePaper>
+        {activeAssetsTabIndex === 2 ? (
+          <EventsTable
+            header={'Bundle events'}
+            accountId={normalizeSubstrate(substrateAddress as string)}
+            tokens={[]}
+          />
+        ) : (
+          <LastTransfers accountId={substrateAddress} pageSize={10} />
+        )}
+      </Wrapper>
+    </>
   );
 };
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   grid-row-gap: var(--gap);
 `;
 
-const AssetsWrapper = styled.div`
+const ScrollXWrapper = styled.div`
   padding-top: calc(var(--gap) * 1.5);
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 `;
 
 export default AccountPage;
