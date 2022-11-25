@@ -88,7 +88,7 @@ export const useGraphQLTokensEvents = ({
     fetchTokensEventsError,
     isTokenEventsFetching,
     timestamp: data?.token_events?.timestamp || 0,
-    bundleEvents: data?.token_events?.data,
+    tokensEvents: data?.token_events?.data,
     count: data?.token_events?.count || 0,
   };
 };

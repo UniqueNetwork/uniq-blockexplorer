@@ -5,8 +5,8 @@ import PagePaper from '@app/components/PagePaper';
 import { Tabs } from '@app/components';
 import HoldersComponent from '@app/pages/Collection/components/CollectionStatisticBlock/HoldersComponent';
 import EventsTable from '@app/components/EventsTable/EventsTable';
-import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/columnsSchema';
 import { useGraphQlTokens } from '@app/api';
+import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/Events/columnsSchema';
 
 interface CollectionStatisticBlockProps {
   collectionId?: string;
