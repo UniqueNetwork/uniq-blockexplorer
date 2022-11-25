@@ -26,6 +26,7 @@ const tokensEventsQuery = gql`
         token_id
         values
         token_name
+        tokens
       }
     }
   }
