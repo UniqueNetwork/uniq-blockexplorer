@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
@@ -9,14 +9,16 @@ import { defaultSorting } from '@app/pages/Collections/constants';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { normalizeSubstrate } from '@app/utils/normalizeAccount';
 import BundleCard from '@app/components/BundleCard';
+import { TokenKeys } from '@app/api/graphQL/tokensEvents/types';
 
 interface BundlesComponentProps {
   accountId: string;
+  setBundles: (tokens: TokenKeys[]) => void;
 }
 
 const pageSize = 6;
 
-const BundlesComponent: FC<BundlesComponentProps> = ({ accountId }) => {
+const BundlesComponent: FC<BundlesComponentProps> = ({ accountId, setBundles }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
   const { searchString } = useQueryParams();
@@ -42,6 +44,16 @@ const BundlesComponent: FC<BundlesComponentProps> = ({ accountId }) => {
     searchString,
     offset: 0,
   });
+
+  useEffect(() => {
+    if (bundles?.length)
+      setBundles(
+        bundles.map((bundle) => ({
+          collectionId: bundle.collection_id,
+          tokenId: bundle.token_id,
+        })),
+      );
+  }, [bundles]);
 
   const onClickSeeMore = useCallback(() => {
     let params: { accountId?: string; search?: string; sort?: string } = {};

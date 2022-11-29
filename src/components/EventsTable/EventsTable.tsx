@@ -89,7 +89,6 @@ const EventsTable: FC<{
       offset,
       orderBy,
       limit: pageSizeNumber,
-      author: accountId,
     });
 
   const columns = useMemo(() => {

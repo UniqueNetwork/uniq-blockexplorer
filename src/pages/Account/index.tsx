@@ -12,6 +12,7 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
 import EventsTable from '@app/components/EventsTable/EventsTable';
+import { TokenKeys } from '@app/api/graphQL/tokensEvents/types';
 
 import BundlesComponent from './components/BundlesComponent';
 import AccountDetailComponent from './components/AccountDetailComponent';
@@ -23,6 +24,7 @@ const AccountPage = () => {
   useScrollToTop();
   const { accountId } = useParams();
   const { currentChain } = useApi();
+  const [bundles, setBundles] = useState<TokenKeys[]>([]);
   // assume that we got the substrate address
   let substrateAddress = accountId;
   let accountForTokensSearch = accountId;
@@ -82,15 +84,18 @@ const AccountPage = () => {
             <BundlesComponent
               accountId={normalizeSubstrate(substrateAddress as string)}
               key="collections"
+              setBundles={setBundles}
             />
           )}
         </PagePaper>
         {activeAssetsTabIndex === 2 ? (
-          <EventsTable
-            header={'Bundle events'}
-            accountId={normalizeSubstrate(substrateAddress as string)}
-            tokens={[]}
-          />
+          !!bundles?.length && (
+            <EventsTable
+              header={'Bundle events'}
+              accountId={accountId}
+              tokens={bundles}
+            />
+          )
         ) : (
           <LastTransfers accountId={substrateAddress} pageSize={10} />
         )}
