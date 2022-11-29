@@ -63,16 +63,12 @@ const CollectionPage: FC = () => {
           <CollectionExtendedDataComponent collection={collection} key="tokens" />
         )}
       </PagePaper>
-      {activeDetailTabIndex === 0 && (
-        <>
-          <PagePaper>
-            <div>
-              <TokensComponent collectionId={collectionId} />
-            </div>
-          </PagePaper>
-          <CollectionStatisticBlock collectionId={collectionId} />
-        </>
-      )}
+      <PagePaper>
+        <div>
+          <TokensComponent collectionId={collectionId} />
+        </div>
+      </PagePaper>
+      <CollectionStatisticBlock collectionId={collectionId} />
     </>
   );
 };

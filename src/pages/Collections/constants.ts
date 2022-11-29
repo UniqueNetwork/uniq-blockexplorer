@@ -1,4 +1,5 @@
 import { CollectionSorting } from '@app/api';
+import { EventsSorting } from '@app/api/graphQL/collectionsEvents/types';
 
 import { CollectionsSelectOption } from './types';
 // transfers_count
@@ -76,6 +77,7 @@ export const OPTIONS: CollectionsSelectOption[] = [
 ];
 
 export const defaultOrderBy: CollectionSorting = { date_of_creation: 'desc_nulls_last' };
+export const defaultEventsOrderBy: EventsSorting = { timestamp: 'desc_nulls_last' };
 export const defaultSorting: string = 'date_of_creation-desc_nulls_last';
 export const defaultOrderId = 3;
 

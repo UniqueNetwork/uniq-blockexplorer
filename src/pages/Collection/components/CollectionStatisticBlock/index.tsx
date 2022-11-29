@@ -8,6 +8,8 @@ import EventsTable from '@app/components/EventsTable/EventsTable';
 import { useGraphQlTokens } from '@app/api';
 import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/Events/columnsSchema';
 
+import { default as CollectionEventsTable } from './collectionEvents';
+
 interface CollectionStatisticBlockProps {
   collectionId?: string;
 }
@@ -48,6 +50,9 @@ const CollectionStatisticBlock = ({ collectionId }: CollectionStatisticBlockProp
           getEventsColumns={getBundleEventsAccountsPageColumns}
           tokens={tokenKeys}
         />
+      )}
+      {activeDetailTabIndex === 2 && (
+        <CollectionEventsTable collectionId={Number(collectionId)} />
       )}
     </PagePaper>
   );
