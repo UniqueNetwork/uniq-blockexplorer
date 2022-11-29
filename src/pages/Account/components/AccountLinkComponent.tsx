@@ -13,9 +13,15 @@ interface AccountLinkProps {
   value: string;
   size?: 'xs' | 's' | 'm' | 'l';
   noShort?: boolean;
+  noIcon?: boolean;
 }
 
-const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value }) => {
+const AccountLinkComponent: FC<AccountLinkProps> = ({
+  noShort,
+  size = 'm',
+  value,
+  noIcon,
+}) => {
   const { currentChain } = useApi();
 
   const shortcut = noShort ? value : shortcutText(value);
@@ -41,7 +47,7 @@ const AccountLinkComponent: FC<AccountLinkProps> = ({ noShort, size = 'm', value
 
   return (
     <Wrapper>
-      <IdentityIcon copyable address={value} />
+      {!noIcon && <IdentityIcon copyable address={value} />}
       <Link
         to={`/${currentChain?.network.toLowerCase()}/account/${value}`}
         onClick={onAccountClick}
