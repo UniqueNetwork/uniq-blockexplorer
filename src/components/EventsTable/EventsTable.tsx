@@ -11,13 +11,7 @@ import {
   EventsSorting,
   TokenKeys,
 } from '@app/api/graphQL/tokensEvents/types';
-import {
-  PagePaper,
-  Pagination,
-  ScrollableTable,
-  SelectOptionProps,
-  Stub,
-} from '@app/components';
+import { Pagination, ScrollableTable, SelectOptionProps, Stub } from '@app/components';
 import { useGraphQLTokensEvents } from '@app/api/graphQL/tokensEvents/tokensEvents';
 import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/Events/columnsSchema';
 
@@ -101,6 +95,7 @@ const EventsTable: FC<{
         tokenSymbol: currentChain?.symbol,
         isAgeColumn,
         setIsAgeColumn,
+        chainId: currentChain.network,
       });
 
     return !accountId
@@ -111,6 +106,7 @@ const EventsTable: FC<{
           tokenSymbol: currentChain?.symbol,
           isAgeColumn,
           setIsAgeColumn,
+          chainId: currentChain.network,
         })
       : getBundleEventsAccountsPageColumns({
           orderBy,
@@ -130,7 +126,7 @@ const EventsTable: FC<{
   );
 
   return (
-    <PagePaperStyled>
+    <Wrapper>
       {header && <Heading size={'2'}>{header}</Heading>}
       <div>
         {isTokenEventsFetching ? (
@@ -162,11 +158,11 @@ const EventsTable: FC<{
           </BottomPaginationContainer>
         )}
       </div>
-    </PagePaperStyled>
+    </Wrapper>
   );
 };
 
-const PagePaperStyled = styled(PagePaper)`
+const Wrapper = styled.div`
   .failed-event {
     background: var(--coral-100);
     td:first-of-type span,
