@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { formatFeeValue, timeDifference, timestampTableFormat } from '@app/utils';
-import { EventsSorting } from '@app/api/graphQL/collectionsEvents/types';
+import { EventsActions, EventsSorting } from '@app/api/graphQL/collectionsEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import { SVGIcon } from '@app/components';
 
@@ -67,10 +67,16 @@ export const getCollectionEventsColumns = ({
   {
     dataIndex: 'fee',
     key: 'fee',
-    render: (value: number) => {
+    render: (value: number, event: DefaultRecordType) => {
+      let calculatedValue = value || 0;
+
+      if (event.action === EventsActions.create) {
+        calculatedValue += 2;
+      }
+
       return (
         <Text size="m" weight="regular" color={'blue-grey-600'}>
-          {`${formatFeeValue(value || 0)} ${tokenSymbol}`}
+          {`${formatFeeValue(calculatedValue)} ${tokenSymbol}`}
         </Text>
       );
     },
