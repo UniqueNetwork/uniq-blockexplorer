@@ -39,7 +39,7 @@ export const useGraphQLTokensEvents = ({
   tokens,
   author,
 }: useGraphQLTokensEventsProps) => {
-  let where: { [key: string]: unknown } = {};
+  let where: { [key: string]: unknown };
 
   if (tokens?.length) {
     const collectionMap = new Map();
@@ -62,6 +62,13 @@ export const useGraphQLTokensEvents = ({
     });
     where = {
       _or: tokensFilter,
+    };
+  } else {
+    where = {
+      _or: {
+        collection_id: { _eq: -1 },
+        token_id: { _in: -1 },
+      },
     };
   }
 

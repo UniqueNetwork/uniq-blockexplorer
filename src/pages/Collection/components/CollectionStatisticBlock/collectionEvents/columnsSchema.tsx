@@ -93,7 +93,7 @@ export const getCollectionEventsColumns = ({
   {
     dataIndex: 'author',
     key: 'author',
-    render: (value: string) => <AccountLinkComponent value={value} noIcon={true} />,
+    render: (value: string) => <AccountLinkComponent value={value} />,
     title: 'Author',
     width: 150,
   },
