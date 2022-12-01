@@ -4,8 +4,9 @@ import { useSearchParams } from 'react-router-dom';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
-import { deviceWidth } from '@app/hooks';
+import { deviceWidth, useQueryParams } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
+import AttributesFilter from '@app/pages/Tokens/components/AttributesFilter';
 
 interface RightMenuProps {
   selectSort: (selected: SelectOptionProps) => void;
@@ -21,6 +22,7 @@ export const RightMenu: FC<RightMenuProps> = ({
   view,
 }) => {
   const [queryParams] = useSearchParams();
+  const { collectionId } = useQueryParams();
 
   const [sort, setSort] = useState<SelectOptionProps>();
 
@@ -37,6 +39,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
+      {!!collectionId && <AttributesFilter />}
       {view === ViewType.Grid && (
         <SelectStyled
           options={OPTIONS}
