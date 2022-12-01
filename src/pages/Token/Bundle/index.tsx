@@ -53,7 +53,9 @@ const BundlePage: FC<BundlePageComponentProps> = ({ loading, token }) => {
         <TokenDetailComponent loading={loading} token={token} />
       </PagePaper>
       <BundleTreeSection token={token} />
-      <EventsTable header={'Bundle events'} tokens={tokensInBundle} />
+      <PagePaper>
+        <EventsTable header={'Bundle events'} tokens={tokensInBundle} />
+      </PagePaper>
     </>
   );
 };

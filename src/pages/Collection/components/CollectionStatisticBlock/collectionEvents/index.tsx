@@ -1,38 +1,27 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
-import { ColumnType, DefaultRecordType } from 'rc-table/lib/interface';
+import { DefaultRecordType } from 'rc-table/lib/interface';
 import { Heading, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
-import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
 import {
-  TokensEvent,
+  DEFAULT_PAGE_SIZE,
+  defaultEventsOrderBy,
+} from '@app/pages/Collections/constants';
+import {
+  CollectionsEvent,
   EventsSorting,
-  TokenKeys,
-} from '@app/api/graphQL/tokensEvents/types';
+} from '@app/api/graphQL/collectionsEvents/types';
 import { Pagination, ScrollableTable, SelectOptionProps, Stub } from '@app/components';
-import { useGraphQLTokensEvents } from '@app/api/graphQL/tokensEvents/tokensEvents';
-import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/Events/columnsSchema';
+import { useGraphQLCollectionsEvents } from '@app/api/graphQL/collectionsEvents/collectionsEvents';
 
-import { getBundleEventsColumns } from './columnsSchema';
-
-type TGetEventsColumns = (arg: {
-  orderBy: EventsSorting;
-  onOrderChange: (orderBy: EventsSorting) => void;
-  timestamp: number;
-  tokenSymbol: string;
-  isAgeColumn: boolean;
-  setIsAgeColumn: (newIsAgeColumn: boolean) => void;
-  chainId?: string;
-}) => ColumnType<DefaultRecordType>[];
+import { getCollectionEventsColumns } from './columnsSchema';
 
 const EventsTable: FC<{
   header?: string;
-  accountId?: string;
-  getEventsColumns?: TGetEventsColumns;
-  tokens: TokenKeys[];
-}> = ({ accountId, getEventsColumns, tokens, header }) => {
+  collectionId: number;
+}> = ({ collectionId, header }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { sort, setParamToQuery } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
@@ -77,50 +66,29 @@ const EventsTable: FC<{
     setQueryParams(queryParams);
   };
 
-  const { tokensEvents, isTokenEventsFetching, timestamp, count } =
-    useGraphQLTokensEvents({
-      tokens,
+  const { collectionsEvents, isCollectionsEventsFetching, timestamp, count } =
+    useGraphQLCollectionsEvents({
+      collection_id: collectionId,
       offset,
       orderBy,
       limit: pageSizeNumber,
     });
 
   const columns = useMemo(() => {
-    if (getEventsColumns)
-      return getEventsColumns({
-        orderBy,
-        onOrderChange: setOrderAndQuery,
-        timestamp,
-        tokenSymbol: currentChain?.symbol,
-        isAgeColumn,
-        setIsAgeColumn,
-        chainId: currentChain.network,
-      });
-
-    return !accountId
-      ? getBundleEventsColumns({
-          orderBy,
-          onOrderChange: setOrderAndQuery,
-          timestamp,
-          tokenSymbol: currentChain?.symbol,
-          isAgeColumn,
-          setIsAgeColumn,
-          chainId: currentChain.network,
-        })
-      : getBundleEventsAccountsPageColumns({
-          orderBy,
-          onOrderChange: setOrderAndQuery,
-          timestamp,
-          tokenSymbol: currentChain?.symbol,
-          isAgeColumn,
-          setIsAgeColumn,
-          chainId: currentChain.network,
-        });
+    return getCollectionEventsColumns({
+      orderBy,
+      onOrderChange: setOrderAndQuery,
+      timestamp,
+      tokenSymbol: currentChain?.symbol,
+      isAgeColumn,
+      setIsAgeColumn,
+      chainId: currentChain.network,
+    });
   }, [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn]);
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>
-      `${(item as TokensEvent).action}-${(item as TokensEvent).timestamp}`,
+      `${(item as CollectionsEvent).action}-${(item as CollectionsEvent).timestamp}`,
     [],
   );
 
@@ -128,15 +96,15 @@ const EventsTable: FC<{
     <Wrapper>
       {header && <Heading size={'2'}>{header}</Heading>}
       <div>
-        {isTokenEventsFetching ? (
+        {isCollectionsEventsFetching ? (
           <SkeletonWrapper>
             <Skeleton />
           </SkeletonWrapper>
         ) : count > 0 ? (
           <ScrollableTable
             columns={columns}
-            data={tokensEvents || []}
-            loading={isTokenEventsFetching}
+            data={collectionsEvents || []}
+            loading={isCollectionsEventsFetching}
             rowKey={getRowKey}
             onRow={(event) => ({ className: !event.result ? 'failed-event' : '' })}
           />
@@ -162,6 +130,7 @@ const EventsTable: FC<{
 };
 
 const Wrapper = styled.div`
+  margin-top: var(--gap);
   .failed-event {
     background: var(--coral-100);
     td:first-of-type span,

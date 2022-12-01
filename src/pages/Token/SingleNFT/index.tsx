@@ -29,7 +29,9 @@ const SingleNFTPage: FC<SingleNFTPageComponentProps> = ({ loading, token }) => {
       <PagePaper>
         <TokenDetailComponent loading={loading} token={token} />
       </PagePaper>
-      <EventsTable header="Events" tokens={tokenKeys} />
+      <PagePaper>
+        <EventsTable header="Events" tokens={tokenKeys} />
+      </PagePaper>
     </>
   );
 };
