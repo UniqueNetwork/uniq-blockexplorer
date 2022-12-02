@@ -8,7 +8,7 @@ import { IconType } from '@app/images/icons';
 const ActionTableCell: FC<{ action: string }> = ({ action }) => {
   const icons: { [key: string]: IconType } = {
     CollectionCreated: 'checkCircle',
-    Transfer: 'transfer',
+    CollectionOwnedChanged: 'transfer',
     CollectionDestroyed: 'fire',
   };
 
