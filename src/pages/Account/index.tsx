@@ -90,11 +90,13 @@ const AccountPage = () => {
         </PagePaper>
         {activeAssetsTabIndex === 2 ? (
           !!bundles?.length && (
-            <EventsTable
-              header={'Bundle events'}
-              accountId={accountId}
-              tokens={bundles}
-            />
+            <PagePaper>
+              <EventsTable
+                header={'Bundle events'}
+                accountId={accountId}
+                tokens={bundles}
+              />
+            </PagePaper>
           )
         ) : (
           <LastTransfers accountId={substrateAddress} pageSize={10} />
