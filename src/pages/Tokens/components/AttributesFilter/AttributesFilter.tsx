@@ -3,8 +3,9 @@ import styled from 'styled-components/macro';
 import { Text, Button } from '@unique-nft/ui-kit';
 
 import { Checkbox } from '@app/components';
+import { CollectionAttribute } from '@app/api/graphQL/attributes/types';
 
-const AttributesFilter = ({}) => {
+const AttributesFilter = ({ attributes }: { attributes: CollectionAttribute[] }) => {
   const [selectedAttrs, setSelectedAttrs] = useState<{ [key: string]: boolean }>({});
   const handleCheck = useCallback((attr: string) => {
     setSelectedAttrs((selectedAttrs) => {

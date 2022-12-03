@@ -39,7 +39,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
-      {!!collectionId && <AttributesFilter />}
+      {!!collectionId && <AttributesFilter collectionId={Number(collectionId)} />}
       {view === ViewType.Grid && (
         <SelectStyled
           options={OPTIONS}

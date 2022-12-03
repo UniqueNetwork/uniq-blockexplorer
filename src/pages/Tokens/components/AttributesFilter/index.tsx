@@ -1,12 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/macro';
+import { Skeleton } from '@unique-nft/ui-kit';
 
 import { InputTag } from '@app/components';
+import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
 
-const AttributesFilter = ({}) => {
+const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
+  const { isCollectionAttributesFetching, collectionAttributes } =
+    useGraphQLCollectionAttributes({ collectionId });
   return (
     <DropdownStyled
       iconRight={{
@@ -15,7 +19,11 @@ const AttributesFilter = ({}) => {
         height: 8,
         className: 'icon-triangle',
       }}
-      dropdownRender={() => <AttributesFilterComponent />}
+      dropdownRender={() => {
+        if (isCollectionAttributesFetching) return <Skeleton width={343} height={40} />;
+
+        return <AttributesFilterComponent attributes={collectionAttributes || []} />;
+      }}
     >
       <InputTagStyled placeholder="All attributes" />
     </DropdownStyled>
