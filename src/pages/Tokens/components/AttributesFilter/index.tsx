@@ -1,16 +1,58 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
 
 import { InputTag } from '@app/components';
 import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
+import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
 
+export type ChosenAttribute = AttributeValue & Pick<CollectionAttribute, 'key'>;
+export type ChosenAttributesMap = {
+  [key: string]: ChosenAttribute | null;
+};
+
+const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
+  const result = [];
+  for (let key in selectedAttrs) {
+    const value = selectedAttrs[key]?.value;
+
+    if (value) {
+      result.push(typeof value === 'string' ? value : value._);
+    }
+  }
+
+  return result;
+};
+
 const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
+  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>({});
+
+  const handleCheck = useCallback(
+    (key: string, attribute: AttributeValue, attributeKey: string) => {
+      setSelectedAttrs((selectedAttrs) => {
+        return {
+          ...selectedAttrs,
+          [key]: selectedAttrs[key] ? null : { ...attribute, key: attributeKey },
+        };
+      });
+    },
+    [],
+  );
+
+  const handleReset = useCallback(() => {
+    setSelectedAttrs({});
+  }, []);
+
   const { isCollectionAttributesFetching, collectionAttributes } =
     useGraphQLCollectionAttributes({ collectionId });
+
+  // console.log('getTags(selectedAttrs)', getTags(selectedAttrs));
+
+  if (isCollectionAttributesFetching) return <Skeleton width={343} height={40} />;
+
   return (
     <DropdownStyled
       iconRight={{
@@ -20,12 +62,21 @@ const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
         className: 'icon-triangle',
       }}
       dropdownRender={() => {
-        if (isCollectionAttributesFetching) return <Skeleton width={343} height={40} />;
-
-        return <AttributesFilterComponent attributes={collectionAttributes || []} />;
+        return (
+          <AttributesFilterComponent
+            attributes={collectionAttributes || []}
+            selectedAttrs={selectedAttrs}
+            handleCheck={handleCheck}
+            handleReset={handleReset}
+          />
+        );
       }}
     >
-      <InputTagStyled placeholder="All attributes" />
+      <InputTagStyled
+        key={getTags(selectedAttrs).join()}
+        placeholder="All attributes"
+        value={getTags(selectedAttrs)}
+      />
     </DropdownStyled>
   );
 };

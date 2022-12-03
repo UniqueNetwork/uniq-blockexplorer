@@ -1,74 +1,64 @@
-import React, { useCallback, useState } from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components/macro';
 import { Text, Button } from '@unique-nft/ui-kit';
 
 import { Checkbox } from '@app/components';
-import { CollectionAttribute } from '@app/api/graphQL/attributes/types';
+import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
+import { ChosenAttributesMap } from '@app/pages/Tokens/components/AttributesFilter/index';
 
-const AttributesFilter = ({ attributes }: { attributes: CollectionAttribute[] }) => {
-  const [selectedAttrs, setSelectedAttrs] = useState<{ [key: string]: boolean }>({});
-  const handleCheck = useCallback((attr: string) => {
-    setSelectedAttrs((selectedAttrs) => {
-      return { ...selectedAttrs, [attr]: !selectedAttrs[attr] };
-    });
-  }, []);
-
+interface AttributesFilterProps {
+  attributes: CollectionAttribute[];
+  selectedAttrs: ChosenAttributesMap;
+  handleCheck: (key: string, attribute: AttributeValue, attributeKey: string) => void;
+  handleReset: () => void;
+}
+const AttributesFilter = ({
+  attributes,
+  selectedAttrs,
+  handleCheck,
+  handleReset,
+}: AttributesFilterProps) => {
+  // console.log('selectedAttrs', selectedAttrs);
   return (
     <Wrapper>
-      <Text size={'s'} color={'grey-500'}>
-        Specification
-      </Text>
-      <Attributes>
-        <Attribute>
-          <Checkbox
-            checked={selectedAttrs['old']}
-            label="Old"
-            size={'m'}
-            onChange={() => {
-              handleCheck('old');
-            }}
-          />
-          <AttributesCount color={'grey-500'}>12</AttributesCount>
-        </Attribute>
-        <Attribute>
-          <Checkbox
-            checked={selectedAttrs['king']}
-            label="King"
-            size={'m'}
-            onChange={() => {
-              handleCheck('king');
-            }}
-          />
-          <AttributesCount color={'grey-500'}>7654</AttributesCount>
-        </Attribute>
-        <Attribute>
-          <Checkbox
-            checked={selectedAttrs['fat']}
-            label="Fat"
-            size={'m'}
-            onChange={() => {
-              handleCheck('fat');
-            }}
-          />
-          <AttributesCount color={'grey-500'}>45</AttributesCount>
-        </Attribute>
-      </Attributes>
-      <Text size={'s'} color={'grey-500'}>
-        Who made
-      </Text>
-      <Attributes>
-        <Attribute>
-          <Checkbox
-            checked={selectedAttrs['parents']}
-            label="Parents"
-            size={'m'}
-            onChange={() => {
-              handleCheck('parents');
-            }}
-          />
-          <AttributesCount color={'grey-500'}>9</AttributesCount>
-        </Attribute>
-      </Attributes>
+      {attributes.map((attribute) => (
+        <Fragment key={attribute.key}>
+          <Text size={'s'} color={'grey-500'} key={attribute.key}>
+            {attribute.name._}
+          </Text>
+          <Attributes>
+            {attribute.values.map((value) => (
+              <Attribute
+                key={`K${attribute.key}V${
+                  typeof value.value === 'string' ? value.value : value.value._
+                }`}
+              >
+                <Checkbox
+                  checked={
+                    !!selectedAttrs[
+                      `K${attribute.key}V${
+                        typeof value.value === 'string' ? value.value : value.value._
+                      }`
+                    ]
+                  }
+                  label={typeof value.value === 'string' ? value.value : value.value._}
+                  size={'m'}
+                  onChange={() => {
+                    handleCheck(
+                      `K${attribute.key}V${
+                        typeof value.value === 'string' ? value.value : value.value._
+                      }`,
+                      value,
+                      attribute.key,
+                    );
+                  }}
+                />
+                <AttributesCount color={'grey-500'}>{value.tokens_count}</AttributesCount>
+              </Attribute>
+            ))}
+          </Attributes>
+        </Fragment>
+      ))}
       <ButtonsWrapper>
         <ApplyButton
           title={'Apply'}
@@ -79,9 +69,7 @@ const AttributesFilter = ({ attributes }: { attributes: CollectionAttribute[] })
           title={'Reset all'}
           role={'danger'}
           disabled={Object.keys(selectedAttrs).length === 0}
-          onClick={() => {
-            setSelectedAttrs({});
-          }}
+          onClick={handleReset}
         />
       </ButtonsWrapper>
     </Wrapper>
