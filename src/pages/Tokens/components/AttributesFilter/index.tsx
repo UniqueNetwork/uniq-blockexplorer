@@ -1,17 +1,19 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
+import { LocalizedStringWithDefault } from '@unique-nft/api';
 
 import { InputTag } from '@app/components';
 import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
 import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
+import { TokenAttributeFilterItem } from '@app/api';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
 
 export type ChosenAttribute = AttributeValue & Pick<CollectionAttribute, 'key'>;
 export type ChosenAttributesMap = {
-  [key: string]: ChosenAttribute | null;
+  [key: string]: ChosenAttribute;
 };
 
 const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
@@ -27,29 +29,78 @@ const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
   return result;
 };
 
-const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
+const AttributesFilter = ({
+  collectionId,
+  setAttributesFilter,
+}: {
+  collectionId: number;
+  setAttributesFilter: (filterState: TokenAttributeFilterItem[]) => void;
+}) => {
   const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>({});
+  const [isOpen, setIsOpen] = useState(false);
+
+  const filterTokens = useCallback(
+    (attributes = selectedAttrs) => {
+      const selectedAttributesForApiCall: TokenAttributeFilterItem[] = [];
+      for (let key in attributes) {
+        selectedAttributesForApiCall.push({
+          key: attributes[key].key,
+          raw_value: attributes[key].raw_value,
+        });
+      }
+      setAttributesFilter(selectedAttributesForApiCall);
+    },
+    [selectedAttrs],
+  );
 
   const handleCheck = useCallback(
-    (key: string, attribute: AttributeValue, attributeKey: string) => {
+    (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
       setSelectedAttrs((selectedAttrs) => {
-        return {
-          ...selectedAttrs,
-          [key]: selectedAttrs[key] ? null : { ...attribute, key: attributeKey },
-        };
+        let newSelectedAttrs: ChosenAttributesMap = {};
+
+        if (!selectedAttrs[checkedKey])
+          newSelectedAttrs[checkedKey] = { ...attribute, key: attributeKey };
+
+        for (let key in selectedAttrs) {
+          if (key !== checkedKey) newSelectedAttrs[key] = selectedAttrs[key];
+        }
+        return newSelectedAttrs;
       });
     },
     [],
   );
 
+  const handleApply = useCallback(() => {
+    filterTokens();
+    setIsOpen(false);
+  }, [filterTokens]);
+
+  const handleTagRemove = useCallback(
+    (tag: string) => {
+      setSelectedAttrs((selectedAttrs) => {
+        let newSelectedAttrs: ChosenAttributesMap = {};
+        for (let key in selectedAttrs) {
+          const attrValue = selectedAttrs[key]?.value;
+
+          if ((attrValue as LocalizedStringWithDefault)?._ !== tag && attrValue !== tag) {
+            newSelectedAttrs[key] = selectedAttrs[key];
+          }
+        }
+        filterTokens(newSelectedAttrs);
+
+        return newSelectedAttrs;
+      });
+    },
+    [filterTokens],
+  );
+
   const handleReset = useCallback(() => {
     setSelectedAttrs({});
-  }, []);
+    filterTokens({});
+  }, [filterTokens]);
 
   const { isCollectionAttributesFetching, collectionAttributes } =
     useGraphQLCollectionAttributes({ collectionId });
-
-  // console.log('getTags(selectedAttrs)', getTags(selectedAttrs));
 
   if (isCollectionAttributesFetching) return <Skeleton width={343} height={40} />;
 
@@ -68,14 +119,18 @@ const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
             selectedAttrs={selectedAttrs}
             handleCheck={handleCheck}
             handleReset={handleReset}
+            handleApply={handleApply}
           />
         );
       }}
+      open={isOpen}
+      onOpenChange={setIsOpen}
     >
       <InputTagStyled
         key={getTags(selectedAttrs).join()}
         placeholder="All attributes"
         value={getTags(selectedAttrs)}
+        onRemoved={handleTagRemove}
       />
     </DropdownStyled>
   );
@@ -96,15 +151,18 @@ const DropdownStyled = styled(Dropdown)`
 const InputTagStyled = styled(InputTag)`
   width: 100%;
   input {
-    cursor: pointer;
+    display: none;
   }
   .rti--container {
     overflow-x: auto;
     flex-wrap: nowrap;
     border: none;
     outline: none;
+    min-height: 24px;
+    max-height: 40px;
     .rti--tag {
       word-break: unset;
+      flex-shrink: 0;
     }
   }
   .rti--container:hover,

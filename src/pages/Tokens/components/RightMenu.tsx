@@ -7,12 +7,14 @@ import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 import { deviceWidth, useQueryParams } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 import AttributesFilter from '@app/pages/Tokens/components/AttributesFilter';
+import { TokenAttributeFilterItem } from '@app/api';
 
 interface RightMenuProps {
   selectSort: (selected: SelectOptionProps) => void;
   selectGrid: () => void;
   selectList: () => void;
   view: ViewType;
+  setAttributesFilter: (filterState: TokenAttributeFilterItem[]) => void;
 }
 
 export const RightMenu: FC<RightMenuProps> = ({
@@ -20,6 +22,7 @@ export const RightMenu: FC<RightMenuProps> = ({
   selectGrid,
   selectList,
   view,
+  setAttributesFilter,
 }) => {
   const [queryParams] = useSearchParams();
   const { collectionId } = useQueryParams();
@@ -39,7 +42,12 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
-      {!!collectionId && <AttributesFilter collectionId={Number(collectionId)} />}
+      {!!collectionId && (
+        <AttributesFilter
+          collectionId={Number(collectionId)}
+          setAttributesFilter={setAttributesFilter}
+        />
+      )}
       {view === ViewType.Grid && (
         <SelectStyled
           options={OPTIONS}

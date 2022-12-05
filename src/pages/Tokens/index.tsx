@@ -12,7 +12,7 @@ import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
-import { TokenSorting } from '@app/api';
+import { TokenAttributeFilterItem, TokenSorting } from '@app/api';
 import { RouterTabs, SelectOptionProps } from '@app/components';
 import { PageHeading } from '@app/components/PageHeading';
 
@@ -33,6 +33,9 @@ const TokensPage: FC = () => {
   const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
+  const [attributesFilter, setAttributesFilter] = useState<TokenAttributeFilterItem[]>(
+    [],
+  );
 
   const setOrderAndQuery = (sorting: TokenSorting) => {
     setOrderBy(sorting);
@@ -107,6 +110,7 @@ const TokensPage: FC = () => {
                   selectGrid={selectGrid}
                   selectList={selectList}
                   view={view as ViewType}
+                  setAttributesFilter={setAttributesFilter}
                 />
               )}
             </>,
@@ -136,6 +140,7 @@ const TokensPage: FC = () => {
                 pageSize={pageSize}
                 setPageSize={setPageSize}
                 view={view as ViewType}
+                attributesFilter={attributesFilter}
               />
             }
             path="nfts"

@@ -9,8 +9,15 @@ const tokensQuery = gql`
     $offset: Int
     $where: TokenWhereParams = {}
     $orderBy: TokenOrderByParams = {}
+    $attributesFilter: [AttributeFilterValue!]
   ) {
-    tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+    tokens(
+      where: $where
+      limit: $limit
+      offset: $offset
+      order_by: $orderBy
+      attributes_filter: $attributesFilter
+    ) {
       data {
         attributes
         collection_cover
@@ -90,6 +97,7 @@ export const useGraphQlTokens = ({
   orderBy,
   pageSize,
   searchString,
+  attributesFilter,
 }: useGraphQlTokensProps) => {
   if (searchString) {
     parseSearchString(searchString);
@@ -143,6 +151,7 @@ export const useGraphQlTokens = ({
       offset,
       orderBy,
       where,
+      attributesFilter,
     },
   });
 

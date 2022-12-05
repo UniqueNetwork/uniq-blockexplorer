@@ -11,14 +11,15 @@ interface AttributesFilterProps {
   selectedAttrs: ChosenAttributesMap;
   handleCheck: (key: string, attribute: AttributeValue, attributeKey: string) => void;
   handleReset: () => void;
+  handleApply: () => void;
 }
 const AttributesFilter = ({
   attributes,
   selectedAttrs,
   handleCheck,
   handleReset,
+  handleApply,
 }: AttributesFilterProps) => {
-  // console.log('selectedAttrs', selectedAttrs);
   return (
     <Wrapper>
       {attributes.map((attribute) => (
@@ -64,9 +65,10 @@ const AttributesFilter = ({
           title={'Apply'}
           role={'primary'}
           disabled={Object.keys(selectedAttrs).length === 0}
+          onClick={handleApply}
         />
         <ResetButton
-          title={'Reset all'}
+          title={'Clear all'}
           role={'danger'}
           disabled={Object.keys(selectedAttrs).length === 0}
           onClick={handleReset}

@@ -5,6 +5,7 @@ export interface TokensVariables {
   offset: number;
   where?: Record<string, unknown>;
   orderBy?: TokenSorting;
+  attributesFilter?: TokenAttributeFilterItem[];
 }
 
 export type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT';
@@ -50,6 +51,11 @@ export type TokenSorting = {
     | 'desc_nulls_first';
 };
 
+export type TokenAttributeFilterItem = {
+  key: string;
+  raw_value: string;
+};
+
 export type useGraphQlTokensProps = {
   pageSize: number;
   filter?: Record<string, unknown>;
@@ -57,4 +63,5 @@ export type useGraphQlTokensProps = {
   orderBy?: TokenSorting;
   collectionId?: string;
   searchString?: string;
+  attributesFilter?: TokenAttributeFilterItem[];
 };

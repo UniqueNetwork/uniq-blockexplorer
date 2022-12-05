@@ -3,7 +3,12 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useMemo } from 'react';
 import styled from 'styled-components/macro';
 
-import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
+import {
+  Token,
+  TokenAttributeFilterItem,
+  TokenSorting,
+  useGraphQlTokens,
+} from '@app/api';
 import { Pagination, ScrollableTable, SelectOptionProps } from '@app/components';
 import {
   DeviceSize,
@@ -58,6 +63,7 @@ interface TokensComponentProps {
   setPageSize: (pageSize: SelectOptionProps) => void;
   setOrderBy: (orderBy: TokenSorting) => void;
   view: ViewType;
+  attributesFilter: TokenAttributeFilterItem[];
 }
 
 const TokensComponent: FC<TokensComponentProps> = ({
@@ -68,6 +74,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   setPageSize,
   setOrderBy,
   view,
+  attributesFilter,
 }) => {
   const deviceSize = useDeviceSize();
   const { accountId, collectionId, searchString } = useQueryParams();
@@ -81,6 +88,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
     orderBy,
     pageSize: pageSizeNumber,
     searchString,
+    attributesFilter,
   });
 
   const tokenColumns = getTokensColumns(

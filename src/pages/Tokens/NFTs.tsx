@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import { TokenSorting } from '@app/api';
+import { TokenAttributeFilterItem, TokenSorting } from '@app/api';
 import { SelectOptionProps } from '@app/components';
 
 import TokensComponent, { ViewType } from './components/TokensComponent';
@@ -11,6 +11,7 @@ interface NFTsProps {
   pageSize: SelectOptionProps;
   setPageSize: (pageSize: SelectOptionProps) => void;
   view: ViewType;
+  attributesFilter: TokenAttributeFilterItem[];
 }
 
 export const NFTs: FC<NFTsProps> = ({
@@ -19,6 +20,7 @@ export const NFTs: FC<NFTsProps> = ({
   pageSize,
   setPageSize,
   view,
+  attributesFilter,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -31,6 +33,7 @@ export const NFTs: FC<NFTsProps> = ({
       setCurrentPage={setCurrentPage}
       setOrderBy={setOrderBy}
       view={view}
+      attributesFilter={attributesFilter}
     />
   );
 };
