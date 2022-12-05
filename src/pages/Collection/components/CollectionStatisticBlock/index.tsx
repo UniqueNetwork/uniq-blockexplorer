@@ -14,7 +14,7 @@ interface CollectionStatisticBlockProps {
   collectionId?: string;
 }
 
-const tabs = ['Holders', 'Tokens event', 'Collection event'];
+const tabs = ['Holders', 'Token events', 'Collection events'];
 
 const CollectionStatisticBlock = ({ collectionId }: CollectionStatisticBlockProps) => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
