@@ -63,7 +63,6 @@ interface TokensComponentProps {
   setPageSize: (pageSize: SelectOptionProps) => void;
   setOrderBy: (orderBy: TokenSorting) => void;
   view: ViewType;
-  attributesFilter: TokenAttributeFilterItem[];
 }
 
 const TokensComponent: FC<TokensComponentProps> = ({
@@ -74,13 +73,16 @@ const TokensComponent: FC<TokensComponentProps> = ({
   setPageSize,
   setOrderBy,
   view,
-  attributesFilter,
 }) => {
   const deviceSize = useDeviceSize();
-  const { accountId, collectionId, searchString } = useQueryParams();
+  const { accountId, collectionId, searchString, attributes } = useQueryParams();
   const { currentChain } = useApi();
 
   const pageSizeNumber = pageSize.id as number;
+
+  const attributesFilter = useMemo(() => {
+    return JSON.parse(attributes || '{}')?.attributes;
+  }, [attributes]);
 
   const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: filter({ accountId, collectionId }),

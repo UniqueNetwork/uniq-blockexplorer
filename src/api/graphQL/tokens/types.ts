@@ -1,5 +1,7 @@
 import { DecodedAttributes } from '@unique-nft/api';
 
+import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
+
 export interface TokensVariables {
   limit: number;
   offset: number;
@@ -63,5 +65,11 @@ export type useGraphQlTokensProps = {
   orderBy?: TokenSorting;
   collectionId?: string;
   searchString?: string;
-  attributesFilter?: TokenAttributeFilterItem[];
+  attributesFilter?: ChosenAttributesMap;
+};
+
+export type ChosenAttribute = AttributeValue & Pick<CollectionAttribute, 'key'>;
+
+export type ChosenAttributesMap = {
+  [key: string]: ChosenAttribute;
 };

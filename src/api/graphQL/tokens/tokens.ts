@@ -1,7 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
-import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
+import {
+  TokenAttributeFilterItem,
+  TokensData,
+  TokensVariables,
+  useGraphQlTokensProps,
+} from './types';
 
 const tokensQuery = gql`
   query getTokens(
@@ -137,6 +142,21 @@ export const useGraphQlTokens = ({
 
   const where = getWhere(filter, searchString);
 
+  const getAttributes = () => {
+    if (!attributesFilter) return [];
+
+    const selectedAttributesForApiCall: TokenAttributeFilterItem[] = [];
+    for (let key in attributesFilter) {
+      selectedAttributesForApiCall.push({
+        key: attributesFilter[key].key,
+        raw_value: attributesFilter[key].raw_value,
+      });
+    }
+
+    return selectedAttributesForApiCall;
+  };
+  const getAttributesFilter = getAttributes();
+
   const {
     data,
     error: fetchTokensError,
@@ -151,7 +171,7 @@ export const useGraphQlTokens = ({
       offset,
       orderBy,
       where,
-      attributesFilter,
+      attributesFilter: getAttributesFilter,
     },
   });
 

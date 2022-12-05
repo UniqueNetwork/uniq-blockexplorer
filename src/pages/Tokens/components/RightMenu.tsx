@@ -14,7 +14,6 @@ interface RightMenuProps {
   selectGrid: () => void;
   selectList: () => void;
   view: ViewType;
-  setAttributesFilter: (filterState: TokenAttributeFilterItem[]) => void;
 }
 
 export const RightMenu: FC<RightMenuProps> = ({
@@ -22,7 +21,6 @@ export const RightMenu: FC<RightMenuProps> = ({
   selectGrid,
   selectList,
   view,
-  setAttributesFilter,
 }) => {
   const [queryParams] = useSearchParams();
   const { collectionId } = useQueryParams();
@@ -42,12 +40,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   return (
     <RightTabMenu className="right-tab-menu">
-      {!!collectionId && (
-        <AttributesFilter
-          collectionId={Number(collectionId)}
-          setAttributesFilter={setAttributesFilter}
-        />
-      )}
+      {!!collectionId && <AttributesFilter collectionId={Number(collectionId)} />}
       {view === ViewType.Grid && (
         <SelectStyled
           options={OPTIONS}

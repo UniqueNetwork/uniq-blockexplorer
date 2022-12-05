@@ -33,9 +33,6 @@ const TokensPage: FC = () => {
   const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
-  const [attributesFilter, setAttributesFilter] = useState<TokenAttributeFilterItem[]>(
-    [],
-  );
 
   const setOrderAndQuery = (sorting: TokenSorting) => {
     setOrderBy(sorting);
@@ -110,7 +107,6 @@ const TokensPage: FC = () => {
                   selectGrid={selectGrid}
                   selectList={selectList}
                   view={view as ViewType}
-                  setAttributesFilter={setAttributesFilter}
                 />
               )}
             </>,
@@ -140,7 +136,6 @@ const TokensPage: FC = () => {
                 pageSize={pageSize}
                 setPageSize={setPageSize}
                 view={view as ViewType}
-                attributesFilter={attributesFilter}
               />
             }
             path="nfts"

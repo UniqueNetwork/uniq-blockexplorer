@@ -6,15 +6,11 @@ import { LocalizedStringWithDefault } from '@unique-nft/api';
 import { InputTag } from '@app/components';
 import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
 import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
-import { TokenAttributeFilterItem } from '@app/api';
+import { ChosenAttributesMap, TokenAttributeFilterItem } from '@app/api';
+import { useQueryParams } from '@app/hooks';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
-
-export type ChosenAttribute = AttributeValue & Pick<CollectionAttribute, 'key'>;
-export type ChosenAttributesMap = {
-  [key: string]: ChosenAttribute;
-};
 
 const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
   const result = [];
@@ -29,26 +25,21 @@ const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
   return result;
 };
 
-const AttributesFilter = ({
-  collectionId,
-  setAttributesFilter,
-}: {
-  collectionId: number;
-  setAttributesFilter: (filterState: TokenAttributeFilterItem[]) => void;
-}) => {
-  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>({});
+const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
+  const { setParamToQuery, attributes } = useQueryParams();
+  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>(
+    JSON.parse(attributes || '{}')?.attributes || {},
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const filterTokens = useCallback(
     (attributes = selectedAttrs) => {
-      const selectedAttributesForApiCall: TokenAttributeFilterItem[] = [];
-      for (let key in attributes) {
-        selectedAttributesForApiCall.push({
-          key: attributes[key].key,
-          raw_value: attributes[key].raw_value,
-        });
-      }
-      setAttributesFilter(selectedAttributesForApiCall);
+      setParamToQuery([
+        {
+          name: 'attributes',
+          value: JSON.stringify({ attributes }),
+        },
+      ]);
     },
     [selectedAttrs],
   );

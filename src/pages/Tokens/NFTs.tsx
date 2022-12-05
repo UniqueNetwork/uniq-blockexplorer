@@ -11,7 +11,6 @@ interface NFTsProps {
   pageSize: SelectOptionProps;
   setPageSize: (pageSize: SelectOptionProps) => void;
   view: ViewType;
-  attributesFilter: TokenAttributeFilterItem[];
 }
 
 export const NFTs: FC<NFTsProps> = ({
@@ -20,7 +19,6 @@ export const NFTs: FC<NFTsProps> = ({
   pageSize,
   setPageSize,
   view,
-  attributesFilter,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -33,7 +31,6 @@ export const NFTs: FC<NFTsProps> = ({
       setCurrentPage={setCurrentPage}
       setOrderBy={setOrderBy}
       view={view}
-      attributesFilter={attributesFilter}
     />
   );
 };
