@@ -71,7 +71,11 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
                 <TokenPicture alt={token.collection_id.toString()} src={imgSrc} />
               )}
               {/* the picture has loaded */}
-              {imgSrc && <CollectionPicture src={imgSrc} />}
+              {imgSrc && (
+                <CollectionPictureWrapper>
+                  <CollectionPicture src={imgSrc} />
+                </CollectionPictureWrapper>
+              )}
               <div>
                 <Text color="primary-500">{name}</Text>
                 <div>
@@ -178,6 +182,11 @@ const TokenPicture = styled(Picture)`
     height: 100%;
   }
 `;
+const CollectionPictureWrapper = styled.div`
+  width: 40px;
+  display: flex;
+  align-items: center;
+`;
 
 const CollectionPicture = styled.div<{ src: string }>`
   width: 40px;
@@ -187,6 +196,10 @@ const CollectionPicture = styled.div<{ src: string }>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  @media (max-width: 380px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 const TokenInfo = styled.div`
