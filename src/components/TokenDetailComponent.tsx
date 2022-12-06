@@ -155,6 +155,11 @@ const Wrapper = styled.div`
   @media (max-width: 568px) {
     grid-template-columns: 1fr;
   }
+  @media (max-width: 290px) {
+    .unique-text[class*='size-m'] {
+      font-size: 13px;
+    }
+  }
 `;
 
 const TokenPicture = styled(Picture)`
