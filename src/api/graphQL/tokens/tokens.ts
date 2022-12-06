@@ -1,7 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
-import { TokensData, TokensVariables, useGraphQlTokensProps } from './types';
+import {
+  TokenAttributeFilterItem,
+  TokensData,
+  TokensVariables,
+  useGraphQlTokensProps,
+} from './types';
 
 const tokensQuery = gql`
   query getTokens(
@@ -9,8 +14,15 @@ const tokensQuery = gql`
     $offset: Int
     $where: TokenWhereParams = {}
     $orderBy: TokenOrderByParams = {}
+    $attributesFilter: [AttributeFilterValue!]
   ) {
-    tokens(where: $where, limit: $limit, offset: $offset, order_by: $orderBy) {
+    tokens(
+      where: $where
+      limit: $limit
+      offset: $offset
+      order_by: $orderBy
+      attributes_filter: $attributesFilter
+    ) {
       data {
         attributes
         collection_cover
@@ -90,6 +102,7 @@ export const useGraphQlTokens = ({
   orderBy,
   pageSize,
   searchString,
+  attributesFilter,
 }: useGraphQlTokensProps) => {
   if (searchString) {
     parseSearchString(searchString);
@@ -129,6 +142,21 @@ export const useGraphQlTokens = ({
 
   const where = getWhere(filter, searchString);
 
+  const getAttributes = () => {
+    if (!attributesFilter) return [];
+
+    const selectedAttributesForApiCall: TokenAttributeFilterItem[] = [];
+    for (let key in attributesFilter) {
+      selectedAttributesForApiCall.push({
+        key: attributesFilter[key].key,
+        raw_value: attributesFilter[key].raw_value,
+      });
+    }
+
+    return selectedAttributesForApiCall;
+  };
+  const getAttributesFilter = getAttributes();
+
   const {
     data,
     error: fetchTokensError,
@@ -143,6 +171,7 @@ export const useGraphQlTokens = ({
       offset,
       orderBy,
       where,
+      attributesFilter: getAttributesFilter,
     },
   });
 

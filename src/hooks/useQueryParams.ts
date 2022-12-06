@@ -44,6 +44,10 @@ export const useQueryParams = () => {
     queryParams.get('mainCollectionsSort') || 'new',
   );
 
+  const [attributes, setAttributes] = useState<string | undefined>(
+    queryParams.get('attributes') || '',
+  );
+
   const setFunction = (param: string) => {
     switch (param) {
       case 'search':
@@ -66,6 +70,8 @@ export const useQueryParams = () => {
         return setMainLastTransfersSort;
       case 'mainCollectionsSort':
         return setMainCollectionsSort;
+      case 'attributes':
+        return setAttributes;
       default:
         return () => {
           console.log(`param ${param} does not exist`);
@@ -139,6 +145,12 @@ export const useQueryParams = () => {
     } else {
       setMainCollectionsSort('new');
     }
+
+    if (queryParams.get('attributes')) {
+      setAttributes(queryParams.get('attributes') as string);
+    } else {
+      setAttributes('');
+    }
   }, [queryParams]);
 
   return {
@@ -153,5 +165,6 @@ export const useQueryParams = () => {
     mainLastTransfersSort,
     mainCollectionsSort,
     setParamToQuery,
+    attributes,
   };
 };
