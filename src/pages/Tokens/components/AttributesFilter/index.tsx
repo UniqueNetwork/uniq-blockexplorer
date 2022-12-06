@@ -1,17 +1,28 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
-import { LocalizedStringWithDefault } from '@unique-nft/api';
 
 import { InputTag } from '@app/components';
 import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
-import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
-import { ChosenAttributesMap, TokenAttributeFilterItem } from '@app/api';
-import { useQueryParams } from '@app/hooks';
+import { AttributeValue } from '@app/api/graphQL/attributes/types';
+import { ChosenAttributesMap } from '@app/api';
+import { deviceWidth } from '@app/hooks';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
 
+type AttributesFilterProps = {
+  selectedAttrs: ChosenAttributesMap;
+  collectionId: number;
+  handleCheck: (
+    checkedKey: string,
+    attribute: AttributeValue,
+    attributeKey: string,
+  ) => void;
+  handleApply: () => void;
+  handleReset: () => void;
+  handleTagRemove: (tag: string) => void;
+};
 const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
   const result = [];
   for (let key in selectedAttrs) {
@@ -25,70 +36,20 @@ const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
   return result;
 };
 
-const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
-  const { setParamToQuery, attributes } = useQueryParams();
-  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>(
-    JSON.parse(attributes || '{}')?.attributes || {},
-  );
+const AttributesFilter = ({
+  selectedAttrs,
+  collectionId,
+  handleTagRemove: handleTagRemoveProps,
+  handleReset: handleResetProps,
+  handleApply: handleApplyProps,
+  handleCheck: handleCheckProps,
+}: AttributesFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const filterTokens = useCallback(
-    (attributes = selectedAttrs) => {
-      setParamToQuery([
-        {
-          name: 'attributes',
-          value: JSON.stringify({ attributes }),
-        },
-      ]);
-    },
-    [selectedAttrs],
-  );
-
-  const handleCheck = useCallback(
-    (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
-      setSelectedAttrs((selectedAttrs) => {
-        let newSelectedAttrs: ChosenAttributesMap = {};
-
-        if (!selectedAttrs[checkedKey])
-          newSelectedAttrs[checkedKey] = { ...attribute, key: attributeKey };
-
-        for (let key in selectedAttrs) {
-          if (key !== checkedKey) newSelectedAttrs[key] = selectedAttrs[key];
-        }
-        return newSelectedAttrs;
-      });
-    },
-    [],
-  );
-
   const handleApply = useCallback(() => {
-    filterTokens();
+    handleApplyProps();
     setIsOpen(false);
-  }, [filterTokens]);
-
-  const handleTagRemove = useCallback(
-    (tag: string) => {
-      setSelectedAttrs((selectedAttrs) => {
-        let newSelectedAttrs: ChosenAttributesMap = {};
-        for (let key in selectedAttrs) {
-          const attrValue = selectedAttrs[key]?.value;
-
-          if ((attrValue as LocalizedStringWithDefault)?._ !== tag && attrValue !== tag) {
-            newSelectedAttrs[key] = selectedAttrs[key];
-          }
-        }
-        filterTokens(newSelectedAttrs);
-
-        return newSelectedAttrs;
-      });
-    },
-    [filterTokens],
-  );
-
-  const handleReset = useCallback(() => {
-    setSelectedAttrs({});
-    filterTokens({});
-  }, [filterTokens]);
+  }, [handleApplyProps]);
 
   const { isCollectionAttributesFetching, collectionAttributes } =
     useGraphQLCollectionAttributes({ collectionId });
@@ -108,8 +69,8 @@ const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
           <AttributesFilterComponent
             attributes={collectionAttributes || []}
             selectedAttrs={selectedAttrs}
-            handleCheck={handleCheck}
-            handleReset={handleReset}
+            handleCheck={handleCheckProps}
+            handleReset={handleResetProps}
             handleApply={handleApply}
           />
         );
@@ -121,7 +82,7 @@ const AttributesFilter = ({ collectionId }: { collectionId: number }) => {
         key={getTags(selectedAttrs).join()}
         placeholder="All attributes"
         value={getTags(selectedAttrs)}
-        onRemoved={handleTagRemove}
+        onRemoved={handleTagRemoveProps}
       />
     </DropdownStyled>
   );
@@ -136,6 +97,9 @@ const DropdownStyled = styled(Dropdown)`
   &:hover,
   &:focus-within {
     border: 1px solid var(--grey-500);
+  }
+  @media ${deviceWidth.smallerThan.lg} {
+    width: calc(100% - 34px);
   }
 `;
 

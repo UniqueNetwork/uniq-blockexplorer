@@ -1,13 +1,15 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
+import { LocalizedStringWithDefault } from '@unique-nft/api';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
 import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
 import { deviceWidth, useQueryParams } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 import AttributesFilter from '@app/pages/Tokens/components/AttributesFilter';
-import { TokenAttributeFilterItem } from '@app/api';
+import { ChosenAttributesMap } from '@app/api';
+import { AttributeValue } from '@app/api/graphQL/attributes/types';
 
 interface RightMenuProps {
   selectSort: (selected: SelectOptionProps) => void;
@@ -23,7 +25,7 @@ export const RightMenu: FC<RightMenuProps> = ({
   view,
 }) => {
   const [queryParams] = useSearchParams();
-  const { collectionId } = useQueryParams();
+  const { collectionId, attributes, setParamToQuery } = useQueryParams();
 
   const [sort, setSort] = useState<SelectOptionProps>();
 
@@ -38,9 +40,80 @@ export const RightMenu: FC<RightMenuProps> = ({
     setSort(currentSorting);
   }, [queryParams]);
 
+  //attributes filter
+  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>(
+    JSON.parse(attributes || '{}')?.attributes || {},
+  );
+
+  const filterTokens = useCallback(
+    (attributes = selectedAttrs) => {
+      setParamToQuery([
+        {
+          name: 'attributes',
+          value: JSON.stringify({ attributes }),
+        },
+      ]);
+    },
+    [selectedAttrs],
+  );
+
+  const handleCheck = useCallback(
+    (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
+      setSelectedAttrs((selectedAttrs) => {
+        let newSelectedAttrs: ChosenAttributesMap = {};
+
+        if (!selectedAttrs[checkedKey])
+          newSelectedAttrs[checkedKey] = { ...attribute, key: attributeKey };
+
+        for (let key in selectedAttrs) {
+          if (key !== checkedKey) newSelectedAttrs[key] = selectedAttrs[key];
+        }
+        return newSelectedAttrs;
+      });
+    },
+    [],
+  );
+
+  const handleApply = useCallback(() => {
+    filterTokens();
+  }, [filterTokens]);
+
+  const handleTagRemove = useCallback(
+    (tag: string) => {
+      setSelectedAttrs((selectedAttrs) => {
+        let newSelectedAttrs: ChosenAttributesMap = {};
+        for (let key in selectedAttrs) {
+          const attrValue = selectedAttrs[key]?.value;
+
+          if ((attrValue as LocalizedStringWithDefault)?._ !== tag && attrValue !== tag) {
+            newSelectedAttrs[key] = selectedAttrs[key];
+          }
+        }
+        filterTokens(newSelectedAttrs);
+
+        return newSelectedAttrs;
+      });
+    },
+    [filterTokens],
+  );
+
+  const handleReset = useCallback(() => {
+    setSelectedAttrs({});
+    filterTokens({});
+  }, [filterTokens]);
+
   return (
     <RightTabMenu className="right-tab-menu">
-      {!!collectionId && <AttributesFilter collectionId={Number(collectionId)} />}
+      {!!collectionId && (
+        <AttributesFilter
+          selectedAttrs={selectedAttrs}
+          collectionId={Number(collectionId)}
+          handleTagRemove={handleTagRemove}
+          handleCheck={handleCheck}
+          handleReset={handleReset}
+          handleApply={handleApply}
+        />
+      )}
       {view === ViewType.Grid && (
         <SelectStyled
           options={OPTIONS}

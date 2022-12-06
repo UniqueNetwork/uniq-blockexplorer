@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components/macro';
-import { Text, Button, Scrollbar } from '@unique-nft/ui-kit';
+import { Button, Scrollbar, Text } from '@unique-nft/ui-kit';
 
 import { Checkbox } from '@app/components';
 import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
 import { ChosenAttributesMap } from '@app/api';
+import { DeviceSize, deviceWidth, useDeviceSize } from '@app/hooks';
 
 interface AttributesFilterProps {
   attributes: CollectionAttribute[];
@@ -20,9 +21,13 @@ const AttributesFilter = ({
   handleReset,
   handleApply,
 }: AttributesFilterProps) => {
+  const deviceSize = useDeviceSize();
   return (
     <Wrapper>
-      <Scrollbar width={'100%'} height={228}>
+      <Scrollbar
+        width={deviceSize <= DeviceSize.md ? 'calc(100% - 5px)' : '100%'}
+        height={228}
+      >
         {attributes.map((attribute) => (
           <Fragment key={attribute.key}>
             <Text size={'s'} color={'grey-500'} key={attribute.key}>
@@ -94,6 +99,9 @@ const Wrapper = styled.div`
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+  @media ${deviceWidth.smallerThan.lg} {
+    width: calc(100% - 5px);
+  }
 `;
 const Attributes = styled.div`
   margin-top: calc(var(--gap) / 2);
@@ -111,7 +119,11 @@ const AttributesCount = styled(Text)`
   background-color: var(--grey-100);
   border-radius: 12px;
 `;
-const ButtonsWrapper = styled.div``;
+const ButtonsWrapper = styled.div`
+  @media ${deviceWidth.smallerThan.lg} {
+    display: none;
+  }
+`;
 const ApplyButton = styled(Button)`
   width: 230px;
   margin-right: 8px;
