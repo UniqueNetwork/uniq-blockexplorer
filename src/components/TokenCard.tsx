@@ -140,7 +140,7 @@ const TokenBackground = styled.div<{ imgUrl: string }>`
   background-image: url(${(props) => props.imgUrl});
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   border-radius: 8px 8px 0 0;
 
   &:after {
