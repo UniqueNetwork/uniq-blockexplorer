@@ -20,7 +20,7 @@ interface ExtrinsicDetailProps {
   index: number;
 }
 
-const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ blockIndex, extrinsic, index }) => {
+const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ extrinsic }) => {
   useScrollToTop();
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
@@ -41,7 +41,7 @@ const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ blockIndex, extrinsic, inde
   return (
     <ExtrinsicWrapper>
       <div>
-        <Heading>{`Extrinsic ${index}`}</Heading>
+        <Heading>{`Extrinsic ${extrinsic.block_index}`}</Heading>
         <ExtrinsicDataWrapper>
           <Text color="grey-500">Block</Text>
           <Text>{formatBlockNumber(blockNumber)}</Text>
@@ -91,7 +91,7 @@ const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ blockIndex, extrinsic, inde
             </>
           )}
           <Text color="grey-500">Extrinsic</Text>
-          <Text>{blockIndex}</Text>
+          <Text>{extrinsic.block_index}</Text>
           <Text color="grey-500">Method</Text>
           <Text>{method || ''}</Text>
           <Text color="grey-500">Section</Text>
