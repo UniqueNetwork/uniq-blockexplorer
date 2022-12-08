@@ -1,11 +1,44 @@
-import { FC } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
-import { Text } from '@unique-nft/ui-kit';
+import { Text, useNotifications } from '@unique-nft/ui-kit';
+import { Address } from '@unique-nft/utils';
 
 import { account as gqlAccount } from '@app/api/graphQL';
-import { CoverContainer, IdentityIcon, LoadingComponent } from '@app/components';
-import { useDeviceSize, DeviceSize, useApi } from '@app/hooks';
+import {
+  CoverContainer,
+  IconWithTooltip,
+  IdentityIcon,
+  LoadingComponent,
+  Select,
+  SVGIcon,
+} from '@app/components';
+import { useDeviceSize, DeviceSize, useApi, deviceWidth } from '@app/hooks';
 import { formatAmount, shortcutText } from '@app/utils';
+import { Header3 } from '@app/styles/styled-components';
+import { TChainNetwork } from '@app/api/ApiContext';
+
+const OPTIONS_FOR_ETHER_ADDRESS = [
+  { title: 'Unique' },
+  { title: 'Quartz' },
+  { title: 'Sapphire' },
+  { title: 'Opal (Substrate SS58 address format)' },
+];
+
+const OPTIONS_FOR_SUBSTRATE_ADDRESS = [
+  ...OPTIONS_FOR_ETHER_ADDRESS,
+  { title: 'Ethereum mirror' },
+];
+
+const getFormatFromChain = (chain: TChainNetwork): string => {
+  switch (chain) {
+    case 'OPAL':
+      return 'Opal (Substrate SS58 address format)';
+    case 'QUARTZ':
+      return 'Quartz';
+    default:
+      return 'Unique';
+  }
+};
 
 interface AccountProps {
   accountId: string;
@@ -13,9 +46,39 @@ interface AccountProps {
 
 const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
-
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
+  const { info } = useNotifications();
+  const [accountFormat, setAccountFormat] = useState(
+    getFormatFromChain(currentChain.network),
+  );
+  const [accountFormatted, setAccountFormatted] = useState(accountId);
+
+  const isEthereumAccount = Address.is.ethereumAddress(accountId);
+
+  const changeAccountFormat = useCallback(
+    (option) => {
+      setAccountFormat(option.title);
+      switch (option.title) {
+        case 'Unique':
+          setAccountFormatted(Address.normalize.substrateAddress(accountId, 7391));
+          break;
+        case 'Quartz':
+          setAccountFormatted(Address.normalize.substrateAddress(accountId, 255));
+          break;
+        case 'Sapphire':
+          setAccountFormatted(Address.normalize.substrateAddress(accountId, 8883));
+          break;
+        case 'Opal (Substrate SS58 address format)':
+          setAccountFormatted(Address.normalize.substrateAddress(accountId));
+          break;
+        case 'Ethereum mirror':
+          setAccountFormatted(Address.mirror.substrateToEthereum(accountId));
+          break;
+      }
+    },
+    [accountId],
+  );
 
   if (isAccountFetching) return <LoadingComponent />;
 
@@ -30,27 +93,78 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
   const tokenSymbol = currentChain?.symbol || '';
   const accountAddress = accountChain || accountNormalized || accountId;
 
+  const onCopyAddress = (account: string) => {
+    navigator.clipboard.writeText(account).then(() => {
+      info('Address copied');
+    });
+  };
+
   return (
     <AccountWrapper>
       <CoverContainer>
         <IdentityIcon copyable address={accountAddress} size="72" />
       </CoverContainer>
-      <div>
-        <Text size="l">Account name</Text>
-        <h2>
-          {deviceSize <= DeviceSize.lg ? shortcutText(accountAddress) : accountAddress}
-        </h2>
-      </div>
-      <Text color="grey-500">Balance</Text>
-      <BalanceWrapper>
-        <Text>{`${formatAmount(freeBalance)} ${tokenSymbol} (total) `}</Text>
-        <Text color="grey-500">{`${formatAmount(
-          lockedBalance,
-        )} ${tokenSymbol} (locked) `}</Text>
-        <Text color="grey-500">{`${formatAmount(
-          availableBalance,
-        )} ${tokenSymbol} (transferable)`}</Text>
-      </BalanceWrapper>
+      <AccountInfoWrapper>
+        <AccountLabel>
+          <Text size="m" color={'grey-500'}>
+            Account format
+          </Text>
+          <IconWithTooltip>
+            <span>
+              You could check how your address looks in the <br /> different networks
+            </span>
+          </IconWithTooltip>
+          <SelectStyled
+            options={
+              isEthereumAccount
+                ? OPTIONS_FOR_ETHER_ADDRESS
+                : OPTIONS_FOR_SUBSTRATE_ADDRESS
+            }
+            optionKey="title"
+            optionValue="title"
+            value={accountFormat}
+            onChange={changeAccountFormat}
+          />
+          {deviceSize > DeviceSize.sm && (
+            <AccountFormat size="m" color={'grey-500'}>
+              {isEthereumAccount ? 'Ethereum account' : 'Substrate account'}
+            </AccountFormat>
+          )}
+        </AccountLabel>
+        <AccountAddress>
+          <h2>
+            {deviceSize <= DeviceSize.lg
+              ? shortcutText(accountFormatted)
+              : accountFormatted}
+          </h2>
+          <div
+            onClick={() => {
+              onCopyAddress(accountFormatted);
+            }}
+          >
+            <SVGIcon name={'copy'} width={24} height={24} />
+          </div>
+        </AccountAddress>
+        {deviceSize <= DeviceSize.sm && (
+          <AccountFormat size="m" color={'grey-500'}>
+            {isEthereumAccount ? 'Ethereum account' : 'Substrate account'}
+          </AccountFormat>
+        )}
+        <BalanceWrapper>
+          <BalanceItem>
+            <Text size={'m'}>{`Total balance (${tokenSymbol})`}</Text>
+            <Header3>{formatAmount(freeBalance)}</Header3>
+          </BalanceItem>
+          <BalanceItem>
+            <Text color="grey-500">Locked</Text>
+            <Header3>{formatAmount(lockedBalance)}</Header3>
+          </BalanceItem>
+          <BalanceItem>
+            <Text color="grey-500">Transferable</Text>
+            <Header3>{formatAmount(availableBalance)}</Header3>
+          </BalanceItem>
+        </BalanceWrapper>
+      </AccountInfoWrapper>
     </AccountWrapper>
   );
 };
@@ -63,37 +177,90 @@ const AccountWrapper = styled.div`
   padding-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);
 
-  @media (max-width: 767px) {
-    grid-row-gap: 0;
-    div:not(:first-child) {
-      grid-column: span 2;
-      margin-top: var(--gap);
-    }
+  .unique-text[class*='weight-regular'] {
+    font-weight: 400;
+  }
+  @media (${deviceWidth.smallerThan.md}) {
+    grid-template-columns: 55px 1fr;
+  }
+`;
 
-    *:nth-child(3) {
-      margin-top: calc(var(--gap) * 1.5);
-    }
+const AccountInfoWrapper = styled.div`
+  position: relative;
+`;
 
-    *:not(:first-child) {
-      grid-column: span 2;
-    }
+const AccountLabel = styled.div`
+  display: flex;
+  margin-top: var(--gap);
+`;
 
-    *:last-child {
-      flex-direction: column;
-      align-items: flex-start;
+const AccountAddress = styled.div`
+  display: flex;
+  h2 {
+    margin-right: 10px;
+  }
+  svg {
+    cursor: pointer;
+  }
+`;
 
-      span:not(:first-child) {
-        margin-top: calc(var(--gap) / 4);
+const SelectStyled = styled(Select)`
+  .select-wrapper {
+    &.dropped {
+      .select-value {
+        border: none;
       }
+    }
+    .select-value {
+      border: none;
+      padding: 4px 16px 4px 8px;
+      color: var(--primary-500);
+
+      &:focus,
+      &:hover {
+        border: none;
+      }
+    }
+
+    .icon-triangle {
+      top: -8px;
+      path {
+        fill: var(--primary-500);
+      }
+    }
+
+    .select-dropdown {
+      width: 270px;
+    }
+  }
+`;
+
+const AccountFormat = styled(Text)`
+  position: absolute;
+  right: 0;
+  @media (${deviceWidth.smallerThan.md}) {
+    position: relative;
+    margin-top: 10px;
+    margin-left: -65px;
+    &[class*='appearance-inline'] {
+      display: block;
     }
   }
 `;
 
 const BalanceWrapper = styled.div`
+  margin-top: calc(var(--gap) * 2);
   display: flex;
-  flex-wrap: wrap;
-  column-gap: var(--gap);
-  align-items: center;
+  gap: 24px;
+  @media (${deviceWidth.smallerThan.md}) {
+    flex-direction: column;
+    margin-left: -66px;
+  }
+`;
+
+const BalanceItem = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export default AccountDetailComponent;
