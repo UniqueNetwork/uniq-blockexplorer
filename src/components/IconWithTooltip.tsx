@@ -1,10 +1,11 @@
+import { FC, ReactNode } from 'react';
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components/macro';
 
-import { SVGIcon } from '@app/components';
+import { SVGIcon } from '@app/components/index';
 import { isTouchEnabled } from '@app/utils';
 
-export const IconWithTooltip = () => (
+export const IconWithTooltip: FC<{ children: ReactNode }> = ({ children }) => (
   <>
     <SVGIconStyled data-tip data-for="question" name="question" height={24} width={24} />
     <ReactTooltip
@@ -12,9 +13,7 @@ export const IconWithTooltip = () => (
       id="question"
       effect="solid"
     >
-      <span>
-        The value is calculated <br /> by the number of transfers{' '}
-      </span>{' '}
+      {children}
     </ReactTooltip>
   </>
 );

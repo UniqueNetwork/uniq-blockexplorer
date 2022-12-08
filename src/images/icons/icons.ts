@@ -26,3 +26,4 @@ export { default as transfer } from './transfer.svg';
 export { default as calendar } from './calendar.svg';
 export { default as icon404 } from './404-icon.svg';
 export { default as checked } from './checked.svg';
+export { default as copy } from './copy.svg';

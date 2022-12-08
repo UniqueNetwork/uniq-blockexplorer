@@ -14,6 +14,7 @@
     "@types/jdenticon": "^2.2.0",
     "@unique-nft/api": "^0.1.13",
     "@unique-nft/ui-kit": "^0.0.31",
+    "@unique-nft/utils": "^0.3.2",
     "amplitude-js": "^8.18.5",
     "babel-jest": "^27.4.2",
     "babel-loader": "^8.2.3",
