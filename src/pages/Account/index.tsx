@@ -51,7 +51,10 @@ const AccountPage = () => {
     <>
       <Wrapper className="account-page">
         <PagePaper>
-          <AccountDetailComponent accountId={substrateAddress as string} />
+          <AccountDetailComponent
+            accountId={accountId}
+            substrateAddress={substrateAddress as string}
+          />
           <ScrollXWrapper>
             <Tabs
               content={[
