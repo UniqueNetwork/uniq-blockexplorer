@@ -5,6 +5,8 @@ import React, {
   useEffect,
   useState,
   MouseEvent,
+  forwardRef,
+  LegacyRef,
 } from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components/macro';
@@ -29,135 +31,134 @@ export interface DropdownProps extends Omit<ComponentProps, 'onChange'> {
   dropdownRender?(): ReactNode;
 }
 
-export const Dropdown = ({
-  id,
-  value,
-  className,
-  disabled,
-  options,
-  optionKey = 'id',
-  optionValue = 'title',
-  onChange,
-  children,
-  optionRender,
-  dropdownRender,
-  placement = 'left',
-  iconLeft,
-  iconRight,
-  open,
-  isTouch,
-  verticalOffset,
-  onOpenChange,
-}: DropdownProps) => {
-  const selected = options?.find(
-    (option) => option[optionKey as keyof SelectOptionProps] === value,
-  );
+export const Dropdown = forwardRef(
+  (
+    {
+      id,
+      value,
+      className,
+      disabled,
+      options,
+      optionKey = 'id',
+      optionValue = 'title',
+      onChange,
+      children,
+      optionRender,
+      dropdownRender,
+      placement = 'left',
+      iconLeft,
+      iconRight,
+      open,
+      isTouch,
+      verticalOffset,
+      onOpenChange,
+    }: DropdownProps,
+    ref: LegacyRef<HTMLDivElement>,
+  ) => {
+    const selected = options?.find(
+      (option) => option[optionKey as keyof SelectOptionProps] === value,
+    );
+    const [dropped, setDropped] = useState<boolean>(!!open);
+    useEffect(() => {
+      setDropped(!!open);
+    }, [open, setDropped]);
+    const handleClickOutside = () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      setDropped(false);
+      onOpenChange?.(false);
+    };
+    const handleMouseLeave = () => {
+      document.addEventListener('mousedown', handleClickOutside);
+    };
+    const handleMouseEnter = () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+    const handleOptionSelect = (option: SelectOptionProps) => {
+      setDropped(false);
+      onOpenChange?.(false);
+      onChange?.(option);
+    };
+    const handleMouseClick = (event: MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
 
-  const [dropped, setDropped] = useState<boolean>(!!open);
+      if (disabled) return;
 
-  useEffect(() => {
-    setDropped(!!open);
-  }, [open, setDropped]);
+      setDropped(!dropped);
+      onOpenChange?.(!dropped);
+    };
 
-  const handleClickOutside = () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-    setDropped(false);
-    onOpenChange?.(false);
-  };
-
-  const handleMouseLeave = () => {
-    document.addEventListener('mousedown', handleClickOutside);
-  };
-
-  const handleMouseEnter = () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-  };
-
-  const handleOptionSelect = (option: SelectOptionProps) => {
-    setDropped(false);
-    onOpenChange?.(false);
-    onChange?.(option);
-  };
-
-  const handleMouseClick = (event: MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-
-    if (disabled) return;
-
-    setDropped(!dropped);
-    onOpenChange?.(!dropped);
-  };
-
-  return (
-    <DropDownWrapper
-      className={classNames('unique-dropdown', className, {
-        touch: isTouch,
-      })}
-      id={id}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
-    >
-      <div
-        className={classNames('dropdown-wrapper', {
-          dropped,
-          disabled,
+    return (
+      <DropDownWrapper
+        className={classNames('unique-dropdown', className, {
+          touch: isTouch,
         })}
-        data-testid="dropdown-wrapper"
-        onClick={handleMouseClick}
+        id={id}
+        onMouseLeave={handleMouseLeave}
+        onMouseEnter={handleMouseEnter}
       >
-        {iconLeft &&
-          (isValidElement(iconLeft) ? (
-            iconLeft
-          ) : (
-            <Icon {...(iconLeft as SVGIconProps)} />
-          ))}
-        {children}
-        {iconRight &&
-          (isValidElement(iconRight) ? (
-            iconRight
-          ) : (
-            <Icon {...(iconRight as SVGIconProps)} />
-          ))}
-      </div>
-      {dropped && (
         <div
-          className={classNames('dropdown-options', {
-            right: placement === 'right',
-            touch: isTouch,
+          className={classNames('dropdown-wrapper', {
+            dropped,
+            disabled,
           })}
-          role="listbox"
-          {...(verticalOffset && {
-            style: {
-              top: verticalOffset,
-              height: `calc(100vh - (${verticalOffset} + 36px))`,
-            },
-          })}
+          data-testid="dropdown-wrapper"
+          ref={ref}
+          onClick={handleMouseClick}
         >
-          {dropdownRender?.()}
-          {options?.map((option) => {
-            const isSelected =
-              option[optionKey as keyof SelectOptionProps] ===
-              selected?.[optionKey as keyof SelectOptionProps];
-            return (
-              <div
-                className={classNames('dropdown-option', {
-                  selected: isSelected,
-                  disabled,
-                })}
-                key={option[optionKey] as Key}
-                role="option"
-                onClick={() => handleOptionSelect(option)}
-              >
-                {optionRender?.(option, isSelected) ||
-                  (option[optionValue as keyof SelectOptionProps] as string)}
-              </div>
-            );
-          })}
+          {iconLeft &&
+            (isValidElement(iconLeft) ? (
+              iconLeft
+            ) : (
+              <Icon {...(iconLeft as SVGIconProps)} />
+            ))}
+          {children}
+          {iconRight &&
+            (isValidElement(iconRight) ? (
+              iconRight
+            ) : (
+              <Icon {...(iconRight as SVGIconProps)} />
+            ))}
         </div>
-      )}
-    </DropDownWrapper>
-  );
-};
+        {dropped && (
+          <div
+            className={classNames('dropdown-options', {
+              right: placement === 'right',
+              touch: isTouch,
+            })}
+            role="listbox"
+            {...(verticalOffset && {
+              style: {
+                top: verticalOffset,
+                height: `calc(100vh - (${verticalOffset} + 36px))`,
+              },
+            })}
+          >
+            {dropdownRender?.()}
+            {options?.map((option) => {
+              const isSelected =
+                option[optionKey as keyof SelectOptionProps] ===
+                selected?.[optionKey as keyof SelectOptionProps];
+              return (
+                <div
+                  className={classNames('dropdown-option', {
+                    selected: isSelected,
+                    disabled,
+                  })}
+                  key={option[optionKey] as Key}
+                  role="option"
+                  onClick={() => handleOptionSelect(option)}
+                >
+                  {optionRender?.(option, isSelected) ||
+                    (option[optionValue as keyof SelectOptionProps] as string)}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </DropDownWrapper>
+    );
+  },
+);
 
 const DropDownWrapper = styled.div`
   font-family: var(--prop-font-family);
