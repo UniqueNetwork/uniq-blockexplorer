@@ -17,14 +17,22 @@ import { formatAmount, shortcutText } from '@app/utils';
 import { Header3 } from '@app/styles/styled-components';
 import { TChainNetwork } from '@app/api/ApiContext';
 
-const OPTIONS_FOR_ETHER_ADDRESS = [
+type ChainsFormat =
+  | 'Unique'
+  | 'Quartz'
+  | 'Sapphire'
+  | 'Opal (Substrate SS58 address format)'
+  | 'Ethereum mirror';
+type TFormatOption = { title: ChainsFormat };
+
+const OPTIONS_FOR_ETHER_ADDRESS: TFormatOption[] = [
   { title: 'Unique' },
   { title: 'Quartz' },
   { title: 'Sapphire' },
   { title: 'Opal (Substrate SS58 address format)' },
 ];
 
-const OPTIONS_FOR_SUBSTRATE_ADDRESS = [
+const OPTIONS_FOR_SUBSTRATE_ADDRESS: TFormatOption[] = [
   ...OPTIONS_FOR_ETHER_ADDRESS,
   { title: 'Ethereum mirror' },
 ];
@@ -42,42 +50,42 @@ const getFormatFromChain = (chain: TChainNetwork): string => {
 
 interface AccountProps {
   accountId: string;
+  substrateAddress: string;
 }
 
-const AccountDetailComponent: FC<AccountProps> = ({ accountId }) => {
-  const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(accountId);
+const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress }) => {
+  const { account, isAccountFetching } = gqlAccount.useGraphQlAccount(substrateAddress);
   const { currentChain } = useApi();
   const deviceSize = useDeviceSize();
   const { info } = useNotifications();
+  const isEthereumAccount = /0x[0-9A-Fa-f]{40}/g.test(accountId as string);
   const [accountFormat, setAccountFormat] = useState(
-    getFormatFromChain(currentChain.network),
+    isEthereumAccount ? 'Ethereum mirror' : getFormatFromChain(currentChain.network),
   );
   const [accountFormatted, setAccountFormatted] = useState(accountId);
-
-  const isEthereumAccount = Address.is.ethereumAddress(accountId);
 
   const changeAccountFormat = useCallback(
     (option) => {
       setAccountFormat(option.title);
       switch (option.title) {
         case 'Unique':
-          setAccountFormatted(Address.normalize.substrateAddress(accountId, 7391));
+          setAccountFormatted(Address.normalize.substrateAddress(substrateAddress, 7391));
           break;
         case 'Quartz':
-          setAccountFormatted(Address.normalize.substrateAddress(accountId, 255));
+          setAccountFormatted(Address.normalize.substrateAddress(substrateAddress, 255));
           break;
         case 'Sapphire':
-          setAccountFormatted(Address.normalize.substrateAddress(accountId, 8883));
+          setAccountFormatted(Address.normalize.substrateAddress(substrateAddress, 8883));
           break;
         case 'Opal (Substrate SS58 address format)':
-          setAccountFormatted(Address.normalize.substrateAddress(accountId));
+          setAccountFormatted(Address.normalize.substrateAddress(substrateAddress));
           break;
         case 'Ethereum mirror':
-          setAccountFormatted(Address.mirror.substrateToEthereum(accountId));
+          setAccountFormatted(Address.mirror.substrateToEthereum(substrateAddress));
           break;
       }
     },
-    [accountId],
+    [substrateAddress],
   );
 
   if (isAccountFetching) return <LoadingComponent />;
