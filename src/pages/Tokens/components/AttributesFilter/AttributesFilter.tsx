@@ -77,7 +77,7 @@ const AttributesFilter = ({
           onClick={handleApply}
         />
         <ResetButton
-          title={'Clear all'}
+          title={'Reset all'}
           role={'danger'}
           disabled={Object.keys(selectedAttrs).length === 0}
           onClick={handleReset}
@@ -88,7 +88,7 @@ const AttributesFilter = ({
 };
 
 const Wrapper = styled.div`
-  width: 343px;
+  width: 475px;
   max-height: 276px;
   overflow: auto;
   display: flex;
@@ -120,12 +120,14 @@ const AttributesCount = styled(Text)`
   border-radius: 12px;
 `;
 const ButtonsWrapper = styled.div`
+  display: flex;
   @media ${deviceWidth.smallerThan.lg} {
     display: none;
   }
 `;
 const ApplyButton = styled(Button)`
-  width: 230px;
+  //width: 230px;
+  flex: 1;
   margin-right: 8px;
 `;
 const ResetButton = styled(Button)`

@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
+import { LocalizedStringWithDefault } from '@unique-nft/api';
 
-import { InputTag } from '@app/components';
 import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
 import { AttributeValue } from '@app/api/graphQL/attributes/types';
 import { ChosenAttributesMap } from '@app/api';
-import { deviceWidth } from '@app/hooks';
+import { DeviceSize, deviceWidth, useDeviceSize } from '@app/hooks';
+import SelectedAttributesInput, {
+  getTags,
+} from '@app/pages/Tokens/components/AttributesFilter/SelectedAttributesInput';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
@@ -23,18 +26,6 @@ type AttributesFilterProps = {
   handleReset: () => void;
   handleTagRemove: (tag: string) => void;
 };
-const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
-  const result = [];
-  for (let key in selectedAttrs) {
-    const value = selectedAttrs[key]?.value;
-
-    if (value) {
-      result.push(typeof value === 'string' ? value : value._);
-    }
-  }
-
-  return result;
-};
 
 const AttributesFilter = ({
   selectedAttrs,
@@ -45,6 +36,48 @@ const AttributesFilter = ({
   handleCheck: handleCheckProps,
 }: AttributesFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [hideTags, setHideTags] = useState(false);
+  const [visibleTags, setVisibleTags] = useState<string[]>(getTags(selectedAttrs));
+  const [, setHasAttributeOnNewLine] = useState(false);
+  const deviceSize = useDeviceSize();
+
+  useEffect(() => {
+    if (hideTags && Object.keys(selectedAttrs).length - visibleTags.length < 0) {
+      setHideTags(false);
+    }
+  }, [selectedAttrs, visibleTags, hideTags]);
+
+  useEffect(() => {
+    if (!hideTags) setVisibleTags(getTags(selectedAttrs));
+  }, [hideTags, selectedAttrs]);
+
+  useEffect(() => {
+    const dropdownInputHeight = deviceSize <= DeviceSize.md ? 124 : 40;
+    setHasAttributeOnNewLine((hasAttributeOnNewLine) => {
+      if (hasAttributeOnNewLine)
+        setHideTags((dropdownRef.current?.clientHeight || 0) > dropdownInputHeight);
+
+      return (dropdownRef.current?.clientHeight || 0) > dropdownInputHeight;
+    });
+  }, [selectedAttrs]);
+
+  useEffect(() => {
+    if (hideTags && Object.keys(selectedAttrs).length - visibleTags.length > 0) {
+      let span = document.getElementById('hiddenTagsCount');
+
+      if (!span) {
+        span = document.createElement('span');
+        span.className =
+          'unique-text size-s weight-regular color-secondary-500 appearance-inline';
+        span.id = 'hiddenTagsCount';
+      }
+
+      span.textContent = `+${Object.keys(selectedAttrs).length - visibleTags.length}`;
+      const container = document.getElementsByClassName('rti--container');
+      container[0].appendChild(span);
+    }
+  }, [hideTags, selectedAttrs, visibleTags]);
 
   const handleApply = useCallback(() => {
     handleApplyProps();
@@ -54,10 +87,49 @@ const AttributesFilter = ({
   const { isCollectionAttributesFetching, collectionAttributes } =
     useGraphQLCollectionAttributes({ collectionId });
 
-  if (isCollectionAttributesFetching) return <Skeleton width={343} height={40} />;
+  const handleCheck = useCallback(
+    (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
+      if (selectedAttrs[checkedKey]) {
+        const tag =
+          typeof selectedAttrs[checkedKey].value === 'string'
+            ? selectedAttrs[checkedKey].value
+            : (selectedAttrs[checkedKey].value as LocalizedStringWithDefault)._;
+        setVisibleTags((currVisibleTags) => {
+          const result = currVisibleTags.filter((currTag) => currTag !== tag);
+
+          if (currVisibleTags.length === Object.values(selectedAttrs).length) {
+            setHideTags(false);
+          }
+
+          if (
+            Object.values(selectedAttrs).length - result.length >= 1 &&
+            result.length < currVisibleTags.length
+          ) {
+            const newDisplayedAttribute = Object.values(selectedAttrs).find((attr) => {
+              const value = typeof attr.value === 'string' ? attr.value : attr.value._;
+              return !result.includes(value);
+            });
+            result.push(
+              typeof newDisplayedAttribute?.value === 'string'
+                ? newDisplayedAttribute?.value
+                : (newDisplayedAttribute?.value._ as string),
+            );
+          }
+
+          return result;
+        });
+      }
+
+      handleCheckProps(checkedKey, attribute, attributeKey);
+    },
+    [handleCheckProps, selectedAttrs, visibleTags, hideTags],
+  );
+
+  if (isCollectionAttributesFetching) return <Skeleton width={475} height={40} />;
 
   return (
     <DropdownStyled
+      ref={dropdownRef}
       iconRight={{
         name: 'triangle',
         width: 8,
@@ -69,7 +141,7 @@ const AttributesFilter = ({
           <AttributesFilterComponent
             attributes={collectionAttributes || []}
             selectedAttrs={selectedAttrs}
-            handleCheck={handleCheckProps}
+            handleCheck={handleCheck}
             handleReset={handleResetProps}
             handleApply={handleApply}
           />
@@ -78,18 +150,19 @@ const AttributesFilter = ({
       open={isOpen}
       onOpenChange={setIsOpen}
     >
-      <InputTagStyled
-        key={getTags(selectedAttrs).join()}
-        placeholder="All attributes"
-        value={getTags(selectedAttrs)}
-        onRemoved={handleTagRemoveProps}
+      <SelectedAttributesInput
+        selectedAttrs={selectedAttrs}
+        hideTags={hideTags}
+        visibleTags={visibleTags}
+        setVisibleTags={setVisibleTags}
+        handleTagRemoveProps={handleTagRemoveProps}
       />
     </DropdownStyled>
   );
 };
 
 const DropdownStyled = styled(Dropdown)`
-  width: 343px;
+  width: 475px;
   cursor: pointer;
   border: 1px solid var(--grey-300);
   padding-right: calc(var(--gap) * 2);
@@ -100,29 +173,6 @@ const DropdownStyled = styled(Dropdown)`
   }
   @media ${deviceWidth.smallerThan.lg} {
     width: calc(100% - 34px);
-  }
-`;
-
-const InputTagStyled = styled(InputTag)`
-  width: 100%;
-  input {
-    display: none;
-  }
-  .rti--container {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    border: none;
-    outline: none;
-    min-height: 24px;
-    max-height: 40px;
-    .rti--tag {
-      word-break: unset;
-      flex-shrink: 0;
-    }
-  }
-  .rti--container:hover,
-  .rti--container:focus-within {
-    border: none;
   }
 `;
 
