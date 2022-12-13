@@ -13,7 +13,7 @@ import {
   SVGIcon,
 } from '@app/components';
 import { useDeviceSize, DeviceSize, useApi, deviceWidth } from '@app/hooks';
-import { formatAmount, shortcutText } from '@app/utils';
+import { formatFeeValue, shortcutText } from '@app/utils';
 import { Header3 } from '@app/styles/styled-components';
 import { TChainNetwork } from '@app/api/ApiContext';
 
@@ -161,15 +161,15 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
         <BalanceWrapper>
           <BalanceItem>
             <Text size={'m'}>{`Total balance (${tokenSymbol})`}</Text>
-            <Header3>{formatAmount(freeBalance)}</Header3>
+            <Header3>{formatFeeValue(Number(freeBalance))}</Header3>
           </BalanceItem>
           <BalanceItem>
             <Text color="grey-500">Locked</Text>
-            <Header3>{formatAmount(lockedBalance)}</Header3>
+            <Header3>{formatFeeValue(Number(lockedBalance))}</Header3>
           </BalanceItem>
           <BalanceItem>
             <Text color="grey-500">Transferable</Text>
-            <Header3>{formatAmount(availableBalance)}</Header3>
+            <Header3>{formatFeeValue(Number(availableBalance))}</Header3>
           </BalanceItem>
         </BalanceWrapper>
       </AccountInfoWrapper>
