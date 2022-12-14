@@ -41,7 +41,7 @@ const ExtrinsicDetail: FC<ExtrinsicDetailProps> = ({ extrinsic }) => {
   return (
     <ExtrinsicWrapper>
       <div>
-        <Heading>{`Extrinsic ${extrinsic.block_index}`}</Heading>
+        <HeadingStyled>{`Extrinsic ${extrinsic.block_index}`}</HeadingStyled>
         <ExtrinsicDataWrapper>
           <Text color="grey-500">Block</Text>
           <Text>{formatBlockNumber(blockNumber)}</Text>
@@ -116,6 +116,10 @@ const ExtrinsicWrapper = styled.div`
     flex-direction: column;
     row-gap: calc(var(--gap) * 2);
   }
+`;
+
+const HeadingStyled = styled(Heading)`
+  font-feature-settings: 'pnum' on, 'lnum' on;
 `;
 
 const ExtrinsicDataWrapper = styled.div`
