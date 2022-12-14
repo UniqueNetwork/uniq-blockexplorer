@@ -44,6 +44,7 @@ export const RightMenu: FC<RightMenuProps> = ({
   const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>(
     JSON.parse(attributes || '{}')?.attributes || {},
   );
+  const [filterChanged, setFilterChanged] = useState(false);
 
   const filterTokens = useCallback(
     (attributes = selectedAttrs) => {
@@ -59,6 +60,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   const handleCheck = useCallback(
     (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
+      setFilterChanged(true);
       setSelectedAttrs((selectedAttrs) => {
         let newSelectedAttrs: ChosenAttributesMap = {};
 
@@ -76,10 +78,12 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   const handleApply = useCallback(() => {
     filterTokens();
+    setFilterChanged(false);
   }, [filterTokens]);
 
   const handleTagRemove = useCallback(
     (tag: string) => {
+      setFilterChanged(false);
       setSelectedAttrs((selectedAttrs) => {
         let newSelectedAttrs: ChosenAttributesMap = {};
         for (let key in selectedAttrs) {
@@ -100,6 +104,7 @@ export const RightMenu: FC<RightMenuProps> = ({
   const handleReset = useCallback(() => {
     setSelectedAttrs({});
     filterTokens({});
+    setFilterChanged(false);
   }, [filterTokens]);
 
   return (
@@ -112,6 +117,7 @@ export const RightMenu: FC<RightMenuProps> = ({
           handleCheck={handleCheck}
           handleReset={handleReset}
           handleApply={handleApply}
+          filterChanged={filterChanged}
         />
       )}
       {view === ViewType.Grid && (
