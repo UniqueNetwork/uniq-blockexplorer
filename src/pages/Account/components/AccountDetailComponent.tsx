@@ -109,50 +109,55 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
 
   return (
     <AccountWrapper>
-      <CoverContainer>
-        <IdentityIcon copyable address={accountAddress} size="72" />
-      </CoverContainer>
       <AccountInfoWrapper>
-        <AccountLabel>
-          <Text size="m" color={'grey-500'}>
-            Account format
-          </Text>
-          <IconWithTooltip>
-            <span>
-              You could check how your address looks in the <br /> different networks
-            </span>
-          </IconWithTooltip>
-          <SelectStyled
-            options={
-              isEthereumAccount
-                ? OPTIONS_FOR_ETHER_ADDRESS
-                : OPTIONS_FOR_SUBSTRATE_ADDRESS
-            }
-            optionKey="title"
-            optionValue="title"
-            value={accountFormat}
-            onChange={changeAccountFormat}
-          />
-          {deviceSize > DeviceSize.sm && (
-            <AccountFormat size="m" color={'grey-500'}>
-              {isEthereumAccount ? 'Ethereum account' : 'Substrate account'}
-            </AccountFormat>
-          )}
-        </AccountLabel>
-        <AccountAddress>
-          <h2>
-            {deviceSize <= DeviceSize.lg
-              ? shortcutText(accountFormatted)
-              : accountFormatted}
-          </h2>
-          <div
-            onClick={() => {
-              onCopyAddress(accountFormatted);
-            }}
-          >
-            <SVGIcon name={'copy'} width={24} height={24} />
+        <AccountCard>
+          <CoverContainer>
+            <IdentityIcon copyable address={accountAddress} size="72" />
+          </CoverContainer>
+          <div>
+            <AccountLabel>
+              <Text size="m" color={'grey-500'}>
+                Account format
+              </Text>
+              <IconWithTooltip>
+                <span>
+                  You could check how your address looks in the <br /> different networks
+                </span>
+              </IconWithTooltip>
+              <SelectStyled
+                options={
+                  isEthereumAccount
+                    ? OPTIONS_FOR_ETHER_ADDRESS
+                    : OPTIONS_FOR_SUBSTRATE_ADDRESS
+                }
+                optionKey="title"
+                optionValue="title"
+                value={accountFormat}
+                isLongSelected={accountFormat === 'Opal (Substrate SS58 address format)'}
+                onChange={changeAccountFormat}
+              />
+              {deviceSize > DeviceSize.sm && (
+                <AccountFormat size="m" color={'grey-500'}>
+                  {isEthereumAccount ? 'Ethereum account' : 'Substrate account'}
+                </AccountFormat>
+              )}
+            </AccountLabel>
+            <AccountAddress>
+              <h2>
+                {deviceSize <= DeviceSize.lg
+                  ? shortcutText(accountFormatted)
+                  : accountFormatted}
+              </h2>
+              <div
+                onClick={() => {
+                  onCopyAddress(accountFormatted);
+                }}
+              >
+                <SVGIcon name={'copy'} width={24} height={24} />
+              </div>
+            </AccountAddress>
           </div>
-        </AccountAddress>
+        </AccountCard>
         {deviceSize <= DeviceSize.sm && (
           <AccountFormat size="m" color={'grey-500'}>
             {isEthereumAccount ? 'Ethereum account' : 'Substrate account'}
@@ -178,23 +183,20 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
 };
 
 const AccountWrapper = styled.div`
-  display: grid;
-  grid-column-gap: var(--gap);
-  grid-template-columns: 85px 1fr;
-  grid-row-gap: calc(var(--gap) * 1.5);
   padding-bottom: calc(var(--gap) * 2);
   border-bottom: 1px dashed var(--border-color);
 
   .unique-text[class*='weight-regular'] {
     font-weight: 400;
   }
-  @media (${deviceWidth.smallerThan.md}) {
-    grid-template-columns: 55px 1fr;
-  }
 `;
 
 const AccountInfoWrapper = styled.div`
   position: relative;
+`;
+
+const AccountCard = styled.div`
+  display: flex;
 `;
 
 const AccountLabel = styled.div`
@@ -205,14 +207,25 @@ const AccountLabel = styled.div`
 const AccountAddress = styled.div`
   display: flex;
   h2 {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+    line-height: 42px;
     margin-right: 10px;
   }
   svg {
     cursor: pointer;
   }
+  div {
+    display: flex;
+  }
 `;
 
-const SelectStyled = styled(Select)`
+const SelectStyled = styled(Select)<{ isLongSelected: boolean }>`
+  margin-bottom: ${(props) => (props.isLongSelected ? 25 : 0)}px;
+  font-size: 16px;
   .select-wrapper {
     &.dropped {
       .select-value {
@@ -238,7 +251,22 @@ const SelectStyled = styled(Select)`
     }
 
     .select-dropdown {
-      width: 270px;
+      width: 305px;
+    }
+    @media (${deviceWidth.smallerThan.xs}) {
+      width: 104px;
+      .select-dropdown {
+        width: 104px;
+        font-size: 14px;
+
+        .dropdown-option {
+          line-height: 14px;
+          height: auto;
+        }
+        .dropdown-option:not(:last-child) {
+          margin-bottom: 10px;
+        }
+      }
     }
   }
 `;
@@ -249,7 +277,6 @@ const AccountFormat = styled(Text)`
   @media (${deviceWidth.smallerThan.md}) {
     position: relative;
     margin-top: 10px;
-    margin-left: -65px;
     &[class*='appearance-inline'] {
       display: block;
     }
@@ -262,7 +289,6 @@ const BalanceWrapper = styled.div`
   gap: 24px;
   @media (${deviceWidth.smallerThan.md}) {
     flex-direction: column;
-    margin-left: -66px;
   }
 `;
 
