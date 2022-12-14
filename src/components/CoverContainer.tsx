@@ -15,7 +15,6 @@ export const CoverContainer = styled.div.attrs<{ src?: string }>((props) => ({
   width: 88px;
   top: calc(100% - 46px);
   left: calc(50% - 46px);
-  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   svg {
@@ -30,7 +29,10 @@ export const CoverContainer = styled.div.attrs<{ src?: string }>((props) => ({
 
   @media (max-width: 767px) {
     width: 64px;
-    height: 64px;
+    div {
+      width: 64px;
+      height: 64px;
+    }
     margin-top: 10px;
     top: calc(100% - 32px);
     left: calc(50% - 32px);

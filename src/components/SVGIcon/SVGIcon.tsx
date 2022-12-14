@@ -46,7 +46,7 @@ const IconWrapper = styled.span.attrs<{ color?: string; width: number; height: n
   }),
 )<{ color?: string; width: number; height: number }>`
   display: flex;
-  align-items: center;
+  align-items: baseline;
 
   svg {
     width: ${(props) => props.width}px;
