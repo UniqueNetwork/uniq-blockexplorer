@@ -25,6 +25,7 @@ type AttributesFilterProps = {
   handleApply: () => void;
   handleReset: () => void;
   handleTagRemove: (tag: string) => void;
+  filterChanged?: boolean;
 };
 
 const AttributesFilter = ({
@@ -34,6 +35,7 @@ const AttributesFilter = ({
   handleReset: handleResetProps,
   handleApply: handleApplyProps,
   handleCheck: handleCheckProps,
+  filterChanged,
 }: AttributesFilterProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -125,6 +127,15 @@ const AttributesFilter = ({
     [handleCheckProps, selectedAttrs, visibleTags, hideTags],
   );
 
+  const onOpenChange = useCallback(
+    (isOpen: boolean) => {
+      if (!isOpen && filterChanged) handleResetProps();
+
+      setIsOpen(isOpen);
+    },
+    [handleResetProps, filterChanged],
+  );
+
   if (isCollectionAttributesFetching) return <Skeleton width={475} height={40} />;
 
   return (
@@ -144,11 +155,12 @@ const AttributesFilter = ({
             handleCheck={handleCheck}
             handleReset={handleResetProps}
             handleApply={handleApply}
+            filterChanged={!!filterChanged}
           />
         );
       }}
       open={isOpen}
-      onOpenChange={setIsOpen}
+      onOpenChange={onOpenChange}
     >
       <SelectedAttributesInput
         selectedAttrs={selectedAttrs}

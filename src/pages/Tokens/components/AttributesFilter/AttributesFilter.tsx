@@ -13,6 +13,7 @@ interface AttributesFilterProps {
   handleCheck: (key: string, attribute: AttributeValue, attributeKey: string) => void;
   handleReset: () => void;
   handleApply: () => void;
+  filterChanged: boolean;
 }
 const AttributesFilter = ({
   attributes,
@@ -20,6 +21,7 @@ const AttributesFilter = ({
   handleCheck,
   handleReset,
   handleApply,
+  filterChanged,
 }: AttributesFilterProps) => {
   const deviceSize = useDeviceSize();
   return (
@@ -70,14 +72,15 @@ const AttributesFilter = ({
         ))}
       </Scrollbar>
       <ButtonsWrapper>
+        <Mute />
         <ApplyButton
           title={'Apply'}
           role={'primary'}
-          disabled={Object.keys(selectedAttrs).length === 0}
+          disabled={Object.keys(selectedAttrs).length === 0 || !filterChanged}
           onClick={handleApply}
         />
         <ResetButton
-          title={'Reset all'}
+          title={'Clear all'}
           role={'danger'}
           disabled={Object.keys(selectedAttrs).length === 0}
           onClick={handleReset}
@@ -105,28 +108,36 @@ const Wrapper = styled.div`
 `;
 const Attributes = styled.div`
   margin-top: calc(var(--gap) / 2);
-  margin-bottom: var(--gap);
+  margin-bottom: calc(var(--gap) * 1.5);
   display: flex;
   flex-direction: column;
 `;
 const Attribute = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 6px 8px;
+  padding: 6px 12px 6px 8px;
 `;
 const AttributesCount = styled(Text)`
   padding: 0 8px;
   background-color: var(--grey-100);
   border-radius: 12px;
 `;
+const Mute = styled.div`
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: -48px;
+  height: 48px;
+  background: linear-gradient(0deg, #ffffff 10.61%, rgba(255, 255, 255, 0) 100%);
+`;
 const ButtonsWrapper = styled.div`
+  position: relative;
   display: flex;
   @media ${deviceWidth.smallerThan.lg} {
     display: none;
   }
 `;
 const ApplyButton = styled(Button)`
-  //width: 230px;
   flex: 1;
   margin-right: 8px;
 `;
