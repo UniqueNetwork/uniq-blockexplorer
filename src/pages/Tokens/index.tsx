@@ -12,7 +12,7 @@ import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
-import { TokenSorting } from '@app/api';
+import { TokenAttributeFilterItem, TokenSorting } from '@app/api';
 import { RouterTabs, SelectOptionProps } from '@app/components';
 import { PageHeading } from '@app/components/PageHeading';
 

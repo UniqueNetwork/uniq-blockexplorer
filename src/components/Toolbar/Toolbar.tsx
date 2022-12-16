@@ -1,7 +1,7 @@
 import { Button, Toggle } from '@unique-nft/ui-kit';
-import { createRef, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { createRef, useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components/macro';
+import { LocalizedStringWithDefault } from '@unique-nft/api';
 
 import {
   GlobalSearch,
@@ -14,6 +14,9 @@ import { deviceWidth, TParam, useLocationPathname, useQueryParams } from '@app/h
 import { defaultOrderId, OPTIONS as tokensOptions } from '@app/pages/Tokens/constants';
 import { OPTIONS as collectionsOptions } from '@app/pages/Collections/constants';
 import { OPTIONS as bundlesOptions } from '@app/pages/Bundles/constants';
+import AttributesFilter from '@app/pages/Tokens/components/AttributesFilter';
+import { ChosenAttributesMap } from '@app/api';
+import { AttributeValue } from '@app/api/graphQL/attributes/types';
 
 import { MobileModal } from '../MobileModal/MobileModal';
 
@@ -25,7 +28,8 @@ export enum MobileType {
 }
 
 export const Toolbar = () => {
-  const { view, setParamToQuery, sort, nesting } = useQueryParams();
+  const { view, setParamToQuery, sort, nesting, collectionId, attributes } =
+    useQueryParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
   const { tokensPage, collectionsPage, bundlesPage, notTheMainPage } =
@@ -143,6 +147,62 @@ export const Toolbar = () => {
     };
   }, []);
 
+  // attributes filter
+  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>(
+    JSON.parse(attributes || '{}')?.attributes || {},
+  );
+  const [filterChanged, setFilterChanged] = useState(false);
+
+  const filterTokens = useCallback(
+    (attributes = selectedAttrs) => {
+      setParamToQuery([
+        {
+          name: 'attributes',
+          value: JSON.stringify({ attributes }),
+        },
+      ]);
+    },
+    [selectedAttrs],
+  );
+
+  const handleCheck = useCallback(
+    (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
+      setFilterChanged(true);
+      setSelectedAttrs((selectedAttrs) => {
+        let newSelectedAttrs: ChosenAttributesMap = {};
+
+        if (!selectedAttrs[checkedKey])
+          newSelectedAttrs[checkedKey] = { ...attribute, key: attributeKey };
+
+        for (let key in selectedAttrs) {
+          if (key !== checkedKey) newSelectedAttrs[key] = selectedAttrs[key];
+        }
+        return newSelectedAttrs;
+      });
+    },
+    [],
+  );
+
+  const handleTagRemove = useCallback(
+    (tag: string) => {
+      setFilterChanged(true);
+      setSelectedAttrs((selectedAttrs) => {
+        let newSelectedAttrs: ChosenAttributesMap = {};
+        for (let key in selectedAttrs) {
+          const attrValue = selectedAttrs[key]?.value;
+
+          if ((attrValue as LocalizedStringWithDefault)?._ !== tag && attrValue !== tag) {
+            newSelectedAttrs[key] = selectedAttrs[key];
+          }
+        }
+        filterTokens(newSelectedAttrs);
+
+        return newSelectedAttrs;
+      });
+    },
+    [filterTokens],
+  );
+
   const handleApplyClick = () => {
     const params: [TParam] = [] as unknown as [TParam];
 
@@ -152,6 +212,10 @@ export const Toolbar = () => {
 
     if (stateNew?.sort) {
       params.push({ name: 'sort', value: `${stateNew?.sort}` });
+    }
+
+    if (tokensPage && collectionId) {
+      filterTokens();
     }
 
     setParamToQuery(params);
@@ -173,6 +237,11 @@ export const Toolbar = () => {
       setNestingLocal('false');
       setSortLocal(option);
       setStateNew({ sort: `${option.sortField}-${option.sortDir}`, nesting: 'false' });
+    }
+
+    if (tokensPage && collectionId) {
+      setSelectedAttrs({});
+      filterTokens({});
     }
 
     setAllDefaultSettings(true);
@@ -215,7 +284,7 @@ export const Toolbar = () => {
     setSortLocal(currentSorting);
   };
 
-  const ModalContent = () => {
+  const ModalContent = useMemo(() => {
     switch (mobileType) {
       case MobileType.Search:
         return (
@@ -234,6 +303,16 @@ export const Toolbar = () => {
                 onChange={selectSorting}
               />
             </SelectWrapper>
+            {tokensPage && collectionId && (
+              <AttributesFilter
+                selectedAttrs={selectedAttrs}
+                collectionId={Number(collectionId)}
+                handleTagRemove={handleTagRemove}
+                handleCheck={handleCheck}
+                handleReset={handleResetAll}
+                handleApply={handleApplyClick}
+              />
+            )}
             {collectionsPage && (
               <Toggle
                 label="Only nesting enabled"
@@ -244,7 +323,23 @@ export const Toolbar = () => {
           </>
         );
     }
-  };
+  }, [
+    Options,
+    collectionId,
+    collectionsPage,
+    handleApplyClick,
+    handleCheck,
+    handleResetAll,
+    handleTagRemove,
+    mobileType,
+    nestingLocal,
+    nestingToggled,
+    searchRef,
+    selectSorting,
+    selectedAttrs,
+    sortLocal?.id,
+    tokensPage,
+  ]);
 
   return (
     <>
@@ -258,7 +353,7 @@ export const Toolbar = () => {
               }}
             >
               <SVGIcon name="filter" width={32} height={32} />
-              {!allDefaultSettings && (
+              {(!allDefaultSettings || !!Object.keys(selectedAttrs).length) && (
                 <Mark>
                   <SVGIcon name="mark" width={12} height={12} />
                 </Mark>
@@ -294,13 +389,21 @@ export const Toolbar = () => {
             <>
               <Button
                 wide
-                disabled={itIsNoChange()}
+                disabled={
+                  tokensPage && collectionId
+                    ? !filterChanged && itIsNoChange()
+                    : itIsNoChange()
+                }
                 title="Apply"
                 role="primary"
                 onClick={handleApplyClick}
               />
               <Button
-                disabled={allDefaultSettings}
+                disabled={
+                  tokensPage && collectionId
+                    ? !Object.keys(selectedAttrs).length && allDefaultSettings
+                    : allDefaultSettings
+                }
                 title="Reset All"
                 role="danger"
                 onClick={handleResetAll}
@@ -310,7 +413,7 @@ export const Toolbar = () => {
         }
         onCloseModal={closeModal}
       >
-        <ModalContent />
+        {ModalContent}
       </MobileModal>
     </>
   );
@@ -334,17 +437,6 @@ const Wrapper = styled.div`
   &.hide {
     transform: translateY(110px);
   }
-`;
-const WrapperShadow = styled.div`
-  display: flex;
-  background: var(--color-primary-500);
-  position: absolute;
-  width: 192px;
-  filter: blur(8px);
-  opacity: 0.24;
-  height: 72px;
-  bottom: -8px;
-  border-radius: 16px;
 `;
 const Buttons = styled.div`
   background-color: var(--primary-500);

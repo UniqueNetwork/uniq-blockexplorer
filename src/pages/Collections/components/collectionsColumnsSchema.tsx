@@ -4,8 +4,8 @@ import { Text } from '@unique-nft/ui-kit';
 
 import { timeDifference } from '@app/utils';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { Collection, CollectionSorting } from '@app/api';
 
-import { Collection, CollectionSorting } from '../../../api/graphQL';
 import CollectionTableCell from '../../../components/CollectionTableCell';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
@@ -36,6 +36,30 @@ export const getCollectionsColumns = (
       />
     ),
     width: 180,
+  },
+  {
+    dataIndex: 'tokens_count',
+    key: 'tokens_count',
+    render: (items: number, item: unknown) => {
+      return (
+        <Link
+          to={`/${chainId.toLowerCase()}/collections/${
+            (item as Collection).collection_id
+          }`}
+        >
+          {items || 0}
+        </Link>
+      );
+    },
+    title: (
+      <TableSortableColumnTitle
+        dataIndex={'tokens_count'}
+        orderBy={orderBy}
+        title={'Items'}
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 100,
   },
   {
     dataIndex: 'date_of_creation',
@@ -72,30 +96,6 @@ export const getCollectionsColumns = (
         dataIndex="holders_count"
         orderBy={orderBy}
         title="Holders"
-        onOrderChange={onOrderChange}
-      />
-    ),
-    width: 100,
-  },
-  {
-    dataIndex: 'tokens_count',
-    key: 'tokens_count',
-    render: (items: number, item: unknown) => {
-      return (
-        <Link
-          to={`/${chainId.toLowerCase()}/collections/${
-            (item as Collection).collection_id
-          }`}
-        >
-          {items || 0}
-        </Link>
-      );
-    },
-    title: (
-      <TableSortableColumnTitle
-        dataIndex={'tokens_count'}
-        orderBy={orderBy}
-        title={'Items'}
         onOrderChange={onOrderChange}
       />
     ),

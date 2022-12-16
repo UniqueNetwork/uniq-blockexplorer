@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { ViewType } from '@app/components';
+import { lastTransferOptions } from '@app/pages/Main/components/LastTransfers/lastTransferOptions';
 
 export type TParam = {
   name: string;
@@ -27,6 +28,26 @@ export const useQueryParams = () => {
     queryParams.get('nesting') || 'false',
   );
 
+  const [mainTokensSort, setMainTokensSort] = useState<string | undefined>(
+    queryParams.get('mainTokensSort') || 'new',
+  );
+
+  const [mainBundlesSort, setMainBundlesSort] = useState<string | undefined>(
+    queryParams.get('mainBundlesSort') || 'new',
+  );
+
+  const [mainLastTransfersSort, setMainLastTransfersSort] = useState<string | undefined>(
+    queryParams.get('mainLastTransfersSort') || (lastTransferOptions[1].id as string),
+  );
+
+  const [mainCollectionsSort, setMainCollectionsSort] = useState<string | undefined>(
+    queryParams.get('mainCollectionsSort') || 'new',
+  );
+
+  const [attributes, setAttributes] = useState<string | undefined>(
+    queryParams.get('attributes') || '',
+  );
+
   const setFunction = (param: string) => {
     switch (param) {
       case 'search':
@@ -41,6 +62,16 @@ export const useQueryParams = () => {
         return setView;
       case 'nesting':
         return setNesting;
+      case 'mainTokensSort':
+        return setMainTokensSort;
+      case 'mainBundlesSort':
+        return setMainBundlesSort;
+      case 'mainLastTransfersSort':
+        return setMainLastTransfersSort;
+      case 'mainCollectionsSort':
+        return setMainCollectionsSort;
+      case 'attributes':
+        return setAttributes;
       default:
         return () => {
           console.log(`param ${param} does not exist`);
@@ -90,6 +121,36 @@ export const useQueryParams = () => {
     } else {
       setView('List');
     }
+
+    if (queryParams.get('mainTokensSort')) {
+      setMainTokensSort(queryParams.get('mainTokensSort') as string);
+    } else {
+      setMainTokensSort('new');
+    }
+
+    if (queryParams.get('mainBundlesSort')) {
+      setMainBundlesSort(queryParams.get('mainBundlesSort') as string);
+    } else {
+      setMainBundlesSort('new');
+    }
+
+    if (queryParams.get('mainLastTransfersSort')) {
+      setMainLastTransfersSort(queryParams.get('mainLastTransfersSort') as string);
+    } else {
+      setMainLastTransfersSort(lastTransferOptions[1].id as string);
+    }
+
+    if (queryParams.get('mainCollectionsSort')) {
+      setMainCollectionsSort(queryParams.get('mainCollectionsSort') as string);
+    } else {
+      setMainCollectionsSort('new');
+    }
+
+    if (queryParams.get('attributes')) {
+      setAttributes(queryParams.get('attributes') as string);
+    } else {
+      setAttributes('');
+    }
   }, [queryParams]);
 
   return {
@@ -99,6 +160,11 @@ export const useQueryParams = () => {
     searchString,
     sort,
     view,
+    mainTokensSort,
+    mainBundlesSort,
+    mainLastTransfersSort,
+    mainCollectionsSort,
     setParamToQuery,
+    attributes,
   };
 };

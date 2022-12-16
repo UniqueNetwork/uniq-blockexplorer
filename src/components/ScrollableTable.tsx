@@ -96,6 +96,9 @@ const ShadowForScroll = styled.div.attrs<{ width: number }>((props) => ({
   top: 0;
   bottom: 0;
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.08);
+  @media (max-width: 576px) {
+    display: none;
+  }
 `;
 
 const Mute = styled.div`
@@ -174,6 +177,14 @@ const TableWrapper = styled.div.attrs<{ minScreenWidthForTable: number }>((props
       tr > td:first-of-type {
         background-color: white;
         z-index: 1;
+      }
+    }
+  }
+  @media (max-width: 576px) {
+    table {
+      tr > th:first-of-type,
+      tr > td:first-of-type {
+        position: relative;
       }
     }
   }

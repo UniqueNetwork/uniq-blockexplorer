@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
-import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import { SVGIcon } from '@app/components';
 

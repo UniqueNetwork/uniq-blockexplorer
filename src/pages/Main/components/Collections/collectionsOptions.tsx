@@ -1,6 +1,4 @@
-import { DropdownOptionProps } from '@app/components';
-
-import { IconWithTooltip } from './IconWithTooltip';
+import { DropdownOptionProps, IconWithTooltip } from '@app/components';
 
 export const collectionsOptions: DropdownOptionProps[] = [
   {
@@ -10,6 +8,12 @@ export const collectionsOptions: DropdownOptionProps[] = [
   {
     id: 'top',
     title: 'Top',
-    iconRight: <IconWithTooltip />,
+    iconRight: (
+      <IconWithTooltip>
+        <span>
+          The value is calculated <br /> by the number of transfers{' '}
+        </span>{' '}
+      </IconWithTooltip>
+    ),
   },
 ];

@@ -1,8 +1,12 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
+import { useGraphQLBundleTree } from '@app/api/graphQL/bundleTree/bundleTree';
+import { TokenKeys } from '@app/api/graphQL/tokensEvents/types';
+import { INestingToken } from '@app/pages/Token/Bundle/components/BundleTreeSection/BundleTree/types';
 import { Token } from '@app/api';
 import { useScrollToTop } from '@app/hooks';
-import EventsTable from '@app/pages/Token/Bundle/components/Events/EventsTable';
+import EventsTable from '@app/components/EventsTable/EventsTable';
 
 import TokenDetailComponent from '../../../components/TokenDetailComponent';
 import PagePaper from '../../../components/PagePaper';
@@ -17,6 +21,28 @@ interface BundlePageComponentProps {
 const BundlePage: FC<BundlePageComponentProps> = ({ loading, token }) => {
   useScrollToTop();
 
+  const { collectionId, tokenId } = useParams<{
+    collectionId: string;
+    tokenId: string;
+  }>();
+
+  const { bundle } = useGraphQLBundleTree(Number(collectionId), Number(tokenId));
+
+  const tokensInBundle = useMemo(() => {
+    const result: TokenKeys[] = [];
+    const iter = (bundlesChildren: INestingToken) => {
+      result.push({
+        tokenId: bundlesChildren.token_id,
+        collectionId: bundlesChildren.collection_id,
+      });
+      bundlesChildren.nestingChildren?.map((child) => iter(child));
+    };
+
+    if (bundle) iter(bundle);
+
+    return result;
+  }, [bundle]);
+
   if ((!token && !loading) || token?.burned) return <Page404 />;
 
   if (!token) return null;
@@ -27,7 +53,9 @@ const BundlePage: FC<BundlePageComponentProps> = ({ loading, token }) => {
         <TokenDetailComponent loading={loading} token={token} />
       </PagePaper>
       <BundleTreeSection token={token} />
-      <EventsTable />
+      <PagePaper>
+        <EventsTable header={'Bundle events'} tokens={tokensInBundle} />
+      </PagePaper>
     </>
   );
 };

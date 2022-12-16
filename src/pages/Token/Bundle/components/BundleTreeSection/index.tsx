@@ -64,7 +64,9 @@ function BundleTreeSection({
 
     const openNodeIfChildsPageOpened = (bundle: INestingToken) => {
       if (!bundle.nestingChildren?.length) {
-        return bundle.token_id === token_id && bundle.collection_id === collection_id;
+        bundle.opened =
+          bundle.token_id === token_id && bundle.collection_id === collection_id;
+        return bundle;
       }
 
       if (!bundle.opened) {

@@ -1,10 +1,13 @@
 import { DecodedAttributes } from '@unique-nft/api';
 
+import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
+
 export interface TokensVariables {
   limit: number;
   offset: number;
   where?: Record<string, unknown>;
   orderBy?: TokenSorting;
+  attributesFilter?: TokenAttributeFilterItem[];
 }
 
 export type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT';
@@ -50,6 +53,11 @@ export type TokenSorting = {
     | 'desc_nulls_first';
 };
 
+export type TokenAttributeFilterItem = {
+  key: string;
+  raw_value: string;
+};
+
 export type useGraphQlTokensProps = {
   pageSize: number;
   filter?: Record<string, unknown>;
@@ -57,4 +65,11 @@ export type useGraphQlTokensProps = {
   orderBy?: TokenSorting;
   collectionId?: string;
   searchString?: string;
+  attributesFilter?: ChosenAttributesMap;
+};
+
+export type ChosenAttribute = AttributeValue & Pick<CollectionAttribute, 'key'>;
+
+export type ChosenAttributesMap = {
+  [key: string]: ChosenAttribute;
 };

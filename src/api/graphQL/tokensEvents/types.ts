@@ -1,19 +1,19 @@
-export interface BundleEventsVariables {
+export interface TokensEventsVariables {
   limit: number;
   offset: number;
   orderBy?: EventsSorting;
   where?: { [key: string]: unknown };
 }
 
-export interface BundleEventsData {
+export interface TokensEventsData {
   token_events: {
-    data: BundleEvent[];
+    data: TokensEvent[];
     count: number;
     timestamp: number;
   };
 }
 
-export interface BundleEvent {
+export interface TokensEvent {
   action: string;
   author?: string;
   collection_id: number;
@@ -21,11 +21,13 @@ export interface BundleEvent {
   result: boolean;
   timestamp: number;
   token_id: number;
+  token_name: string;
   values?: { [key: string]: unknown };
+  tokens: { [key: string]: unknown };
 }
 
 export type EventsSorting = {
-  [P in keyof BundleEvent]?:
+  [P in keyof TokensEvent]?:
     | 'asc'
     | 'desc'
     | 'desc_nulls_last'
@@ -36,11 +38,11 @@ export type EventsSorting = {
 
 export type TokenKeys = { tokenId: number; collectionId: number };
 
-export interface useGraphQLBundleEventsProps {
+export interface useGraphQLTokensEventsProps {
   limit: number;
   offset?: number;
   orderBy?: EventsSorting;
-  tokensInBundle: TokenKeys[];
+  tokens: TokenKeys[];
   author?: string;
 }
 

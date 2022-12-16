@@ -1,3 +1,5 @@
+import { formatBlockNumber } from '@app/utils/textUtils';
+
 const countDecimal = (num: number) => {
   const text = num.toString();
   const index = text.indexOf('.');
@@ -6,17 +8,17 @@ const countDecimal = (num: number) => {
 };
 
 export const formatLongNumber = (number = 0): string => {
-  // over a million
-  if (number >= 1000000) {
-    return Math.floor(number / 1000000) + '\u00A0M';
+  if (!number) return '0';
+
+  if (number < 10000) return formatBlockNumber(number);
+
+  if (number < 1000000) {
+    return formatBlockNumber(Math.floor(number / 100) / 10) + 'K';
   }
 
-  // truncate decimal if greater than 4
-  if (countDecimal(number) > 3) {
-    const stringNum = number.toString();
-    const truncateNum = stringNum.slice(0, stringNum.indexOf('.') + 5);
-    return Number(truncateNum) === 0 ? number.toExponential() : truncateNum;
+  if (number < 1000000000) {
+    return formatBlockNumber(Math.floor(number / 100000) / 10) + 'M';
   }
 
-  return number.toString();
+  return formatBlockNumber(Math.floor(number / 100000000) / 10) + 'B';
 };

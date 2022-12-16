@@ -3,7 +3,13 @@ import styled from 'styled-components/macro';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Button, Skeleton } from '@unique-nft/ui-kit';
 
-import { DeviceSize, deviceWidth, useApi, useDeviceSize } from '@app/hooks';
+import {
+  DeviceSize,
+  deviceWidth,
+  useApi,
+  useDeviceSize,
+  useQueryParams,
+} from '@app/hooks';
 import { Header } from '@app/styles/styled-components';
 import { PagePaperWrapper, DropdownOptionProps, TokenCard } from '@app/components';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -29,7 +35,21 @@ export const Tokens: VFC<TokensProps> = ({
 }) => {
   const { currentChain } = useApi();
   const navigate = useNavigate();
-  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(tokensOptions[0]);
+  const { setParamToQuery, mainTokensSort } = useQueryParams();
+  const defaultSort = tokensOptions.find((option) => option.id === mainTokensSort);
+  const [selectedSort, setSelectedSort] = useState<DropdownOptionProps>(
+    defaultSort || tokensOptions[0],
+  );
+
+  const onOrderChange = (newOrder: DropdownOptionProps) => {
+    setParamToQuery([
+      {
+        name: 'mainTokensSort',
+        value: newOrder.id as string,
+      },
+    ]);
+    setSelectedSort(newOrder);
+  };
 
   const deviceSize = useDeviceSize();
 
@@ -113,7 +133,7 @@ export const Tokens: VFC<TokensProps> = ({
         <HeaderWithDropdown
           options={tokensOptions}
           selectedSort={selectedSort}
-          setSelectedSort={setSelectedSort}
+          setSelectedSort={onOrderChange}
           title="Tokens"
         />
       )}
@@ -123,6 +143,8 @@ export const Tokens: VFC<TokensProps> = ({
             key={`token-${token.collection_id}-${token.token_id}`}
             {...token}
             timeNow={timestamp}
+            hideOwner={true}
+            hideTransfers={true}
           />
         ))}
       </TokensWrapper>

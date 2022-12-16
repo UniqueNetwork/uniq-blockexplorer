@@ -2,7 +2,7 @@ import React from 'react';
 
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
-import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 import FractionsTableCell from '@app/pages/Token/RFT/components/OwnersSection/FractionsTableCell';
 import { DeviceSize } from '@app/hooks';
 import PercentageTableCell from '@app/pages/Token/RFT/components/OwnersSection/PercentageTableCell';

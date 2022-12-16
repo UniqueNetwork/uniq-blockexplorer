@@ -4,7 +4,7 @@ import { Heading } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { useDeviceSize, useQueryParams } from '@app/hooks';
-import { EventsSorting } from '@app/api/graphQL/bundleEvents/types';
+import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
 import { PagePaper, ScrollableTable, SelectOptionProps } from '@app/components';
 import { GetOwnersColumns } from '@app/pages/Token/RFT/components/OwnersSection/columnsSchema';

@@ -33,7 +33,7 @@ const TokenCard: FC<TokenCardProps> = ({
   hideCreationTime,
   hideCollection,
   hideOwner,
-  owner_normalized,
+  owner,
   hideTransfers,
 }) => {
   const navigate = useNavigate();
@@ -75,11 +75,11 @@ const TokenCard: FC<TokenCardProps> = ({
           </div>
         )}
         {type === 'NFT' && (
-          <NFTProperties>
+          <TokenProperties>
             {!hideOwner && (
               <OwnerProperty color="grey-500" size="xs">
                 Owner:
-                <AccountLinkComponent value={owner_normalized} size={'xs'} />
+                <AccountLinkComponent value={owner} size={'xs'} />
               </OwnerProperty>
             )}
             {!hideTransfers && (
@@ -90,7 +90,15 @@ const TokenCard: FC<TokenCardProps> = ({
                 </Text>
               </Text>
             )}
-          </NFTProperties>
+            {!hideCreationTime && (
+              <CreatedTime>
+                <StyledSVGIcon height={16} name="clock" width={16} />
+                <Text color="additional-dark" size="xs">
+                  {timeDifference(dateOfCreation, timeNow)}
+                </Text>
+              </CreatedTime>
+            )}
+          </TokenProperties>
         )}
         {type === 'FRACTIONAL' && (
           <RFTProperties>
@@ -121,14 +129,6 @@ const TokenCard: FC<TokenCardProps> = ({
               </Text>
             </Property>
           </RFTProperties>
-        )}
-        {!hideCreationTime && (
-          <CreatedTime>
-            <StyledSVGIcon height={16} name="clock" width={16} />
-            <Text color="additional-dark" size="xs">
-              {timeDifference(dateOfCreation, timeNow)}
-            </Text>
-          </CreatedTime>
         )}
       </TokenTitle>
     </TokenCardLink>
@@ -175,7 +175,7 @@ const TokenBackground = styled.div<{ imgUrl: string }>`
   background-image: url(${(props) => props.imgUrl});
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   border-radius: 8px 8px 0 0;
 
   &:after {
@@ -202,6 +202,11 @@ const NFTProperties = styled.div`
 const CreatedTime = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 4px;
+`;
+
+const TokenProperties = styled.div`
+  margin-top: calc(var(--gap) / 4);
 `;
 
 const RFTProperties = styled.div`

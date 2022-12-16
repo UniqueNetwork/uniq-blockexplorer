@@ -21,3 +21,25 @@ export const formatBlockNumber = (blockNumber: number | undefined) => {
 
   return blockNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 };
+
+export const formatFeeValue = (amount: number): string => {
+  if (!amount) return '0';
+
+  const parts = amount.toString().split('.');
+
+  if (!parts[1] || parts[1].length < 5) return parts.join('.');
+
+  const intParts = parts[0].split('');
+  const formattedIntParts = [];
+  for (let i = intParts.length; i >= 0; i--) {
+    formattedIntParts.unshift(intParts[i]);
+
+    if ((intParts.length - i) % 3 === 0) formattedIntParts.unshift(' ');
+  }
+  const floatParts = parts[1].split('');
+
+  if (parseInt(floatParts[4]) >= 5)
+    floatParts[3] = (parseInt(floatParts[3]) + 1).toString();
+
+  return `${formattedIntParts.join('').trim()}.${floatParts.join('').slice(0, 4)}`;
+};

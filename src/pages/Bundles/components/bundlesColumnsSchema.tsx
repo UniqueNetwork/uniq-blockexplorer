@@ -4,8 +4,8 @@ import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 
 import { timeDifference } from '@app/utils';
+import { Token, TokenSorting } from '@app/api';
 
-import { Token, TokenSorting } from '../../../api/graphQL';
 import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
 import TokenTableCell from '../../../components/TokenTableCell';
 import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
@@ -40,6 +40,20 @@ export const getBundlesColumns = (
       />
     ),
     width: 180,
+  },
+  {
+    dataIndex: 'children_count',
+    key: 'children_count',
+    render: (value: string) => <>{value}</>,
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="children_count"
+        orderBy={orderBy}
+        title="Nested items"
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 100,
   },
   {
     dataIndex: 'bundle_created',
@@ -82,23 +96,9 @@ export const getBundlesColumns = (
     width: 180,
   },
   {
-    dataIndex: 'children_count',
-    key: 'children_count',
-    render: (value: string, item: unknown) => <>{value}</>,
-    title: (
-      <TableSortableColumnTitle
-        dataIndex="children_count"
-        orderBy={orderBy}
-        title="Nested items"
-        onOrderChange={onOrderChange}
-      />
-    ),
-    width: 100,
-  },
-  {
     dataIndex: 'transfers_count',
     key: 'transfers_count',
-    render: (value: string, item: unknown) => <>{value}</>,
+    render: (value: string) => <>{value}</>,
     title: (
       <TableSortableColumnTitle
         dataIndex="transfers_count"

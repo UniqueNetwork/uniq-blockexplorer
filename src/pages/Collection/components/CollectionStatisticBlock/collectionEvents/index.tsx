@@ -1,56 +1,33 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { Heading, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
-import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
 import {
-  BundleEvent,
+  DEFAULT_PAGE_SIZE,
+  defaultEventsOrderBy,
+} from '@app/pages/Collections/constants';
+import {
+  CollectionsEvent,
   EventsSorting,
-  TokenKeys,
-} from '@app/api/graphQL/bundleEvents/types';
-import {
-  PagePaper,
-  Pagination,
-  ScrollableTable,
-  SelectOptionProps,
-} from '@app/components';
-import { useGraphQLBundleEvents } from '@app/api/graphQL/bundleEvents/bundleEvents';
-import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/columnsSchema';
-import { INestingToken } from '@app/pages/Token/Bundle/components/BundleTreeSection/BundleTree/types';
-import { useGraphQLBundleTree } from '@app/api/graphQL/bundleTree/bundleTree';
+} from '@app/api/graphQL/collectionsEvents/types';
+import { Pagination, ScrollableTable, SelectOptionProps, Stub } from '@app/components';
+import { useGraphQLCollectionsEvents } from '@app/api/graphQL/collectionsEvents/collectionsEvents';
 
-import { getBundleEventsColumns } from './columnsSchema';
+import { getCollectionEventsColumns } from './columnsSchema';
 
-const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
+const EventsTable: FC<{
+  header?: string;
+  collectionId: number;
+}> = ({ collectionId, header }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { sort, setParamToQuery } = useQueryParams();
-  const { collectionId, tokenId } = useParams<{
-    collectionId: string;
-    tokenId: string;
-  }>();
   const [queryParams, setQueryParams] = useSearchParams();
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
   const [isAgeColumn, setIsAgeColumn] = useState(false);
-  const { bundle } = useGraphQLBundleTree(Number(collectionId), Number(tokenId));
-
-  const tokensInBundle = useMemo(() => {
-    const result: TokenKeys[] = [];
-    const iter = (bundlesChildren: INestingToken) => {
-      result.push({
-        tokenId: bundlesChildren.token_id,
-        collectionId: bundlesChildren.collection_id,
-      });
-      bundlesChildren.nestingChildren.map((child) => iter(child));
-    };
-
-    if (bundle) iter(bundle);
-
-    return result;
-  }, [bundle]);
 
   // get sort from query string
   const getOrderByFromQuery = () => {
@@ -89,60 +66,50 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
     setQueryParams(queryParams);
   };
 
-  const { bundleEvents, isBundleEventsFetching, timestamp, count } =
-    useGraphQLBundleEvents({
-      tokensInBundle,
+  const { collectionsEvents, isCollectionsEventsFetching, timestamp, count } =
+    useGraphQLCollectionsEvents({
+      collection_id: collectionId,
       offset,
       orderBy,
       limit: pageSizeNumber,
-      author: accountId,
     });
 
   const columns = useMemo(() => {
-    return !accountId
-      ? getBundleEventsColumns(
-          orderBy,
-          setOrderAndQuery,
-          timestamp,
-          currentChain?.symbol,
-          isAgeColumn,
-          setIsAgeColumn,
-        )
-      : getBundleEventsAccountsPageColumns(
-          orderBy,
-          setOrderAndQuery,
-          timestamp,
-          currentChain?.symbol,
-          isAgeColumn,
-          setIsAgeColumn,
-          currentChain.network,
-        );
+    return getCollectionEventsColumns({
+      orderBy,
+      onOrderChange: setOrderAndQuery,
+      timestamp,
+      tokenSymbol: currentChain?.symbol,
+      isAgeColumn,
+      setIsAgeColumn,
+      chainId: currentChain.network,
+    });
   }, [orderBy, timestamp, currentChain?.symbol, isAgeColumn, setIsAgeColumn]);
 
   const getRowKey = useMemo(
     () => (item: DefaultRecordType) =>
-      `${(item as BundleEvent).action}-${(item as BundleEvent).timestamp}`,
+      `${(item as CollectionsEvent).action}-${(item as CollectionsEvent).timestamp}`,
     [],
   );
 
   return (
-    <PagePaperStyled>
-      <Heading size={'2'}>Bundle events</Heading>
+    <Wrapper>
+      {header && <Heading size={'2'}>{header}</Heading>}
       <div>
-        {isBundleEventsFetching ? (
+        {isCollectionsEventsFetching ? (
           <SkeletonWrapper>
             <Skeleton />
           </SkeletonWrapper>
+        ) : count > 0 ? (
+          <ScrollableTable
+            columns={columns}
+            data={collectionsEvents || []}
+            loading={isCollectionsEventsFetching}
+            rowKey={getRowKey}
+            onRow={(event) => ({ className: !event.result ? 'failed-event' : '' })}
+          />
         ) : (
-          <>
-            <ScrollableTable
-              columns={columns}
-              data={bundleEvents || []}
-              loading={isBundleEventsFetching}
-              rowKey={getRowKey}
-              onRow={(event) => ({ className: !event.result ? 'failed-event' : '' })}
-            />
-          </>
+          <Stub />
         )}
         {!!count && (
           <BottomPaginationContainer>
@@ -158,11 +125,12 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
           </BottomPaginationContainer>
         )}
       </div>
-    </PagePaperStyled>
+    </Wrapper>
   );
 };
 
-const PagePaperStyled = styled(PagePaper)`
+const Wrapper = styled.div`
+  margin-top: var(--gap);
   .failed-event {
     background: var(--coral-100);
     td:first-of-type span,

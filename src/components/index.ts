@@ -20,3 +20,6 @@ export * from './Pagination';
 export * from './Tabs';
 export * from './types';
 export * from './TreeView/types';
+export * from './InputTag';
+export * from './Checkbox';
+export * from './IconWithTooltip';

@@ -1,3 +1,10 @@
+## Version 2.3.0
+
+- new Bundles page
+- new Bundle page
+- added bundle block to main page
+- new page 404
+
 ## Version 2.2.6
 
 - added filter burned=false

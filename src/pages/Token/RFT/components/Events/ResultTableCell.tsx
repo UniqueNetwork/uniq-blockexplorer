@@ -4,7 +4,7 @@ import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 import { useParams } from 'react-router-dom';
 
-import { EventsActions } from '@app/api/graphQL/bundleEvents/types';
+import { EventsActions } from '@app/api/graphQL/tokensEvents/types';
 import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { useApi } from '@app/hooks';
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';

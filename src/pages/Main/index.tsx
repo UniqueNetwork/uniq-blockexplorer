@@ -55,6 +55,11 @@ const MainPage = () => {
         searchString={searchString}
         setResultExist={setTokensExist}
       />
+      <Collections
+        searchModeOn={searchModeOn}
+        searchString={searchString}
+        setResultExist={setCollectionsExist}
+      />
       {searchModeOn ? (
         <>
           <CoinsTransfersSearchResult
@@ -77,11 +82,6 @@ const MainPage = () => {
           <LastBlocks searchModeOn={searchModeOn} searchString={searchString} />
         </Main2BlocksWrapper>
       )}
-      <Collections
-        searchModeOn={searchModeOn}
-        searchString={searchString}
-        setResultExist={setCollectionsExist}
-      />
       {!resultsExist && searchModeOn && (
         <StubWrapper>
           {' '}

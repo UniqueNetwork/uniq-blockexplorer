@@ -103,6 +103,7 @@ const timestampTableFormat = (timestamp: number) => {
   const formatted = new Date(timestamp * 1000)
     .toLocaleString('en-GB', {
       hour12: false,
+      timeZone: 'GMT',
     })
     .replaceAll('/', '-');
 
