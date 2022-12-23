@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import { TokenAttributeFilterItem, TokenSorting } from '@app/api';
+import { TokenSorting } from '@app/api';
 import { SelectOptionProps } from '@app/components';
 
 import TokensComponent, { ViewType } from './components/TokensComponent';

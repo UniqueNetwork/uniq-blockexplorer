@@ -241,7 +241,7 @@ export const Toolbar = () => {
 
     if (tokensPage && collectionId) {
       setSelectedAttrs({});
-      filterTokens({});
+      // filterTokens({});
     }
 
     setAllDefaultSettings(true);
@@ -282,6 +282,8 @@ export const Toolbar = () => {
       }
     });
     setSortLocal(currentSorting);
+
+    setSelectedAttrs(JSON.parse(attributes || '{}')?.attributes || {});
   };
 
   const ModalContent = useMemo(() => {
@@ -311,6 +313,7 @@ export const Toolbar = () => {
                 handleCheck={handleCheck}
                 handleReset={handleResetAll}
                 handleApply={handleApplyClick}
+                handleRevert={handleResetAll}
               />
             )}
             {collectionsPage && (

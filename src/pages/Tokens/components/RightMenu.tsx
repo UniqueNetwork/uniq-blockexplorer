@@ -103,19 +103,25 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   const handleReset = useCallback(() => {
     setSelectedAttrs({});
-    filterTokens({});
-    setFilterChanged(false);
+    setFilterChanged(true);
   }, [filterTokens]);
+
+  const handleRevert = useCallback(() => {
+    setSelectedAttrs(JSON.parse(attributes || '{}')?.attributes || {});
+    setFilterChanged(false);
+  }, [filterTokens, attributes]);
 
   return (
     <RightTabMenu className="right-tab-menu">
       {!!collectionId && (
         <AttributesFilter
+          key={view}
           selectedAttrs={selectedAttrs}
           collectionId={Number(collectionId)}
           handleTagRemove={handleTagRemove}
           handleCheck={handleCheck}
           handleReset={handleReset}
+          handleRevert={handleRevert}
           handleApply={handleApply}
           filterChanged={filterChanged}
         />

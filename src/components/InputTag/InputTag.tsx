@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { TagsInput } from 'react-tag-input-component';
 import { InputBaseProps } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
+import { forwardRef } from 'react';
 
 import { ComponentProps } from '../types';
 
@@ -27,34 +28,40 @@ export type InputTagProps = Omit<InputBaseProps, 'onChange'> &
     beforeAddValidate?: (tag: string, existingTags: string[]) => boolean;
   };
 
-export const InputTag = ({
-  id,
-  label,
-  additionalText,
-  statusText,
-  className,
-  size = 'middle',
-  testid,
-  error,
-  disabled,
-  ...rest
-}: InputTagProps) => {
-  return (
-    <Wrapper
-      className={classNames('unique-input-tag', `size-${size}`, className, {
-        error,
-        disabled,
-      })}
-      id={id}
-      data-testid={testid}
-    >
-      {label && <label htmlFor={id}>{label}</label>}
-      {additionalText && <div className="additional-text">{additionalText}</div>}
-      <TagsInput {...rest} disabled={disabled} />
-      {statusText && <div className="status-text">{statusText}</div>}
-    </Wrapper>
-  );
-};
+export const InputTag = forwardRef<HTMLDivElement, InputTagProps>(
+  (
+    {
+      id,
+      label,
+      additionalText,
+      statusText,
+      className,
+      size = 'middle',
+      testid,
+      error,
+      disabled,
+      ...rest
+    },
+    ref,
+  ) => {
+    return (
+      <Wrapper
+        className={classNames('unique-input-tag', `size-${size}`, className, {
+          error,
+          disabled,
+        })}
+        id={id}
+        data-testid={testid}
+        ref={ref}
+      >
+        {label && <label htmlFor={id}>{label}</label>}
+        {additionalText && <div className="additional-text">{additionalText}</div>}
+        <TagsInput {...rest} disabled={disabled} />
+        {statusText && <div className="status-text">{statusText}</div>}
+      </Wrapper>
+    );
+  },
+);
 
 const Wrapper = styled.div`
   font-family: var(--prop-font-family);
