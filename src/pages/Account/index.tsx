@@ -55,6 +55,8 @@ const AccountPage = () => {
             accountId={accountId}
             substrateAddress={substrateAddress as string}
           />
+        </PagePaper>
+        <PagePaper>
           <ScrollXWrapper>
             <Tabs
               content={[
@@ -110,7 +112,6 @@ const Wrapper = styled.div`
 `;
 
 const ScrollXWrapper = styled.div`
-  padding-top: calc(var(--gap) * 1.5);
   overflow-x: auto;
   &::-webkit-scrollbar {
     display: none;
