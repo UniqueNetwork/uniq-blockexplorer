@@ -112,7 +112,7 @@ const EventsTable: FC<{ accountId?: string }> = ({ accountId }) => {
             <Pagination
               count={count || 0}
               currentPage={currentPage}
-              itemsName="Events"
+              itemName="Event"
               pageSize={pageSize}
               setPageSize={setPageSizeAndQuery}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}

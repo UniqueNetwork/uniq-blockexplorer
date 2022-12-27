@@ -134,7 +134,9 @@ const SearchInput = styled(InputText)`
   width: 100%;
   margin-right: calc(var(--gap) / 2);
   background-color: var(--white-color);
-
+  & .unique-input-text .input-wrapper.with-icon.to-left input {
+    padding: 11px 25px 11px 0px;
+  }
   @media (max-width: 767px) {
     width: 100%;
     margin-right: 0;

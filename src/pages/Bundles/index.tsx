@@ -22,6 +22,7 @@ import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, Token, useGraphQlBundles } from '@app/api';
 import { PageHeading } from '@app/components/PageHeading';
+import { ContentWrapper } from '@app/components/ContentWrapper';
 
 import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
@@ -151,12 +152,12 @@ const BundlesPage: FC = () => {
           selectList={selectList}
           view={view as ViewType}
         />
-        <div>
+        <ContentWrapper>
           <TopPaginationContainer>
             <Pagination
               count={bundlesCount || 0}
               currentPage={currentPage}
-              itemsName="Bundles"
+              itemName="Bundle"
               pageSize={pageSize}
               setPageSize={setPageSizeAndQuery}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
@@ -190,7 +191,7 @@ const BundlesPage: FC = () => {
               <Pagination
                 count={bundlesCount || 0}
                 currentPage={currentPage}
-                itemsName="Bundles"
+                itemName="Bundle"
                 pageSize={pageSize}
                 setPageSize={setPageSizeAndQuery}
                 siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
@@ -198,7 +199,7 @@ const BundlesPage: FC = () => {
               />
             </BottomPaginationContainer>
           )}
-        </div>
+        </ContentWrapper>
       </PagePaper>
     </div>
   );
@@ -224,43 +225,13 @@ const PagePaper = styled(PagePaperWrapper)`
 
 const TopPaginationContainer = styled.div`
   .pagination {
-    display: flex;
-    flex-direction: column;
     margin-bottom: calc(var(--gap) * 2);
-    align-items: flex-end;
-    gap: calc(var(--gap));
-    > div:first-of-type {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      > div:last-of-type {
-        display: flex;
-        align-items: center;
-        gap: calc(var(--gap) / 2);
-      }
-    }
   }
 `;
 
 const BottomPaginationContainer = styled.div`
   .pagination {
-    display: flex;
-    flex-direction: column;
     margin-top: calc(var(--gap) * 2.25);
-    align-items: flex-end;
-    gap: calc(var(--gap));
-    > div:first-of-type {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      > div:last-of-type {
-        display: flex;
-        align-items: center;
-        gap: calc(var(--gap) / 2);
-      }
-    }
   }
 `;
 

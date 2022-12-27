@@ -9,6 +9,7 @@ import {
   ScrollableTable,
   SelectOptionProps,
   ViewType,
+  DEFAULT_PAGE_SIZE_OPTIONS,
 } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
@@ -16,6 +17,7 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { CollectionSorting, useGraphQlCollections, useGraphQlTokens } from '@app/api';
 import { CollectionCard } from '@app/components/CollectionCard';
 import { PageHeading } from '@app/components/PageHeading';
+import { ContentWrapper } from '@app/components/ContentWrapper';
 
 import { RightMenu } from './components/RightMenu';
 import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
@@ -156,15 +158,20 @@ const CollectionsPage: FC = () => {
           setNestingOn={setNestingAndQuery}
           view={view as ViewType}
         />
-        <div>
+        <ContentWrapper>
           <TopPaginationContainer>
             <Pagination
               count={collectionsCount || 0}
               currentPage={currentPage}
-              itemsName="Collections"
+              itemName="Collection"
               pageSize={pageSize}
               setPageSize={setPageSizeAndQuery}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+              pageSizeOptions={[
+                ...DEFAULT_PAGE_SIZE_OPTIONS,
+                { id: 48, title: '48' },
+                { id: 60, title: '60' },
+              ]}
               onPageChange={setCurrentPage}
             />
           </TopPaginationContainer>
@@ -204,15 +211,20 @@ const CollectionsPage: FC = () => {
               <Pagination
                 count={collectionsCount || 0}
                 currentPage={currentPage}
-                itemsName="Collections"
+                itemName="Collection"
                 pageSize={pageSize}
                 setPageSize={setPageSizeAndQuery}
                 siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+                pageSizeOptions={[
+                  ...DEFAULT_PAGE_SIZE_OPTIONS,
+                  { id: 48, title: '48' },
+                  { id: 60, title: '60' },
+                ]}
                 onPageChange={setCurrentPage}
               />
             </BottomPaginationContainer>
           )}
-        </div>
+        </ContentWrapper>
       </PagePaper>
     </div>
   );
@@ -255,43 +267,13 @@ const CollectionsList = styled.div`
 
 const TopPaginationContainer = styled.div`
   .pagination {
-    display: flex;
-    flex-direction: column;
     margin-bottom: calc(var(--gap) * 2);
-    align-items: flex-end;
-    gap: calc(var(--gap));
-    > div:first-of-type {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      > div:last-of-type {
-        display: flex;
-        align-items: center;
-        gap: calc(var(--gap) / 2);
-      }
-    }
   }
 `;
 
 const BottomPaginationContainer = styled.div`
   .pagination {
-    display: flex;
-    flex-direction: column;
     margin-top: calc(var(--gap) * 2.25);
-    align-items: flex-end;
-    gap: calc(var(--gap));
-    > div:first-of-type {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      > div:last-of-type {
-        display: flex;
-        align-items: center;
-        gap: calc(var(--gap) / 2);
-      }
-    }
   }
 `;
 

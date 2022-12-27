@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
@@ -38,11 +38,20 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_id: id,
     token_prefix: prefix,
     type,
+    parent_id,
   } = token;
 
   const { imgSrc } = useCheckImageExists(
     getCoverURLFromCollection(token.collection_cover),
   );
+
+  const badge = useMemo(() => {
+    if (type === 'FRACTIONAL') return 'Fractional';
+
+    if (type === 'NESTED') return parent_id ? 'Nested' : 'Bundle';
+
+    return '';
+  }, [type, parent_id]);
 
   if (loading) return <LoadingComponent />;
 
@@ -52,11 +61,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   return (
     <Wrapper>
-      <TokenPicture
-        alt={`${prefix}-${id}`}
-        src={image.fullUrl}
-        badge={type !== 'NFT' ? type : ''}
-      />
+      <TokenPicture alt={`${prefix}-${id}`} src={image.fullUrl} badge={badge} />
       <div>
         <Heading size="2">{`${prefix} #${id}`}</Heading>
         <TokenInfo>

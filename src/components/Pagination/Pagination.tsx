@@ -10,15 +10,16 @@ import { PageNumber } from './PageNumber';
 
 interface PaginationProps {
   count: number; // total number of elements in DB
-  itemsName?: string;
+  itemName?: string;
   pageSize: SelectOptionProps; // how many elements we present per single page
+  pageSizeOptions?: SelectOptionProps[];
   onPageChange: (page: number) => void; // fetch new page data
   setPageSize?: (pageSize: SelectOptionProps) => void;
   siblingCount?: number; // how many pages to show, the rest will be "..."
   currentPage?: number;
 }
 
-const OPTIONS: SelectOptionProps[] = [
+export const DEFAULT_PAGE_SIZE_OPTIONS: SelectOptionProps[] = [
   {
     id: 24,
     title: '24',
@@ -32,8 +33,9 @@ const OPTIONS: SelectOptionProps[] = [
 export const Pagination: FC<PaginationProps> = ({
   count,
   currentPage = 1,
-  itemsName,
+  itemName,
   onPageChange,
+  pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
   pageSize,
   setPageSize,
   siblingCount = 2,
@@ -74,13 +76,14 @@ export const Pagination: FC<PaginationProps> = ({
     <PaginationWrapper className="pagination">
       <div className="count-with-page-size">
         <div>
-          {count} {itemsName ?? 'items'}
+          {count} {itemName ?? 'item'}
+          {count > 1 && 's'}
         </div>
         {!!setPageSize && (
           <PageSize className="page-size">
             Results on the page
             <Select
-              options={OPTIONS}
+              options={pageSizeOptions}
               value={pageSize?.id as string}
               onChange={changePageSize}
             />

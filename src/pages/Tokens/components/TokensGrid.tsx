@@ -5,14 +5,24 @@ import { Token } from '@app/api';
 import { TokenCard } from '@app/components';
 import { deviceWidth, useScrollToTop } from '@app/hooks';
 
+import Stub from '../../../components/Stub';
+
 interface TokensGridProps {
   chainNetwork: string;
   timestamp: number | undefined;
+  loading: boolean;
   tokens: Token[];
 }
 
-const TokensGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => {
+const TokensGrid: FC<TokensGridProps> = ({
+  chainNetwork,
+  timestamp,
+  tokens,
+  loading,
+}) => {
   useScrollToTop();
+
+  if (!loading && !tokens.length) return <Stub />;
 
   return (
     <TokenGallery>

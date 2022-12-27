@@ -6,9 +6,9 @@ body {
 }
 
 .notification-container {
+  position: fixed !important;
+  top: var(--gap) !important;
   .notification-alert {
-    position: fixed;
-    top: var(--gap);
 
     @media (max-width: 1199px) {
       max-width: 50% !important;
@@ -26,6 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-variant-numeric: lining-nums;
 }
 
 a {
@@ -51,6 +52,12 @@ a {
     display: flex;
     flex-direction: column;
     row-gap: var(--gap);
+  }
+  @media (max-width: 1024px) {
+    footer {
+      border-top: none !important;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    }
   }
 
   @media (min-width: 1920px) {

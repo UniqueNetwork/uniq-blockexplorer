@@ -112,6 +112,7 @@ const Wrapper = styled.div`
 
 const SelectedOption = styled.div`
   display: flex;
+  align-items: center;
 
   @media ${deviceWidth.smallerThan.md} {
     font-size: 20px !important;
