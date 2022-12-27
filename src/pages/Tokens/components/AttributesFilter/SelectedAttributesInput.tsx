@@ -33,9 +33,7 @@ const SelectedAttributesInput = ({
   const calculateHidden = useCallback(() => {
     if (!inputRef.current) return;
 
-    const container = inputRef.current.getElementsByClassName('rti--container')?.[0];
-
-    if (!container) return;
+    const container = inputRef.current;
 
     let hiddenTags = 0;
     let tailOffset = 0;
@@ -74,7 +72,6 @@ const SelectedAttributesInput = ({
         <>
           <InputTagStyled
             ref={inputRef}
-            key={getTags(selectedAttrs).join()}
             value={getTags(selectedAttrs)}
             onRemoved={handleTagRemove}
           />
@@ -92,22 +89,6 @@ const InputTagStyled = styled(InputTag)`
 
   input {
     display: none;
-  }
-  .rti--container {
-    flex-wrap: wrap;
-    border: none;
-    outline: none;
-    min-height: 24px;
-    max-height: 50px;
-    overflow: hidden;
-    .rti--tag {
-      word-break: unset;
-      flex-shrink: 0;
-    }
-  }
-  .rti--container:hover,
-  .rti--container:focus-within {
-    border: none;
   }
 `;
 

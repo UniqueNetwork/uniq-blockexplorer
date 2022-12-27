@@ -37,6 +37,7 @@ export const Toolbar = () => {
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
+  const parsedAttributes = JSON.parse(attributes || '{}')?.attributes || {};
   const toolbarIsActive = notTheMainPage;
   const showFilter = notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
   const showView = notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
@@ -148,9 +149,8 @@ export const Toolbar = () => {
   }, []);
 
   // attributes filter
-  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>(
-    JSON.parse(attributes || '{}')?.attributes || {},
-  );
+  const [selectedAttrs, setSelectedAttrs] =
+    useState<ChosenAttributesMap>(parsedAttributes);
   const [filterChanged, setFilterChanged] = useState(false);
 
   const filterTokens = useCallback(
@@ -241,7 +241,6 @@ export const Toolbar = () => {
 
     if (tokensPage && collectionId) {
       setSelectedAttrs({});
-      // filterTokens({});
     }
 
     setAllDefaultSettings(true);
@@ -283,7 +282,7 @@ export const Toolbar = () => {
     });
     setSortLocal(currentSorting);
 
-    setSelectedAttrs(JSON.parse(attributes || '{}')?.attributes || {});
+    setSelectedAttrs(parsedAttributes);
   };
 
   const ModalContent = useMemo(() => {

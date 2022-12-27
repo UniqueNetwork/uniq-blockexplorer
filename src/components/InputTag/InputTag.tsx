@@ -1,8 +1,7 @@
 import classNames from 'classnames';
-import { TagsInput } from 'react-tag-input-component';
 import { InputBaseProps } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 
 import { ComponentProps } from '../types';
 
@@ -40,7 +39,8 @@ export const InputTag = forwardRef<HTMLDivElement, InputTagProps>(
       testid,
       error,
       disabled,
-      ...rest
+      value,
+      onRemoved,
     },
     ref,
   ) => {
@@ -52,23 +52,80 @@ export const InputTag = forwardRef<HTMLDivElement, InputTagProps>(
         })}
         id={id}
         data-testid={testid}
-        ref={ref}
       >
         {label && <label htmlFor={id}>{label}</label>}
         {additionalText && <div className="additional-text">{additionalText}</div>}
-        <TagsInput {...rest} disabled={disabled} />
+        <TagsContainer ref={ref}>
+          {value?.map((item) => (
+            <Tag label={item} key={item} onRemove={onRemoved} />
+          ))}
+        </TagsContainer>
         {statusText && <div className="status-text">{statusText}</div>}
       </Wrapper>
     );
   },
 );
 
+type TagProps = {
+  label: string;
+  onRemove?(label: string): void;
+};
+
+const Tag = ({ label, onRemove }: TagProps) => {
+  const onRemoveClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onRemove?.(label);
+  };
+
+  return (
+    <TagStyled>
+      <span>{label}</span>
+      <button onClick={onRemoveClick}>✕</button>
+    </TagStyled>
+  );
+};
+
+const TagsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  border: none;
+  outline: none;
+  min-height: 24px;
+  max-height: 50px;
+  overflow: hidden;
+  line-height: 1.4;
+  align-items: center;
+  padding: calc(var(--prop-gap) / 2) var(--prop-gap);
+  gap: calc(var(--prop-gap) / 2);
+`;
+
+const TagStyled = styled.div`
+  word-break: unset;
+  flex-shrink: 0;
+  background: var(--color-primary-300);
+  color: var(--color-additional-light);
+  border-radius: var(--prop-border-radius);
+  padding: 1px calc(var(--prop-gap) / 2);
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: calc(var(--prop-gap) / 4);
+  & button {
+    color: var(--color-additional-light);
+    padding: 0;
+    width: 16px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    line-height: inherit;
+  }
+`;
+
 const Wrapper = styled.div`
   font-family: var(--prop-font-family);
   font-size: var(--prop-font-size);
   font-weight: var(--prop-font-weight);
   position: relative;
-  width: 250px;
 
   label {
     color: var(--color-secondary-500);
