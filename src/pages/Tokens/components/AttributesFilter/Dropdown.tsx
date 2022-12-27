@@ -178,12 +178,11 @@ const DropDownWrapper = styled.div`
 
   .dropdown-wrapper {
     position: relative;
-    width: 100%;
-    float: right;
+    padding-right: calc(var(--gap) * 2);
 
     .icon-triangle {
       position: absolute;
-      right: -20px;
+      right: 16px;
       top: 50%;
       margin-top: -4px;
       cursor: pointer;

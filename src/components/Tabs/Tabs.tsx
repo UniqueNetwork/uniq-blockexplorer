@@ -38,17 +38,20 @@ export const Tabs: FC<TabsProps> = ({
 const TabsHeader = styled.div`
   position: relative;
   margin-bottom: calc(var(--gap) * 1.5);
-
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--grey-300);
   .right-tab-menu {
-    position: absolute;
-    right: 0;
-    top: 10px;
+    flex-grow: 1;
+    justify-content: end;
+    align-items: center;
+    height: 100%;
+    padding-bottom: 16px;
   }
 `;
 
 const TabsList = styled.div`
   display: flex;
-  border-bottom: 1px solid var(--grey-300);
 `;
 
 const Tab = styled.div`
