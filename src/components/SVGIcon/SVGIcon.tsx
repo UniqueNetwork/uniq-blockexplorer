@@ -1,4 +1,4 @@
-import { FC, ForwardedRef } from 'react';
+import { FC, ForwardedRef, MouseEvent } from 'react';
 import styled from 'styled-components/macro';
 
 import * as IconComponents from '@app/images/icons/icons';
@@ -11,6 +11,7 @@ export interface SVGIconProps {
   height: number;
   className?: string;
   innerRef?: ForwardedRef<any>;
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 export const SVGIcon: FC<SVGIconProps> = ({

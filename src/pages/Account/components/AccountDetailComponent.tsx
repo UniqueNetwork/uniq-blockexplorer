@@ -114,7 +114,7 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
           <CoverContainer>
             <IdentityIcon copyable address={accountAddress} size="72" />
           </CoverContainer>
-          <div>
+          <AddressWrapper>
             <AccountLabel>
               <Text size="m" color={'grey-500'}>
                 Account format
@@ -148,15 +148,15 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
                   ? shortcutText(accountFormatted)
                   : accountFormatted}
               </h2>
-              <div
+              <CopyWrapper
                 onClick={() => {
                   onCopyAddress(accountFormatted);
                 }}
               >
                 <SVGIcon name={'copy'} width={24} height={24} />
-              </div>
+              </CopyWrapper>
             </AccountAddress>
-          </div>
+          </AddressWrapper>
         </AccountCard>
         {deviceSize <= DeviceSize.sm && (
           <AccountFormat size="m" color={'grey-500'}>
@@ -183,9 +183,6 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
 };
 
 const AccountWrapper = styled.div`
-  padding-bottom: calc(var(--gap) * 2);
-  border-bottom: 1px dashed var(--border-color);
-
   .unique-text[class*='weight-regular'] {
     font-weight: 400;
   }
@@ -202,6 +199,15 @@ const AccountCard = styled.div`
 const AccountLabel = styled.div`
   display: flex;
   margin-top: var(--gap);
+`;
+
+const AddressWrapper = styled.div`
+  margin-left: var(--gap);
+`;
+
+const CopyWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const AccountAddress = styled.div`
@@ -224,7 +230,7 @@ const AccountAddress = styled.div`
 `;
 
 const SelectStyled = styled(Select)<{ isLongSelected: boolean }>`
-  margin-bottom: ${(props) => (props.isLongSelected ? 25 : 0)}px;
+  margin-bottom: 0;
   font-size: 16px;
   .select-wrapper {
     &.dropped {
@@ -287,8 +293,10 @@ const BalanceWrapper = styled.div`
   margin-top: calc(var(--gap) * 2);
   display: flex;
   gap: 24px;
+  margin-left: calc(var(--gap) + 88px);
   @media (${deviceWidth.smallerThan.md}) {
     flex-direction: column;
+    margin-left: 0;
   }
 `;
 

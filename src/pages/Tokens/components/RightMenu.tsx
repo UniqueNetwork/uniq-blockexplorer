@@ -40,10 +40,11 @@ export const RightMenu: FC<RightMenuProps> = ({
     setSort(currentSorting);
   }, [queryParams]);
 
+  const parsedAttributes = JSON.parse(attributes || '{}')?.attributes || {};
+
   //attributes filter
-  const [selectedAttrs, setSelectedAttrs] = useState<ChosenAttributesMap>(
-    JSON.parse(attributes || '{}')?.attributes || {},
-  );
+  const [selectedAttrs, setSelectedAttrs] =
+    useState<ChosenAttributesMap>(parsedAttributes);
   const [filterChanged, setFilterChanged] = useState(false);
 
   const filterTokens = useCallback(
@@ -103,19 +104,25 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   const handleReset = useCallback(() => {
     setSelectedAttrs({});
-    filterTokens({});
-    setFilterChanged(false);
+    setFilterChanged(true);
   }, [filterTokens]);
+
+  const handleRevert = useCallback(() => {
+    setSelectedAttrs(parsedAttributes);
+    setFilterChanged(false);
+  }, [filterTokens, attributes]);
 
   return (
     <RightTabMenu className="right-tab-menu">
       {!!collectionId && (
         <AttributesFilter
+          key={view}
           selectedAttrs={selectedAttrs}
           collectionId={Number(collectionId)}
           handleTagRemove={handleTagRemove}
           handleCheck={handleCheck}
           handleReset={handleReset}
+          handleRevert={handleRevert}
           handleApply={handleApply}
           filterChanged={filterChanged}
         />

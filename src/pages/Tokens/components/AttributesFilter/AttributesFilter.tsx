@@ -36,37 +36,47 @@ const AttributesFilter = ({
               {attribute.name._}
             </Text>
             <Attributes>
-              {attribute.values.map((value) => (
-                <Attribute
-                  key={`K${attribute.key}V${
-                    typeof value.value === 'string' ? value.value : value.value._
-                  }`}
-                >
-                  <Checkbox
-                    checked={
-                      !!selectedAttrs[
-                        `K${attribute.key}V${
-                          typeof value.value === 'string' ? value.value : value.value._
-                        }`
-                      ]
-                    }
-                    label={typeof value.value === 'string' ? value.value : value.value._}
-                    size={'m'}
-                    onChange={() => {
-                      handleCheck(
-                        `K${attribute.key}V${
-                          typeof value.value === 'string' ? value.value : value.value._
-                        }`,
-                        value,
-                        attribute.key,
-                      );
-                    }}
-                  />
-                  <AttributesCount color={'grey-500'}>
-                    {value.tokens_count}
-                  </AttributesCount>
-                </Attribute>
-              ))}
+              {attribute.values.map((value) => {
+                const isSelected =
+                  !!selectedAttrs[
+                    `K${attribute.key}V${
+                      typeof value.value === 'string' ? value.value : value.value._
+                    }`
+                  ];
+                return (
+                  <Attribute
+                    key={`K${attribute.key}V${
+                      typeof value.value === 'string' ? value.value : value.value._
+                    }`}
+                  >
+                    <Checkbox
+                      checked={isSelected}
+                      disabled={
+                        !isSelected &&
+                        Object.keys(selectedAttrs).some((key) =>
+                          key.startsWith(`K${attribute.key}`),
+                        )
+                      }
+                      label={
+                        typeof value.value === 'string' ? value.value : value.value._
+                      }
+                      size={'m'}
+                      onChange={() => {
+                        handleCheck(
+                          `K${attribute.key}V${
+                            typeof value.value === 'string' ? value.value : value.value._
+                          }`,
+                          value,
+                          attribute.key,
+                        );
+                      }}
+                    />
+                    <AttributesCount color={'grey-500'}>
+                      {value.tokens_count}
+                    </AttributesCount>
+                  </Attribute>
+                );
+              })}
             </Attributes>
           </Fragment>
         ))}
@@ -76,7 +86,7 @@ const AttributesFilter = ({
         <ApplyButton
           title={'Apply'}
           role={'primary'}
-          disabled={Object.keys(selectedAttrs).length === 0 || !filterChanged}
+          disabled={!filterChanged}
           onClick={handleApply}
         />
         <ResetButton
@@ -91,7 +101,6 @@ const AttributesFilter = ({
 };
 
 const Wrapper = styled.div`
-  width: 475px;
   max-height: 276px;
   overflow: auto;
   display: flex;

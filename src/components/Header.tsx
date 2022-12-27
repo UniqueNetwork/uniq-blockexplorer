@@ -106,6 +106,7 @@ const RightSide = styled.div`
   display: flex;
   justify-content: flex-end;
   flex-grow: 1;
+  margin-left: 40px;
 `;
 
 const SearchWrapper = styled.div`

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Text } from '@unique-nft/ui-kit';
 
@@ -21,54 +21,62 @@ export const getTags = (selectedAttrs: ChosenAttributesMap): string[] => {
 interface SelectedAttributesInputProps {
   selectedAttrs: ChosenAttributesMap;
   handleTagRemoveProps: (tag: string) => void;
-  hideTags: boolean;
-  visibleTags: string[];
-  setVisibleTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
 const SelectedAttributesInput = ({
   selectedAttrs,
-  hideTags,
   handleTagRemoveProps,
-  visibleTags,
-  setVisibleTags,
 }: SelectedAttributesInputProps) => {
+  const inputRef = useRef<HTMLDivElement>(null);
+  const [hiddenTags, setHiddenTags] = useState(0);
+  const tailOffsetRef = useRef<number>(0);
+
+  const calculateHidden = useCallback(() => {
+    if (!inputRef.current) return;
+
+    const container = inputRef.current;
+
+    let hiddenTags = 0;
+    let tailOffset = 0;
+
+    container.childNodes.forEach((item) => {
+      if ((item as HTMLSpanElement).offsetTop > 50) hiddenTags++;
+
+      if (hiddenTags === 0) {
+        tailOffset =
+          (item as HTMLSpanElement).offsetLeft + (item as HTMLSpanElement).offsetWidth;
+      }
+    });
+    tailOffsetRef.current = tailOffset;
+    setHiddenTags(hiddenTags);
+  }, [selectedAttrs]);
+
   const handleTagRemove = useCallback(
     (tag: string) => {
-      setVisibleTags((currVisibleTags) => {
-        const result = currVisibleTags.filter((currTag) => currTag !== tag);
-        handleTagRemoveProps(tag);
-
-        if (
-          Object.values(selectedAttrs).length - result.length >= 1 &&
-          result.length < currVisibleTags.length
-        ) {
-          const newDisplayedAttribute = Object.values(selectedAttrs).find((attr) => {
-            const value = typeof attr.value === 'string' ? attr.value : attr.value._;
-            return !result.includes(value) && value !== tag;
-          });
-
-          if (newDisplayedAttribute)
-            result.push(
-              typeof newDisplayedAttribute.value === 'string'
-                ? newDisplayedAttribute.value
-                : (newDisplayedAttribute.value._ as string),
-            );
-        }
-
-        return result;
-      });
+      handleTagRemoveProps(tag);
     },
-    [handleTagRemoveProps, selectedAttrs, setVisibleTags],
+    [handleTagRemoveProps],
   );
+
+  useEffect(() => {
+    calculateHidden();
+    window.addEventListener('resize', calculateHidden);
+
+    return () => {
+      window.removeEventListener('resize', calculateHidden);
+    };
+  }, [calculateHidden]);
 
   return (
     <>
       {getTags(selectedAttrs).length > 0 ? (
-        <InputTagStyled
-          key={getTags(selectedAttrs).join()}
-          value={hideTags ? visibleTags : getTags(selectedAttrs)}
-          onRemoved={handleTagRemove}
-        />
+        <>
+          <InputTagStyled
+            ref={inputRef}
+            value={getTags(selectedAttrs)}
+            onRemoved={handleTagRemove}
+          />
+          {hiddenTags > 0 && <Tail offset={tailOffsetRef.current}>+{hiddenTags}</Tail>}
+        </>
       ) : (
         <Placeholder color="grey-400">Select attributes</Placeholder>
       )}
@@ -78,23 +86,18 @@ const SelectedAttributesInput = ({
 
 const InputTagStyled = styled(InputTag)`
   width: 100%;
+
   input {
     display: none;
   }
-  .rti--container {
-    flex-wrap: wrap;
-    border: none;
-    outline: none;
-    min-height: 24px;
-    .rti--tag {
-      word-break: unset;
-      flex-shrink: 0;
-    }
-  }
-  .rti--container:hover,
-  .rti--container:focus-within {
-    border: none;
-  }
+`;
+
+const Tail = styled.div<{ offset: number }>`
+  position: absolute;
+  top: 38px;
+  left: ${({ offset }) => offset + 'px'};
+  line-height: 22px;
+  margin-left: 4px;
 `;
 
 const Placeholder = styled(Text)`
