@@ -28,10 +28,10 @@ const Wrapper = styled.div.attrs<{ width: number }>((props) => ({
   width: ${(props) => props.width}px;
   border-radius: ${(props) => props.width}px;
   overflow: hidden;
-
   img {
-    height: 100%;
+    object-fit: cover;
     width: 100%;
+    height: 100%;
   }
 `;
 

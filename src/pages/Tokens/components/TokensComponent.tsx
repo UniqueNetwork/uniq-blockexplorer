@@ -3,20 +3,15 @@ import { DefaultRecordType } from 'rc-table/lib/interface';
 import { FC, useMemo } from 'react';
 import styled from 'styled-components/macro';
 
+import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
 import {
-  Token,
-  TokenAttributeFilterItem,
-  TokenSorting,
-  useGraphQlTokens,
-} from '@app/api';
-import { Pagination, ScrollableTable, SelectOptionProps } from '@app/components';
-import {
-  DeviceSize,
-  DeviceSizes,
-  useApi,
-  useDeviceSize,
-  useQueryParams,
-} from '@app/hooks';
+  DEFAULT_PAGE_SIZE_OPTIONS,
+  Pagination,
+  ScrollableTable,
+  SelectOptionProps,
+} from '@app/components';
+import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
+import { ContentWrapper } from '@app/components/ContentWrapper';
 
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
@@ -107,15 +102,20 @@ const TokensComponent: FC<TokensComponentProps> = ({
   );
 
   return (
-    <Wrapper>
+    <ContentWrapper>
       <TopPaginationContainer>
         <Pagination
           count={tokensCount || 0}
           currentPage={currentPage}
-          itemsName="NFTs"
+          itemName="NFT"
           pageSize={pageSize}
           setPageSize={setPageSize}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          pageSizeOptions={[
+            ...DEFAULT_PAGE_SIZE_OPTIONS,
+            { id: 48, title: '48' },
+            { id: 60, title: '60' },
+          ]}
           onPageChange={setCurrentPage}
         />
       </TopPaginationContainer>
@@ -133,60 +133,41 @@ const TokensComponent: FC<TokensComponentProps> = ({
               rowKey={getRowKey}
             />
           ) : (
-            <div>
+            <TokensGridWrapper>
               <TokensGrid
                 chainNetwork={currentChain.network}
                 timestamp={timestamp}
                 tokens={tokens || []}
+                loading={isTokensFetching}
               />
-            </div>
+            </TokensGridWrapper>
           )}
         </>
       )}
-      <BottomPaginationContainer>
-        <Pagination
-          count={tokensCount || 0}
-          currentPage={currentPage}
-          itemsName="NFTs"
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
-          onPageChange={setCurrentPage}
-        />
-      </BottomPaginationContainer>
-    </Wrapper>
+      {!isTokensFetching && !!tokensCount && (
+        <BottomPaginationContainer>
+          <Pagination
+            count={tokensCount || 0}
+            currentPage={currentPage}
+            itemName="NFT"
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+            pageSizeOptions={[
+              ...DEFAULT_PAGE_SIZE_OPTIONS,
+              { id: 48, title: '48' },
+              { id: 60, title: '60' },
+            ]}
+            onPageChange={setCurrentPage}
+          />
+        </BottomPaginationContainer>
+      )}
+    </ContentWrapper>
   );
 };
 
-const Wrapper = styled.div`
-  > :first-of-type {
-    margin-bottom: calc(var(--gap) * 1.5);
-  }
-  .pagination {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-
-    .count-with-page-size {
-      display: flex;
-      align-items: center;
-      grid-column-gap: calc(var(--gap) * 2.5);
-
-      .page-size {
-        display: flex;
-        grid-column-gap: calc(var(--gap) / 2);
-        align-items: center;
-
-        .unique-select {
-          width: 72px;
-        }
-      }
-
-      @media (max-width: ${DeviceSizes.sm}) {
-        grid-column-gap: var(--gap);
-      }
-    }
-  }
+const TokensGridWrapper = styled.div`
+  flex: 1;
 `;
 
 const TopPaginationContainer = styled.div`

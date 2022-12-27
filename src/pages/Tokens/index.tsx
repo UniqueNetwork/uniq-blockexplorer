@@ -7,12 +7,13 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
+import styled from 'styled-components/macro';
 
 import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { Question } from '@app/images/icons/svgs';
-import { TokenAttributeFilterItem, TokenSorting } from '@app/api';
+import { TokenSorting } from '@app/api';
 import { RouterTabs, SelectOptionProps } from '@app/components';
 import { PageHeading } from '@app/components/PageHeading';
 
@@ -94,7 +95,7 @@ const TokensPage: FC = () => {
   }, [basePath, location.pathname, navigate]);
 
   return (
-    <div className="tokens-page">
+    <TokensPageWrapper className="tokens-page">
       <PageHeading title="Tokens" />
       <PagePaper>
         <RouterTabs
@@ -143,8 +144,14 @@ const TokensPage: FC = () => {
           <Route element={<div>fractional coming soon</div>} path="fractional" />
         </Routes>
       </PagePaper>
-    </div>
+    </TokensPageWrapper>
   );
 };
+
+const TokensPageWrapper = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+`;
 
 export default TokensPage;
