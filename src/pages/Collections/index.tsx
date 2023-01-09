@@ -59,6 +59,10 @@ const CollectionsPage: FC = () => {
   const offset = (currentPage - 1) * pageSizeNumber;
 
   const setOrderAndQuery = (sorting: CollectionSorting) => {
+    if (!Object.values(sorting)[0]) {
+      sorting = defaultOrderBy;
+    }
+
     setOrderBy(sorting);
     setParamToQuery([
       {
