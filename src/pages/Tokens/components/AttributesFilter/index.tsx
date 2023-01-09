@@ -1,12 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
+import { DecodedAttributes } from '@unique-nft/api';
 
 import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
 import { AttributeValue } from '@app/api/graphQL/attributes/types';
 import { ChosenAttributesMap } from '@app/api';
 import { deviceWidth } from '@app/hooks';
 import SelectedAttributesInput from '@app/pages/Tokens/components/AttributesFilter/SelectedAttributesInput';
+import { useGraphQlTokensForAttributes } from '@app/api/graphQL/tokensForAttributes/tokensForAttributes';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
@@ -46,6 +48,11 @@ const AttributesFilter = ({
   const { isCollectionAttributesFetching, collectionAttributes } =
     useGraphQLCollectionAttributes({ collectionId });
 
+  const { tokens } = useGraphQlTokensForAttributes({
+    collectionId,
+    attributesFilter: selectedAttrs,
+  });
+
   const handleCheck = useCallback(
     (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
       handleCheckProps(checkedKey, attribute, attributeKey);
@@ -62,6 +69,33 @@ const AttributesFilter = ({
     [handleRevertProps, filterChanged],
   );
 
+  const calculatedAttributes = useMemo(() => {
+    return collectionAttributes?.map((attribute) => {
+      return {
+        ...attribute,
+        values: attribute.values.map((value) => ({
+          ...value,
+          tokens_count:
+            tokens?.reduce<number>((acc, token) => {
+              const attributes: DecodedAttributes = token.attributes;
+
+              if (
+                Object.keys(attributes).some(
+                  (key) =>
+                    attribute.key === key &&
+                    attributes[Number(key)].rawValue.toString() === value.raw_value,
+                )
+              ) {
+                return acc + 1;
+              }
+
+              return acc;
+            }, 0) || 0,
+        })),
+      };
+    });
+  }, [collectionAttributes, tokens]);
+
   if (isCollectionAttributesFetching) return <Skeleton height={40} />;
 
   return (
@@ -75,7 +109,7 @@ const AttributesFilter = ({
       dropdownRender={() => {
         return (
           <AttributesFilterComponent
-            attributes={collectionAttributes || []}
+            attributes={calculatedAttributes || []}
             selectedAttrs={selectedAttrs}
             handleCheck={handleCheck}
             handleReset={handleResetProps}
