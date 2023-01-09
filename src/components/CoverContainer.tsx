@@ -29,6 +29,8 @@ export const CoverContainer = styled.div.attrs<{ src?: string }>((props) => ({
 
   @media (max-width: 767px) {
     width: 64px;
+    height: 64px;
+    overflow: hidden;
     div {
       width: 64px;
       height: 64px;
