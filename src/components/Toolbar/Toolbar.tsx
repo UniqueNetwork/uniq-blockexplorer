@@ -151,7 +151,17 @@ export const Toolbar = () => {
   // attributes filter
   const [selectedAttrs, setSelectedAttrs] =
     useState<ChosenAttributesMap>(parsedAttributes);
-  const [filterChanged, setFilterChanged] = useState(false);
+  const filterChanged = useMemo(() => {
+    const isKeysDiffer =
+      Object.keys(selectedAttrs).length !== Object.keys(parsedAttributes).length;
+
+    return (
+      isKeysDiffer ||
+      Object.keys(selectedAttrs).some(
+        (key) => selectedAttrs[key].raw_value !== parsedAttributes[key]?.raw_value,
+      )
+    );
+  }, [selectedAttrs, parsedAttributes]);
 
   const filterTokens = useCallback(
     (attributes = selectedAttrs) => {
@@ -167,7 +177,6 @@ export const Toolbar = () => {
 
   const handleCheck = useCallback(
     (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
-      setFilterChanged(true);
       setSelectedAttrs((selectedAttrs) => {
         let newSelectedAttrs: ChosenAttributesMap = {};
 
@@ -185,7 +194,6 @@ export const Toolbar = () => {
 
   const handleTagRemove = useCallback(
     (tag: string) => {
-      setFilterChanged(true);
       setSelectedAttrs((selectedAttrs) => {
         let newSelectedAttrs: ChosenAttributesMap = {};
         for (let key in selectedAttrs) {
@@ -195,8 +203,6 @@ export const Toolbar = () => {
             newSelectedAttrs[key] = selectedAttrs[key];
           }
         }
-        filterTokens(newSelectedAttrs);
-
         return newSelectedAttrs;
       });
     },
@@ -406,7 +412,7 @@ export const Toolbar = () => {
                     ? !Object.keys(selectedAttrs).length && allDefaultSettings
                     : allDefaultSettings
                 }
-                title="Reset All"
+                title="Clear All"
                 role="danger"
                 onClick={handleResetAll}
               />

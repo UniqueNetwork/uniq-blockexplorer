@@ -78,7 +78,7 @@ const SelectedAttributesInput = ({
           {hiddenTags > 0 && <Tail offset={tailOffsetRef.current}>+{hiddenTags}</Tail>}
         </>
       ) : (
-        <Placeholder color="grey-400">Select attributes</Placeholder>
+        <Placeholder color="grey-400">All attributes</Placeholder>
       )}
     </>
   );
