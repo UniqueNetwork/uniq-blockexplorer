@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components/macro';
 import { Skeleton } from '@unique-nft/ui-kit';
-import { DecodedAttributes } from '@unique-nft/api';
+import {
+  DecodedAttributes,
+  LocalizedStringOrBoxedNumberWithDefault,
+} from '@unique-nft/api';
 
 import { useGraphQLCollectionAttributes } from '@app/api/graphQL/attributes/attributes';
 import { AttributeValue } from '@app/api/graphQL/attributes/types';
@@ -83,7 +86,13 @@ const AttributesFilter = ({
                 Object.keys(attributes).some(
                   (key) =>
                     attribute.key === key &&
-                    attributes[Number(key)].rawValue.toString() === value.raw_value,
+                    ((
+                      attributes[Number(key)]
+                        .rawValue as LocalizedStringOrBoxedNumberWithDefault
+                    )?._
+                      ? JSON.stringify(attributes[Number(key)].rawValue) ===
+                        value.raw_value
+                      : attributes[Number(key)].rawValue.toString() === value.raw_value),
                 )
               ) {
                 return acc + 1;
