@@ -16,7 +16,7 @@ export const ContentWrapper = styled.div`
     .count-with-page-size {
       display: flex;
       align-items: center;
-      grid-column-gap: calc(var(--gap) * 2.5);
+      gap: calc(var(--gap) * 1.5);
 
       .page-size {
         display: flex;
@@ -32,5 +32,10 @@ export const ContentWrapper = styled.div`
         grid-column-gap: var(--gap);
       }
     }
+  }
+  .unique-toggle-wrapper label {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
   }
 `;

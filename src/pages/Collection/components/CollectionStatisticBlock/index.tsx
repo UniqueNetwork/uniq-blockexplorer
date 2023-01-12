@@ -59,7 +59,6 @@ const CollectionStatisticBlock = ({ collectionId }: CollectionStatisticBlockProp
 };
 
 const ScrollXWrapper = styled.div`
-  padding-top: calc(var(--gap) * 1.5);
   overflow-x: auto;
   &::-webkit-scrollbar {
     display: none;

@@ -130,7 +130,6 @@ const EventsTable: FC<{
 };
 
 const Wrapper = styled.div`
-  margin-top: var(--gap);
   .failed-event {
     background: var(--coral-100);
     td:first-of-type span,
@@ -148,7 +147,7 @@ const SkeletonWrapper = styled.div`
 
   .unique-skeleton {
     width: 100%;
-    min-height: 1200px;
+    min-height: 120px;
     border-radius: var(--gap) !important;
   }
 `;
