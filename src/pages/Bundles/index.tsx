@@ -10,6 +10,7 @@ import {
   ScrollableTable,
   SelectOptionProps,
   ViewType,
+  DEFAULT_PAGE_SIZE_OPTIONS,
 } from '@app/components';
 import {
   DeviceSize,
@@ -165,6 +166,11 @@ const BundlesPage: FC = () => {
               pageSize={pageSize}
               setPageSize={setPageSizeAndQuery}
               siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+              pageSizeOptions={[
+                ...DEFAULT_PAGE_SIZE_OPTIONS,
+                { id: 48, title: '48' },
+                { id: 60, title: '60' },
+              ]}
               onPageChange={setCurrentPage}
             />
           </TopPaginationContainer>
@@ -199,6 +205,11 @@ const BundlesPage: FC = () => {
                 pageSize={pageSize}
                 setPageSize={setPageSizeAndQuery}
                 siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+                pageSizeOptions={[
+                  ...DEFAULT_PAGE_SIZE_OPTIONS,
+                  { id: 48, title: '48' },
+                  { id: 60, title: '60' },
+                ]}
                 onPageChange={setCurrentPage}
               />
             </BottomPaginationContainer>

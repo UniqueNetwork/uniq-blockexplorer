@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { Button, Text } from '@unique-nft/ui-kit';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
-import { LoadingComponent } from '@app/components';
+import { LoadingComponent, Stub } from '@app/components';
 import { useGraphQlBundles } from '@app/api';
 import BundleCard from '@app/components/BundleCard';
 import { useApi } from '@app/hooks';
@@ -47,9 +47,7 @@ const BundlesTab = ({ collectionId, pageSize = 16, tokensLimit }: BundlesTabProp
   if (!bundlesCount)
     return (
       <NoDataWrapper>
-        <Text size={'m'} color={'grey-500'}>
-          No bundles
-        </Text>
+        <Stub />
       </NoDataWrapper>
     );
 

@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { Button, Text } from '@unique-nft/ui-kit';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
-import { LoadingComponent, TokenCard } from '@app/components';
+import { LoadingComponent, Stub, TokenCard } from '@app/components';
 import { useGraphQlTokens } from '@app/api';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -45,9 +45,7 @@ const TokensTab = ({ collectionId, pageSize = 16, tokensLimit }: TokensTabProps)
   if (!tokensCount)
     return (
       <NoDataWrapper>
-        <Text size={'m'} color={'grey-500'}>
-          No bundles
-        </Text>
+        <Stub />
       </NoDataWrapper>
     );
 

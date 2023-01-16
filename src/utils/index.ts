@@ -11,3 +11,4 @@ export * from './addressMirroring';
 export * from './formatLongNumber';
 export * from './isTouchEnabled';
 export * from './countNestedChildren';
+export * from './compareAttributeRawValues';

@@ -9,6 +9,7 @@ import { ChosenAttributesMap } from '@app/api';
 import { deviceWidth } from '@app/hooks';
 import SelectedAttributesInput from '@app/pages/Tokens/components/AttributesFilter/SelectedAttributesInput';
 import { useGraphQlTokensForAttributes } from '@app/api/graphQL/tokensForAttributes/tokensForAttributes';
+import { compareAttributeRawValues } from '@app/utils';
 
 import { Dropdown } from './Dropdown';
 import AttributesFilterComponent from './AttributesFilter';
@@ -57,7 +58,7 @@ const AttributesFilter = ({
     (checkedKey: string, attribute: AttributeValue, attributeKey: string) => {
       handleCheckProps(checkedKey, attribute, attributeKey);
     },
-    [handleCheckProps, selectedAttrs],
+    [handleCheckProps],
   );
 
   const onOpenChange = useCallback(
@@ -83,7 +84,10 @@ const AttributesFilter = ({
                 Object.keys(attributes).some(
                   (key) =>
                     attribute.key === key &&
-                    attributes[Number(key)].rawValue.toString() === value.raw_value,
+                    compareAttributeRawValues(
+                      attributes[Number(key)].rawValue,
+                      value.raw_value,
+                    ),
                 )
               ) {
                 return acc + 1;
