@@ -27,7 +27,9 @@ const TokenPage: FC = () => {
     <>
       {token.type === 'NESTED' && <Bundle loading={isTokensFetching} token={token} />}
       {token.type === 'NFT' && <SingleNFT loading={isTokensFetching} token={token} />}
-      {token.type === 'FRACTIONAL' && <RFT loading={isTokensFetching} token={token} />}
+      {(token.type === 'FRACTIONAL' || token.type === 'RFT') && (
+        <RFT loading={isTokensFetching} token={token} />
+      )}
     </>
   );
 };

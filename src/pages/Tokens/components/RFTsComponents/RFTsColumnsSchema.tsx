@@ -7,7 +7,6 @@ import { Token, TokenSorting } from '@app/api';
 
 import TableSortableColumnTitle from '../../../../components/TableSortableColumnTitle';
 import TokenTableCell from '../../../../components/TokenTableCell';
-import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
 
 export const getTokensColumns = (
   chainId: string,
@@ -79,12 +78,12 @@ export const getTokensColumns = (
     width: 180,
   },
   {
-    dataIndex: 'total_fractions',
-    key: 'total_fractions',
+    dataIndex: 'total_pieces',
+    key: 'total_pieces',
     render: (value: string) => <>{value}</>,
     title: (
       <TableSortableColumnTitle
-        dataIndex="total_fractions"
+        dataIndex="total_pieces"
         orderBy={orderBy}
         title="Total fractions"
         onOrderChange={onOrderChange}
@@ -100,9 +99,9 @@ export const getTokensColumns = (
     width: 150,
   },
   {
-    dataIndex: 'owners',
+    dataIndex: 'ownersCount',
     key: 'owners',
-    render: (value: string) => <AccountLinkComponent value={value} />,
+    render: (value: string) => <>{value}</>,
     title: 'Owners',
     width: 150,
   },

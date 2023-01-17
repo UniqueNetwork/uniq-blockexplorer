@@ -2,25 +2,26 @@ import React from 'react';
 
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
-import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 import FractionsTableCell from '@app/pages/Token/RFT/components/OwnersSection/FractionsTableCell';
 import { DeviceSize } from '@app/hooks';
 import PercentageTableCell from '@app/pages/Token/RFT/components/OwnersSection/PercentageTableCell';
+import { OwnersSorting } from '@app/api/graphQL/rftOwners/types';
 
 export const GetOwnersColumns = (
-  orderBy: EventsSorting,
-  onOrderChange: (orderBy: EventsSorting) => void,
+  orderBy: OwnersSorting,
+  onOrderChange: (orderBy: OwnersSorting) => void,
+  totalPieces: number,
   deviceSize: DeviceSize,
 ) => [
   {
-    dataIndex: 'account',
-    key: 'account',
+    dataIndex: 'owner',
+    key: 'owner',
     render: (value: string) => (
       <AccountLinkComponent value={value} noShort={deviceSize >= DeviceSize.xl} />
     ),
     title: (
       <TableSortableColumnTitle
-        dataIndex="account"
+        dataIndex="owner"
         orderBy={orderBy}
         title="Account"
         onOrderChange={onOrderChange}
@@ -29,33 +30,33 @@ export const GetOwnersColumns = (
     width: 234,
   },
   {
-    dataIndex: 'fractions',
-    key: 'fractions',
+    dataIndex: 'amount',
+    key: 'amount',
     title: (
       <TableSortableColumnTitle
-        dataIndex="fractions"
+        dataIndex="amount"
         orderBy={orderBy}
         title="Owned fractions"
         onOrderChange={onOrderChange}
       />
     ),
     render: (value: number) => (
-      <FractionsTableCell fractions={value} totalCount={10000} />
+      <FractionsTableCell fractions={value} totalCount={totalPieces} />
     ),
     width: deviceSize >= DeviceSize.xl ? 100 : 234,
   },
   {
-    dataIndex: 'fractions',
+    dataIndex: 'amount',
     key: 'fractions-owned',
     title: (
       <TableSortableColumnTitle
-        dataIndex="fractions"
+        dataIndex="amount"
         orderBy={orderBy}
         title="Ownership percentage"
         onOrderChange={onOrderChange}
       />
     ),
-    render: (value: number) => <PercentageTableCell value={value} />,
+    render: (value: number) => <PercentageTableCell value={value} total={totalPieces} />,
     width: 234,
   },
 ];

@@ -12,6 +12,7 @@ import {
   useDeviceSize,
   useQueryParams,
 } from '@app/hooks';
+import { useGraphQLTokensTotalOwners } from '@app/api/graphQL/rftTotalOwners/rftTotalOwners';
 
 import { getTokensColumns } from './RFTsColumnsSchema';
 import RFTsGrid from './RFTsGrid';
@@ -28,7 +29,10 @@ const filter = ({
   accountId?: string;
   collectionId?: string;
 }) => {
-  let _filter: any = { burned: { _eq: 'false' }, type: { _eq: 'FRACTIONAL' } };
+  let _filter: any = {
+    burned: { _eq: 'false' },
+    _or: [{ type: { _eq: 'RFT' } }, { type: { _eq: 'FRACTIONAL' } }],
+  };
 
   if (accountId) {
     _filter = {
@@ -80,6 +84,11 @@ const RFTsComponent: FC<TokensComponentProps> = ({
     searchString,
   });
 
+  const { tokensOwners, isTokensTotalOwnersFetching } = useGraphQLTokensTotalOwners({
+    tokens:
+      tokens?.map(({ collection_id, token_id }) => ({ collection_id, token_id })) || [],
+  });
+
   const tokenColumns = getTokensColumns(
     currentChain.network,
     orderBy,
@@ -93,20 +102,29 @@ const RFTsComponent: FC<TokensComponentProps> = ({
     [],
   );
 
+  const tokensWithOwners = useMemo(
+    () =>
+      tokens?.map((token) => ({
+        ...token,
+        ownersCount: tokensOwners[`${token.collection_id}_${token.token_id}`] || 0,
+      })) || [],
+    [tokens, tokensOwners],
+  );
+
   return (
     <Wrapper>
       <TopPaginationContainer>
         <Pagination
           count={tokensCount || 0}
           currentPage={currentPage}
-          itemsName="NFTs"
+          itemName="RFT"
           pageSize={pageSize}
           setPageSize={setPageSize}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
           onPageChange={setCurrentPage}
         />
       </TopPaginationContainer>
-      {isTokensFetching ? (
+      {isTokensFetching || isTokensTotalOwnersFetching ? (
         <SkeletonWrapper>
           <Skeleton />
         </SkeletonWrapper>
@@ -115,8 +133,8 @@ const RFTsComponent: FC<TokensComponentProps> = ({
           {view === ViewType.List ? (
             <ScrollableTable
               columns={tokenColumns}
-              data={tokens || []}
-              loading={isTokensFetching}
+              data={tokensWithOwners}
+              loading={isTokensFetching || isTokensTotalOwnersFetching}
               rowKey={getRowKey}
             />
           ) : (
@@ -134,7 +152,7 @@ const RFTsComponent: FC<TokensComponentProps> = ({
         <Pagination
           count={tokensCount || 0}
           currentPage={currentPage}
-          itemsName="NFTs"
+          itemName="RFT"
           pageSize={pageSize}
           setPageSize={setPageSize}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}

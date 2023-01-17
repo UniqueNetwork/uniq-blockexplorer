@@ -1,56 +1,41 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Heading } from '@unique-nft/ui-kit';
+import React, { useMemo, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { Heading, Skeleton } from '@unique-nft/ui-kit';
 import { DefaultRecordType } from 'rc-table/lib/interface';
+import styled from 'styled-components/macro';
 
-import { useDeviceSize, useQueryParams } from '@app/hooks';
+import { DeviceSize, useDeviceSize } from '@app/hooks';
 import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
-import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
-import { PagePaper, ScrollableTable, SelectOptionProps } from '@app/components';
+import { DEFAULT_PAGE_SIZE, defaultOwnersOrderBy } from '@app/pages/Bundles/constants';
+import {
+  PagePaper,
+  Pagination,
+  ScrollableTable,
+  SelectOptionProps,
+} from '@app/components';
 import { GetOwnersColumns } from '@app/pages/Token/RFT/components/OwnersSection/columnsSchema';
+import { useGraphQLRftOwners } from '@app/api/graphQL/rftOwners/rftOwners';
+import { OwnersSorting } from '@app/api/graphQL/rftOwners/types';
 
 type OwnersItem = {
   account: string;
   fractions: number;
 };
 
-const data: OwnersItem[] = [
-  {
-    account: '5FcCSk2PJrjS2G6EaAw7QvYapBTXtWUShd7kuLwYx4Syp47s',
-    fractions: 5000,
-  },
-  {
-    account: '5FcCSk2PJrjS2G6EaAw7QvYapBTXtWUShd7kuLwYx4Syp47s',
-    fractions: 3000,
-  },
-  {
-    account: '5FcCSk2PJrjS2G6EaAw7QvYapBTXtWUShd7kuLwYx4Syp47s',
-    fractions: 5010,
-  },
-  {
-    account: '5FcCSk2PJrjS2G6EaAw7QvYapBTXtWUShd7kuLwYx4Syp47s',
-    fractions: 5900,
-  },
-];
+type OwnersTableProps = {
+  totalPieces: number;
+};
 
-const OwnersTable = () => {
+const OwnersTable = ({ totalPieces }: OwnersTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const { sort, setParamToQuery } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
   const deviceSize = useDeviceSize();
+  const { collectionId, tokenId } = useParams<{
+    collectionId: string;
+    tokenId: string;
+  }>();
 
-  // get sort from query string
-  const getOrderByFromQuery = () => {
-    const split = sort?.split('-');
-    return split ? { [split[0]]: split[1] } : ({} as EventsSorting);
-  };
-  const [orderBy, setOrderBy] = useState<EventsSorting>(
-    getOrderByFromQuery() || defaultEventsOrderBy,
-  );
-
-  useEffect(() => {
-    setOrderBy(getOrderByFromQuery());
-  }, [sort]);
+  const [orderBy, setOrderBy] = useState<OwnersSorting>(defaultOwnersOrderBy);
 
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
     id: Number(queryParams.get('pageSize')) || DEFAULT_PAGE_SIZE,
@@ -62,13 +47,6 @@ const OwnersTable = () => {
 
   const setOrderAndQuery = (sorting: EventsSorting) => {
     setOrderBy(sorting);
-    setParamToQuery([
-      {
-        name: 'sort',
-        // @ts-ignore
-        value: `${Object.keys(sorting)[0]}-${sorting[Object.keys(sorting)[0]]}`,
-      },
-    ]);
   };
 
   const setPageSizeAndQuery = (option: SelectOptionProps) => {
@@ -78,8 +56,8 @@ const OwnersTable = () => {
   };
 
   const columns = useMemo(
-    () => GetOwnersColumns(orderBy, setOrderAndQuery, deviceSize),
-    [orderBy, deviceSize],
+    () => GetOwnersColumns(orderBy, setOrderAndQuery, totalPieces, deviceSize),
+    [orderBy, deviceSize, totalPieces],
   );
 
   const getRowKey = useMemo(
@@ -88,17 +66,81 @@ const OwnersTable = () => {
     [],
   );
 
+  const { owners, isTokenOwnersFetching, count } = useGraphQLRftOwners({
+    collectionId: Number(collectionId),
+    tokenId: Number(tokenId),
+    offset,
+    orderBy,
+    limit: pageSizeNumber,
+  });
+
+  if (!collectionId || !tokenId) return null;
+
   return (
     <PagePaper>
       <Heading size={'2'}>Owners</Heading>
-      <ScrollableTable
-        columns={columns}
-        data={data || []}
-        loading={false}
-        rowKey={getRowKey}
-      />
+      {isTokenOwnersFetching ? (
+        <SkeletonWrapper>
+          <Skeleton />
+        </SkeletonWrapper>
+      ) : (
+        <>
+          <ScrollableTable
+            columns={columns}
+            data={owners || []}
+            loading={false}
+            rowKey={getRowKey}
+          />
+        </>
+      )}
+      {!!count && (
+        <BottomPaginationContainer>
+          <Pagination
+            count={count || 0}
+            currentPage={currentPage}
+            itemName="Owner"
+            pageSize={pageSize}
+            setPageSize={setPageSizeAndQuery}
+            siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+            onPageChange={setCurrentPage}
+          />
+        </BottomPaginationContainer>
+      )}
     </PagePaper>
   );
 };
+
+const SkeletonWrapper = styled.div`
+  padding: 0;
+  display: flex;
+  flex-grow: 1;
+
+  .unique-skeleton {
+    width: 100%;
+    min-height: 1200px;
+    border-radius: var(--gap) !important;
+  }
+`;
+
+const BottomPaginationContainer = styled.div`
+  .pagination {
+    display: flex;
+    flex-direction: column;
+    margin-top: calc(var(--gap) * 2.25);
+    align-items: flex-end;
+    gap: calc(var(--gap));
+    > div:first-of-type {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      > div:last-of-type {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--gap) / 2);
+      }
+    }
+  }
+`;
 
 export default OwnersTable;

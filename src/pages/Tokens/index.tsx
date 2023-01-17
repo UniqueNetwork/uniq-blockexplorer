@@ -116,10 +116,6 @@ const TokensPage: FC = () => {
             </div>,
             <div className="flex-row" key="fractional-tab">
               Fractional
-              <img data-tip alt="tooltip" data-for="sadFace" src={Question} />
-              <ReactTooltip id="sadFace" effect="solid">
-                <span>Coming soon</span>
-              </ReactTooltip>
             </div>,
           ]}
           tabUrls={tabUrls}

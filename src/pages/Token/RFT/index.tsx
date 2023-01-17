@@ -23,7 +23,7 @@ const SingleRFTPage: FC<SingleNFTPageComponentProps> = ({ loading, token }) => {
       <PagePaper>
         <TokenDetailComponent loading={loading} token={token} />
       </PagePaper>
-      <OwnersTable />
+      <OwnersTable totalPieces={token.total_pieces || 1} />
       <EventsTable />
     </>
   );

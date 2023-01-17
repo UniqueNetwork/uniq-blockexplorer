@@ -12,7 +12,7 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import ProgressBar from '@app/components/ProgressBar';
+import { RftCharacteristics } from '@app/pages/Token/RFT/components/RFTCharacteristics';
 
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
@@ -47,7 +47,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   );
 
   const badge = useMemo(() => {
-    if (type === 'FRACTIONAL') return 'Fractional';
+    if (type === 'FRACTIONAL' || type === 'RFT') return 'Fractional';
 
     if (type === 'NESTED') return parent_id ? 'Nested' : 'Bundle';
 
@@ -94,33 +94,21 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
           <Text color="grey-500">Created on</Text>
           <Text>{createdOnDate}</Text>
-          <Text color="grey-500">Owner{type === 'FRACTIONAL' && 's'}</Text>
-          <OwnerWrapper>
-            <AccountLinkComponent noShort={deviceSize >= DeviceSize.xxl} value={owner} />
-          </OwnerWrapper>
+          {type !== 'FRACTIONAL' && type !== 'RFT' && (
+            <>
+              <Text color="grey-500">Owner</Text>
+              <OwnerWrapper>
+                <AccountLinkComponent
+                  noShort={deviceSize >= DeviceSize.xxl}
+                  value={owner}
+                />
+              </OwnerWrapper>
+            </>
+          )}
         </TokenInfo>
         <TokenAttributes>
-          {type !== 'FRACTIONAL' && (
-            <CheracteristicsInfo>
-              <Heading size="4">Сharacteristics</Heading>
-              <RFTAttribute key={`attribute-fractions-minted`}>
-                <Text color="grey-500">Total number of minted fractions:</Text>
-                <Text>10000</Text>
-              </RFTAttribute>
-              <RFTAttribute key={`attribute-fractions-sold`}>
-                <Text color="grey-500">Total number of fractions sold:</Text>
-                <Text>10000</Text>
-              </RFTAttribute>
-              <RFTAttribute key={`attribute-fractions-owned`}>
-                <Text color="grey-500">Owned fractions:</Text>
-                <Text>10000</Text>
-              </RFTAttribute>
-              <RFTAttribute key={`attribute-fractions-owned`}>
-                <Text color="grey-500">Ownership percentage:</Text>
-                <Text>1,25 %</Text>
-              </RFTAttribute>
-              <ProgressBarStyled filledPercent={1.25} />
-            </CheracteristicsInfo>
+          {(type === 'RFT' || type === 'FRACTIONAL') && (
+            <RftCharacteristics token={token} />
           )}
           {type === 'NESTED' ? (
             <HeaderWithTooltip>
@@ -248,24 +236,6 @@ const TokenInfo = styled.div`
     display: flex !important;
     align-items: center;
   }
-`;
-
-const CheracteristicsInfo = styled.div`
-  padding-bottom: calc(var(--gap) * 2);
-  margin-bottom: calc(var(--gap) * 2);
-  border-bottom: 1px dashed var(--border-color);
-`;
-
-const RFTAttribute = styled.div`
-  display: flex;
-  gap: calc(var(--gap) / 2);
-  &:first-of-type {
-    margin-top: var(--gap);
-  }
-`;
-
-const ProgressBarStyled = styled(ProgressBar)`
-  margin-top: 6px;
 `;
 
 const TokenAttributes = styled.div`

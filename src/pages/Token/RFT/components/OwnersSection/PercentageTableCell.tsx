@@ -5,7 +5,7 @@ import styled from 'styled-components/macro';
 import ProgressBar from '@app/components/ProgressBar';
 import { DeviceSize, useDeviceSize } from '@app/hooks';
 
-const PercentageTableCell = ({ value }: { value: number }) => {
+const PercentageTableCell = ({ value, total }: { value: number; total: number }) => {
   const deviceSize = useDeviceSize();
   let barWidth = 134;
 
@@ -17,8 +17,8 @@ const PercentageTableCell = ({ value }: { value: number }) => {
 
   return (
     <FlexWrapper>
-      <ProgressBar filledPercent={(value / 10000) * 100} height={8} width={barWidth} />
-      <Text>{(value / 10000) * 100} %</Text>
+      <ProgressBar filledPercent={(value / total) * 100} height={8} width={barWidth} />
+      <Text>{(value / total) * 100} %</Text>
     </FlexWrapper>
   );
 };
