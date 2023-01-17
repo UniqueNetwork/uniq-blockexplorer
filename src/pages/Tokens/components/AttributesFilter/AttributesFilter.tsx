@@ -52,10 +52,11 @@ const AttributesFilter = ({
                     <Checkbox
                       checked={isSelected}
                       disabled={
-                        !isSelected &&
-                        Object.keys(selectedAttrs).some((key) =>
-                          key.startsWith(`K${attribute.key}`),
-                        )
+                        (!isSelected &&
+                          Object.keys(selectedAttrs).some((key) =>
+                            key.startsWith(`K${attribute.key}`),
+                          )) ||
+                        !value.tokens_count
                       }
                       label={
                         typeof value.value === 'string' ? value.value : value.value._

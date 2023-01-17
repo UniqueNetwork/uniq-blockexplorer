@@ -106,6 +106,10 @@ const InputWrapper = styled.div`
   position: relative;
   display: flex;
   width: 100%;
+  margin-right: calc(var(--gap) / 2);
+  @media (max-width: 767px) {
+    margin-right: 0;
+  }
 `;
 
 const SearchWrapper = styled.div`
@@ -125,16 +129,15 @@ const SearchWrapper = styled.div`
 const ClearSearch = styled.div`
   position: absolute;
   cursor: pointer;
-  right: 20px;
+  right: 12px;
   top: 16px;
 `;
 
 const SearchInput = styled(InputText)`
   box-sizing: border-box;
   width: 100%;
-  margin-right: calc(var(--gap) / 2);
   background-color: var(--white-color);
-  & .unique-input-text .input-wrapper.with-icon.to-left input {
+  & .input-wrapper.with-icon.to-left input {
     padding: 11px 25px 11px 0px;
   }
   @media (max-width: 767px) {

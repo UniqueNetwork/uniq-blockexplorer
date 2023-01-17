@@ -37,6 +37,10 @@ const TokensPage: FC = () => {
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
 
   const setOrderAndQuery = (sorting: TokenSorting) => {
+    if (!Object.values(sorting)[0]) {
+      sorting = defaultOrderBy;
+    }
+
     setOrderBy(sorting);
     queryParams.set(
       'sort',
