@@ -87,7 +87,7 @@ const CollectionsPage: FC = () => {
   let tokensFilter;
 
   const filter = useMemo(() => {
-    let filters = { _or: [{}] }; // { _or: [{}], nesting_enabled: {}, burned: { _eq: 'false' } };
+    let filters = { _or: [{}], nesting_enabled: {}, burned: { _eq: 'false' } };
 
     if (accountId) {
       filters._or = [
@@ -97,9 +97,9 @@ const CollectionsPage: FC = () => {
       tokensFilter = { ...filters };
     }
 
-    // if (nesting === 'true') {
-    //   filters.nesting_enabled = { _eq: 'true' };
-    // }
+    if (nesting === 'true') {
+      filters.nesting_enabled = { _eq: 'true' };
+    }
 
     return filters;
   }, [accountId, nesting]);

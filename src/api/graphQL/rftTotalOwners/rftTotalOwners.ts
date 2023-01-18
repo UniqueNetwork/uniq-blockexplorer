@@ -80,11 +80,8 @@ export const useGraphQLTokensTotalOwners = ({
     return (
       data?.token_owners?.data?.reduce<Record<string, number>>(
         (acc, { token_id, collection_id }) => {
-          if (acc[`${collection_id}_${token_id}`]) {
-            acc[`${collection_id}_${token_id}`]++;
-          } else {
-            acc[`${collection_id}_${token_id}`] = 1;
-          }
+          acc[`${collection_id}_${token_id}`] =
+            (acc[`${collection_id}_${token_id}`] || 0) + 1;
 
           return acc;
         },
