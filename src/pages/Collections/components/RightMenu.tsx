@@ -49,7 +49,12 @@ export const RightMenu: FC<RightMenuProps> = ({
           onChange={selectSort}
         />
       )}
-      <Toggle label="Only nesting enabled" on={nestingOn} onChange={setNestingOn} />
+      <Toggle
+        size="m"
+        label="Only nesting enabled"
+        on={nestingOn}
+        onChange={setNestingOn}
+      />
       <Controls className="controls">
         <ViewButtons>
           <ViewButton onClick={selectList}>
