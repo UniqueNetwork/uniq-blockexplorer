@@ -3,7 +3,7 @@ import { Heading, Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 
 import { Token } from '@app/api';
-import { useGraphQLRftOwners } from '@app/api/graphQL/rftOwners/rftOwners';
+import { useGraphQLRftHolders } from '@app/api/graphQL/rftHolders/rftHolders';
 import { formatBlockNumber } from '@app/utils';
 
 interface RftCharacteristicsProps {
@@ -11,7 +11,7 @@ interface RftCharacteristicsProps {
 }
 
 export const RftCharacteristics: FC<RftCharacteristicsProps> = ({ token }) => {
-  const { owners } = useGraphQLRftOwners({
+  const { owners } = useGraphQLRftHolders({
     collectionId: token.collection_id,
     tokenId: token.token_id,
     owner: token.owner,

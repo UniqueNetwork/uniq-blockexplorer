@@ -2,12 +2,12 @@ import { gql, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
 import {
-  TokensTotalOwnersData,
-  TokensTotalOwnersVariables,
-  useGraphQLTokensTotalOwnersProps,
+  TokensTotalHoldersData,
+  TokensTotalHoldersVariables,
+  useGraphQLTokensTotalHoldersProps,
 } from './types';
 
-const tokensTotalOwnersQuery = gql`
+const tokensTotalHoldersQuery = gql`
   query getTokensOwners($limit: Int, $offset: Int, $where: TokenOwnersWhereParams = {}) {
     token_owners(where: $where, limit: $limit, offset: $offset) {
       data {
@@ -18,11 +18,11 @@ const tokensTotalOwnersQuery = gql`
   }
 `;
 
-export const useGraphQLTokensTotalOwners = ({
+export const useGraphQLTokensTotalHolders = ({
   limit = 2_147_483_647,
   offset = 0,
   tokens,
-}: useGraphQLTokensTotalOwnersProps) => {
+}: useGraphQLTokensTotalHoldersProps) => {
   const where = useMemo(() => {
     let where: { [key: string]: unknown } = {};
 
@@ -59,10 +59,10 @@ export const useGraphQLTokensTotalOwners = ({
 
   const {
     data,
-    error: fetchTokensTotalOwnersError,
-    loading: isTokensTotalOwnersFetching,
-  } = useQuery<TokensTotalOwnersData, TokensTotalOwnersVariables>(
-    tokensTotalOwnersQuery,
+    error: fetchTokensTotalHoldersError,
+    loading: isTokensTotalHoldersFetching,
+  } = useQuery<TokensTotalHoldersData, TokensTotalHoldersVariables>(
+    tokensTotalHoldersQuery,
     {
       fetchPolicy: 'network-only',
       // Used for first execution
@@ -76,7 +76,7 @@ export const useGraphQLTokensTotalOwners = ({
     },
   );
 
-  const tokensOwners = useMemo(() => {
+  const tokensHolders = useMemo(() => {
     return (
       data?.token_owners?.data?.reduce<Record<string, number>>(
         (acc, { token_id, collection_id }) => {
@@ -91,8 +91,8 @@ export const useGraphQLTokensTotalOwners = ({
   }, [data?.token_owners?.data]);
 
   return {
-    fetchTokensTotalOwnersError,
-    isTokensTotalOwnersFetching,
-    tokensOwners,
+    fetchTokensTotalHoldersError,
+    isTokensTotalHoldersFetching,
+    tokensHolders,
   };
 };

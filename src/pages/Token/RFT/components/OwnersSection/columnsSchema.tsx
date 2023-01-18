@@ -5,11 +5,11 @@ import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import FractionsTableCell from '@app/pages/Token/RFT/components/OwnersSection/FractionsTableCell';
 import { DeviceSize } from '@app/hooks';
 import PercentageTableCell from '@app/pages/Token/RFT/components/OwnersSection/PercentageTableCell';
-import { OwnersSorting } from '@app/api/graphQL/rftOwners/types';
+import { HoldersSorting } from '@app/api/graphQL/rftHolders/types';
 
 export const GetOwnersColumns = (
-  orderBy: OwnersSorting,
-  onOrderChange: (orderBy: OwnersSorting) => void,
+  orderBy: HoldersSorting,
+  onOrderChange: (orderBy: HoldersSorting) => void,
   totalPieces: number,
   deviceSize: DeviceSize,
 ) => [

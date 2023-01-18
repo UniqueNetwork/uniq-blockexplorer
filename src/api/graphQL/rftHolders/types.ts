@@ -1,19 +1,19 @@
-export interface RftOwnersVariables {
+export interface RftHoldersVariables {
   limit: number;
   offset: number;
-  orderBy?: OwnersSorting;
+  orderBy?: HoldersSorting;
   where?: { [key: string]: unknown };
 }
 
-export interface RftOwnersData {
+export interface RftHoldersData {
   token_owners: {
-    data: RftOwners[];
+    data: RftHolders[];
     count: number;
     timestamp: number;
   };
 }
 
-export interface RftOwners {
+export interface RftHolders {
   collection_id: number;
   token_id: number;
   amount: number;
@@ -21,8 +21,8 @@ export interface RftOwners {
   owner_normalized: string;
 }
 
-export type OwnersSorting = {
-  [P in keyof RftOwners]?:
+export type HoldersSorting = {
+  [P in keyof RftHolders]?:
     | 'asc'
     | 'desc'
     | 'desc_nulls_last'
@@ -31,10 +31,10 @@ export type OwnersSorting = {
     | 'desc_nulls_first';
 };
 
-export interface useGraphQLRftOwnersProps {
+export interface useGraphQLRftHoldersProps {
   limit: number;
   offset?: number;
-  orderBy?: OwnersSorting;
+  orderBy?: HoldersSorting;
   tokenId?: number;
   collectionId?: number;
   owner?: string;

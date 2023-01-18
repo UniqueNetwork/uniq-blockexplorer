@@ -1,11 +1,11 @@
-export interface TokensTotalOwnersVariables {
+export interface TokensTotalHoldersVariables {
   limit: number;
   offset: number;
 
   where?: { [key: string]: unknown };
 }
 
-export interface TokensTotalOwnersData {
+export interface TokensTotalHoldersData {
   token_owners: {
     data: TokenTotalOwner[];
     count: number;
@@ -19,7 +19,7 @@ export interface TokenTotalOwner {
   amount: number;
 }
 
-export interface TokenTotalOwners {
+export interface TokenTotalHolders {
   collection_id: number;
   token_id: number;
   owners: number;
@@ -27,7 +27,7 @@ export interface TokenTotalOwners {
 
 export type TokenKeys = { token_id: number; collection_id: number };
 
-export interface useGraphQLTokensTotalOwnersProps {
+export interface useGraphQLTokensTotalHoldersProps {
   limit?: number;
   offset?: number;
   tokens: TokenKeys[];

@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
 
-import { RftOwnersData, RftOwnersVariables, useGraphQLRftOwnersProps } from './types';
+import { RftHoldersData, RftHoldersVariables, useGraphQLRftHoldersProps } from './types';
 
-const tokenOwnersQuery = gql`
+const tokenHoldersQuery = gql`
   query getTokenOwners(
     $limit: Int
     $offset: Int
@@ -24,14 +24,14 @@ const tokenOwnersQuery = gql`
   }
 `;
 
-export const useGraphQLRftOwners = ({
+export const useGraphQLRftHolders = ({
   limit,
   offset = 0,
   orderBy,
   collectionId,
   tokenId,
   owner,
-}: useGraphQLRftOwnersProps) => {
+}: useGraphQLRftHoldersProps) => {
   const where: { [key: string]: unknown } = {
     collection_id: { _eq: collectionId },
     token_id: { _eq: tokenId },
@@ -41,9 +41,9 @@ export const useGraphQLRftOwners = ({
 
   const {
     data,
-    error: fetchTokenOwnersError,
-    loading: isTokenOwnersFetching,
-  } = useQuery<RftOwnersData, RftOwnersVariables>(tokenOwnersQuery, {
+    error: fetchTokenHoldersError,
+    loading: isTokenHoldersFetching,
+  } = useQuery<RftHoldersData, RftHoldersVariables>(tokenHoldersQuery, {
     fetchPolicy: 'network-only',
     // Used for first execution
     nextFetchPolicy: 'cache-first',
@@ -57,8 +57,8 @@ export const useGraphQLRftOwners = ({
   });
 
   return {
-    fetchTokenOwnersError,
-    isTokenOwnersFetching,
+    fetchTokenHoldersError,
+    isTokenHoldersFetching,
     timestamp: data?.token_owners?.timestamp || 0,
     owners: data?.token_owners?.data,
     count: data?.token_owners?.count || 0,

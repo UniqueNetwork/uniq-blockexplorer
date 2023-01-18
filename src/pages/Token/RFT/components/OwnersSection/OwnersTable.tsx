@@ -14,8 +14,8 @@ import {
   SelectOptionProps,
 } from '@app/components';
 import { GetOwnersColumns } from '@app/pages/Token/RFT/components/OwnersSection/columnsSchema';
-import { useGraphQLRftOwners } from '@app/api/graphQL/rftOwners/rftOwners';
-import { OwnersSorting } from '@app/api/graphQL/rftOwners/types';
+import { useGraphQLRftHolders } from '@app/api/graphQL/rftHolders/rftHolders';
+import { HoldersSorting } from '@app/api/graphQL/rftHolders/types';
 
 type OwnersItem = {
   account: string;
@@ -35,7 +35,7 @@ const OwnersTable = ({ totalPieces }: OwnersTableProps) => {
     tokenId: string;
   }>();
 
-  const [orderBy, setOrderBy] = useState<OwnersSorting>(defaultOwnersOrderBy);
+  const [orderBy, setOrderBy] = useState<HoldersSorting>(defaultOwnersOrderBy);
 
   const [pageSize, setPageSize] = useState<SelectOptionProps>({
     id: Number(queryParams.get('pageSize')) || DEFAULT_PAGE_SIZE,
@@ -66,7 +66,7 @@ const OwnersTable = ({ totalPieces }: OwnersTableProps) => {
     [],
   );
 
-  const { owners, isTokenOwnersFetching, count } = useGraphQLRftOwners({
+  const { owners, isTokenHoldersFetching, count } = useGraphQLRftHolders({
     collectionId: Number(collectionId),
     tokenId: Number(tokenId),
     offset,
@@ -79,7 +79,7 @@ const OwnersTable = ({ totalPieces }: OwnersTableProps) => {
   return (
     <PagePaper>
       <Heading size={'2'}>Owners</Heading>
-      {isTokenOwnersFetching ? (
+      {isTokenHoldersFetching ? (
         <SkeletonWrapper>
           <Skeleton />
         </SkeletonWrapper>

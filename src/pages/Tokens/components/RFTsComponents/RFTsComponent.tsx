@@ -12,7 +12,7 @@ import {
   useDeviceSize,
   useQueryParams,
 } from '@app/hooks';
-import { useGraphQLTokensTotalOwners } from '@app/api/graphQL/rftTotalOwners/rftTotalOwners';
+import { useGraphQLTokensTotalHolders } from '@app/api/graphQL/rftTotalHolders/rftTotalHolders';
 
 import { getTokensColumns } from './RFTsColumnsSchema';
 import RFTsGrid from './RFTsGrid';
@@ -84,7 +84,7 @@ const RFTsComponent: FC<TokensComponentProps> = ({
     searchString,
   });
 
-  const { tokensOwners, isTokensTotalOwnersFetching } = useGraphQLTokensTotalOwners({
+  const { tokensHolders, isTokensTotalHoldersFetching } = useGraphQLTokensTotalHolders({
     tokens:
       tokens?.map(({ collection_id, token_id }) => ({ collection_id, token_id })) || [],
   });
@@ -106,9 +106,9 @@ const RFTsComponent: FC<TokensComponentProps> = ({
     () =>
       tokens?.map((token) => ({
         ...token,
-        ownersCount: tokensOwners[`${token.collection_id}_${token.token_id}`] || 0,
+        ownersCount: tokensHolders[`${token.collection_id}_${token.token_id}`] || 0,
       })) || [],
-    [tokens, tokensOwners],
+    [tokens, tokensHolders],
   );
 
   return (
@@ -124,7 +124,7 @@ const RFTsComponent: FC<TokensComponentProps> = ({
           onPageChange={setCurrentPage}
         />
       </TopPaginationContainer>
-      {isTokensFetching || isTokensTotalOwnersFetching ? (
+      {isTokensFetching || isTokensTotalHoldersFetching ? (
         <SkeletonWrapper>
           <Skeleton />
         </SkeletonWrapper>
@@ -134,7 +134,7 @@ const RFTsComponent: FC<TokensComponentProps> = ({
             <ScrollableTable
               columns={tokenColumns}
               data={tokensWithOwners}
-              loading={isTokensFetching || isTokensTotalOwnersFetching}
+              loading={isTokensFetching || isTokensTotalHoldersFetching}
               rowKey={getRowKey}
             />
           ) : (
