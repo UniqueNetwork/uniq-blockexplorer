@@ -140,7 +140,7 @@ export const getBundleEventsAccountsPageColumns = ({
 ];
 
 const formatType = (type: TokenTypeEnum) => {
-  if (type === 'RFT') return 'Fractional';
+  if (type === TokenTypeEnum.RFT) return 'Fractional';
 
   return type;
 };

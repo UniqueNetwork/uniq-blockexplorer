@@ -26,7 +26,7 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   tokenName,
   iconSize,
 }) => (
-  <TokenLink to={`/${chainId.toLowerCase()}/nfts/${collectionId}/${tokenId}`}>
+  <TokenLink to={`/${chainId.toLowerCase()}/tokens/${collectionId}/${tokenId}`}>
     <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} iconSize={iconSize} />
     <TokenTitle>
       <Text color="primary-500">

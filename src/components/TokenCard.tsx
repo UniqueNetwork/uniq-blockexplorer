@@ -1,11 +1,11 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { Link, useNavigate } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
 import { useApi, useCheckImageExists } from '@app/hooks';
 import { timeDifference } from '@app/utils';
-import { Token } from '@app/api';
+import { Token, TokenTypeEnum } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Picture, Badge } from '@app/components';
@@ -18,6 +18,7 @@ type TokenCardProps = Token & {
   hideCollection?: boolean;
   hideOwner?: boolean;
   hideTransfers?: boolean;
+  ownersCount?: number;
 };
 
 const TokenCard: FC<TokenCardProps> = ({
@@ -28,20 +29,22 @@ const TokenCard: FC<TokenCardProps> = ({
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
+  total_pieces,
   type,
   transfers_count,
   hideCreationTime,
   hideCollection,
   hideOwner,
   owner,
+  ownersCount,
   hideTransfers,
+  nested,
+  parent_id,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
 
-  let typeLinkPart = type === 'RFT' ? 'fractional' : 'nfts';
-
-  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
+  const navigateTo = `/${currentChain.network.toLowerCase()}/tokens/${collectionId}/${tokenId}`;
 
   const logUserAnalytics = useCallback(() => {
     const path = window.location.pathname;
@@ -52,7 +55,14 @@ const TokenCard: FC<TokenCardProps> = ({
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
-  const badge = type === 'RFT' ? 'Fractional' : '';
+
+  const badge = useMemo(() => {
+    if (type === TokenTypeEnum.RFT) return 'Fractional';
+
+    if (nested) return parent_id ? 'Nested' : 'Bundle';
+
+    return '';
+  }, [type, parent_id, nested]);
 
   return (
     <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
@@ -74,62 +84,50 @@ const TokenCard: FC<TokenCardProps> = ({
             </TokenCollectionLink>
           </div>
         )}
-        {type === 'NFT' && (
-          <TokenProperties>
-            {!hideOwner && (
-              <OwnerProperty color="grey-500" size="xs">
-                Owner:
-                <AccountLinkComponent value={owner} size={'xs'} />
-              </OwnerProperty>
-            )}
-            {!hideTransfers && (
-              <Text color="grey-500" size="xs">
-                Transfers:{' '}
-                <Text color="additional-dark" size="xs">
-                  {transfers_count}
+        <TokenProperties>
+          {!hideOwner && (
+            <OwnerProperty color="grey-500" size="xs">
+              Owner:
+              <AccountLinkComponent value={owner} size={'xs'} />
+            </OwnerProperty>
+          )}
+          {!hideTransfers && (
+            <Text color="grey-500" size="xs">
+              Transfers:{' '}
+              <Text color="additional-dark" size="xs">
+                {transfers_count}
+              </Text>
+            </Text>
+          )}
+          {type === TokenTypeEnum.RFT && (
+            <>
+              <Property>
+                <Text color="grey-500" size="xs" weight="light">
+                  Owners:&nbsp;
                 </Text>
-              </Text>
-            )}
-            {!hideCreationTime && (
-              <CreatedTime>
-                <StyledSVGIcon height={16} name="clock" width={16} />
-                <Text color="additional-dark" size="xs">
-                  {timeDifference(dateOfCreation, timeNow)}
+                <Text color="additional-dark" size="xs" weight="light">
+                  {ownersCount}
                 </Text>
-              </CreatedTime>
-            )}
-          </TokenProperties>
-        )}
-        {type === 'RFT' && (
-          <RFTProperties>
-            <Property>
-              {!hideTransfers && (
-                <Text color="grey-500" size="xs">
-                  Transfers:{' '}
-                  <Text color="additional-dark" size="xs">
-                    {transfers_count}
-                  </Text>
+              </Property>
+              <Property>
+                <Text color="grey-500" size="xs" weight="light">
+                  Total fractions:&nbsp;
                 </Text>
-              )}
-            </Property>
-            <Property>
-              <Text color="grey-500" size="xs" weight="light">
-                Owners:&nbsp;
+                <Text color="additional-dark" size="xs" weight="light">
+                  {total_pieces}
+                </Text>
+              </Property>
+            </>
+          )}
+          {!hideCreationTime && (
+            <CreatedTime>
+              <StyledSVGIcon height={16} name="clock" width={16} />
+              <Text color="additional-dark" size="xs">
+                {timeDifference(dateOfCreation, timeNow)}
               </Text>
-              <Text color="additional-dark" size="xs" weight="light">
-                100
-              </Text>
-            </Property>
-            <Property>
-              <Text color="grey-500" size="xs" weight="light">
-                Total fractions:&nbsp;
-              </Text>
-              <Text color="additional-dark" size="xs" weight="light">
-                1000000
-              </Text>
-            </Property>
-          </RFTProperties>
-        )}
+            </CreatedTime>
+          )}
+        </TokenProperties>
       </TokenTitle>
     </TokenCardLink>
   );
@@ -193,12 +191,6 @@ const TokenTitle = styled.div`
   }
 `;
 
-const NFTProperties = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: calc(var(--gap) / 2);
-`;
-
 const CreatedTime = styled.div`
   display: flex;
   align-items: center;
@@ -206,10 +198,6 @@ const CreatedTime = styled.div`
 `;
 
 const TokenProperties = styled.div`
-  margin-top: calc(var(--gap) / 4);
-`;
-
-const RFTProperties = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: calc(var(--gap) / 2);
@@ -224,11 +212,6 @@ const OwnerProperty = styled(Text)`
 const Property = styled.div`
   display: flex;
   margin-bottom: 2px;
-`;
-
-const CreatedRow = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 export default TokenCard;

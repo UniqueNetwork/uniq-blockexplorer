@@ -2,30 +2,34 @@ import React, { FC } from 'react';
 import { Heading, Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 
-import { useGraphQLTokensSoldFractions } from '@app/api/graphQL/rftSoldFractions/rftSoldFractions';
 import { Token } from '@app/api';
+import { useGraphQLRftOwners } from '@app/api/graphQL/rftOwners/rftOwners';
+import { formatBlockNumber } from '@app/utils';
 
 interface RftCharacteristicsProps {
   token: Token;
 }
 
 export const RftCharacteristics: FC<RftCharacteristicsProps> = ({ token }) => {
-  const { soldFractions } = useGraphQLTokensSoldFractions({
+  const { owners } = useGraphQLRftOwners({
     collectionId: token.collection_id,
     tokenId: token.token_id,
     owner: token.owner,
+    limit: 1,
   });
+
+  const distributedFractions = token.total_pieces - (owners?.[0]?.amount || 0);
 
   return (
     <CharacteristicsInfo>
       <Heading size="4">Characteristics</Heading>
       <RFTAttribute key={`attribute-fractions-minted`}>
         <Text color="grey-500">Total number of minted fractions:</Text>
-        <Text>{token.total_pieces}</Text>
+        <Text>{formatBlockNumber(token.total_pieces)}</Text>
       </RFTAttribute>
-      <RFTAttribute key={`attribute-fractions-sold`}>
-        <Text color="grey-500">Total number of fractions sold:</Text>
-        <Text>{soldFractions}</Text>
+      <RFTAttribute key={`attribute-distributed-fractions`}>
+        <Text color="grey-500">Total distributed fractions:</Text>
+        <Text>{formatBlockNumber(distributedFractions)}</Text>
       </RFTAttribute>
     </CharacteristicsInfo>
   );

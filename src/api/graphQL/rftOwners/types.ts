@@ -37,4 +37,5 @@ export interface useGraphQLRftOwnersProps {
   orderBy?: OwnersSorting;
   tokenId?: number;
   collectionId?: number;
+  owner?: string;
 }

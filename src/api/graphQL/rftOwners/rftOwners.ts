@@ -30,11 +30,13 @@ export const useGraphQLRftOwners = ({
   orderBy,
   collectionId,
   tokenId,
+  owner,
 }: useGraphQLRftOwnersProps) => {
   const where: { [key: string]: unknown } = {
     collection_id: { _eq: collectionId },
     token_id: { _eq: tokenId },
     amount: { _neq: 0 },
+    owner: owner ? { _eq: owner } : undefined,
   };
 
   const {

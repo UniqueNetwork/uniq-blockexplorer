@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
-import { Token } from '@app/api';
+import { Token, TokenTypeEnum } from '@app/api';
 import { LoadingComponent, Picture } from '@app/components/index';
 import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, tokenPageTimestampFormat } from '@app/utils';
@@ -48,7 +48,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   );
 
   const badge = useMemo(() => {
-    if (type === 'RFT') return 'Fractional';
+    if (type === TokenTypeEnum.RFT) return 'Fractional';
 
     if (nested) return parent_id ? 'Nested' : 'Bundle';
 
@@ -108,7 +108,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           )}
         </TokenInfo>
         <TokenAttributes>
-          {type === 'RFT' && <RftCharacteristics token={token} />}
+          {type === TokenTypeEnum.RFT && <RftCharacteristics token={token} />}
           {nested ? (
             <HeaderWithTooltip>
               <Heading size="4">Parent NFT attributes</Heading>

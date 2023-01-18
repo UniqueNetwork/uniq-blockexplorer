@@ -25,18 +25,11 @@ const BundleCard: FC<BundleCardProps> = ({
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
-  type,
   transfers_count,
-  hideCreationTime,
-  hideCollection,
-  hideOwner,
-  owner_normalized,
 }) => {
   const { currentChain } = useApi();
 
-  let typeLinkPart = type === 'RFT' ? 'fractional' : 'nfts';
-
-  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
+  const navigateTo = `/${currentChain.network.toLowerCase()}/tokens/${collectionId}/${tokenId}`;
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 

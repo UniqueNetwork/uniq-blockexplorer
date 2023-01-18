@@ -142,7 +142,7 @@ const RFTsComponent: FC<TokensComponentProps> = ({
               <RFTsGrid
                 chainNetwork={currentChain.network}
                 timestamp={timestamp}
-                tokens={tokens || []}
+                tokens={tokensWithOwners}
               />
             </div>
           )}

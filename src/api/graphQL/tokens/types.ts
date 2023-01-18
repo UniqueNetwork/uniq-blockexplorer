@@ -10,7 +10,10 @@ export interface TokensVariables {
   attributesFilter?: TokenAttributeFilterItem[];
 }
 
-export type TokenTypeEnum = 'NFT' | 'RFT';
+export enum TokenTypeEnum {
+  NFT = 'NFT',
+  RFT = 'RFT',
+}
 
 export interface Token {
   attributes: DecodedAttributes;

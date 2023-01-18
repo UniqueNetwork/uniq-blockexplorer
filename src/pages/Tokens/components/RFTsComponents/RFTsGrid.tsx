@@ -8,7 +8,7 @@ import { deviceWidth, useScrollToTop } from '@app/hooks';
 interface TokensGridProps {
   chainNetwork: string;
   timestamp: number | undefined;
-  tokens: Token[];
+  tokens: (Token & { ownersCount: number })[];
 }
 
 const RFTsGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => {
@@ -20,6 +20,8 @@ const RFTsGrid: FC<TokensGridProps> = ({ chainNetwork, timestamp, tokens }) => {
         <TokenCard
           key={`token-${token.collection_id}-${token.token_id}`}
           {...token}
+          hideTransfers
+          hideOwner
           timeNow={timestamp}
         />
       ))}
