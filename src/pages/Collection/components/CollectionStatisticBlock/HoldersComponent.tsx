@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
 import { useDeviceSize, DeviceSize } from '@app/hooks';
-import { Pagination, ScrollableTable } from '@app/components';
+import { Pagination, ScrollableTable, Stub } from '@app/components';
 import { DEFAULT_PAGE_SIZE } from '@app/pages/Tokens/constants';
 
 import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
@@ -73,6 +73,8 @@ const HoldersComponent: FC<HoldersComponentProps> = ({
   const onPageChange = useCallback((_currentPage: number) => {
     setCurrentPage(_currentPage);
   }, []);
+
+  if (!isHoldersFetching && !holders?.length) return <Stub />;
 
   return (
     <HolderWrapper>

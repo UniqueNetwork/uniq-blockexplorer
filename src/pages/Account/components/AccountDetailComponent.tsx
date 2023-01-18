@@ -21,7 +21,7 @@ type ChainsFormat =
   | 'Unique'
   | 'Quartz'
   | 'Sapphire'
-  | 'Opal (Substrate SS58 address format)'
+  | 'Opal (Substrate SS58 address)'
   | 'Ethereum mirror';
 type TFormatOption = { title: ChainsFormat };
 
@@ -29,7 +29,7 @@ const OPTIONS_FOR_ETHER_ADDRESS: TFormatOption[] = [
   { title: 'Unique' },
   { title: 'Quartz' },
   { title: 'Sapphire' },
-  { title: 'Opal (Substrate SS58 address format)' },
+  { title: 'Opal (Substrate SS58 address)' },
 ];
 
 const OPTIONS_FOR_SUBSTRATE_ADDRESS: TFormatOption[] = [
@@ -40,7 +40,7 @@ const OPTIONS_FOR_SUBSTRATE_ADDRESS: TFormatOption[] = [
 const getFormatFromChain = (chain: TChainNetwork): string => {
   switch (chain) {
     case 'OPAL':
-      return 'Opal (Substrate SS58 address format)';
+      return 'Opal (Substrate SS58 address)';
     case 'QUARTZ':
       return 'Quartz';
     default:
@@ -77,7 +77,7 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
         case 'Sapphire':
           setAccountFormatted(Address.normalize.substrateAddress(substrateAddress, 8883));
           break;
-        case 'Opal (Substrate SS58 address format)':
+        case 'Opal (Substrate SS58 address)':
           setAccountFormatted(Address.normalize.substrateAddress(substrateAddress));
           break;
         case 'Ethereum mirror':
@@ -138,9 +138,6 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
                     optionKey="title"
                     optionValue="title"
                     value={accountFormat}
-                    isLongSelected={
-                      accountFormat === 'Opal (Substrate SS58 address format)'
-                    }
                     onChange={changeAccountFormat}
                   />
                 </AccountFormatSelectorWrapper>
@@ -188,7 +185,6 @@ const AccountDetailComponent: FC<AccountProps> = ({ accountId, substrateAddress 
                 optionKey="title"
                 optionValue="title"
                 value={accountFormat}
-                isLongSelected={accountFormat === 'Opal (Substrate SS58 address format)'}
                 onChange={changeAccountFormat}
               />
             </AccountFormatSelectorWrapper>
@@ -247,6 +243,7 @@ const AccountFormatSelectorWrapper = styled.div`
   display: flex;
   @media (${deviceWidth.smallerThan.md}) {
     flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
@@ -286,7 +283,7 @@ const AccountAddress = styled.div`
   }
 `;
 
-const SelectStyled = styled(Select)<{ isLongSelected: boolean }>`
+const SelectStyled = styled(Select)`
   margin-bottom: 0;
   font-size: 16px;
   white-space: nowrap;
@@ -315,6 +312,7 @@ const SelectStyled = styled(Select)<{ isLongSelected: boolean }>`
     }
 
     .select-dropdown {
+      width: unset;
     }
     @media (${deviceWidth.smallerThan.md}) {
       .select-value {
