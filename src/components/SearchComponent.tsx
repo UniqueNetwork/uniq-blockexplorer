@@ -2,6 +2,7 @@ import { Button, InputText } from '@unique-nft/ui-kit';
 import { createRef, FC, useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import { Address } from '@unique-nft/utils';
 
 import { useApi, useQueryParams } from '@app/hooks';
 import { UserEvents } from '@app/analytics/user_analytics';
@@ -54,10 +55,7 @@ const SearchComponent: FC<SearchComponentProps> = ({
     }
 
     // ethers address or substrate address
-    if (
-      /0x[0-9A-Fa-f]{40}/g.test(inputValue || '') ||
-      /^\w{48}\w*$/.test(inputValue || '')
-    ) {
+    if (Address.is.validAddressInAnyForm(inputValue?.trim() || '')) {
       navigate(`/${currentChain.network.toLowerCase()}/account/${inputValue || ''}`);
 
       return;
