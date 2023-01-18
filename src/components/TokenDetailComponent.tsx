@@ -40,6 +40,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_prefix: prefix,
     type,
     parent_id,
+    nested,
   } = token;
 
   const { imgSrc } = useCheckImageExists(
@@ -47,12 +48,12 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   );
 
   const badge = useMemo(() => {
-    if (type === 'FRACTIONAL' || type === 'RFT') return 'Fractional';
+    if (type === 'RFT') return 'Fractional';
 
-    if (type === 'NESTED') return parent_id ? 'Nested' : 'Bundle';
+    if (nested) return parent_id ? 'Nested' : 'Bundle';
 
     return '';
-  }, [type, parent_id]);
+  }, [type, parent_id, nested]);
 
   if (loading) return <LoadingComponent />;
 
@@ -94,7 +95,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
           <Text color="grey-500">Created on</Text>
           <Text>{createdOnDate}</Text>
-          {type !== 'FRACTIONAL' && type !== 'RFT' && (
+          {type !== 'RFT' && (
             <>
               <Text color="grey-500">Owner</Text>
               <OwnerWrapper>
@@ -107,10 +108,8 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           )}
         </TokenInfo>
         <TokenAttributes>
-          {(type === 'RFT' || type === 'FRACTIONAL') && (
-            <RftCharacteristics token={token} />
-          )}
-          {type === 'NESTED' ? (
+          {type === 'RFT' && <RftCharacteristics token={token} />}
+          {nested ? (
             <HeaderWithTooltip>
               <Heading size="4">Parent NFT attributes</Heading>
               <img

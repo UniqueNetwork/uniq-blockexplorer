@@ -34,7 +34,7 @@ const BundleCard: FC<BundleCardProps> = ({
 }) => {
   const { currentChain } = useApi();
 
-  let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
+  let typeLinkPart = type === 'RFT' ? 'fractional' : 'nfts';
 
   const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
 

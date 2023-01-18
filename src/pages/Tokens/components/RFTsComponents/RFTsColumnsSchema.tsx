@@ -24,7 +24,6 @@ export const getTokensColumns = (
         imageUrl={(item as Token).image.fullUrl}
         tokenId={value}
         tokenPrefix={(item as Token).token_prefix}
-        type={(item as Token).type}
       />
     ),
     title: (
@@ -92,8 +91,8 @@ export const getTokensColumns = (
     width: 100,
   },
   {
-    dataIndex: 'transfers',
-    key: 'transfers',
+    dataIndex: 'transfers_count',
+    key: 'transfers_count',
     render: (value: string) => <>{value}</>,
     title: 'Transfers',
     width: 150,

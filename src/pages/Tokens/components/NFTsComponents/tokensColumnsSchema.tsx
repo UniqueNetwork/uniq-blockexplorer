@@ -25,7 +25,6 @@ export const getTokensColumns = (
         imageUrl={(item as Token).image.fullUrl}
         tokenId={value}
         tokenPrefix={(item as Token).token_prefix}
-        type={(item as Token).type}
       />
     ),
     title: (

@@ -13,7 +13,6 @@ interface TokenTableCellProps {
   collectionId: number;
   imageUrl: string | null;
   tokenPrefix?: string;
-  type: TokenTypeEnum;
   tokenName?: string;
   iconSize?: number;
 }
@@ -24,7 +23,6 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   imageUrl,
   tokenId,
   tokenPrefix,
-  type,
   tokenName,
   iconSize,
 }) => (

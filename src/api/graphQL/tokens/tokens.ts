@@ -40,6 +40,7 @@ const tokensQuery = gql`
         transfers_count
         type
         burned
+        nested
       }
       count
       timestamp

@@ -10,7 +10,7 @@ export interface TokensVariables {
   attributesFilter?: TokenAttributeFilterItem[];
 }
 
-export type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT' | 'RFT';
+export type TokenTypeEnum = 'NFT' | 'RFT';
 
 export interface Token {
   attributes: DecodedAttributes;
@@ -34,6 +34,7 @@ export interface Token {
   transfers_count: number;
   total_pieces: number;
   type: TokenTypeEnum;
+  nested: boolean;
 }
 
 export interface TokensData {

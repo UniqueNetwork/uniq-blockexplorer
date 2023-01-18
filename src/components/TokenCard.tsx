@@ -39,7 +39,7 @@ const TokenCard: FC<TokenCardProps> = ({
   const navigate = useNavigate();
   const { currentChain } = useApi();
 
-  let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
+  let typeLinkPart = type === 'RFT' ? 'fractional' : 'nfts';
 
   const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
 
@@ -52,7 +52,7 @@ const TokenCard: FC<TokenCardProps> = ({
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
-  const badge = type === 'FRACTIONAL' ? 'Fractional' : '';
+  const badge = type === 'RFT' ? 'Fractional' : '';
 
   return (
     <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
@@ -100,7 +100,7 @@ const TokenCard: FC<TokenCardProps> = ({
             )}
           </TokenProperties>
         )}
-        {type === 'FRACTIONAL' && (
+        {type === 'RFT' && (
           <RFTProperties>
             <Property>
               {!hideTransfers && (

@@ -76,7 +76,6 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
             tokenId={fromTokenData.token_id}
             tokenPrefix={fromTokenData.token_prefix}
             tokenName={fromTokenData.token_name}
-            type={'NESTED'}
             iconSize={24}
           />
         </CellWrapper>
@@ -89,7 +88,6 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
             tokenId={toTokenData.token_id}
             tokenPrefix={toTokenData.token_prefix}
             tokenName={toTokenData.token_name}
-            type={'NESTED'}
             iconSize={24}
           />
         </CellWrapper>
@@ -104,7 +102,6 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
             tokenId={fromTokenData.token_id}
             tokenPrefix={fromTokenData.token_prefix}
             tokenName={fromTokenData.token_name}
-            type={'NESTED'}
             iconSize={24}
           />
         </CellWrapper>
@@ -117,7 +114,6 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
             tokenId={toTokenData.token_id}
             tokenPrefix={toTokenData.token_prefix}
             tokenName={toTokenData.token_name}
-            type={'NESTED'}
             iconSize={24}
           />
         </CellWrapper>
