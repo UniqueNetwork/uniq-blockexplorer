@@ -1,8 +1,9 @@
 import { gql, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
+import { Token } from '@app/api';
+
 import {
-  Token,
   TokenAttributeFilterItem,
   TokensData,
   TokensVariables,

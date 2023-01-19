@@ -1,5 +1,6 @@
 import { BundleSorting } from '@app/api';
 import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
+import { HoldersSorting } from '@app/api/graphQL/rftHolders/types';
 
 import { BundlesSelectOption } from './types';
 export const OPTIONS: BundlesSelectOption[] = [
@@ -77,6 +78,7 @@ export const OPTIONS: BundlesSelectOption[] = [
 
 export const defaultOrderBy: BundleSorting = { bundle_created: 'desc_nulls_last' };
 export const defaultEventsOrderBy: EventsSorting = { timestamp: 'desc_nulls_last' };
+export const defaultOwnersOrderBy: HoldersSorting = { amount: 'desc_nulls_last' };
 export const defaultSorting: string = 'bundle_created-desc_nulls_last';
 export const defaultOrderId = 3;
 

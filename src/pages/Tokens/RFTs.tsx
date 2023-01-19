@@ -3,9 +3,9 @@ import { FC, useState } from 'react';
 import { TokenSorting } from '@app/api';
 import { SelectOptionProps } from '@app/components';
 
-import TokensComponent, { ViewType } from './components/NFTsComponents/TokensComponent';
+import RFTsComponent, { ViewType } from './components/RFTsComponents/RFTsComponent';
 
-interface NFTsProps {
+interface RFTsProps {
   orderBy: TokenSorting;
   setOrderBy: (orderBy: TokenSorting) => void;
   pageSize: SelectOptionProps;
@@ -13,7 +13,7 @@ interface NFTsProps {
   view: ViewType;
 }
 
-export const NFTs: FC<NFTsProps> = ({
+export const RFTs: FC<RFTsProps> = ({
   orderBy,
   setOrderBy,
   pageSize,
@@ -23,7 +23,7 @@ export const NFTs: FC<NFTsProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   return (
-    <TokensComponent
+    <RFTsComponent
       currentPage={currentPage}
       orderBy={orderBy}
       pageSize={pageSize}

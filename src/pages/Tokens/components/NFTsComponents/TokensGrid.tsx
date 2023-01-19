@@ -5,7 +5,7 @@ import { Token } from '@app/api';
 import { TokenCard } from '@app/components';
 import { deviceWidth, useScrollToTop } from '@app/hooks';
 
-import Stub from '../../../components/Stub';
+import Stub from '../../../../components/Stub';
 
 interface TokensGridProps {
   chainNetwork: string;

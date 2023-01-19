@@ -13,7 +13,6 @@ interface TokenTableCellProps {
   collectionId: number;
   imageUrl: string | null;
   tokenPrefix?: string;
-  type: TokenTypeEnum;
   tokenName?: string;
   iconSize?: number;
 }
@@ -24,11 +23,10 @@ const TokenTableCell: FC<TokenTableCellProps> = ({
   imageUrl,
   tokenId,
   tokenPrefix,
-  type,
   tokenName,
   iconSize,
 }) => (
-  <TokenLink to={`/${chainId.toLowerCase()}/nfts/${collectionId}/${tokenId}`}>
+  <TokenLink to={`/${chainId.toLowerCase()}/tokens/${collectionId}/${tokenId}`}>
     <TokenPicture alt={`${tokenPrefix} #${tokenId}`} src={imageUrl} iconSize={iconSize} />
     <TokenTitle>
       <Text color="primary-500">

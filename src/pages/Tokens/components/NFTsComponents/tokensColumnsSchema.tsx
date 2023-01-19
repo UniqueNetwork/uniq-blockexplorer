@@ -3,11 +3,11 @@ import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 
 import { timeDifference } from '@app/utils';
+import { Token, TokenSorting } from '@app/api';
 
-import { Token, TokenSorting } from '../../../api/graphQL';
-import TableSortableColumnTitle from '../../../components/TableSortableColumnTitle';
-import TokenTableCell from '../../../components/TokenTableCell';
-import AccountLinkComponent from '../../Account/components/AccountLinkComponent';
+import TableSortableColumnTitle from '../../../../components/TableSortableColumnTitle';
+import TokenTableCell from '../../../../components/TokenTableCell';
+import AccountLinkComponent from '../../../Account/components/AccountLinkComponent';
 
 export const getTokensColumns = (
   chainId: string,
@@ -25,7 +25,6 @@ export const getTokensColumns = (
         imageUrl={(item as Token).image.fullUrl}
         tokenId={value}
         tokenPrefix={(item as Token).token_prefix}
-        type={(item as Token).type}
       />
     ),
     title: (
@@ -81,7 +80,7 @@ export const getTokensColumns = (
   {
     dataIndex: 'transfers_count',
     key: 'transfers_count',
-    render: (value: string, item: unknown) => <>{value}</>,
+    render: (value: string) => <>{value}</>,
     title: (
       <TableSortableColumnTitle
         dataIndex="transfers_count"

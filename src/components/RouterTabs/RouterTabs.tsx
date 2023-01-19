@@ -9,6 +9,7 @@ interface RouterTabsProps {
   content: ReactNode[];
   tabsClassNames?: string[];
   tabUrls: string[];
+  queryParams?: string;
 }
 
 export const RouterTabs: FC<RouterTabsProps> = ({
@@ -17,6 +18,7 @@ export const RouterTabs: FC<RouterTabsProps> = ({
   content,
   tabsClassNames,
   tabUrls,
+  queryParams,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ export const RouterTabs: FC<RouterTabsProps> = ({
       return;
     }
 
-    navigate(`${basePath}/${tabUrls[tabIndex]}`);
+    navigate(`${basePath}/${tabUrls[tabIndex]}${queryParams ? `?${queryParams}` : ''}`);
   };
 
   const currentTabIndex = tabUrls.findIndex((tab: string) =>

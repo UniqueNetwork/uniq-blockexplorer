@@ -6,6 +6,7 @@ export { default as TokenCard } from './TokenCard';
 export { default as Stub } from './Stub';
 export { default as GlobalSearch } from './GlobalSearch';
 export { default as BundleTree } from './TreeView';
+export { default as Badge } from './Badge';
 
 export * from './CoverContainer';
 export * from './Dropdown';

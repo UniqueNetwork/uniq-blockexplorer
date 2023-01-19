@@ -5,6 +5,7 @@ import { Skeleton } from '@unique-nft/ui-kit';
 
 import { useCheckImageExists } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { Badge } from '@app/components';
 
 interface PictureProps {
   className?: string;
@@ -53,24 +54,6 @@ const PictureWrapper = styled.div`
   img {
     width: 100%;
   }
-`;
-
-const Badge = styled.div`
-  position: absolute;
-  top: var(--gap);
-  right: var(--gap);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 4px 8px;
-  background-color: var(--white-color);
-  border: 1px solid var(--blue-gray-200);
-  border-radius: 4px;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--dark);
-  z-index: 2;
 `;
 
 export default Picture;

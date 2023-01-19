@@ -36,9 +36,11 @@ const tokensQuery = gql`
         parent_id
         token_id
         token_prefix
+        total_pieces
         transfers_count
         type
         burned
+        nested
       }
       count
       timestamp

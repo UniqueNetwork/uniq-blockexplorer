@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 
-import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
+import { ViewType } from '@app/pages/Tokens/components/NFTsComponents/TokensComponent';
 import { DeviceSizes, deviceWidth } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 

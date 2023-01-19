@@ -27,7 +27,6 @@ export const getBundlesColumns = (
           imageUrl={item.image.fullUrl}
           tokenId={item.token_id}
           tokenPrefix={value}
-          type={item.type}
         />
       );
     },

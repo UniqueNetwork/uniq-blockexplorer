@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Toggle } from '@unique-nft/ui-kit';
 
 import { OPTIONS } from '@app/pages/Collections/constants';
-import { ViewType } from '@app/pages/Tokens/components/TokensComponent';
+import { ViewType } from '@app/pages/Tokens/components/NFTsComponents/TokensComponent';
 import { DeviceSizes, deviceWidth } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon } from '@app/components';
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
-import { Token } from '@app/api';
+import { Token, TokenTypeEnum } from '@app/api';
 import { LoadingComponent, Picture } from '@app/components/index';
 import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
 import { convertAttributesToView, tokenPageTimestampFormat } from '@app/utils';
@@ -12,6 +12,7 @@ import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
+import { RftCharacteristics } from '@app/pages/Token/RFT/components/RFTCharacteristics';
 
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
 
@@ -39,6 +40,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     token_prefix: prefix,
     type,
     parent_id,
+    nested,
   } = token;
 
   const { imgSrc } = useCheckImageExists(
@@ -46,12 +48,12 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
   );
 
   const badge = useMemo(() => {
-    if (type === 'FRACTIONAL') return 'Fractional';
+    if (type === TokenTypeEnum.RFT) return 'Fractional';
 
-    if (type === 'NESTED') return parent_id ? 'Nested' : 'Bundle';
+    if (nested) return parent_id ? 'Nested' : 'Bundle';
 
     return '';
-  }, [type, parent_id]);
+  }, [type, parent_id, nested]);
 
   if (loading) return <LoadingComponent />;
 
@@ -93,13 +95,21 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
           </div>
           <Text color="grey-500">Created on</Text>
           <Text>{createdOnDate}</Text>
-          <Text color="grey-500">Owner</Text>
-          <OwnerWrapper>
-            <AccountLinkComponent noShort={deviceSize >= DeviceSize.xxl} value={owner} />
-          </OwnerWrapper>
+          {type !== 'RFT' && (
+            <>
+              <Text color="grey-500">Owner</Text>
+              <OwnerWrapper>
+                <AccountLinkComponent
+                  noShort={deviceSize >= DeviceSize.xxl}
+                  value={owner}
+                />
+              </OwnerWrapper>
+            </>
+          )}
         </TokenInfo>
         <TokenAttributes>
-          {type === 'NESTED' ? (
+          {type === TokenTypeEnum.RFT && <RftCharacteristics token={token} />}
+          {nested ? (
             <HeaderWithTooltip>
               <Heading size="4">Parent NFT attributes</Heading>
               <img

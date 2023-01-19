@@ -16,7 +16,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
   const { currentChain } = useApi();
   const { chainId } = useParams<'chainId'>();
   const { defaultChain } = config;
-  const { action, result, values, tokens } = event;
+  const { action, result, values } = event;
   const formatAddress = (address: string) => {
     let substrateAddress = address;
 
@@ -56,7 +56,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
 
   // nesting
   if (values.toToken) {
-    const { toToken } = values;
+    const { toToken, tokens } = values;
     let fromTokenData = tokens[0];
     let toTokenData = tokens[1];
 
@@ -68,6 +68,17 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
 
     return result ? (
       <Text size="m" weight="regular" color={'blue-grey-600'}>
+        <CellWrapper>
+          <TokenTableCell
+            chainId={chainId || defaultChain.network}
+            collectionId={fromTokenData.collection_id}
+            imageUrl={fromTokenData.image.fullUrl}
+            tokenId={fromTokenData.token_id}
+            tokenPrefix={fromTokenData.token_prefix}
+            tokenName={fromTokenData.token_name}
+            iconSize={24}
+          />
+        </CellWrapper>
         Transferred to
         <CellWrapper>
           <TokenTableCell
@@ -83,7 +94,18 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
       </Text>
     ) : (
       <Text size="m" weight="regular" color={'coral-700'}>
-        Transferred to
+        <CellWrapper>
+          <TokenTableCell
+            chainId={chainId || defaultChain.network}
+            collectionId={fromTokenData.collection_id}
+            imageUrl={fromTokenData.image.fullUrl}
+            tokenId={fromTokenData.token_id}
+            tokenPrefix={fromTokenData.token_prefix}
+            tokenName={fromTokenData.token_name}
+            iconSize={24}
+          />
+        </CellWrapper>
+        Transfer to
         <CellWrapper>
           <TokenTableCell
             chainId={chainId || defaultChain.network}

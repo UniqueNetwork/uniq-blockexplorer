@@ -42,7 +42,6 @@ export const getBundleEventsAccountsPageColumns = ({
         imageUrl={event.tokens[0].image.fullUrl}
         tokenId={event.tokens[0].token_id}
         tokenName={event.tokens[0].token_name}
-        type={event.tokens[0].type}
         iconSize={40}
       />
     ),
@@ -96,7 +95,7 @@ export const getBundleEventsAccountsPageColumns = ({
     render: (value: number, event: DefaultRecordType) => {
       return (
         <Text size="m" weight="regular" color={'blue-grey-600'}>
-          {`${formatType(event.tokens[0].type)}`}
+          {`${event.tokens[0].nested ? 'Bundle' : formatType(event.tokens[0].type)}`}
         </Text>
       );
     },
@@ -141,9 +140,7 @@ export const getBundleEventsAccountsPageColumns = ({
 ];
 
 const formatType = (type: TokenTypeEnum) => {
-  if (type === 'NESTED') return 'Bundle';
-
-  if (type === 'FRACTIONAL') return 'Fractional';
+  if (type === TokenTypeEnum.RFT) return 'Fractional';
 
   return type;
 };

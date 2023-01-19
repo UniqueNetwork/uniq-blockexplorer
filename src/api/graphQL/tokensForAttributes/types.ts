@@ -1,6 +1,5 @@
-import { DecodedAttributes } from '@unique-nft/api';
-
 import { AttributeValue, CollectionAttribute } from '@app/api/graphQL/attributes/types';
+import { Token } from '@app/api';
 
 export interface TokensVariables {
   limit: number;
@@ -8,31 +7,6 @@ export interface TokensVariables {
   where?: Record<string, unknown>;
   orderBy?: TokenSorting;
   attributesFilter?: TokenAttributeFilterItem[];
-}
-
-export type TokenTypeEnum = 'FRACTIONAL' | 'NESTED' | 'NFT';
-
-export interface Token {
-  attributes: DecodedAttributes;
-  bundle_created: number;
-  burned: boolean;
-  token_id: number;
-  children_count: number;
-  collection_id: number;
-  collection_name: string;
-  image: {
-    fullUrl: string | null;
-  };
-  date_of_creation: number;
-  token_prefix: string;
-  owner: string;
-  owner_normalized: string;
-  image_path: string;
-  collection_cover: string;
-  collection_description: string;
-  parent_id: string;
-  transfers_count: number;
-  type: TokenTypeEnum;
 }
 
 export interface TokensData {

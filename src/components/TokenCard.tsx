@@ -1,14 +1,14 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { Link, useNavigate } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
 import { useApi, useCheckImageExists } from '@app/hooks';
 import { timeDifference } from '@app/utils';
-import { Token } from '@app/api';
+import { Token, TokenTypeEnum } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { Picture } from '@app/components';
+import { Picture, Badge } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
 
@@ -18,6 +18,7 @@ type TokenCardProps = Token & {
   hideCollection?: boolean;
   hideOwner?: boolean;
   hideTransfers?: boolean;
+  ownersCount?: number;
 };
 
 const TokenCard: FC<TokenCardProps> = ({
@@ -28,20 +29,22 @@ const TokenCard: FC<TokenCardProps> = ({
   timeNow,
   token_id: tokenId,
   token_prefix: prefix,
+  total_pieces,
   type,
   transfers_count,
   hideCreationTime,
   hideCollection,
   hideOwner,
   owner,
+  ownersCount,
   hideTransfers,
+  nested,
+  parent_id,
 }) => {
   const navigate = useNavigate();
   const { currentChain } = useApi();
 
-  let typeLinkPart = type === 'FRACTIONAL' ? 'fractional' : 'nfts';
-
-  const navigateTo = `/${currentChain.network.toLowerCase()}/${typeLinkPart}/${collectionId}/${tokenId}`;
+  const navigateTo = `/${currentChain.network.toLowerCase()}/tokens/${collectionId}/${tokenId}`;
 
   const logUserAnalytics = useCallback(() => {
     const path = window.location.pathname;
@@ -53,8 +56,17 @@ const TokenCard: FC<TokenCardProps> = ({
 
   const { imgSrc } = useCheckImageExists(image.fullUrl);
 
+  const badge = useMemo(() => {
+    if (type === TokenTypeEnum.RFT) return 'Fractional';
+
+    if (nested) return parent_id ? 'Nested' : 'Bundle';
+
+    return '';
+  }, [type, parent_id, nested]);
+
   return (
     <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
+      {badge && <Badge>{badge}</Badge>}
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -87,6 +99,26 @@ const TokenCard: FC<TokenCardProps> = ({
               </Text>
             </Text>
           )}
+          {type === TokenTypeEnum.RFT && (
+            <>
+              <Property>
+                <Text color="grey-500" size="xs" weight="light">
+                  Owners:&nbsp;
+                </Text>
+                <Text color="additional-dark" size="xs" weight="light">
+                  {ownersCount}
+                </Text>
+              </Property>
+              <Property>
+                <Text color="grey-500" size="xs" weight="light">
+                  Total fractions:&nbsp;
+                </Text>
+                <Text color="additional-dark" size="xs" weight="light">
+                  {total_pieces}
+                </Text>
+              </Property>
+            </>
+          )}
           {!hideCreationTime && (
             <CreatedTime>
               <StyledSVGIcon height={16} name="clock" width={16} />
@@ -107,6 +139,7 @@ const StyledSVGIcon = styled(SVGIcon)`
 `;
 
 const TokenCardLink = styled(Link)`
+  position: relative;
   cursor: pointer;
   width: 100%;
   border: 1px solid var(--blue-gray-200);
@@ -165,13 +198,20 @@ const CreatedTime = styled.div`
 `;
 
 const TokenProperties = styled.div`
-  margin-top: calc(var(--gap) / 4);
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(var(--gap) / 2);
 `;
 
 const OwnerProperty = styled(Text)`
   display: flex !important;
   gap: 4px;
   align-items: center;
+`;
+
+const Property = styled.div`
+  display: flex;
+  margin-bottom: 2px;
 `;
 
 export default TokenCard;
