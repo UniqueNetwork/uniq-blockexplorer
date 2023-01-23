@@ -65,7 +65,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     <Wrapper>
       <TokenPicture alt={`${prefix}-${id}`} src={image.fullUrl} badge={badge} />
       <div>
-        <Heading size="2">{`${prefix} #${id}`}</Heading>
+        <Heading size="1">{`${prefix} #${id}`}</Heading>
         <TokenInfo>
           <Text color="grey-500">Collection</Text>
           <div>

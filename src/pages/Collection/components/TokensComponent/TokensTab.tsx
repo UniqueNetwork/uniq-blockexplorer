@@ -4,7 +4,7 @@ import { Button, Text } from '@unique-nft/ui-kit';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import { LoadingComponent, Stub, TokenCard } from '@app/components';
-import { useGraphQlTokens } from '@app/api';
+import { TokenTypeEnum, useGraphQlTokens } from '@app/api';
 import { logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { defaultSorting } from '@app/pages/Tokens/constants';
@@ -64,6 +64,7 @@ const TokensTab = ({ collectionId, pageSize = 16, tokensLimit }: TokensTabProps)
             timeNow={timestamp}
             hideCollection={true}
             hideCreationTime={true}
+            hideOwner={token.type === TokenTypeEnum.RFT}
             {...token}
           />
         ))}
