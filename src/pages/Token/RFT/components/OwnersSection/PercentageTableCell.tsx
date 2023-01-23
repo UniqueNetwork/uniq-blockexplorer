@@ -18,7 +18,7 @@ const PercentageTableCell = ({ value, total }: { value: number; total: number })
   return (
     <FlexWrapper>
       <ProgressBar filledPercent={(value / total) * 100} height={8} width={barWidth} />
-      <Text>{(value / total) * 100} %</Text>
+      <Text>{((value / total) * 100).toFixed(2)} %</Text>
     </FlexWrapper>
   );
 };

@@ -41,7 +41,7 @@ export const useGraphQlTokensForAttributes = ({
   const where = {
     collection_id: { _eq: collectionId },
     burned: { _eq: 'false' },
-    _or: [{ type: { _eq: 'NFT' } }, { type: { _eq: 'NESTED' } }],
+    _or: [{ type: { _eq: 'NFT' } }, { type: { _eq: 'RFT' } }],
   };
 
   const getAttributes = () => {

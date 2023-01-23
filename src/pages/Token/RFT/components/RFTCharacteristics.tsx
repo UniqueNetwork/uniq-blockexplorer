@@ -28,8 +28,8 @@ export const RftCharacteristics: FC<RftCharacteristicsProps> = ({ token }) => {
         <Text>{formatBlockNumber(token.total_pieces)}</Text>
       </RFTAttribute>
       <RFTAttribute key={`attribute-distributed-fractions`}>
-        <Text color="grey-500">Total distributed fractions:</Text>
-        <Text>{formatBlockNumber(distributedFractions)}</Text>
+        <Text color="grey-500">Sent to other wallets:</Text>
+        <Text>{formatBlockNumber(distributedFractions) || 0}</Text>
       </RFTAttribute>
     </CharacteristicsInfo>
   );
