@@ -2,7 +2,7 @@ import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 
-import { timeDifference } from '@app/utils';
+import { formatBlockNumber, timeDifference } from '@app/utils';
 import { Token, TokenSorting } from '@app/api';
 
 import TableSortableColumnTitle from '../../../../components/TableSortableColumnTitle';
@@ -79,7 +79,7 @@ export const getTokensColumns = (
   {
     dataIndex: 'total_pieces',
     key: 'total_pieces',
-    render: (value: string) => <>{value}</>,
+    render: (value: string) => <>{formatBlockNumber(Number(value || 0))}</>,
     title: (
       <TableSortableColumnTitle
         dataIndex="total_pieces"

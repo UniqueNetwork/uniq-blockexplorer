@@ -71,10 +71,14 @@ const RFTsComponent: FC<TokensComponentProps> = ({
   view,
 }) => {
   const deviceSize = useDeviceSize();
-  const { accountId, collectionId, searchString } = useQueryParams();
+  const { accountId, collectionId, searchString, attributes } = useQueryParams();
   const { currentChain } = useApi();
 
   const pageSizeNumber = pageSize.id as number;
+
+  const attributesFilter = useMemo(() => {
+    return JSON.parse(attributes || '{}')?.attributes;
+  }, [attributes]);
 
   const { isTokensFetching, timestamp, tokens, tokensCount } = useGraphQlTokens({
     filter: filter({ accountId, collectionId }),
@@ -82,6 +86,7 @@ const RFTsComponent: FC<TokensComponentProps> = ({
     orderBy,
     pageSize: pageSizeNumber,
     searchString,
+    attributesFilter,
   });
 
   const { tokensHolders, isTokensTotalHoldersFetching } = useGraphQLTokensTotalHolders({
