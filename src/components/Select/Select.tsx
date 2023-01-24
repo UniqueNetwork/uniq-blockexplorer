@@ -342,7 +342,7 @@ const Wrapper = styled.div`
       left: 0;
       top: calc(100% + 4px);
       width: calc(100% - 18px);
-      z-index: 2;
+      z-index: 3;
 
       .dropdown-option {
         display: flex;

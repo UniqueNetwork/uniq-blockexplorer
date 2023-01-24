@@ -30,7 +30,8 @@ export const SearchHeader: VFC<SearchHeaderProps> = ({
     <Wrapper data-automation-id="search-header">
       {searchModeOn ? (
         <H>
-          Search results&nbsp;"<SearchString>{searchString}</SearchString>"
+          <SearchLabel>Search results&nbsp;"</SearchLabel>
+          <SearchString>{searchString}</SearchString>"
         </H>
       ) : (
         <H>
@@ -65,9 +66,15 @@ const Wrapper = styled.div`
   }
 `;
 
+const SearchLabel = styled.div`
+  white-space: nowrap;
+`;
+
 const H = styled(Header1)`
   display: flex;
   margin-bottom: calc(var(--gap));
+  overflow: hidden;
+  max-width: 100%;
 
   @media ${deviceWidth.smallerThan.md} {
     font-size: 24px;
@@ -92,4 +99,6 @@ const NetworkName = styled.span<{ networkColor: string }>`
 const SearchString = styled.span`
   font-family: Inter;
   color: var(--primary-500);
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
