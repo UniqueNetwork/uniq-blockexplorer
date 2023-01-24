@@ -4,9 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import { LocalizedStringWithDefault } from '@unique-nft/api';
 
 import { OPTIONS } from '@app/pages/Tokens/constants';
-import { ViewType } from '@app/pages/Tokens/components/NFTsComponents/TokensComponent';
 import { deviceWidth, useQueryParams } from '@app/hooks';
-import { Select, SelectOptionProps, SVGIcon } from '@app/components';
+import { Select, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
 import AttributesFilter from '@app/pages/Tokens/components/AttributesFilter';
 import { ChosenAttributesMap } from '@app/api';
 import { AttributeValue } from '@app/api/graphQL/attributes/types';

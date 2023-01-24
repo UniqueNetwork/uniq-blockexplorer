@@ -4,9 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import { Toggle } from '@unique-nft/ui-kit';
 
 import { OPTIONS } from '@app/pages/Collections/constants';
-import { ViewType } from '@app/pages/Tokens/components/NFTsComponents/TokensComponent';
 import { DeviceSizes, deviceWidth } from '@app/hooks';
-import { Select, SelectOptionProps, SVGIcon } from '@app/components';
+import { Select, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
 
 interface RightMenuProps {
   selectSort: (selected: SelectOptionProps) => void;
@@ -89,8 +88,6 @@ const RightTabMenu = styled.div`
   height: 40px;
   justify-content: flex-end;
   grid-column-gap: 44px;
-  border-bottom: 1px solid var(--grey-300);
-  padding-bottom: calc(var(--gap) * 1.5);
   @media ${deviceWidth.biggerThan.md} {
     display: flex;
   }

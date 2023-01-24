@@ -4,7 +4,12 @@ import { FC, useMemo } from 'react';
 import styled from 'styled-components/macro';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
-import { Pagination, ScrollableTable, SelectOptionProps } from '@app/components';
+import {
+  Pagination,
+  ScrollableTable,
+  SelectOptionProps,
+  ViewType,
+} from '@app/components';
 import {
   DeviceSize,
   DeviceSizes,
@@ -16,11 +21,6 @@ import { useGraphQLTokensTotalHolders } from '@app/api/graphQL/rftTotalHolders/r
 
 import { getTokensColumns } from './RFTsColumnsSchema';
 import RFTsGrid from './RFTsGrid';
-
-export enum ViewType {
-  Grid = 'Grid',
-  List = 'List',
-}
 
 const filter = ({
   accountId,

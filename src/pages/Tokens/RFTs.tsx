@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
 
 import { TokenSorting } from '@app/api';
-import { SelectOptionProps } from '@app/components';
+import { SelectOptionProps, ViewType } from '@app/components';
 
-import RFTsComponent, { ViewType } from './components/RFTsComponents/RFTsComponent';
+import RFTsComponent from './components/RFTsComponents/RFTsComponent';
 
 interface RFTsProps {
   orderBy: TokenSorting;

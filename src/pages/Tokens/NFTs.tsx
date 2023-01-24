@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
 
 import { TokenSorting } from '@app/api';
-import { SelectOptionProps } from '@app/components';
+import { SelectOptionProps, ViewType } from '@app/components';
 
-import TokensComponent, { ViewType } from './components/NFTsComponents/TokensComponent';
+import TokensComponent from './components/NFTsComponents/TokensComponent';
 
 interface NFTsProps {
   orderBy: TokenSorting;

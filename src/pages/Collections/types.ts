@@ -1,5 +1,5 @@
-import { CollectionSorting } from '@app/api';
-import { SelectOptionProps } from '@app/components';
+import { CollectionSorting, TokenSorting, TokenTypeEnum } from '@app/api';
+import { SelectOptionProps, ViewType } from '@app/components';
 
 export type CollectionsComponentProps = {
   currentPage: number;

@@ -11,7 +11,7 @@ interface RftCharacteristicsProps {
 }
 
 export const RftCharacteristics: FC<RftCharacteristicsProps> = ({ token }) => {
-  const { owners } = useGraphQLRftHolders({
+  const { owners, isTokenHoldersFetching } = useGraphQLRftHolders({
     collectionId: token.collection_id,
     tokenId: token.token_id,
     owner: token.owner,
@@ -29,7 +29,9 @@ export const RftCharacteristics: FC<RftCharacteristicsProps> = ({ token }) => {
       </RFTAttribute>
       <RFTAttribute key={`attribute-distributed-fractions`}>
         <Text color="grey-500">Sent to other wallets:</Text>
-        <Text>{formatBlockNumber(distributedFractions) || 0}</Text>
+        <Text>
+          {isTokenHoldersFetching ? 0 : formatBlockNumber(distributedFractions) || 0}
+        </Text>
       </RFTAttribute>
     </CharacteristicsInfo>
   );
