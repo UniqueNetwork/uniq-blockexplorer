@@ -2,7 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components/macro';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
-import { Collection } from '@app/api';
+import { Collection, TokenTypeEnum } from '@app/api';
 import { timestampFormat } from '@app/utils';
 import { useDeviceSize, DeviceSize, DeviceSizes } from '@app/hooks';
 
@@ -22,6 +22,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
     owner,
     token_prefix: prefix,
     tokens_count: tokensCount,
+    mode,
   } = collection || {};
 
   const deviceSize = useDeviceSize();
@@ -44,6 +45,14 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
               </Text>
               <Text color="black" size="l" weight="light">
                 {id?.toString() || ''}
+              </Text>
+            </div>
+            <div>
+              <Text color="grey-500" size="l" weight="light">
+                Collection type:
+              </Text>
+              <Text color="black" size="l" weight="light">
+                {mode === TokenTypeEnum.RFT ? 'fractions' : 'NFT'}
               </Text>
             </div>
             <div>

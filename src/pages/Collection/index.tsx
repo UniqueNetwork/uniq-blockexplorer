@@ -5,10 +5,10 @@ import styled from 'styled-components/macro';
 
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { useGraphQlCollection } from '@app/api';
-import { useCheckImageExists, useScrollToTop } from '@app/hooks';
+import { TokenTypeEnum, useGraphQlCollection } from '@app/api';
+import { deviceWidth, useCheckImageExists, useScrollToTop } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import { IdentityIcon, Tabs } from '@app/components';
+import { Badge, IdentityIcon, Tabs } from '@app/components';
 
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
@@ -23,7 +23,7 @@ const CollectionPage: FC = () => {
   useScrollToTop();
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
   const { collectionId } = useParams<{ collectionId: string }>();
-  const { collection } = useGraphQlCollection(Number(collectionId));
+  const { collection, isCollectionFetching } = useGraphQlCollection(Number(collectionId));
   const { imgSrc } = useCheckImageExists(
     getCoverURLFromCollection(collection?.collection_cover),
   );
@@ -50,6 +50,9 @@ const CollectionPage: FC = () => {
             </CoverContainer>
           )}
           <Heading size="2">{collection?.name || ''}</Heading>
+          {collection?.mode === TokenTypeEnum.RFT && (
+            <BadgeStyled>Fractional</BadgeStyled>
+          )}
         </CollectionTitle>
         <Tabs
           content={detailTabs}
@@ -65,10 +68,14 @@ const CollectionPage: FC = () => {
       </PagePaper>
       <PagePaper>
         <div>
-          <TokensComponent collectionId={collectionId} />
+          <TokensComponent
+            collectionId={collectionId}
+            isLoading={isCollectionFetching}
+            mode={collection?.mode}
+          />
         </div>
       </PagePaper>
-      <CollectionStatisticBlock collectionId={collectionId} />
+      <CollectionStatisticBlock collectionId={collectionId} mode={collection?.mode} />
     </>
   );
 };
@@ -78,10 +85,27 @@ const CollectionTitle = styled.div`
   align-items: center;
   column-gap: var(--gap);
   margin-bottom: calc(var(--gap) * 2);
+  position: relative;
 
   h2 {
     margin-bottom: 0 !important;
     word-break: break-word;
+  }
+  @media ${deviceWidth.smallerThan.md} {
+    padding-bottom: 50px;
+  }
+`;
+
+const BadgeStyled = styled(Badge)`
+  top: 0;
+  right: 0;
+  background-color: var(--color-secondary-400);
+  color: var(--color-additional-light);
+  @media ${deviceWidth.smallerThan.md} {
+    left: 0;
+    bottom: 0;
+    top: unset;
+    right: unset;
   }
 `;
 

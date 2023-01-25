@@ -1,4 +1,5 @@
 import { Sorting } from '@app/api/graphQL/types';
+import { TokenTypeEnum } from '@app/api';
 
 export interface AttributeField {
   isArray: boolean;
@@ -41,6 +42,7 @@ export interface Collection {
   const_chain_schema: null;
   date_of_creation: number;
   nesting_enabled: boolean;
+  mode: TokenTypeEnum;
 }
 
 export interface CollectionsVariables {

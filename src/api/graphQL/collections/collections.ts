@@ -36,7 +36,7 @@ const collectionsQuery = gql`
         token_prefix
         tokens_count
         transfers_count
-        type
+        mode
         limits_sponsore_data_size
       }
       count

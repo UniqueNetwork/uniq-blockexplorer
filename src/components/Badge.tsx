@@ -1,8 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-function Badge({ children }: { children: React.ReactNode }) {
-  return <Wrapper>{children}</Wrapper>;
+function Badge({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <Wrapper className={className}>{children}</Wrapper>;
 }
 
 const Wrapper = styled.div`
