@@ -9,17 +9,13 @@ import {
   Pagination,
   ScrollableTable,
   SelectOptionProps,
+  ViewType,
 } from '@app/components';
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
 import { ContentWrapper } from '@app/components/ContentWrapper';
 
 import { getTokensColumns } from './tokensColumnsSchema';
 import TokensGrid from './TokensGrid';
-
-export enum ViewType {
-  Grid = 'Grid',
-  List = 'List',
-}
 
 const filter = ({
   accountId,
@@ -30,7 +26,7 @@ const filter = ({
 }) => {
   let _filter: any = {
     burned: { _eq: 'false' },
-    _or: [{ type: { _eq: 'NFT' } }, { type: { _eq: 'NESTED' } }],
+    _or: [{ type: { _eq: 'NFT' } }],
   };
 
   if (accountId) {
