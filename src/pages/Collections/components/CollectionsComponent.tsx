@@ -99,7 +99,7 @@ const CollectionsComponent = ({
       _or: [{}],
       nesting_enabled: {},
       burned: { _eq: 'false' },
-      type: { _eq: type },
+      mode: { _eq: type },
     };
 
     if (accountId) {

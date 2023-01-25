@@ -150,7 +150,7 @@ const CollectionsPage: FC = () => {
                 pageSize={pageSize}
                 setPageSize={setPageSize}
                 view={view as ViewType}
-                type={TokenTypeEnum.NFT}
+                type={TokenTypeEnum.RFT}
               />
             }
             path="fractional"
