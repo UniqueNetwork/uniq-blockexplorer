@@ -3,20 +3,25 @@ import styled from 'styled-components/macro';
 
 import PagePaper from '@app/components/PagePaper';
 import { Tabs } from '@app/components';
-import HoldersComponent from '@app/pages/Collection/components/CollectionStatisticBlock/HoldersComponent';
 import EventsTable from '@app/components/EventsTable/EventsTable';
-import { useGraphQlTokens } from '@app/api';
+import { TokenTypeEnum, useGraphQlTokens } from '@app/api';
 import { getBundleEventsAccountsPageColumns } from '@app/pages/Account/components/BundlesComponent/Events/columnsSchema';
 
+import RFTHolders from './RFTHoldersComponent';
+import Holders from './HoldersComponent';
 import { default as CollectionEventsTable } from './collectionEvents';
 
 interface CollectionStatisticBlockProps {
   collectionId?: string;
+  mode?: TokenTypeEnum;
 }
 
 const tabs = ['Holders', 'Tokens event', 'Collection event'];
 
-const CollectionStatisticBlock = ({ collectionId }: CollectionStatisticBlockProps) => {
+const CollectionStatisticBlock = ({
+  collectionId,
+  mode,
+}: CollectionStatisticBlockProps) => {
   const [activeDetailTabIndex, setActiveDetailTabIndex] = useState<number>(0);
   const { tokens } = useGraphQlTokens({
     filter: collectionId
@@ -32,6 +37,8 @@ const CollectionStatisticBlock = ({ collectionId }: CollectionStatisticBlockProp
         tokenId: token.token_id,
       }))
     : [];
+
+  const HoldersComponent = mode === TokenTypeEnum.RFT ? RFTHolders : Holders;
 
   return (
     <PagePaper>
