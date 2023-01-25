@@ -201,7 +201,7 @@ const DropDownWrapper = styled.div`
     min-width: calc(100% - 16px);
     left: 0;
     top: calc(100% + 4px);
-    z-index: 1;
+    z-index: 3;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
 
     &.right {
