@@ -7,12 +7,13 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import styled from 'styled-components/macro';
+import ReactTooltip from 'react-tooltip';
 
 import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
-import { logUserEvents } from '@app/utils';
+import { isTouchEnabled, logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { TokenSorting } from '@app/api';
-import { RouterTabs, SelectOptionProps, ViewType } from '@app/components';
+import { RouterTabs, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
 import { PageHeading } from '@app/components/PageHeading';
 
 import { NFTs } from './NFTs';
@@ -117,6 +118,25 @@ const TokensPage: FC = () => {
             </div>,
             <div className="flex-row" key="fractional-tab">
               Fractional
+              <SVGIconStyled
+                data-tip
+                data-for="fractional-question"
+                name="question"
+                height={24}
+                width={24}
+              />
+              <ReactTooltip
+                event={isTouchEnabled() ? 'click' : undefined}
+                id="fractional-question"
+                effect="solid"
+                eventOff="mouseleave"
+                place={'right'}
+              >
+                <span>
+                  A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own
+                  a&nbsp;part of&nbsp;an&nbsp;NFT
+                </span>
+              </ReactTooltip>
             </div>,
           ]}
           tabUrls={tabUrls}
@@ -157,6 +177,10 @@ const TokensPageWrapper = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+`;
+
+const SVGIconStyled = styled(SVGIcon)`
+  margin-left: 4px;
 `;
 
 export default TokensPage;

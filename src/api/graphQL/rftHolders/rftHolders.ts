@@ -36,7 +36,7 @@ export const useGraphQLRftHolders = ({
     collection_id: { _eq: collectionId },
     token_id: tokenId ? { _eq: tokenId } : undefined,
     owner: owner ? { _eq: owner } : undefined,
-    amount: { _neq: 0 },
+    amount: { _neq: '0' },
   };
 
   const {

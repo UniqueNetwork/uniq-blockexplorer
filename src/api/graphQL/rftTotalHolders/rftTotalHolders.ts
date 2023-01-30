@@ -51,7 +51,7 @@ export const useGraphQLTokensTotalHolders = ({
     });
     where = {
       _or: tokensFilter,
-      amount: { _neq: 0 },
+      amount: { _neq: '0' },
     };
 
     return where;

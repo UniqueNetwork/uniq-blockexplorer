@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 export const useLocationPathname = () => {
   const [notTheMainPage, setNotTheMainPage] = useState(false);
   const [tokensPage, setTokensPage] = useState(false);
+  const [fractionalPage, setFractionalPage] = useState(false);
   const [bundlesPage, setBundlesPage] = useState(false);
   const [collectionsPage, setCollectionsPage] = useState(false);
   const location = useLocation();
@@ -11,7 +12,7 @@ export const useLocationPathname = () => {
   useEffect(() => {
     if (
       location.pathname.match(
-        `/(collections|tokens|account|extrinsic|block|nfts|bundles)`,
+        `/(collections|tokens|account|extrinsic|block|nfts|fractional|bundles)`,
       )
     ) {
       setNotTheMainPage(true);
@@ -23,6 +24,13 @@ export const useLocationPathname = () => {
       setTokensPage(true);
     } else {
       setTokensPage(false);
+    }
+
+    if (location.pathname.match(`/(fractional)`)) {
+      console.log('fractional');
+      setFractionalPage(true);
+    } else {
+      setFractionalPage(false);
     }
 
     if (
@@ -41,5 +49,5 @@ export const useLocationPathname = () => {
     }
   }, [location.pathname]);
 
-  return { collectionsPage, notTheMainPage, tokensPage, bundlesPage };
+  return { collectionsPage, notTheMainPage, tokensPage, bundlesPage, fractionalPage };
 };
