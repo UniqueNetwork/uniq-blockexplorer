@@ -3,8 +3,8 @@ import styled from 'styled-components/macro';
 import { useSearchParams } from 'react-router-dom';
 import { LocalizedStringWithDefault } from '@unique-nft/api';
 
-import { OPTIONS } from '@app/pages/Tokens/constants';
-import { deviceWidth, useQueryParams } from '@app/hooks';
+import { FRACTIONAL_SORTING_OPTIONS, OPTIONS } from '@app/pages/Tokens/constants';
+import { deviceWidth, useLocationPathname, useQueryParams } from '@app/hooks';
 import { Select, SelectOptionProps, SVGIcon, ViewType } from '@app/components';
 import AttributesFilter from '@app/pages/Tokens/components/AttributesFilter';
 import { ChosenAttributesMap } from '@app/api';
@@ -25,6 +25,7 @@ export const RightMenu: FC<RightMenuProps> = ({
 }) => {
   const [queryParams] = useSearchParams();
   const { collectionId, attributes, setParamToQuery } = useQueryParams();
+  const { fractionalPage } = useLocationPathname();
 
   const [sort, setSort] = useState<SelectOptionProps>();
 
@@ -40,6 +41,10 @@ export const RightMenu: FC<RightMenuProps> = ({
   }, [queryParams]);
 
   const parsedAttributes = JSON.parse(attributes || '{}')?.attributes || {};
+
+  const sortingOptions = fractionalPage
+    ? [...OPTIONS, ...FRACTIONAL_SORTING_OPTIONS]
+    : OPTIONS;
 
   //attributes filter
   const [selectedAttrs, setSelectedAttrs] =
@@ -134,7 +139,7 @@ export const RightMenu: FC<RightMenuProps> = ({
       )}
       {view === ViewType.Grid && (
         <SelectStyled
-          options={OPTIONS}
+          options={sortingOptions}
           value={sort?.id as string}
           onChange={selectSort}
         />

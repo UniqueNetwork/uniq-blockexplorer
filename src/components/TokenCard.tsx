@@ -1,10 +1,10 @@
-import { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useMemo } from 'react';
 import styled from 'styled-components/macro';
 import { Link, useNavigate } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
 import { useApi, useCheckImageExists } from '@app/hooks';
-import { timeDifference } from '@app/utils';
+import { formatBlockNumber, timeDifference } from '@app/utils';
 import { Token, TokenTypeEnum } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -66,7 +66,11 @@ const TokenCard: FC<TokenCardProps> = ({
 
   return (
     <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
-      {badge && <Badge>{badge}</Badge>}
+      {badge && (
+        <Badge id={`token-${collectionId.toString()}-${tokenId.toString()}`}>
+          {badge}
+        </Badge>
+      )}
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -114,7 +118,7 @@ const TokenCard: FC<TokenCardProps> = ({
                   Total fractions:&nbsp;
                 </Text>
                 <Text color="additional-dark" size="xs" weight="light">
-                  {total_pieces}
+                  {formatBlockNumber(Number(total_pieces))}
                 </Text>
               </Property>
             </>

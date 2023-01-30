@@ -4,15 +4,18 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components/macro';
 
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { useApi } from '@app/hooks';
+import { DeviceSize, useApi, useDeviceSize, useLocationPathname } from '@app/hooks';
 import { defaultSorting } from '@app/pages/Tokens/constants';
 import { defaultSorting as defaultSortingBundles } from '@app/pages/Bundles/constants';
 import { isTouchEnabled } from '@app/utils';
+import { DropdownTokensItem } from '@app/components/Menu/DropdownTokensItem';
 
 import { SVGIcon } from '..';
 
 const Menu: FC = () => {
   const { currentChain } = useApi();
+  const deviceSize = useDeviceSize();
+  const { tokensPage } = useLocationPathname();
 
   // user analytics
   const onMenuClick = (bullit: string) => () => {
@@ -33,16 +36,27 @@ const Menu: FC = () => {
     logUserEvents(`CLICK_${bullit}_MENU_BUTTON_FROM_${currentPage}_PAGE`);
   };
 
-  return (
-    <>
+  const tokensItem =
+    deviceSize > DeviceSize.lg ? (
+      <DropdownTokensItem
+        currentChain={currentChain.network.toLowerCase()}
+        isActive={tokensPage}
+        onMenuClick={onMenuClick}
+      />
+    ) : (
       <NavLink
         to={`/${
           currentChain ? currentChain?.network.toLowerCase() + '/' : ''
-        }tokens/nfts/?sort=${defaultSorting}`}
-        onClick={onMenuClick('NFTS')}
+        }tokens/nfts?sort=${defaultSorting}`}
+        onClick={onMenuClick('TOKENS')}
       >
         Tokens
       </NavLink>
+    );
+
+  return (
+    <>
+      {tokensItem}
       <Row>
         <NavLink
           to={`/${

@@ -5,9 +5,13 @@ import ReactTooltip from 'react-tooltip';
 import { Heading, Text } from '@unique-nft/ui-kit';
 
 import { Token, TokenTypeEnum } from '@app/api';
-import { LoadingComponent, Picture } from '@app/components/index';
+import { LoadingComponent, Picture, SVGIcon } from '@app/components/index';
 import { DeviceSize, useApi, useCheckImageExists, useDeviceSize } from '@app/hooks';
-import { convertAttributesToView, tokenPageTimestampFormat } from '@app/utils';
+import {
+  convertAttributesToView,
+  isTouchEnabled,
+  tokenPageTimestampFormat,
+} from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
@@ -131,7 +135,28 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
               </ReactTooltip>
             </HeaderWithTooltip>
           ) : (
-            <Heading size="4">Attributes</Heading>
+            <HeaderWithTooltip>
+              <Heading size="4">Attributes</Heading>
+              <SVGIconStyled
+                data-tip
+                data-for="attributes-question"
+                name="question"
+                height={24}
+                width={24}
+              />
+              <ReactTooltip
+                event={isTouchEnabled() ? 'click' : undefined}
+                id="attributes-question"
+                effect="solid"
+                eventOff="mouseleave"
+                place={'right'}
+              >
+                <span>
+                  Special features of&nbsp;the token that the collection creator specifies
+                  when minting
+                </span>
+              </ReactTooltip>
+            </HeaderWithTooltip>
           )}
           <div>
             {attributesParsed.map((attr) => (
@@ -293,6 +318,10 @@ const OwnerWrapper = styled.div`
     height: calc(var(--gap) * 1.5);
     width: calc(var(--gap) * 1.5);
   }
+`;
+
+const SVGIconStyled = styled(SVGIcon)`
+  margin-top: 2px;
 `;
 
 export default TokenDetailComponent;

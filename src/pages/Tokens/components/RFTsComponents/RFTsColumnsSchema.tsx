@@ -95,14 +95,14 @@ export const getTokensColumns = (
     key: 'transfers_count',
     render: (value: string) => <>{value}</>,
     title: 'Transfers',
-    width: 150,
+    width: 100,
   },
   {
     dataIndex: 'ownersCount',
     key: 'owners',
     render: (value: string) => <>{value}</>,
     title: 'Owners',
-    width: 150,
+    width: 100,
   },
 ];
 

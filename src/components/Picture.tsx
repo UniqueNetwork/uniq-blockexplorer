@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/macro';
 import classNames from 'classnames';
 import { Skeleton } from '@unique-nft/ui-kit';
@@ -12,9 +12,16 @@ interface PictureProps {
   src?: string | null;
   alt: string;
   badge?: string;
+  tooltipDescription?: React.ReactNode;
 }
 
-const Picture: FC<PictureProps> = ({ alt, className, src, badge }) => {
+const Picture: FC<PictureProps> = ({
+  alt,
+  className,
+  src,
+  badge,
+  tooltipDescription,
+}) => {
   const { imgSrc, loading } = useCheckImageExists(getCoverURLFromCollection(src || ''));
 
   return (
@@ -23,7 +30,11 @@ const Picture: FC<PictureProps> = ({ alt, className, src, badge }) => {
         <Skeleton height="100%" width="100%" />
       ) : (
         <>
-          {badge && <Badge>{badge}</Badge>}
+          {badge && (
+            <Badge id="badge" tooltipDescription={tooltipDescription}>
+              {badge}
+            </Badge>
+          )}
           {imgSrc ? (
             <img alt={alt} src={imgSrc} />
           ) : (

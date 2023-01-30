@@ -72,6 +72,7 @@ const TokensComponent: FC<TokensComponentProps> = ({
   const pageSizeNumber = pageSize.id as number;
 
   const attributesFilter = useMemo(() => {
+    setCurrentPage(1);
     return JSON.parse(attributes || '{}')?.attributes;
   }, [attributes]);
 

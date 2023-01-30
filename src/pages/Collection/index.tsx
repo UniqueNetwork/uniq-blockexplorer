@@ -51,7 +51,17 @@ const CollectionPage: FC = () => {
           )}
           <Heading size="2">{collection?.name || ''}</Heading>
           {collection?.mode === TokenTypeEnum.RFT && (
-            <BadgeStyled>Fractional</BadgeStyled>
+            <BadgeStyled
+              id="collection-fractional"
+              tooltipDescription={
+                <>
+                  A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own
+                  a&nbsp;part of&nbsp;an&nbsp;NFT
+                </>
+              }
+            >
+              Fractional
+            </BadgeStyled>
           )}
         </CollectionTitle>
         <Tabs

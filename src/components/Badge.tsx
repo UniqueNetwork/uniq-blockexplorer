@@ -1,17 +1,38 @@
 import React from 'react';
 import styled from 'styled-components/macro';
+import ReactTooltip from 'react-tooltip';
 
 function Badge({
+  id,
   children,
   className,
+  tooltipDescription,
 }: {
+  id: string;
   children: React.ReactNode;
   className?: string;
+  tooltipDescription?: React.ReactNode;
 }) {
-  return <Wrapper className={className}>{children}</Wrapper>;
+  return (
+    <>
+      <BadgeWrapper data-tip data-for={`${id}-badge-tooltip`} className={className}>
+        {children}
+      </BadgeWrapper>
+      {tooltipDescription && (
+        <ReactTooltip
+          event={tooltipDescription ? 'mouseenter' : undefined}
+          id={`${id}-badge-tooltip`}
+          effect="solid"
+          eventOff="mouseleave"
+        >
+          <span>{tooltipDescription}</span>
+        </ReactTooltip>
+      )}
+    </>
+  );
 }
 
-const Wrapper = styled.div`
+const BadgeWrapper = styled.div`
   position: absolute;
   top: var(--gap);
   right: var(--gap);
