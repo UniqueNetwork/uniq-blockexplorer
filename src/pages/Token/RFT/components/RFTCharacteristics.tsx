@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Heading, Text } from '@unique-nft/ui-kit';
+import { Heading, Skeleton, Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 
 import { Token } from '@app/api';
@@ -29,9 +29,10 @@ export const RftCharacteristics: FC<RftCharacteristicsProps> = ({ token }) => {
       </RFTAttribute>
       <RFTAttribute key={`attribute-distributed-fractions`}>
         <Text color="grey-500">Sent to other wallets:</Text>
-        <Text>
-          {isTokenHoldersFetching ? 0 : formatBlockNumber(distributedFractions) || 0}
-        </Text>
+        {isTokenHoldersFetching && <Skeleton height={22} width={60} />}
+        {!isTokenHoldersFetching && (
+          <Text>{formatBlockNumber(distributedFractions) || 0}</Text>
+        )}
       </RFTAttribute>
     </CharacteristicsInfo>
   );

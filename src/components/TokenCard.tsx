@@ -64,10 +64,21 @@ const TokenCard: FC<TokenCardProps> = ({
     return '';
   }, [type, parent_id, nested]);
 
+  const tooltipDescription =
+    badge === 'Fractional' ? (
+      <>
+        A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own a&nbsp;part
+        of&nbsp;an&nbsp;NFT
+      </>
+    ) : undefined;
+
   return (
     <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
       {badge && (
-        <Badge id={`token-${collectionId.toString()}-${tokenId.toString()}`}>
+        <Badge
+          id={`token-${collectionId.toString()}-${tokenId.toString()}`}
+          tooltipDescription={tooltipDescription}
+        >
           {badge}
         </Badge>
       )}
@@ -149,7 +160,6 @@ const TokenCardLink = styled(Link)`
   border: 1px solid var(--blue-gray-200);
   border-radius: calc(var(--bradius) * 2);
   transition: 50ms;
-  overflow: hidden;
 
   &:hover {
     transform: translate(0, -5px);

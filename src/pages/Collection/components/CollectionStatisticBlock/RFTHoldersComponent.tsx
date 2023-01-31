@@ -97,13 +97,13 @@ const RFTHoldersComponent: FC<RFTHoldersComponentProps> = ({
 
           if (holder) {
             holder.count++;
-            holder.fractions += amount;
+            holder.fractions += Number(amount);
           } else {
             acc.push({
               owner,
               owner_normalized,
               count: 1,
-              fractions: amount,
+              fractions: Number(amount),
             });
           }
 
