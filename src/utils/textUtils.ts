@@ -16,10 +16,13 @@ export const formatAmount = (amount: number | string) => {
   return parts.join('.');
 };
 
-export const formatBlockNumber = (blockNumber: number | undefined) => {
+export const formatBlockNumber = (
+  blockNumber: number | undefined,
+  replaceValue: string = ' ',
+) => {
   if (!blockNumber) return '';
 
-  return blockNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  return blockNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, replaceValue);
 };
 
 export const formatFeeValue = (amount: number): string => {

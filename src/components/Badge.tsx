@@ -14,21 +14,23 @@ function Badge({
   tooltipDescription?: React.ReactNode;
 }) {
   return (
-    <>
-      <BadgeWrapper data-tip data-for={`${id}-badge-tooltip`} className={className}>
+    <BadgeWrapper>
+      <BadgeContent data-tip data-for={`${id}-badge-tooltip`} className={className}>
         {children}
-      </BadgeWrapper>
+      </BadgeContent>
       {tooltipDescription && (
         <ReactTooltip
           event={tooltipDescription ? 'mouseenter' : undefined}
           id={`${id}-badge-tooltip`}
           effect="solid"
           eventOff="mouseleave"
+          place={'top'}
+          offset={{ top: 3, left: 0 }}
         >
           <span>{tooltipDescription}</span>
         </ReactTooltip>
       )}
-    </>
+    </BadgeWrapper>
   );
 }
 
@@ -36,6 +38,15 @@ const BadgeWrapper = styled.div`
   position: absolute;
   top: var(--gap);
   right: var(--gap);
+  left: var(--gap);
+  display: flex;
+  justify-content: flex-end;
+  .__react_component_tooltip {
+    width: 200px;
+  }
+`;
+
+const BadgeContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
