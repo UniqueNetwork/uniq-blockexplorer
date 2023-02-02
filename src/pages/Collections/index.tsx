@@ -101,7 +101,7 @@ const CollectionsPage: FC = () => {
   }, [basePath, location.pathname, navigate]);
 
   return (
-    <TokensPageWrapper className="tokens-page">
+    <CollectionsPageWrapper className="tokens-page">
       <PageHeading title="Collections" />
       <PagePaper>
         <RouterTabs
@@ -157,14 +157,20 @@ const CollectionsPage: FC = () => {
           />
         </Routes>
       </PagePaper>
-    </TokensPageWrapper>
+    </CollectionsPageWrapper>
   );
 };
 
-const TokensPageWrapper = styled.div`
+const CollectionsPageWrapper = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+
+  th.rc-table-cell > svg[class^='ArrowDownUp'] {
+    @media (max-width: 991px) {
+      display: none;
+    }
+  }
 `;
 
 export default CollectionsPage;

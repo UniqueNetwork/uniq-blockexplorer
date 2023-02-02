@@ -36,8 +36,15 @@ const getColumns = (
     dataIndex: 'owner',
     key: 'owner',
     render: (value: string) => <AccountLinkComponent value={value} />,
-    title: 'Account',
-    width: 100,
+    title: (
+      <TableSortableColumnTitle
+        dataIndex={'owner'}
+        orderBy={orderBy}
+        title={'Account'}
+        onOrderChange={onOrderChange}
+      />
+    ),
+    width: 200,
   },
   {
     dataIndex: 'fractions',
@@ -50,7 +57,7 @@ const getColumns = (
         onOrderChange={onOrderChange}
       />
     ),
-    width: 100,
+    width: 200,
   },
   {
     dataIndex: 'count',
@@ -110,17 +117,19 @@ const RFTHoldersComponent: FC<RFTHoldersComponentProps> = ({
           return acc;
         }, [])
         .sort((item1, item2) => {
-          const { count, fractions } = orderBy;
+          const { count, fractions, owner } = orderBy;
           const compare = (
             order: 'asc_nulls_first' | 'desc_nulls_last',
-            fisrtField: number,
-            secondField2: number,
+            fisrtField: any,
+            secondField2: any,
           ) =>
             (fisrtField > secondField2 ? 1 : -1) * (order === 'asc_nulls_first' ? 1 : -1);
 
           if (count) return compare(count, item1.count, item2.count);
 
           if (fractions) return compare(fractions, item1.fractions, item2.fractions);
+
+          if (owner) return compare(owner, item1.owner, item2.owner);
 
           return 0;
         }) || [],
