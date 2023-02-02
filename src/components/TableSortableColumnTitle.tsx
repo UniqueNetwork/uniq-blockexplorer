@@ -42,7 +42,7 @@ const TableSortableColumnTitle: FC<TableSortableColumnProps> = ({
   return (
     <>
       <ColumnTitleText color="grey-500">{title}</ColumnTitleText>
-      <StyledArrowDownUp direction={direction} onClick={onArrowsClick} />
+      <ArrowDownUp direction={direction} onClick={onArrowsClick} />
     </>
   );
 };

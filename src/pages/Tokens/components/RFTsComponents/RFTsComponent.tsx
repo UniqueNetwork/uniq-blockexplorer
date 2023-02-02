@@ -31,13 +31,13 @@ const filter = ({
 }) => {
   let _filter: any = {
     burned: { _eq: 'false' },
-    _or: [{ type: { _eq: 'RFT' } }, { type: { _eq: 'FRACTIONAL' } }],
+    type: { _eq: 'RFT' },
   };
 
   if (accountId) {
     _filter = {
       ..._filter,
-      _or: [{ owner: { _eq: accountId } }, { owner_normalized: { _eq: accountId } }],
+      tokens_owner: { _eq: accountId },
     };
   }
 

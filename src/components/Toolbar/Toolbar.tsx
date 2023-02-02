@@ -32,15 +32,17 @@ export const Toolbar = () => {
     useQueryParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
-  const { tokensPage, collectionsPage, bundlesPage, notTheMainPage } =
+  const { tokenDetailPage, tokensPage, collectionsPage, bundlesPage, notTheMainPage } =
     useLocationPathname();
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
   const parsedAttributes = JSON.parse(attributes || '{}')?.attributes || {};
   const toolbarIsActive = notTheMainPage;
-  const showFilter = notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
-  const showView = notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
+  const showFilter =
+    !tokenDetailPage && notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
+  const showView =
+    !tokenDetailPage && notTheMainPage && (tokensPage || collectionsPage || bundlesPage);
 
   const [statePrev, setStatePrev] = useState<{ sort?: string; nesting?: string }>();
   const [stateNew, setStateNew] = useState<{ sort?: string; nesting?: string }>();

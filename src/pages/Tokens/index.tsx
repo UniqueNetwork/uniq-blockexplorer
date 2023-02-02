@@ -178,6 +178,12 @@ const TokensPageWrapper = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+
+  th.rc-table-cell > svg[class^='ArrowDownUp'] {
+    @media (max-width: 991px) {
+      display: none;
+    }
+  }
 `;
 
 const SVGIconStyled = styled(SVGIcon)`

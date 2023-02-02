@@ -5,6 +5,7 @@ export const useLocationPathname = () => {
   const [notTheMainPage, setNotTheMainPage] = useState(false);
   const [tokensPage, setTokensPage] = useState(false);
   const [fractionalPage, setFractionalPage] = useState(false);
+  const [tokenDetailPage, setTokenDetailPage] = useState(false);
   const [bundlesPage, setBundlesPage] = useState(false);
   const [collectionsPage, setCollectionsPage] = useState(false);
   const location = useLocation();
@@ -20,6 +21,12 @@ export const useLocationPathname = () => {
       setNotTheMainPage(false);
     }
 
+    if (location.pathname.match(`/(tokens/[0-9])`)) {
+      setTokenDetailPage(true);
+    } else {
+      setTokenDetailPage(false);
+    }
+
     if (location.pathname.match(`/(tokens)`)) {
       setTokensPage(true);
     } else {
@@ -27,7 +34,6 @@ export const useLocationPathname = () => {
     }
 
     if (location.pathname.match(`/(fractional)`)) {
-      console.log('fractional');
       setFractionalPage(true);
     } else {
       setFractionalPage(false);
@@ -49,5 +55,12 @@ export const useLocationPathname = () => {
     }
   }, [location.pathname]);
 
-  return { collectionsPage, notTheMainPage, tokensPage, bundlesPage, fractionalPage };
+  return {
+    collectionsPage,
+    notTheMainPage,
+    tokensPage,
+    bundlesPage,
+    fractionalPage,
+    tokenDetailPage,
+  };
 };
