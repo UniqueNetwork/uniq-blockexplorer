@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import ReactTooltip from 'react-tooltip';
+import { Text } from '@unique-nft/ui-kit';
 
 import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
 import { isTouchEnabled, logUserEvents } from '@app/utils';
@@ -132,10 +133,10 @@ const TokensPage: FC = () => {
                 eventOff="mouseleave"
                 place={'right'}
               >
-                <span>
+                <TextStyled color={'additional-light'} weight={'light'}>
                   A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own
                   a&nbsp;part of&nbsp;an&nbsp;NFT
-                </span>
+                </TextStyled>
               </ReactTooltip>
             </div>,
           ]}
@@ -181,6 +182,10 @@ const TokensPageWrapper = styled.div`
 
 const SVGIconStyled = styled(SVGIcon)`
   margin-left: 4px;
+`;
+
+const TextStyled = styled(Text)`
+  text-transform: none;
 `;
 
 export default TokensPage;
