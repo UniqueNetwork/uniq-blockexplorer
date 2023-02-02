@@ -190,7 +190,8 @@ const Wrapper = styled.div`
     grid-column-gap: calc(var(--gap) * 2);
   }
   @media (max-width: 768px) {
-    grid-template-columns: 224px 1fr;
+    grid-template-columns: 1fr;
+    gap: calc(var(--gap) * 2);
   }
   @media (max-width: 568px) {
     grid-template-columns: 1fr;
@@ -218,8 +219,8 @@ const TokenPicture = styled(Picture)`
   }
 
   @media (max-width: 768px) {
-    width: 224px;
-    height: 224px;
+    width: 100%;
+    height: 100%;
   }
 
   @media (max-width: 568px) {

@@ -24,7 +24,7 @@ export const RftCharacteristics: FC<RftCharacteristicsProps> = ({ token }) => {
     <CharacteristicsInfo>
       <Heading size="4">Characteristics</Heading>
       <RFTAttribute key={`attribute-fractions-minted`}>
-        <Text color="grey-500">Total number of minted fractions:</Text>
+        <Text color="grey-500">Total minted fractions:</Text>
         <Text>{formatBlockNumber(token.total_pieces)}</Text>
       </RFTAttribute>
       <RFTAttribute key={`attribute-distributed-fractions`}>
@@ -50,6 +50,10 @@ const CharacteristicsInfo = styled.div`
 const RFTAttribute = styled.div`
   display: flex;
   gap: calc(var(--gap) / 2);
+  flex-wrap: wrap;
+  & span {
+    white-space: nowrap;
+  }
   &:first-of-type {
     margin-top: calc(var(--gap) / 2);
   }
