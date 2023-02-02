@@ -147,7 +147,7 @@ const BundlesPage: FC = () => {
   };
 
   return (
-    <div>
+    <BundlesPageWrapper>
       <PageHeading title="Bundles" />
       <PagePaper>
         <RightMenu
@@ -216,9 +216,17 @@ const BundlesPage: FC = () => {
           )}
         </ContentWrapper>
       </PagePaper>
-    </div>
+    </BundlesPageWrapper>
   );
 };
+
+const BundlesPageWrapper = styled.div`
+  th.rc-table-cell > svg[class^='ArrowDownUp'] {
+    @media (max-width: 991px) {
+      display: none;
+    }
+  }
+`;
 
 const SkeletonWrapper = styled.div`
   padding: 0;

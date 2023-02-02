@@ -6,8 +6,6 @@ import { Button } from '@unique-nft/ui-kit';
 import { Token, useGraphQlTokens } from '@app/api';
 import { TokenCard } from '@app/components';
 import { useApi, useQueryParams } from '@app/hooks';
-import { normalizeSubstrate } from '@app/utils/normalizeAccount';
-import { getMirrorFromEthersToSubstrate } from '@app/utils';
 import { defaultSorting } from '@app/pages/Tokens/constants';
 
 interface TokensComponentProps {
@@ -20,20 +18,10 @@ const TokensComponent: FC<TokensComponentProps> = ({ accountId, pageSize = 12 })
   const navigate = useNavigate();
   const { searchString } = useQueryParams();
   const [queryParams, setQueryParams] = useSearchParams();
-  // assume that we got the substrate address
-  let substrateAddress = accountId;
-
-  // if we get an ether address
-  if (/0x[0-9A-Fa-f]{40}/g.test(accountId)) {
-    substrateAddress = getMirrorFromEthersToSubstrate(accountId, currentChain.network);
-  }
 
   const { tokens, tokensCount } = useGraphQlTokens({
     filter: {
-      _or: [
-        { owner: { _eq: accountId } },
-        { owner_normalized: { _eq: normalizeSubstrate(substrateAddress) } },
-      ],
+      _or: [{ tokens_owner: { _eq: accountId } }],
       burned: { _eq: 'false' },
     },
     offset: 0,

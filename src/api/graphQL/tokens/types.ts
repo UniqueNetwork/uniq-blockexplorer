@@ -38,6 +38,8 @@ export interface Token {
   total_pieces: number;
   type: TokenTypeEnum;
   nested: boolean;
+  tokens_owner: string;
+  tokens_amount: string;
 }
 
 export interface TokensData {

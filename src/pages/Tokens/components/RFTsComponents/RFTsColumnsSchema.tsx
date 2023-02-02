@@ -94,7 +94,14 @@ export const getTokensColumns = (
     dataIndex: 'transfers_count',
     key: 'transfers_count',
     render: (value: string) => <>{value}</>,
-    title: 'Transfers',
+    title: (
+      <TableSortableColumnTitle
+        dataIndex="transfers_count"
+        orderBy={orderBy}
+        title="Transfers"
+        onOrderChange={onOrderChange}
+      />
+    ),
     width: 100,
   },
   {
