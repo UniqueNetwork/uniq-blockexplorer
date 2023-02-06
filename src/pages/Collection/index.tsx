@@ -1,5 +1,5 @@
 import { Heading } from '@unique-nft/ui-kit';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
 
@@ -9,6 +9,7 @@ import { TokenTypeEnum, useGraphQlCollection } from '@app/api';
 import { deviceWidth, useCheckImageExists, useScrollToTop } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { Badge, IdentityIcon, Tabs } from '@app/components';
+import { useGraphQLRftHolders } from '@app/api/graphQL/rftHolders/rftHolders';
 
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
 import CollectionExtendedDataComponent from './components/CollectionExtendedDataComponent';
@@ -28,12 +29,29 @@ const CollectionPage: FC = () => {
     getCoverURLFromCollection(collection?.collection_cover),
   );
 
+  const { isTokenHoldersFetching, owners } = useGraphQLRftHolders({
+    limit: 2_147_483_647,
+    collectionId: Number(collectionId),
+  });
+
   // user analytics
   useEffect(() => {
     if (activeDetailTabIndex === 1) {
       logUserEvents(UserEvents.Click.TAB_EXTENDED_ON_COLLECTION_PAGE);
     }
   }, [activeDetailTabIndex]);
+
+  const collectionData = useMemo(() => {
+    if (!collection) return undefined;
+
+    if (collection?.mode === 'RFT') {
+      const holders_count = new Set(owners?.map(({ owner }) => owner)).size;
+      return {
+        ...collection,
+        holders_count,
+      };
+    }
+  }, [collection, owners]);
 
   return (
     <>
@@ -70,7 +88,7 @@ const CollectionPage: FC = () => {
           setCurrentTabIndex={setActiveDetailTabIndex}
         />
         {activeDetailTabIndex === 0 && (
-          <CollectionBasicDataComponent collection={collection} key="collections" />
+          <CollectionBasicDataComponent collection={collectionData} key="collections" />
         )}
         {activeDetailTabIndex === 1 && (
           <CollectionExtendedDataComponent collection={collection} key="tokens" />
@@ -80,7 +98,7 @@ const CollectionPage: FC = () => {
         <div>
           <TokensComponent
             collectionId={collectionId}
-            isLoading={isCollectionFetching}
+            isLoading={isCollectionFetching || isTokenHoldersFetching}
             mode={collection?.mode}
           />
         </div>

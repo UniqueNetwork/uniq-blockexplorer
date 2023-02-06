@@ -16,6 +16,7 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { TokenSorting, useGraphQlTokens } from '@app/api/graphQL';
 import { defaultSorting } from '@app/pages/Tokens/constants';
+import { useGraphQLTokensTotalHolders } from '@app/api/graphQL/rftTotalHolders/rftTotalHolders';
 
 import { HeaderWithDropdown } from '../HeaderWithDropdown';
 import { tokensOptions } from './tokensOptions';
@@ -97,6 +98,21 @@ export const Tokens: VFC<TokensProps> = ({
     pageSize: tokensLimit,
     searchString,
   });
+
+  const { tokensHolders, isTokensTotalHoldersFetching } = useGraphQLTokensTotalHolders({
+    tokens:
+      tokens?.map(({ collection_id, token_id }) => ({ collection_id, token_id })) || [],
+  });
+
+  const tokensWithOwners = useMemo(
+    () =>
+      tokens?.map((token) => ({
+        ...token,
+        ownersCount: tokensHolders[`${token.collection_id}_${token.token_id}`] || 0,
+      })) || [],
+    [tokens, tokensHolders],
+  );
+
   const [showButton, setShowButton] = useState<boolean>(true);
 
   useEffect(() => {
@@ -113,7 +129,7 @@ export const Tokens: VFC<TokensProps> = ({
     }
   }, [tokens, isTokensFetching, searchModeOn, setResultExist]);
 
-  if (isTokensFetching) {
+  if (isTokensFetching || isTokensTotalHoldersFetching) {
     return (
       <SkeletonWrapper>
         <Skeleton />
@@ -138,7 +154,7 @@ export const Tokens: VFC<TokensProps> = ({
         />
       )}
       <TokensWrapper>
-        {tokens?.slice(0, tokensLimit).map((token) => (
+        {tokensWithOwners?.slice(0, tokensLimit).map((token) => (
           <TokenCard
             key={`token-${token.collection_id}-${token.token_id}`}
             {...token}
