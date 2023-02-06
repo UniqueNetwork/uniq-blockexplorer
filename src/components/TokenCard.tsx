@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Text } from '@unique-nft/ui-kit';
 
 import { useApi, useCheckImageExists } from '@app/hooks';
-import { formatBlockNumber, timeDifference } from '@app/utils';
+import { formatLongNumber, timeDifference } from '@app/utils';
 import { Token, TokenTypeEnum } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
@@ -129,7 +129,7 @@ const TokenCard: FC<TokenCardProps> = ({
                   Total fractions:&nbsp;
                 </Text>
                 <Text color="additional-dark" size="xs" weight="light">
-                  {formatBlockNumber(Number(total_pieces))}
+                  {formatLongNumber(Number(total_pieces))}
                 </Text>
               </Property>
             </>
