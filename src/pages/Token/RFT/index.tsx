@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { Token } from '@app/api';
 import { useScrollToTop } from '@app/hooks';
@@ -16,6 +16,17 @@ interface SingleNFTPageComponentProps {
 const SingleRFTPage: FC<SingleNFTPageComponentProps> = ({ loading, token }) => {
   useScrollToTop();
 
+  const tokens = useMemo(() => {
+    if (!token) return [];
+
+    return [
+      {
+        collectionId: token.collection_id,
+        tokenId: token.token_id,
+      },
+    ];
+  }, [token]);
+
   if (!token) return null;
 
   return (
@@ -24,7 +35,7 @@ const SingleRFTPage: FC<SingleNFTPageComponentProps> = ({ loading, token }) => {
         <TokenDetailComponent loading={loading} token={token} />
       </PagePaper>
       <OwnersTable totalPieces={token.total_pieces || 1} />
-      <EventsTable />
+      <EventsTable tokens={tokens} />
     </>
   );
 };
