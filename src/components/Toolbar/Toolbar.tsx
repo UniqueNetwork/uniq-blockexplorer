@@ -11,7 +11,11 @@ import {
   ViewType,
 } from '@app/components';
 import { deviceWidth, TParam, useLocationPathname, useQueryParams } from '@app/hooks';
-import { defaultOrderId, OPTIONS as tokensOptions } from '@app/pages/Tokens/constants';
+import {
+  defaultOrderId,
+  FRACTIONAL_SORTING_OPTIONS as fractionalOptions,
+  OPTIONS as tokensOptions,
+} from '@app/pages/Tokens/constants';
 import { OPTIONS as collectionsOptions } from '@app/pages/Collections/constants';
 import { OPTIONS as bundlesOptions } from '@app/pages/Bundles/constants';
 import AttributesFilter from '@app/pages/Tokens/components/AttributesFilter';
@@ -32,8 +36,14 @@ export const Toolbar = () => {
     useQueryParams();
   const [visibleModal, setVisibleModal] = useState(false);
   const [visibleToolbar, setVisibleToolbar] = useState(true);
-  const { tokenDetailPage, tokensPage, collectionsPage, bundlesPage, notTheMainPage } =
-    useLocationPathname();
+  const {
+    tokenDetailPage,
+    tokensPage,
+    collectionsPage,
+    bundlesPage,
+    notTheMainPage,
+    fractionalPage,
+  } = useLocationPathname();
   const [mobileType, setMobileType] = useState(MobileType.Filter);
   const searchRef: React.RefObject<HTMLInputElement> = createRef();
 
@@ -93,6 +103,8 @@ export const Toolbar = () => {
       return collectionsOptions;
     } else if (bundlesPage) {
       return bundlesOptions;
+    } else if (fractionalPage) {
+      return [...tokensOptions, ...fractionalOptions];
     } else if (tokensPage) {
       return tokensOptions;
     }

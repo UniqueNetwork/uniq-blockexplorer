@@ -76,20 +76,20 @@ export const FRACTIONAL_SORTING_OPTIONS: TokensSelectOption[] = [
     sortField: 'total_pieces',
     title: 'Total fractions',
   },
-  {
-    iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
-    id: '11',
-    sortDir: 'desc_nulls_last',
-    sortField: 'owners',
-    title: 'Owners',
-  },
-  {
-    iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
-    id: '12',
-    sortDir: 'asc_nulls_first',
-    sortField: 'owners',
-    title: 'Owners',
-  },
+  // {
+  //   iconRight: { color: '#040B1D', name: 'arrowDown', height: 14, width: 14 },
+  //   id: '11',
+  //   sortDir: 'desc_nulls_last',
+  //   sortField: 'owners',
+  //   title: 'Owners',
+  // },
+  // {
+  //   iconRight: { color: '#040B1D', name: 'arrowUp', height: 14, width: 14 },
+  //   id: '12',
+  //   sortDir: 'asc_nulls_first',
+  //   sortField: 'owners',
+  //   title: 'Owners',
+  // },
 ];
 
 export const defaultOrderBy: TokenSorting = { date_of_creation: 'desc_nulls_last' };
