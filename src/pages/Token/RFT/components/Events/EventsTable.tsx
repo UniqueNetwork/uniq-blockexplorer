@@ -36,12 +36,10 @@ const EventsTable: FC<{
 
   // get sort from query string
   const getOrderByFromQuery = () => {
-    const split = sort?.split('-');
-    return split ? { [split[0]]: split[1] } : ({} as EventsSorting);
+    const split = sort ? sort.split('-') : undefined;
+    return split ? { [split[0]]: split[1] } : defaultEventsOrderBy;
   };
-  const [orderBy, setOrderBy] = useState<EventsSorting>(
-    getOrderByFromQuery() || defaultEventsOrderBy,
-  );
+  const [orderBy, setOrderBy] = useState<EventsSorting>(getOrderByFromQuery());
 
   useEffect(() => {
     setOrderBy(getOrderByFromQuery());

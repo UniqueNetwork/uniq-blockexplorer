@@ -24,6 +24,7 @@ export interface TokensEvent {
   token_name: string;
   values?: { [key: string]: unknown };
   tokens: { [key: string]: unknown };
+  data: any[];
 }
 
 export type EventsSorting = {

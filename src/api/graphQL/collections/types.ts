@@ -8,6 +8,12 @@ export interface AttributeField {
   };
   optional: boolean;
   type: string;
+  enumValues?: Record<
+    string,
+    {
+      _: string;
+    }
+  >;
 }
 
 export interface Attributes {

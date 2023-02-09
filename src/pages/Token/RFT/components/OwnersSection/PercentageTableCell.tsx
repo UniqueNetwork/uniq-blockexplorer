@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 
@@ -15,10 +15,26 @@ const PercentageTableCell = ({ value, total }: { value: number; total: number })
 
   if (deviceSize === DeviceSize.xxl) barWidth = 341;
 
+  const percent = useMemo(() => {
+    return ((value || 0) / (total || 1)) * 100;
+  }, [value, total]);
+
+  const percentText = useMemo(() => {
+    if (percent < 0.01) {
+      return '<0.01 %';
+    }
+
+    if (percent > 99.99) {
+      return '>99.99 %';
+    }
+
+    return `${percent.toFixed(2)} %`;
+  }, [percent]);
+
   return (
     <FlexWrapper>
-      <ProgressBar filledPercent={(value / total) * 100} height={8} width={barWidth} />
-      <Text>{((value / total) * 100).toFixed(2)} %</Text>
+      <ProgressBar filledPercent={percent} height={8} width={barWidth} />
+      <Text>{percentText}</Text>
     </FlexWrapper>
   );
 };
