@@ -51,6 +51,8 @@ const CollectionPage: FC = () => {
         holders_count,
       };
     }
+
+    return collection;
   }, [collection, owners]);
 
   return (
