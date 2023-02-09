@@ -1,12 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 import { Heading, Skeleton } from '@unique-nft/ui-kit';
 
 import { DeviceSize, useApi, useDeviceSize, useQueryParams } from '@app/hooks';
 import { DEFAULT_PAGE_SIZE, defaultEventsOrderBy } from '@app/pages/Bundles/constants';
-import { TokensEvent, EventsSorting } from '@app/api/graphQL/tokensEvents/types';
+import {
+  TokensEvent,
+  EventsSorting,
+  TokenKeys,
+} from '@app/api/graphQL/tokensEvents/types';
 import {
   PagePaper,
   Pagination,
@@ -17,13 +21,14 @@ import { useGraphQLTokensEvents } from '@app/api/graphQL/tokensEvents/tokensEven
 
 import { getRFTEventsColumns } from './columnsSchema';
 
-const EventsTable = () => {
+const EventsTable: FC<{
+  header?: string;
+  accountId?: string;
+  tokens: TokenKeys[];
+}> = ({ accountId, tokens }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const { sort, setParamToQuery } = useQueryParams();
-  const { collectionId, tokenId } = useParams<{
-    collectionId: string;
-    tokenId: string;
-  }>();
+
   const [queryParams, setQueryParams] = useSearchParams();
   const deviceSize = useDeviceSize();
   const { currentChain } = useApi();
@@ -67,10 +72,11 @@ const EventsTable = () => {
 
   const { tokensEvents, isTokenEventsFetching, timestamp, count } =
     useGraphQLTokensEvents({
-      tokens: [],
+      tokens,
       offset,
       orderBy,
       limit: pageSizeNumber,
+      author: accountId,
     });
 
   const columns = useMemo(
