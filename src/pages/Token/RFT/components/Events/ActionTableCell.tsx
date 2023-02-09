@@ -31,5 +31,6 @@ export default ActionTableCell;
 
 const Cell = styled.div`
   display: flex;
+  align-items: center;
   gap: calc(var(--gap) / 2);
 `;

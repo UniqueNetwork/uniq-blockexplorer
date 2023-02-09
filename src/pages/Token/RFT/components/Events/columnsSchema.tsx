@@ -3,7 +3,12 @@ import { Text } from '@unique-nft/ui-kit';
 import styled from 'styled-components/macro';
 import { DefaultRecordType } from 'rc-table/lib/interface';
 
-import { formatAmount, timeDifference, timestampTableFormat } from '@app/utils';
+import {
+  formatFeeValue,
+  formatLongNumber,
+  timeDifference,
+  timestampTableFormat,
+} from '@app/utils';
 import { EventsSorting } from '@app/api/graphQL/tokensEvents/types';
 import TableSortableColumnTitle from '@app/components/TableSortableColumnTitle';
 import { SVGIcon } from '@app/components';
@@ -60,7 +65,7 @@ export const getRFTEventsColumns = (
     render: (value: number) => {
       return (
         <Text size="m" weight="regular" color={'blue-grey-600'}>
-          {`${formatAmount(value || 0)} ${tokenSymbol}`}
+          {`${formatFeeValue(value || 0)} ${tokenSymbol}`}
         </Text>
       );
     },
@@ -82,10 +87,11 @@ export const getRFTEventsColumns = (
     width: 150,
   },
   {
-    dataIndex: 'fractions',
-    key: 'fractions',
+    dataIndex: 'data',
+    key: 'data',
     title: 'Quantity fractions',
     width: 150,
+    render: (value: any[]) => <>{formatLongNumber(value[value.length - 1])}</>,
   },
   {
     dataIndex: 'result',
