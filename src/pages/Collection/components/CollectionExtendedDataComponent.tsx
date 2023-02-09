@@ -36,11 +36,21 @@ const CollectionExtendedDataComponent: FC<ExtendedDataComponentProps> = ({
       </WrapperWithBorder>
       <WrapperWithBorder>
         <Heading size="3">NFTs attributes</Heading>
-        <TagsWrapper>
-          {Object.keys(fields || {}).map((key) => (
-            <Tag key={key}>{fields?.[key].name._}</Tag>
+        <AttributesWrapper>
+          {Object.keys(fields || {}).map((attrField) => (
+            <div key={`attribute-${attrField}`}>
+              <Text color="grey-500">{fields?.[attrField].name._}</Text>
+              <TagsWrapper>
+                {fields?.[attrField]?.enumValues &&
+                  Object.values(fields?.[attrField]?.enumValues || {})?.map(
+                    (item: { _: string }, index: number) => (
+                      <Tag key={`item-${item}-${index}`}>{item._}</Tag>
+                    ),
+                  )}
+              </TagsWrapper>
+            </div>
           ))}
-        </TagsWrapper>
+        </AttributesWrapper>
       </WrapperWithBorder>
       {sponsorship && (
         <OwnerAccountWrapper>
@@ -95,8 +105,15 @@ const StyledHeading = styled(Heading)`
   margin-bottom: var(--gap) !important;
 `;
 
+const AttributesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: var(--gap);
+`;
+
 const TagsWrapper = styled.div`
-  margin: calc(var(--gap) / 2) 0;
+  margin-top: calc(var(--gap) / 2);
   display: flex;
   flex-wrap: wrap;
   column-gap: calc(var(--gap) / 2);
