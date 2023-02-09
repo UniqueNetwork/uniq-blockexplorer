@@ -24,7 +24,7 @@ const PercentageTableCell = ({ value, total }: { value: number; total: number })
       return '<0.01 %';
     }
 
-    if (percent > 99.99) {
+    if (percent > 99.99 && percent < 100) {
       return '>99.99 %';
     }
 
