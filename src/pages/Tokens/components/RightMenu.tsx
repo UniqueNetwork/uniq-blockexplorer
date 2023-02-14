@@ -29,10 +29,14 @@ export const RightMenu: FC<RightMenuProps> = ({
 
   const [sort, setSort] = useState<SelectOptionProps>();
 
+  const sortingOptions = fractionalPage
+    ? [...OPTIONS, ...FRACTIONAL_SORTING_OPTIONS]
+    : OPTIONS;
+
   useEffect(() => {
     const sortFromQuery = queryParams.get('sort');
     const splitSort = sortFromQuery?.split('-');
-    const currentSorting = OPTIONS.find((option) => {
+    const currentSorting = sortingOptions.find((option) => {
       if (splitSort) {
         return option.sortDir === splitSort[1] && option.sortField === splitSort[0];
       }
@@ -41,10 +45,6 @@ export const RightMenu: FC<RightMenuProps> = ({
   }, [queryParams]);
 
   const parsedAttributes = JSON.parse(attributes || '{}')?.attributes || {};
-
-  const sortingOptions = fractionalPage
-    ? [...OPTIONS, ...FRACTIONAL_SORTING_OPTIONS]
-    : OPTIONS;
 
   //attributes filter
   const [selectedAttrs, setSelectedAttrs] =
