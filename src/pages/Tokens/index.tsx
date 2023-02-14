@@ -10,7 +10,7 @@ import styled from 'styled-components/macro';
 import ReactTooltip from 'react-tooltip';
 import { Text } from '@unique-nft/ui-kit';
 
-import { useApi, useQueryParams, useScrollToTop } from '@app/hooks';
+import { useApi, useLocationPathname, useQueryParams, useScrollToTop } from '@app/hooks';
 import { isTouchEnabled, logUserEvents } from '@app/utils';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { TokenSorting } from '@app/api';
@@ -19,7 +19,12 @@ import { PageHeading } from '@app/components/PageHeading';
 
 import { NFTs } from './NFTs';
 import { RightMenu } from './components/RightMenu';
-import { DEFAULT_PAGE_SIZE, defaultOrderBy, OPTIONS } from './constants';
+import {
+  DEFAULT_PAGE_SIZE,
+  defaultOrderBy,
+  FRACTIONAL_SORTING_OPTIONS,
+  OPTIONS,
+} from './constants';
 import PagePaper from '../../components/PagePaper';
 import { RFTs } from './RFTs';
 
@@ -34,6 +39,7 @@ const TokensPage: FC = () => {
   const [, selectSort] = useState<SelectOptionProps>();
   const [queryParams, setQueryParams] = useSearchParams();
   const [orderBy, setOrderBy] = useState<TokenSorting>(defaultOrderBy);
+  const { fractionalPage } = useLocationPathname();
 
   const setOrderAndQuery = (sorting: TokenSorting) => {
     if (!Object.values(sorting)[0]) {
@@ -70,7 +76,10 @@ const TokensPage: FC = () => {
   );
 
   const selectSorting = (selected: SelectOptionProps) => {
-    const option = OPTIONS.find((item) => {
+    const sortingOptions = fractionalPage
+      ? [...OPTIONS, ...FRACTIONAL_SORTING_OPTIONS]
+      : OPTIONS;
+    const option = sortingOptions.find((item) => {
       return item.id === selected.id;
     });
 
