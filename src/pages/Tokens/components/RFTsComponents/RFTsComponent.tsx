@@ -5,6 +5,7 @@ import styled from 'styled-components/macro';
 
 import { Token, TokenSorting, useGraphQlTokens } from '@app/api';
 import {
+  DEFAULT_PAGE_SIZE_OPTIONS,
   Pagination,
   ScrollableTable,
   SelectOptionProps,
@@ -127,6 +128,11 @@ const RFTsComponent: FC<TokensComponentProps> = ({
           pageSize={pageSize}
           setPageSize={setPageSize}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          pageSizeOptions={[
+            ...DEFAULT_PAGE_SIZE_OPTIONS,
+            { id: 48, title: '48' },
+            { id: 60, title: '60' },
+          ]}
           onPageChange={setCurrentPage}
         />
       </TopPaginationContainer>
@@ -162,6 +168,11 @@ const RFTsComponent: FC<TokensComponentProps> = ({
           pageSize={pageSize}
           setPageSize={setPageSize}
           siblingCount={deviceSize <= DeviceSize.sm ? 1 : 2}
+          pageSizeOptions={[
+            ...DEFAULT_PAGE_SIZE_OPTIONS,
+            { id: 48, title: '48' },
+            { id: 60, title: '60' },
+          ]}
           onPageChange={setCurrentPage}
         />
       </BottomPaginationContainer>
