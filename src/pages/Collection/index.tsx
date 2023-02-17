@@ -123,20 +123,18 @@ const CollectionTitle = styled.div`
   }
   @media ${deviceWidth.smallerThan.md} {
     padding-bottom: 50px;
+    div[class^='Badge__BadgeWrapper'] {
+      left: 0;
+      bottom: 0;
+      top: unset;
+      right: unset;
+    }
   }
 `;
 
 const BadgeStyled = styled(Badge)`
-  top: 0;
-  right: 0;
   background-color: var(--color-secondary-400);
   color: var(--color-additional-light);
-  @media ${deviceWidth.smallerThan.md} {
-    left: 0;
-    bottom: 0;
-    top: unset;
-    right: unset;
-  }
 `;
 
 export default CollectionPage;
