@@ -54,6 +54,10 @@ const EventsTable: FC<{
   const offset = (currentPage - 1) * pageSizeNumber;
 
   const setOrderAndQuery = (sorting: EventsSorting) => {
+    if (!Object.values(sorting)[0]) {
+      sorting = defaultEventsOrderBy;
+    }
+
     setOrderBy(sorting);
     setParamToQuery([
       {
