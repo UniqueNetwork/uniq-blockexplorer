@@ -93,7 +93,7 @@ const CollectionPage: FC = () => {
           <CollectionBasicDataComponent collection={collectionData} key="collections" />
         )}
         {activeDetailTabIndex === 1 && (
-          <CollectionExtendedDataComponent collection={collection} key="tokens" />
+          <CollectionExtendedDataComponent collection={collectionData} key="tokens" />
         )}
       </PagePaper>
       <PagePaper>
