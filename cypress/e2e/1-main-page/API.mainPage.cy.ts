@@ -416,10 +416,10 @@ describe("Last transfers.Coins", () => {
               },
               "method": {
                 "_in": [
-                  "transfer",
-                  "transferAll",
-                  "transferKeepAlive",
-                  "vestedTransfer"
+                  "Transfer",
+                  "TransferAll",
+                  "TransferKeepAlive",
+                  "VestedTransfer"
                 ]
               }
             }

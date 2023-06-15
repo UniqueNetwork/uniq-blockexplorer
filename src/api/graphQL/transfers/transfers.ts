@@ -42,7 +42,7 @@ export const useGraphQlLastTransfers = ({
       _and: {
         amount: { _neq: 0 },
         method: {
-          _in: ['transfer', 'transferAll', 'transferKeepAlive', 'vestedTransfer'],
+          _in: ['Transfer', 'TransferAll', 'TransferKeepAlive', 'VestedTransfer'],
         },
         ...(accountId
           ? {
