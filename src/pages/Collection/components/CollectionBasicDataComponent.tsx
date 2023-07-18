@@ -33,7 +33,7 @@ const CollectionBasicDataComponent: FC<BasicDataComponentProps> = ({ collection 
         <CreatedAccountWrapper>
           <div>
             <Text color="grey-500" weight="light">
-              created on {timestampFormat(createdOn)}
+              created on {timestampFormat((createdOn || 0) * 1000)}
             </Text>
           </div>
         </CreatedAccountWrapper>
