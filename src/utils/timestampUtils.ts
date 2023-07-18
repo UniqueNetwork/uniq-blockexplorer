@@ -9,10 +9,11 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
     currentDate.getUTCMinutes(),
     currentDate.getUTCSeconds(),
   );
-  const currentUtcTime = sinceWhen || currentUtcDate.getTime() / 1000;
+  const currentUtcTime = sinceWhen || currentUtcDate.getTime();
+  console.log(currentUtcTime, when);
 
   // https://stackoverflow.com/questions/16767301/calculate-difference-between-2-timestamps-using-javascript
-  let difference = (currentUtcTime - when) * 1000;
+  let difference = (currentUtcTime - when * 1000) * 1000;
 
   const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
 

@@ -63,7 +63,7 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
 
   const attributesParsed = convertAttributesToView(attributes);
 
-  const createdOnDate = tokenPageTimestampFormat(createdOn);
+  const createdOnDate = tokenPageTimestampFormat(createdOn * 1000);
 
   return (
     <Wrapper>
