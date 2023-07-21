@@ -10,31 +10,25 @@ const timeDifference = (when: number, sinceWhen: number | null = null) => {
     currentDate.getUTCSeconds(),
   );
   const currentUtcTime = sinceWhen || currentUtcDate.getTime();
-  console.log(currentUtcTime, when);
 
   // https://stackoverflow.com/questions/16767301/calculate-difference-between-2-timestamps-using-javascript
-  let difference = (currentUtcTime - when * 1000) * 1000;
+  let difference = currentUtcTime - when;
 
-  const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+  const daysDifference = Math.floor(difference / 60 / 60 / 24);
 
-  difference -= daysDifference * 1000 * 60 * 60 * 24;
+  difference -= daysDifference * 60 * 60 * 24;
 
-  const hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+  const hoursDifference = Math.floor(difference / 60 / 60);
 
-  difference -= hoursDifference * 1000 * 60 * 60;
+  difference -= hoursDifference * 60 * 60;
 
-  const minutesDifference = Math.floor(difference / 1000 / 60);
+  const minutesDifference = Math.floor(difference / 60);
 
-  difference -= minutesDifference * 1000 * 60;
+  difference -= minutesDifference * 60;
 
   // just an example, later on oculd be extended to calculate time difference (trying to avoid any external libs for this matter)
-  let amount = Math.floor(difference / 1000);
-  let timeType = 'second';
-
-  if (minutesDifference >= 1) {
-    timeType = 'minute';
-    amount = minutesDifference;
-  }
+  let amount = minutesDifference;
+  let timeType = 'minute';
 
   if (hoursDifference >= 1) {
     timeType = 'hour';
