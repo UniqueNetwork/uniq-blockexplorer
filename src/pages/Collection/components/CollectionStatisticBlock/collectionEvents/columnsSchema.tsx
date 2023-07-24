@@ -50,7 +50,9 @@ export const getCollectionEventsColumns = ({
     render: (value: number) => {
       return (
         <Text size="m" weight="regular" color={'color-blue-grey-600'}>
-          {isAgeColumn ? timeDifference(value, timestamp) : timestampTableFormat(value)}
+          {isAgeColumn
+            ? timeDifference(value * 1000, timestamp)
+            : timestampTableFormat(value)}
         </Text>
       );
     },

@@ -137,6 +137,7 @@ export const Bundles: VFC<BundlesProps> = ({
           <BundleCard
             key={`bundle-${token.collection_id}-${token.token_id}`}
             {...token}
+            bundle_created={token.bundle_created * 1000}
             timeNow={timestamp}
           />
         ))}
