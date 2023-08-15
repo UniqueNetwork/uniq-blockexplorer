@@ -123,6 +123,13 @@ const CollectionTitle = styled.div`
   }
   @media ${deviceWidth.smallerThan.md} {
     padding-bottom: 50px;
+
+    div[class^='Badge__BadgeWrapper'] {
+      top: unset;
+      right: unset;
+      left: 0;
+      bottom: 0;
+    }
   }
 `;
 

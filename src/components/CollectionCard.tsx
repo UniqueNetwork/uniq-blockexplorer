@@ -25,7 +25,7 @@ export const CollectionCard: VFC<CollectionCardProps> = ({
   tokens_count: tokensCount,
 }) => {
   const { currentChain } = useApi();
-  const createdTimeDiff = timeDifference(date_of_creation, timestamp);
+  const createdTimeDiff = timeDifference(date_of_creation * 1000, timestamp);
 
   const onCollectionsCardClick = useCallback(() => {
     const path = window.location.pathname;
