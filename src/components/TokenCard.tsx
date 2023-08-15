@@ -138,7 +138,7 @@ const TokenCard: FC<TokenCardProps> = ({
             <CreatedTime>
               <StyledSVGIcon height={16} name="clock" width={16} />
               <Text color="additional-dark" size="xs">
-                {timeDifference(dateOfCreation, timeNow)}
+                {timeDifference(dateOfCreation * 1000, timeNow)}
               </Text>
             </CreatedTime>
           )}
