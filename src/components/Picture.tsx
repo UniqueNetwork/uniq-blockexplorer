@@ -5,23 +5,18 @@ import { Skeleton } from '@unique-nft/ui-kit';
 
 import { useCheckImageExists } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import { Badge } from '@app/components';
+import { Badges } from '@app/components';
+
+import { BadgeContent } from './Badge';
 
 interface PictureProps {
   className?: string;
   src?: string | null;
   alt: string;
-  badge?: string;
-  tooltipDescription?: React.ReactNode;
+  badges?: BadgeContent[];
 }
 
-const Picture: FC<PictureProps> = ({
-  alt,
-  className,
-  src,
-  badge,
-  tooltipDescription,
-}) => {
+const Picture: FC<PictureProps> = ({ alt, className, src, badges }) => {
   const { imgSrc, loading } = useCheckImageExists(getCoverURLFromCollection(src || ''));
 
   return (
@@ -30,11 +25,7 @@ const Picture: FC<PictureProps> = ({
         <Skeleton height="100%" width="100%" />
       ) : (
         <>
-          {badge && (
-            <Badge id="badge" tooltipDescription={tooltipDescription}>
-              {badge}
-            </Badge>
-          )}
+          <Badges id="badge" badges={badges || []} />
           {imgSrc ? (
             <img alt={alt} src={imgSrc} />
           ) : (
