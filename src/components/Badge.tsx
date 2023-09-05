@@ -2,34 +2,43 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import ReactTooltip from 'react-tooltip';
 
-function Badge({
+export type BadgeContent = {
+  text: React.ReactNode;
+  tooltip?: React.ReactNode;
+};
+
+function Badges({
   id,
-  children,
   className,
   tooltipDescription,
+  badges,
 }: {
   id: string;
-  children: React.ReactNode;
   className?: string;
   tooltipDescription?: React.ReactNode;
+  badges: BadgeContent[];
 }) {
   return (
     <BadgeWrapper>
-      <BadgeContent data-tip data-for={`${id}-badge-tooltip`} className={className}>
-        {children}
-      </BadgeContent>
-      {tooltipDescription && (
-        <ReactTooltip
-          event={tooltipDescription ? 'mouseenter' : undefined}
-          id={`${id}-badge-tooltip`}
-          effect="solid"
-          eventOff="mouseleave"
-          place={'top'}
-          offset={{ top: 3, left: 0 }}
-        >
-          <span>{tooltipDescription}</span>
-        </ReactTooltip>
-      )}
+      {badges.map((badge) => (
+        <>
+          <BadgeContent data-tip data-for={`${id}-badge-tooltip`} className={className}>
+            {badge.text}
+          </BadgeContent>
+          {tooltipDescription && (
+            <ReactTooltip
+              event={tooltipDescription ? 'mouseenter' : undefined}
+              id={`${id}-badge-tooltip`}
+              effect="solid"
+              eventOff="mouseleave"
+              place={'top'}
+              offset={{ top: 3, left: 0 }}
+            >
+              <span>{badge.tooltip}</span>
+            </ReactTooltip>
+          )}
+        </>
+      ))}
     </BadgeWrapper>
   );
 }
@@ -40,6 +49,9 @@ const BadgeWrapper = styled.div`
   right: var(--gap);
   left: var(--gap);
   display: flex;
+  gap: var(--gap);
+  flex-direction: column;
+  align-items: flex-end;
   justify-content: flex-end;
   .__react_component_tooltip {
     width: 200px;
@@ -61,4 +73,4 @@ const BadgeContent = styled.div`
   z-index: 2;
 `;
 
-export default Badge;
+export default Badges;
