@@ -29,5 +29,5 @@ jobs:
         with:
           file: ./.docker/Dockerfile
           push: true
-          tags: uniquenetwork/unique-web:unique-marketplace-frontend-${{ github.sha }},uniquenetwork/unique-web:unique-marketplace-frontend-latest
+          tags: uniquenetwork/unique-web:unique-explorer-frontend-${{ github.sha }},uniquenetwork/unique-web:unique-explorer-frontend-latest
           target: static
