@@ -27,7 +27,7 @@ const Picture: FC<PictureProps> = ({ alt, className, src, badges }) => {
         <>
           <Badges id="badge" badges={badges || []} />
           {imgSrc ? (
-            <img alt={alt} src={imgSrc} />
+            <img alt={alt} src={imgSrc} loading="lazy" />
           ) : (
             <svg fill="white" height="100%" viewBox="0 0 1000 1000" width="100%">
               <g>
