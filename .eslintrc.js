@@ -60,6 +60,7 @@ module.exports = {
         noSortAlphabetically: true,
       },
     ],
+    '@typescript-eslint/no-unused-vars': 'off',
   },
   overrides: [
     {
