@@ -23,9 +23,7 @@ export interface Token {
   children_count: number;
   collection_id: number;
   collection_name: string;
-  image: {
-    fullUrl: string | null;
-  };
+  image: string;
   date_of_creation: number;
   token_prefix: string;
   owner: string;

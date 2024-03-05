@@ -39,7 +39,7 @@ export const getBundleEventsAccountsPageColumns = ({
       <TokenTableCell
         chainId={chainId}
         collectionId={event.tokens[0].collection_id}
-        imageUrl={event.tokens[0].image.fullUrl}
+        imageUrl={event.tokens[0].image}
         tokenId={event.tokens[0].token_id}
         tokenName={event.tokens[0].token_name}
         iconSize={40}

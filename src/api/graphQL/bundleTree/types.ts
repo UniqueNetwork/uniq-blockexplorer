@@ -16,9 +16,7 @@ export type NestingToken = {
   children_count: number | null;
   collection_id: number;
   date_of_creation: number;
-  image: {
-    fullUrl: string | null;
-  };
+  image: string;
   is_sold: boolean;
   nestingChildren?: NestingToken[] | never[];
   owner: string;

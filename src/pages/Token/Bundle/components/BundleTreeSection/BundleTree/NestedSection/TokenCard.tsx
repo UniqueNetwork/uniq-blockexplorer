@@ -20,7 +20,7 @@ function TokenCard({ token, onViewNodeDetails }: ITokenCard) {
     <TokenCardWrapper onClick={viewTokenDetails}>
       <Picture
         alt={`T-${token.token_id} C-${token.collection_id}`}
-        src={token.image?.fullUrl || undefined}
+        src={token.image || undefined}
       />
       <TokenTitle
         token={token}
