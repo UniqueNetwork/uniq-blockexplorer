@@ -24,7 +24,7 @@ export const getBundlesColumns = (
         <TokenTableCell
           chainId={chainId}
           collectionId={item.collection_id}
-          imageUrl={item.image.fullUrl}
+          imageUrl={item.image}
           tokenId={item.token_id}
           tokenPrefix={value}
         />

@@ -54,7 +54,7 @@ const TokenCard: FC<TokenCardProps> = ({
     }
   }, [collectionId, currentChain.network, navigate, tokenId]);
 
-  const { imgSrc } = useCheckImageExists(image.fullUrl);
+  const { imgSrc } = useCheckImageExists(image);
 
   const badge = useMemo(() => {
     if (type === TokenTypeEnum.RFT) return 'Fractional';

@@ -77,7 +77,7 @@ const NodeView: FC<INodeView<INestingToken>> = ({
           </Arrow>
           <Picture
             alt={`T-${data.token_id} C-${data.collection_id}`}
-            src={data.image?.fullUrl || undefined}
+            src={data.image || undefined}
           />
           <TokenTitle
             token={data}

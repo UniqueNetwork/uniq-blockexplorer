@@ -105,8 +105,7 @@ export const Collections: VFC<CollectionsProps> = ({
     ...collection,
     collection_cover:
       collection.collection_cover ||
-      tokens?.find((token) => token.collection_id === collection.collection_id)?.image
-        ?.fullUrl ||
+      tokens?.find((token) => token.collection_id === collection.collection_id)?.image ||
       '',
   }));
 

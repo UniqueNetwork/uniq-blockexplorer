@@ -7,8 +7,11 @@ import {
 } from './types';
 
 const collectionAttributesQuery = gql`
-  query getAttributes($where: AttributesWhereParams!, $orderBy: AttributesOrderByParams) {
-    attributes(where: $where, order_by: $orderBy) {
+  query getAttributes(
+    $where: AttributesV1WhereParams!
+    $orderBy: AttributesV1OrderByParams
+  ) {
+    attributes: attributes_v1(where: $where, order_by: $orderBy) {
       count
       data {
         key

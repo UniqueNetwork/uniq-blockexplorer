@@ -4,7 +4,7 @@ import { BundleTreeVariables, BundleTreeData } from './types';
 
 const bundleTreeQuery = gql`
   fragment tokenFields on NestingToken {
-    attributes
+    attributes: attributes_v1
     bundle_created
     burned
     children_count

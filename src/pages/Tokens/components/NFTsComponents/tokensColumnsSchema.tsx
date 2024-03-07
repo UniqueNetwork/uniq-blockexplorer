@@ -22,7 +22,7 @@ export const getTokensColumns = (
       <TokenTableCell
         chainId={chainId}
         collectionId={(item as Token).collection_id}
-        imageUrl={(item as Token).image.fullUrl}
+        imageUrl={(item as Token).image}
         tokenId={value}
         tokenPrefix={(item as Token).token_prefix}
       />

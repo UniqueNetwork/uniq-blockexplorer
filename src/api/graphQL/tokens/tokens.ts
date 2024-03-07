@@ -14,17 +14,17 @@ const tokensQuery = gql`
     $offset: Int
     $where: TokenWhereParams = {}
     $orderBy: TokenOrderByParams = {}
-    $attributesFilter: [AttributeFilterValue!]
+    $attributesFilter: [AttributeV1FilterValue!]
   ) {
     tokens(
       where: $where
       limit: $limit
       offset: $offset
       order_by: $orderBy
-      attributes_filter: $attributesFilter
+      attributes_v1_filter: $attributesFilter
     ) {
       data {
-        attributes
+        attributes: attributes_v1
         collection_cover
         collection_description
         collection_id

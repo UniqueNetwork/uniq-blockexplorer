@@ -31,7 +31,7 @@ const BundleCard: FC<BundleCardProps> = ({
 
   const navigateTo = `/${currentChain.network.toLowerCase()}/tokens/${collectionId}/${tokenId}`;
 
-  const { imgSrc } = useCheckImageExists(image.fullUrl);
+  const { imgSrc } = useCheckImageExists(image);
 
   return (
     <BundleCardLink to={navigateTo}>

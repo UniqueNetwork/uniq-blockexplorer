@@ -72,7 +72,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
           <TokenTableCell
             chainId={chainId || defaultChain.network}
             collectionId={fromTokenData.collection_id}
-            imageUrl={fromTokenData.image.fullUrl}
+            imageUrl={fromTokenData.image}
             tokenId={fromTokenData.token_id}
             tokenPrefix={fromTokenData.token_prefix}
             tokenName={fromTokenData.token_name}
@@ -84,7 +84,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
           <TokenTableCell
             chainId={chainId || defaultChain.network}
             collectionId={toTokenData.collection_id}
-            imageUrl={toTokenData.image.fullUrl}
+            imageUrl={toTokenData.image}
             tokenId={toTokenData.token_id}
             tokenPrefix={toTokenData.token_prefix}
             tokenName={toTokenData.token_name}
@@ -98,7 +98,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
           <TokenTableCell
             chainId={chainId || defaultChain.network}
             collectionId={fromTokenData.collection_id}
-            imageUrl={fromTokenData.image.fullUrl}
+            imageUrl={fromTokenData.image}
             tokenId={fromTokenData.token_id}
             tokenPrefix={fromTokenData.token_prefix}
             tokenName={fromTokenData.token_name}
@@ -110,7 +110,7 @@ function ResultTableCell({ event }: { event: DefaultRecordType }) {
           <TokenTableCell
             chainId={chainId || defaultChain.network}
             collectionId={toTokenData.collection_id}
-            imageUrl={toTokenData.image.fullUrl}
+            imageUrl={toTokenData.image}
             tokenId={toTokenData.token_id}
             tokenPrefix={toTokenData.token_prefix}
             tokenName={toTokenData.token_name}

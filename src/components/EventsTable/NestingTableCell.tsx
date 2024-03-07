@@ -32,7 +32,7 @@ export const NestingTableCell = ({ tokenId, tokens, result }: NestingTableCellPr
         <TokenTableCell
           chainId={chainId || defaultChain.network}
           collectionId={fromTokenData.collection_id}
-          imageUrl={fromTokenData.image.fullUrl}
+          imageUrl={fromTokenData.image}
           tokenId={fromTokenData.token_id}
           tokenPrefix={fromTokenData.token_prefix}
           iconSize={24}
@@ -43,7 +43,7 @@ export const NestingTableCell = ({ tokenId, tokens, result }: NestingTableCellPr
         <TokenTableCell
           chainId={chainId || defaultChain.network}
           collectionId={toTokenData.collection_id}
-          imageUrl={toTokenData.image.fullUrl}
+          imageUrl={toTokenData.image}
           tokenId={toTokenData.token_id}
           tokenPrefix={toTokenData.token_prefix}
           iconSize={24}
