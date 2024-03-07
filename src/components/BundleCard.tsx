@@ -70,7 +70,7 @@ const BundleCard: FC<BundleCardProps> = ({
           <CreatedRow>
             <StyledSVGIcon height={16} name="clock" width={16} />
             <Text color="additional-dark" size="xs" weight="light">
-              {timeDifference(bundleCreated, timeNow)}
+              {timeDifference(bundleCreated * 1000, timeNow)}
             </Text>
           </CreatedRow>
         </TokenProperties>

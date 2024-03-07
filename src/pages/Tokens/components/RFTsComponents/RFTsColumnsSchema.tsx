@@ -42,7 +42,7 @@ export const getTokensColumns = (
     render: (value: number) => {
       return (
         <Text size="m" weight="regular">
-          {timeDifference(value, timestamp)}
+          {timeDifference(value * 1000, timestamp)}
         </Text>
       );
     },

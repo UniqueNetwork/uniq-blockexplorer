@@ -8,9 +8,12 @@ import { formatLongNumber, timeDifference } from '@app/utils';
 import { Token, TokenTypeEnum } from '@app/api';
 import { UserEvents } from '@app/analytics/user_analytics';
 import { logUserEvents } from '@app/utils/logUserEvents';
-import { Picture, Badge } from '@app/components';
+import { Picture, Badges } from '@app/components';
 import { SVGIcon } from '@app/components/SVGIcon';
 import AccountLinkComponent from '@app/pages/Account/components/AccountLinkComponent';
+import { nonTransferable } from '@app/constants';
+
+import { BadgeContent } from './Badge';
 
 type TokenCardProps = Token & {
   timeNow?: number;
@@ -56,32 +59,41 @@ const TokenCard: FC<TokenCardProps> = ({
 
   const { imgSrc } = useCheckImageExists(image);
 
-  const badge = useMemo(() => {
-    if (type === TokenTypeEnum.RFT) return 'Fractional';
+  const badges = useMemo(() => {
+    const badges: BadgeContent[] = [];
 
-    if (nested) return parent_id ? 'Nested' : 'Bundle';
+    if (type === TokenTypeEnum.RFT)
+      badges.push({
+        text: 'Fractional',
+        tooltip: (
+          <>
+            A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own
+            a&nbsp;part of&nbsp;an&nbsp;NFT
+          </>
+        ),
+      });
 
-    return '';
-  }, [type, parent_id, nested]);
+    if (nested)
+      badges.push({
+        text: parent_id ? 'Nested' : 'Bundle',
+      });
 
-  const tooltipDescription =
-    badge === 'Fractional' ? (
-      <>
-        A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own a&nbsp;part
-        of&nbsp;an&nbsp;NFT
-      </>
-    ) : undefined;
+    if (nonTransferable[currentChain.network.toLowerCase()]?.includes(collectionId)) {
+      badges.push({
+        text: 'Non transferrable',
+      });
+    }
+
+    return badges;
+  }, [type, parent_id, nested, collectionId]);
 
   return (
     <TokenCardLink to={navigateTo} onClick={logUserAnalytics}>
-      {badge && (
-        <Badge
-          id={`token-${collectionId.toString()}-${tokenId.toString()}`}
-          tooltipDescription={tooltipDescription}
-        >
-          {badge}
-        </Badge>
-      )}
+      <Badges
+        id={`token-${collectionId.toString()}-${tokenId.toString()}`}
+        badges={badges}
+      />
+
       {/* the picture has not exists */}
       {!imgSrc && <TokenPicture alt={tokenId.toString()} src={imgSrc} />}
       {/* the picture has loaded */}
@@ -138,7 +150,7 @@ const TokenCard: FC<TokenCardProps> = ({
             <CreatedTime>
               <StyledSVGIcon height={16} name="clock" width={16} />
               <Text color="additional-dark" size="xs">
-                {timeDifference(dateOfCreation, timeNow)}
+                {timeDifference(dateOfCreation * 1000, timeNow)}
               </Text>
             </CreatedTime>
           )}

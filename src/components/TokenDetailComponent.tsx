@@ -17,8 +17,10 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { Question } from '@app/images/icons/svgs';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
 import { RftCharacteristics } from '@app/pages/Token/RFT/components/RFTCharacteristics';
+import { nonTransferable } from '@app/constants';
 
 import AccountLinkComponent from '../pages/Account/components/AccountLinkComponent';
+import { BadgeContent } from './Badge';
 
 interface TokenDetailComponentProps {
   token: Token;
@@ -51,23 +53,49 @@ const TokenDetailComponent: FC<TokenDetailComponentProps> = ({ loading, token })
     getCoverURLFromCollection(token.collection_cover),
   );
 
-  const badge = useMemo(() => {
-    if (type === TokenTypeEnum.RFT) return 'Fractional';
+  const badges = useMemo(() => {
+    const badges: BadgeContent[] = [];
 
-    if (nested) return parent_id ? 'Nested' : 'Bundle';
+    if (type === TokenTypeEnum.RFT)
+      badges.push({
+        text: 'Fractional',
+        tooltip: (
+          <>
+            A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own
+            a&nbsp;part of&nbsp;an&nbsp;NFT
+          </>
+        ),
+      });
 
-    return '';
-  }, [type, parent_id, nested]);
+    if (nested)
+      badges.push({
+        text: parent_id ? 'Nested' : 'Bundle',
+        tooltip: (
+          <>
+            A group of tokens nested in an NFT and having a nested, ordered, tree-like
+            structure
+          </>
+        ),
+      });
+
+    if (nonTransferable[currentChain.network.toLowerCase()]?.includes(collectionId)) {
+      badges.push({
+        text: 'Non transferrable',
+      });
+    }
+
+    return badges;
+  }, [type, nested, parent_id, currentChain.name, collectionId]);
 
   if (loading) return <LoadingComponent />;
 
   const attributesParsed = convertAttributesToView(attributes);
 
-  const createdOnDate = tokenPageTimestampFormat(createdOn);
+  const createdOnDate = tokenPageTimestampFormat(createdOn * 1000);
 
   return (
     <Wrapper>
-      <TokenPicture alt={`${prefix}-${id}`} src={image} badge={badge} />
+      <TokenPicture alt={`${prefix}-${id}`} src={image} badges={badges} />
       <div>
         <Heading size="1">{`${prefix} #${id}`}</Heading>
         <TokenInfo>

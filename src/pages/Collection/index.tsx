@@ -8,7 +8,7 @@ import { logUserEvents } from '@app/utils/logUserEvents';
 import { TokenTypeEnum, useGraphQlCollection } from '@app/api';
 import { deviceWidth, useCheckImageExists, useScrollToTop } from '@app/hooks';
 import { getCoverURLFromCollection } from '@app/utils/collectionUtils';
-import { Badge, IdentityIcon, Tabs } from '@app/components';
+import { Badges, IdentityIcon, Tabs } from '@app/components';
 import { useGraphQLRftHolders } from '@app/api/graphQL/rftHolders/rftHolders';
 
 import CollectionBasicDataComponent from './components/CollectionBasicDataComponent';
@@ -71,17 +71,20 @@ const CollectionPage: FC = () => {
           )}
           <Heading size="2">{collection?.name || ''}</Heading>
           {collection?.mode === TokenTypeEnum.RFT && (
-            <BadgeStyled
+            <BadgesStyled
               id="collection-fractional"
-              tooltipDescription={
-                <>
-                  A&nbsp;fractional token provides a&nbsp;way for many users to&nbsp;own
-                  a&nbsp;part of&nbsp;an&nbsp;NFT
-                </>
-              }
-            >
-              Fractional
-            </BadgeStyled>
+              badges={[
+                {
+                  text: 'Fractional',
+                  tooltip: (
+                    <>
+                      A&nbsp;fractional token provides a&nbsp;way for many users
+                      to&nbsp;own a&nbsp;part of&nbsp;an&nbsp;NFT
+                    </>
+                  ),
+                },
+              ]}
+            />
           )}
         </CollectionTitle>
         <Tabs
@@ -123,10 +126,17 @@ const CollectionTitle = styled.div`
   }
   @media ${deviceWidth.smallerThan.md} {
     padding-bottom: 50px;
+
+    div[class^='Badge__BadgeWrapper'] {
+      top: unset;
+      right: unset;
+      left: 0;
+      bottom: 0;
+    }
   }
 `;
 
-const BadgeStyled = styled(Badge)`
+const BadgesStyled = styled(Badges)`
   top: 0;
   right: 0;
   background-color: var(--color-secondary-400);
